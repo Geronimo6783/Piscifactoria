@@ -3,7 +3,6 @@ package simulador;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.io.InputStreamReader;
 
 import componentes.GeneradorMenus;
@@ -12,6 +11,9 @@ import componentes.SistemaMonedas;
 
 public class Simulador {
 
+    /**
+     * Búfer de entrada por teclado.
+     */
     private static final BufferedReader BUFER_ENTRADA = new BufferedReader(new InputStreamReader(System.in, Charset.forName("ISO-8859-1")));
     
     public static void main(String[] args) {

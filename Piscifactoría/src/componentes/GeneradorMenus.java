@@ -32,6 +32,7 @@ public class GeneradorMenus{
 
     /**
      * Genera un menú operativo a partir de unas opciones.
+     * @param br Búfer de entrada de datos.
      * @param opciones Opciones del menú.
      * @return Opción elegida por el usuario.
      */
@@ -43,6 +44,7 @@ public class GeneradorMenus{
 
     /**
      * Genera un menú operativo con cabecera y unas opciones.
+     * @param br Búfer de entrada de datos.
      * @param cabecera Cabecera del menú.
      * @param opciones Opciones del menú.
      * @return Opción elegida por el usuario.
