@@ -1,7 +1,5 @@
 package componentes;
 
-import java.io.BufferedReader;
-
 public class GeneradorMenus{
 
     /**
@@ -36,9 +34,9 @@ public class GeneradorMenus{
      * @param opciones Opciones del menú.
      * @return Opción elegida por el usuario.
      */
-    public static int generarMenusOperativo(BufferedReader br, String[] opciones){
+    public static int generarMenusOperativo(String[] opciones){
         generarMenus(opciones);
-        return SistemaEntrada.entradaOpcionNumerica(br, 1, opciones.length);
+        return SistemaEntrada.entradaOpcionNumerica(1, opciones.length);
     }
 
 
@@ -49,8 +47,8 @@ public class GeneradorMenus{
      * @param opciones Opciones del menú.
      * @return Opción elegida por el usuario.
      */
-    public static int generarMenusOperativo(BufferedReader br, String[] cabecera, String[] opciones){
+    public static int generarMenusOperativo(String[] cabecera, String[] opciones){
         generarMenus(cabecera, opciones);
-        return SistemaEntrada.entradaOpcionNumerica(br, 1, opciones.length);
+        return SistemaEntrada.entradaOpcionNumerica(1, opciones.length);
     }
 }
