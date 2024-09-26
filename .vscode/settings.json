@@ -1,6 +1,0 @@
-{
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "Piscifactoría/lib/Orca_lib_1.2.1.jar"
-    ]
-}
