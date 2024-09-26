@@ -1,12 +1,15 @@
 package componentes;
 
+/**
+ * Clase que contiene utilidades para generar menús.
+ */
 public class GeneradorMenus{
 
     /**
      * Genera un menú a partir de unas opciones.
      * @param opciones Opciones del menú.
      */
-    public static void generarMenus(String[] opciones){
+    public static void generarMenu(String[] opciones){
         int numeroOpcion = 0;
 
         for(String opcion : opciones){
@@ -20,35 +23,33 @@ public class GeneradorMenus{
      * @param cabecera Cabecera del menú.
      * @param opciones Opciones del menú.
      */
-    public static void generarMenus(String[] cabecera, String[] opciones){
+    public static void generarMenu(String[] cabecera, String[] opciones){
         for(String elemento : cabecera){
             System.out.println(elemento);
         }
 
-        generarMenus(opciones);
+        generarMenu(opciones);
     }
 
     /**
      * Genera un menú operativo a partir de unas opciones.
-     * @param br Búfer de entrada de datos.
      * @param opciones Opciones del menú.
      * @return Opción elegida por el usuario.
      */
-    public static int generarMenusOperativo(String[] opciones){
-        generarMenus(opciones);
+    public static int generarMenuOperativo(String[] opciones){
+        generarMenu(opciones);
         return SistemaEntrada.entradaOpcionNumerica(1, opciones.length);
     }
 
 
     /**
      * Genera un menú operativo con cabecera y unas opciones.
-     * @param br Búfer de entrada de datos.
      * @param cabecera Cabecera del menú.
      * @param opciones Opciones del menú.
      * @return Opción elegida por el usuario.
      */
-    public static int generarMenusOperativo(String[] cabecera, String[] opciones){
-        generarMenus(cabecera, opciones);
+    public static int generarMenuOperativo(String[] cabecera, String[] opciones){
+        generarMenu(cabecera, opciones);
         return SistemaEntrada.entradaOpcionNumerica(1, opciones.length);
     }
 }

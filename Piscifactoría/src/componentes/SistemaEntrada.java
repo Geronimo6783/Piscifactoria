@@ -17,7 +17,6 @@ public class SistemaEntrada {
 
     /**
      * Gestiona la entrada de opciones numéricas.
-     * @param br Búfer de entrada de datos.
      * @param minimo Valor mínimo aceptado.
      * @param maximo Valor máximo aceptado.
      * @return Opción escogida por el usuario.
@@ -46,7 +45,6 @@ public class SistemaEntrada {
 
     /**
      * Gestiona la entrada de texto introducido por el usuario.
-     * @param br Búfer de entrada de datos.
      * @return Texto introducido por el usuario.
      */
     public static String entradaTexto(){
