@@ -54,7 +54,7 @@ public class SalmonAtlantico extends Pez implements Carnivoro {
                 if(edad > AlmacenPropiedades.SALMON_ATLANTICO.getMadurez() && !fertil){
                     diasSinReproducirse++;
                 }
-                if((edad == AlmacenPropiedades.SALMON_ATLANTICO.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.SALMON_ATLANTICO.getCiclo() && edad == AlmacenPropiedades.SALMON_ATLANTICO.getMadurez())) {
+                if((edad == AlmacenPropiedades.SALMON_ATLANTICO.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.SALMON_ATLANTICO.getCiclo() && edad > AlmacenPropiedades.SALMON_ATLANTICO.getMadurez())) {
                     fertil = true;
                 }
             }

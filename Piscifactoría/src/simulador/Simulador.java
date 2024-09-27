@@ -4,21 +4,26 @@ import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
 import componentes.SistemaMonedas;
 import simulador.pez.filtrador.ArenqueDelAtlantico;
+import simulador.pez.filtrador.TilapiaDelNilo;
+import simulador.pez.carnivoro.*;
+import simulador.pez.omnivoro.*;
 
 public class Simulador {
     
     public static void main(String[] args) {
-        ArenqueDelAtlantico arenque = new ArenqueDelAtlantico(true);
+        SalmonChinook abadejo = new SalmonChinook(false);
+        abadejo.showStatus();
         for(int i = 0; i < 5; i++){
-            arenque.setAlimentado(true);
-            arenque.grow();
-            arenque.showStatus();
+            abadejo.setAlimentado(true);
+            abadejo.grow();
+            abadejo.showStatus();
         }
-        arenque.setFertil(false);
+        abadejo.setFertil(false);
+        abadejo.showStatus();
         for(int i = 0; i < 5; i++){
-            arenque.setAlimentado(true);
-            arenque.grow();
-            arenque.showStatus();
+            abadejo.setAlimentado(true);
+            abadejo.grow();
+            abadejo.showStatus();
         }
     }
 }
