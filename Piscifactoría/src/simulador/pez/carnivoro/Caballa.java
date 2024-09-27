@@ -28,7 +28,7 @@ public class Caballa extends Pez implements Carnivoro {
         System.out.println("Sexo: " + ((sexo) ? "H" : "M"));
         System.out.println("Vivo: " + ((vivo) ? "Sí" : "No"));
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
-        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.CABALLA.getMadurez()) ? "H" : "M"));
+        System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.CABALLA.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
     }
 
@@ -42,18 +42,19 @@ public class Caballa extends Pez implements Carnivoro {
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.CABALLA.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.CABALLA.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
-                if(edad == AlmacenPropiedades.CABALLA.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.CABALLA.getCiclo()) {
+                if(edad > AlmacenPropiedades.CABALLA.getMadurez() && !fertil){
+                    diasSinReproducirse++;
+                }
+                if((edad == AlmacenPropiedades.CABALLA.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.CABALLA.getCiclo() && edad > AlmacenPropiedades.CABALLA.getMadurez())) {
                     fertil = true;
                 }
             }

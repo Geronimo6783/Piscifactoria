@@ -28,7 +28,7 @@ public class Abadejo extends Pez implements Omnivoro{
         System.out.println("Sexo: " + ((sexo) ? "H" : "M"));
         System.out.println("Vivo: " + ((vivo) ? "Sí" : "No"));
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
-        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.ABADEJO.getMadurez()) ? "H" : "M"));
+        System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.ABADEJO.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
     }
 
@@ -42,18 +42,19 @@ public class Abadejo extends Pez implements Omnivoro{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.ABADEJO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.ABADEJO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
-                if(edad == AlmacenPropiedades.ABADEJO.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.ABADEJO.getCiclo()) {
+                if(edad > AlmacenPropiedades.ABADEJO.getMadurez() && !fertil){
+                    diasSinReproducirse++;
+                }
+                if((edad == AlmacenPropiedades.ABADEJO.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.ABADEJO.getCiclo() && edad > AlmacenPropiedades.ABADEJO.getMadurez())) {
                     fertil = true;
                 }
             }

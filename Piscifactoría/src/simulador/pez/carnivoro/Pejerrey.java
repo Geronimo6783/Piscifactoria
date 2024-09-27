@@ -28,7 +28,7 @@ public class Pejerrey extends Pez implements Carnivoro{
         System.out.println("Sexo: " + ((sexo) ? "H" : "M"));
         System.out.println("Vivo: " + ((vivo) ? "Sí" : "No"));
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
-        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.PEJERREY.getMadurez()) ? "H" : "M"));
+        System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.PEJERREY.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
     }
 
@@ -42,18 +42,19 @@ public class Pejerrey extends Pez implements Carnivoro{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.PEJERREY.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.PEJERREY.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
-                if(edad == AlmacenPropiedades.PEJERREY.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.PEJERREY.getCiclo()) {
+                if(edad > AlmacenPropiedades.PEJERREY.getMadurez() && !fertil){
+                    diasSinReproducirse++;
+                }
+                if((edad == AlmacenPropiedades.PEJERREY.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.PEJERREY.getCiclo() && edad > AlmacenPropiedades.PEJERREY.getMadurez())) {
                     fertil = true;
                 }
             }

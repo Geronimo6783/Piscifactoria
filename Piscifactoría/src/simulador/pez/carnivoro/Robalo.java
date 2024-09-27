@@ -28,7 +28,7 @@ public class Robalo extends Pez implements Carnivoro {
         System.out.println("Sexo: " + ((sexo) ? "H" : "M"));
         System.out.println("Vivo: " + ((vivo) ? "Sí" : "No"));
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
-        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.ROBALO.getMadurez()) ? "H" : "M"));
+        System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.ROBALO.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
     }
 
@@ -42,18 +42,19 @@ public class Robalo extends Pez implements Carnivoro {
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.ROBALO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.ROBALO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
-                if(edad == AlmacenPropiedades.ROBALO.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.ROBALO.getCiclo()) {
+                if(edad > AlmacenPropiedades.ROBALO.getMadurez() && !fertil){
+                    diasSinReproducirse++;
+                }
+                if((edad == AlmacenPropiedades.ROBALO.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.ROBALO.getCiclo() && edad > AlmacenPropiedades.ROBALO.getMadurez())) {
                     fertil = true;
                 }
             }

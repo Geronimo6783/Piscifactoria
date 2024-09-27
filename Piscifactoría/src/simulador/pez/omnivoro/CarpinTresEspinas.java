@@ -28,7 +28,7 @@ public class CarpinTresEspinas extends Pez implements Omnivoro{
         System.out.println("Sexo: " + ((sexo) ? "H" : "M"));
         System.out.println("Vivo: " + ((vivo) ? "Sí" : "No"));
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
-        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez()) ? "H" : "M"));
+        System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
     }
     
@@ -42,18 +42,19 @@ public class CarpinTresEspinas extends Pez implements Omnivoro{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
-                if(edad == AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.CARPIN_TRES_ESPINAS.getCiclo()) {
+                if(edad > AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez() && !fertil){
+                    diasSinReproducirse++;
+                }
+                if((edad == AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.CARPIN_TRES_ESPINAS.getCiclo() && edad > AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez())) {
                     fertil = true;
                 }
             }
