@@ -1,24 +1,25 @@
 package simulador.pez.filtrador;
 
-import propiedades.AlmacenPropiedades;
-import simulador.pez.*;
 import java.util.Random;
 
+import propiedades.AlmacenPropiedades;
+import simulador.pez.*;
+
 /**
- * Clase que representa a un arenque del atlántico.
+ * Clase que representa a una tilapia del nilo.
  */
-public class ArenqueDelAtlantico extends Pez implements Filtrador{
-    
+public class TilapiaDelNilo extends Pez implements Filtrador{
+
     /**
-     * Contructor de arenque del atlántico.
-     * @param sexo Sexo del arenque del atlántico.
+     * Constructor de tilapias del nilo.
+     * @param sexo Sexo de la tilapia del nilo.
      */
-    public ArenqueDelAtlantico(boolean sexo) {
-        super(AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(), sexo);
+    public TilapiaDelNilo(boolean sexo){
+        super(AlmacenPropiedades.TILAPIA_NILO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getCientifico(), sexo);
     }
 
     /**
-     * Muestra el estado del arenque del atlántico.
+     * Muestra el estado de la tilapia del nilo.
      */
     @Override
     public void showStatus(){
@@ -27,12 +28,12 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador{
         System.out.println("Sexo: " + ((sexo) ? "H" : "M"));
         System.out.println("Vivo: " + ((vivo) ? "Sí" : "No"));
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
-        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez()) ? "H" : "M"));
+        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.TILAPIA_NILO.getMadurez()) ? "H" : "M"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
     }
 
     /**
-     * Hace que el arenque del atlántico crezca un día.
+     * Hace que la tilapia del nilo crezca un día.
      */
     public void grow(){
         if(vivo){
@@ -43,7 +44,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador{
                 fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
-            if((edad < AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez() && vivo)){
+            if((edad < AlmacenPropiedades.TILAPIA_NILO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.TILAPIA_NILO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
                 fertil = pezSigueConVida;
@@ -51,7 +52,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador{
             }
             if(vivo){
                 edad++;
-                if(edad == AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.ARENQUE_ATLANTICO.getCiclo()) {
+                if(edad == AlmacenPropiedades.TILAPIA_NILO.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.TILAPIA_NILO.getCiclo()) {
                     fertil = true;
                 }
             }

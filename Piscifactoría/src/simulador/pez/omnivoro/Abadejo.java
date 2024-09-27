@@ -1,24 +1,25 @@
-package simulador.pez.filtrador;
+package simulador.pez.omnivoro;
+
+import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
-import java.util.Random;
 
 /**
- * Clase que representa a un arenque del atlántico.
+ * Clase que representa a un abadejo.
  */
-public class ArenqueDelAtlantico extends Pez implements Filtrador{
-    
+public class Abadejo extends Pez implements Omnivoro{
+
     /**
-     * Contructor de arenque del atlántico.
-     * @param sexo Sexo del arenque del atlántico.
+     * Constructor de abadejos.
+     * @param sexo Sexo del abadejo.
      */
-    public ArenqueDelAtlantico(boolean sexo) {
-        super(AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(), sexo);
+    public Abadejo(boolean sexo){
+        super(AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ABADEJO.getCientifico(), sexo);
     }
 
     /**
-     * Muestra el estado del arenque del atlántico.
+     * Muestra el estado del abadejo.
      */
     @Override
     public void showStatus(){
@@ -27,13 +28,14 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador{
         System.out.println("Sexo: " + ((sexo) ? "H" : "M"));
         System.out.println("Vivo: " + ((vivo) ? "Sí" : "No"));
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
-        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez()) ? "H" : "M"));
+        System.out.println("Adulto: " + ((edad > AlmacenPropiedades.ABADEJO.getMadurez()) ? "H" : "M"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
     }
 
     /**
-     * Hace que el arenque del atlántico crezca un día.
+     * Hace que el abadejo crezca un día.
      */
+    @Override
     public void grow(){
         if(vivo){
             Random rt = new Random();
@@ -43,7 +45,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador{
                 fertil = pezSigueConVida;
                 alimentado = pezSigueConVida;
             }
-            if((edad < AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez() && vivo)){
+            if((edad < AlmacenPropiedades.ABADEJO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.ABADEJO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
                 fertil = pezSigueConVida;
@@ -51,7 +53,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador{
             }
             if(vivo){
                 edad++;
-                if(edad == AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.ARENQUE_ATLANTICO.getCiclo()) {
+                if(edad == AlmacenPropiedades.ABADEJO.getMadurez() || diasSinReproducirse >= AlmacenPropiedades.ABADEJO.getCiclo()) {
                     fertil = true;
                 }
             }
