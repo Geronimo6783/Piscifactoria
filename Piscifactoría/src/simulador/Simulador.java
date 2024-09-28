@@ -25,5 +25,7 @@ public class Simulador {
             abadejo.grow();
             abadejo.showStatus();
         }
+        abadejo.reset();
+        abadejo.showStatus();
     }
 }

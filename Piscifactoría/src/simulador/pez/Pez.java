@@ -26,7 +26,7 @@ public abstract class Pez {
     protected final boolean sexo;
 
     /**
-     * Indica si el pez es fertil y puede reproducirse.
+     * Indica si el pez es fértil y puede reproducirse.
      */
     protected boolean fertil;
 
@@ -181,6 +181,8 @@ public abstract class Pez {
         this.edad = 0;
         this.fertil = false;
         this.vivo = true;
+        this.alimentado = false;
+        this.diasSinReproducirse = 0;
     }
 
 }
