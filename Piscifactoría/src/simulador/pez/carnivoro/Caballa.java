@@ -8,7 +8,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a una caballa.
  */
-public class Caballa extends Pez implements Carnivoro {
+public class Caballa extends Pez implements Carnivoro, Mar{
 
     /**
      * Constructor de caballas.

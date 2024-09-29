@@ -8,7 +8,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a una perca europea.
  */
-public class PercaEuropea extends Pez implements Carnivoro{
+public class PercaEuropea extends Pez implements Carnivoro, Rio{
 
     /**
      * Constructor de percas europeas.
@@ -59,5 +59,13 @@ public class PercaEuropea extends Pez implements Carnivoro{
                 }
             }
         }
+    }
+
+    /**
+     * 
+     * @return True si la perca europea come doble un día.
+     */
+    public boolean comerDoble(){
+        return new Random().nextBoolean();
     }
 }

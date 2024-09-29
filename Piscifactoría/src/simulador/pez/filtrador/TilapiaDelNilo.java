@@ -8,7 +8,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a una tilapia del nilo.
  */
-public class TilapiaDelNilo extends Pez implements Filtrador{
+public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
 
     /**
      * Constructor de tilapias del nilo.

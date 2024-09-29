@@ -8,7 +8,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a un salmón chinook.
  */
-public class SalmonChinook extends Pez implements Carnivoro {
+public class SalmonChinook extends Pez implements Carnivoro, Rio{
 
     /**
      * Constructor de salomnes chinooks.

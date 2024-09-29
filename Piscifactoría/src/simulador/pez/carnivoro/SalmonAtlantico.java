@@ -8,7 +8,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a un salmón atlántico.
  */
-public class SalmonAtlantico extends Pez implements Carnivoro {
+public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
 
     /**
      * Constructor de salmones atlánticos.

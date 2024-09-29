@@ -8,7 +8,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a un róbalo.
  */
-public class Robalo extends Pez implements Carnivoro {
+public class Robalo extends Pez implements Carnivoro, Mar{
 
     /**
      * Constructor de róbalos.

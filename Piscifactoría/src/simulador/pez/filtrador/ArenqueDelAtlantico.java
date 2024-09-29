@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Clase que representa a un arenque del atlántico.
  */
-public class ArenqueDelAtlantico extends Pez implements Filtrador{
+public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
     
     /**
      * Contructor de arenque del atlántico.

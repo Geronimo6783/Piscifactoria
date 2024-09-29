@@ -8,7 +8,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a un carpín de tres espinas.
  */
-public class CarpinTresEspinas extends Pez implements Omnivoro{
+public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
 
     /**
      * Constructor de carpines de tres espinas.
@@ -59,5 +59,13 @@ public class CarpinTresEspinas extends Pez implements Omnivoro{
                 }
             }
         }
+    }
+
+    /**
+     * 
+     * @return True si el carpín de tres espinas no consume alimento un día.
+     */
+    public boolean noConsumirComida(){
+        return (new Random().nextInt(4) < 3);
     }
 }
