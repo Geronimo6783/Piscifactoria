@@ -55,5 +55,5 @@ public class AlmacenCentral {
         this.capacidadComidaVegetal = capacidadComidaVegetal;
     }
 
-    
+
 }

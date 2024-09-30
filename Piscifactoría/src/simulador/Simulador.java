@@ -11,21 +11,12 @@ import simulador.pez.omnivoro.*;
 public class Simulador {
     
     public static void main(String[] args) {
-        SalmonChinook abadejo = new SalmonChinook(false);
-        abadejo.showStatus();
-        for(int i = 0; i < 5; i++){
-            abadejo.setAlimentado(true);
-            abadejo.grow();
-            abadejo.showStatus();
-        }
-        abadejo.setFertil(false);
-        abadejo.showStatus();
-        for(int i = 0; i < 5; i++){
-            abadejo.setAlimentado(true);
-            abadejo.grow();
-            abadejo.showStatus();
-        }
-        abadejo.reset();
-        abadejo.showStatus();
+       AlmacenCentral almacen = new AlmacenCentral();
+       System.out.println(almacen.getCapacidadComidaAnimal());
+       System.out.println(almacen.getCapacidadComidaVegetal());
+       almacen.setCapacidadComidaAnimal(400);
+       almacen.setCapacidadComidaVegetal(400);
+       System.out.println(almacen.getCapacidadComidaAnimal());
+       System.out.println(almacen.getCapacidadComidaVegetal());
     }
 }
