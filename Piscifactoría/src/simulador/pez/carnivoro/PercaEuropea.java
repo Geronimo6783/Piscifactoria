@@ -62,10 +62,10 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
     }
 
     /**
-     * 
-     * @return True si la perca europea come doble un día.
+     * Indica la cantidad de comida que come la perca europea un día.
+     * @return Cantidad de comida que come la perca europea un día.
      */
-    public boolean comerDoble(){
-        return new Random().nextBoolean();
+    public int comer(){
+        return (new Random().nextBoolean()) ? 2 : 1;
     }
 }

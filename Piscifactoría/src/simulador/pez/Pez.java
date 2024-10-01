@@ -185,4 +185,12 @@ public abstract class Pez {
         this.diasSinReproducirse = 0;
     }
 
+    /**
+     * Indica la cantidad de comida que comerá el pez un día.
+     * @return Cantidad de comida que come el pez.
+     */
+    public int comer(){
+        return 1;
+    }
+
 }

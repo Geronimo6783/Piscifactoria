@@ -62,10 +62,12 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
     }
 
     /**
-     * 
-     * @return True si el carpín de tres espinas no consume alimento un día.
+     * Indica la cantidad de comida que come el carpín de tres espinas un día.
+     * @return Cantidad de comida que comer el carpín de tres espinas.
      */
-    public boolean noConsumirComida(){
-        return (new Random().nextInt(4) < 3);
+    @Override
+    public int comer(){
+        return (new Random().nextInt(4) < 3) ? 0 : 1;
+
     }
 }
