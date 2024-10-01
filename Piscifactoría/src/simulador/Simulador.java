@@ -11,12 +11,7 @@ import simulador.pez.omnivoro.*;
 public class Simulador {
     
     public static void main(String[] args) {
-       AlmacenCentral almacen = new AlmacenCentral();
-       System.out.println(almacen.getCapacidadComidaAnimal());
-       System.out.println(almacen.getCapacidadComidaVegetal());
-       almacen.setCapacidadComidaAnimal(400);
-       almacen.setCapacidadComidaVegetal(400);
-       System.out.println(almacen.getCapacidadComidaAnimal());
-       System.out.println(almacen.getCapacidadComidaVegetal());
+       CarpinTresEspinas pez = new CarpinTresEspinas(false);
+       System.out.println(pez.comer());
     }
 }
