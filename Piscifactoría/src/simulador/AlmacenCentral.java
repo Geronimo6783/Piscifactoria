@@ -55,5 +55,11 @@ public class AlmacenCentral {
         this.capacidadComidaVegetal = capacidadComidaVegetal;
     }
 
-
+    /**
+     * Mejora el almacén centrar aumentado la capacidad de ambas comidas en 50 unidades.
+     */
+    public void mejorar(){
+        capacidadComidaAnimal += 50;
+        capacidadComidaVegetal += 50;
+    }
 }
