@@ -274,7 +274,9 @@ public class Tanque {
         ArrayList<Integer> cantidadDeComidadNecesariaPorPez = new ArrayList<>();
 
         for(Pez pez : peces){
-            cantidadDeComidadNecesariaPorPez.add(pez.comer());
+            if(pez.isVivo() && !pez.isAlimentado()){
+                cantidadDeComidadNecesariaPorPez.add(pez.comer());
+            }
         }
 
         for(Integer cantidadComida : cantidadDeComidadNecesariaPorPez){
@@ -285,7 +287,9 @@ public class Tanque {
             if(comidaAnimal >= comidadNecesaria){
                 comidaAnimal -= comidadNecesaria;
                 for(Pez pez : peces){
-                    pez.setAlimentado(true);
+                    if(pez.isVivo() && !pez.isAlimentado()){
+                        pez.setAlimentado(true);
+                    }
                 }
             }
         }
@@ -294,7 +298,9 @@ public class Tanque {
                 if(comidaVegetal >= comidadNecesaria){
                     comidaVegetal -= comidadNecesaria;
                     for(Pez pez : peces){
-                        pez.setAlimentado(true);
+                        if(pez.isVivo() && !pez.isAlimentado()){
+                            pez.setAlimentado(true);
+                        }
                     }
                 } 
             }
@@ -320,6 +326,12 @@ public class Tanque {
                             comidaAnimal = 0;
                         }
                     }
+
+                    for(Pez pez : peces){
+                        if(pez.isVivo() && !pez.isAlimentado()){
+                            pez.setAlimentado(true);
+                        }
+                    }
                 }
             }
         }
@@ -335,7 +347,7 @@ public class Tanque {
             }
         }
 
-        
+
     }
 
     public void nextDay(){
