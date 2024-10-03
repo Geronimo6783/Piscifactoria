@@ -148,7 +148,7 @@ public class Tanque {
         System.out.println("=============== Tanque ===============\nOcupación: " + peces.size() + " / " + capacidadMaximaPeces + "(" +String.format("%.2f", ((float)peces.size())/(float)capacidadMaximaPeces)
                             +")\nPeces vivos: " + pecesVivos() + " / " + peces.size() + "(" +String.format("%.2f", ((float)pecesVivos()/(float)peces.size())) 
                             + ")\nPeces alimentados: " + pecesAlimentados() + " / " + peces.size() + "(" + String.format("%.2f", ((float)pecesAlimentados()/(float)peces.size())) 
-                            + ")\nPeces adultos: " + "pecesAdultos()" + " / " + peces.size() + "(" + String.format("%.2f", ((float)pecesAlimentados()/(float)peces.size())) 
+                            + ")\nPeces adultos: " + pecesAdultos() + " / " + peces.size() + "(" + String.format("%.2f", ((float)pecesAdultos()/(float)peces.size())) 
                             + ")\nHembras / Machos: " + pecesHembra() + " / " + pecesMacho() 
                             + "\nFértiles: " + pecesFertiles() + " / " + pecesVivos()
                             );
@@ -191,18 +191,17 @@ public class Tanque {
      * 
      * @return Número de peces vivos en el tanque.
      */
-    /*
     private int pecesAdultos(){
         int pecesAdultos = 0;
 
         for(Pez pez :  peces){
-            if(){
+            if(pez.isMaduro()){
                 pecesAdultos += 1;
             }
         }
 
         return pecesAdultos;
-    }*/
+    }
 
     /**
      * 
