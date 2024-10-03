@@ -60,4 +60,20 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
             }
         }
     }
+
+    /**
+     * Indica si la tirapia del nilo está madura.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.TILAPIA_NILO.getMadurez();
+    }
+
+    /**
+     * Indica si la tirapia del nilo está en la edad óptima para ser vendida.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.TILAPIA_NILO.getOptimo();
+    }
 }

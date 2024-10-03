@@ -60,4 +60,20 @@ public class Robalo extends Pez implements Carnivoro, Mar{
             }
         }
     }
+
+    /**
+     * Indica si el robalo está maduro.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.ROBALO.getMadurez();
+    }
+
+    /**
+     * Indica si el robalo está en la edad óptima para ser vendido.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.ROBALO.getOptimo();
+    }
 }

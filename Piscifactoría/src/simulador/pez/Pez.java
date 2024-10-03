@@ -193,4 +193,15 @@ public abstract class Pez {
         return 1;
     }
 
+    /**
+     * 
+     * @return True si el pez está maduro.
+     */
+    public abstract boolean isMaduro();
+
+    /**
+     * 
+     * @return True si el pez está en la edad optima para ser vendido.
+     */
+    public abstract boolean isEdadOptima();
 }

@@ -60,4 +60,20 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
             }
         }
     }
+
+    /**
+     * Indica si el abadejo está maduro.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.ABADEJO.getMadurez();
+    }
+
+    /**
+     * Indica si el abadejo está en la edad óptima para ser vendido.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.ABADEJO.getOptimo();
+    }
 }

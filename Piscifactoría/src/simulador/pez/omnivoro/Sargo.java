@@ -60,4 +60,20 @@ public class Sargo extends Pez implements Omnivoro, Mar{
             }
         }
     }
+
+    /**
+     * Indica si el sargo está maduro.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.SARGO.getMadurez();
+    }
+
+    /**
+     * Indica si el sargo está en la edad óptima para ser vendido.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.SARGO.getOptimo();
+    }
 }

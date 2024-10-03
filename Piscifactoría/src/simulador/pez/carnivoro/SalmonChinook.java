@@ -60,4 +60,20 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
             }
         }
     }
+
+    /**
+     * Indica si el salmón chinook está maduro.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.SALMON_CHINOOK.getMadurez();
+    }
+
+    /**
+     * Indica si el salmón chinook está en la edad óptima para ser vendido.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.SALMON_CHINOOK.getOptimo();
+    }
 }
