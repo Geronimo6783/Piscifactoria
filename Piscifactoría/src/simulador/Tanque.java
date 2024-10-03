@@ -283,17 +283,20 @@ public class Tanque {
                 + String.format("%.2f", ((float) peces.size() / (float) capacidadMaximaPeces)) + "% de capacidad.");
     }
 
+    /**
+     *  Gestiona la lógica para alimentar a los peces.
+     */
     public void alimentar() {
         int comidaNecesaria = 0;
-        ArrayList<Integer> cantidadDecomidaNecesariaPorPez = new ArrayList<>();
+        ArrayList<Integer> cantidadDeComidaNecesariaPorPez = new ArrayList<>();
 
         for (Pez pez : peces) {
             if (pez.isVivo() && !pez.isAlimentado()) {
-                cantidadDecomidaNecesariaPorPez.add(pez.comer());
+                cantidadDeComidaNecesariaPorPez.add(pez.comer());
             }
         }
 
-        for (Integer cantidadComida : cantidadDecomidaNecesariaPorPez) {
+        for (Integer cantidadComida : cantidadDeComidaNecesariaPorPez) {
             comidaNecesaria += cantidadComida;
         }
 
@@ -306,7 +309,7 @@ public class Tanque {
                     }
                 }
             } else{
-                alimentarAleatorio(cantidadDecomidaNecesariaPorPez, comidaAnimal);
+                alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaAnimal);
             }
         } else {
             if (peces.get(0) instanceof Filtrador) {
@@ -318,7 +321,7 @@ public class Tanque {
                         }
                     }
                 } else{
-                    alimentarAleatorio(cantidadDecomidaNecesariaPorPez, comidaVegetal);
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaVegetal);
                 }
             } else {
                 if ((comidaVegetal + comidaAnimal) >= comidaNecesaria) {
@@ -346,32 +349,37 @@ public class Tanque {
                         }
                     }
                 } else{
-                    alimentarAleatorio(cantidadDecomidaNecesariaPorPez, comidaAnimal + comidaVegetal);
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaAnimal + comidaVegetal);
                 }
             }
         }
     }
 
-    private void alimentarAleatorio(ArrayList<Integer> cantidadDecomidaNecesariaPorPez, int comidaDisponible) {
+    /**
+     * Gestiona la lógica para alimentar a los peces cuando la comida es insuficiente.
+     * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada Pez para alimentarse.
+     * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
+     */
+    private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, int comidaDisponible) {
         Random rt = new Random();
         ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
         int posicionAleatoria = 0;
 
-        for (int i = 0; i < cantidadDecomidaNecesariaPorPez.size(); i++) {
-            if (cantidadDecomidaNecesariaPorPez.get(i) == 0) {
+        for (int i = 0; i < cantidadDeComidaNecesariaPorPez.size(); i++) {
+            if (cantidadDeComidaNecesariaPorPez.get(i) == 0) {
                 posicionesPecesAlimentados.add(i);
             }
         }
 
         while (comidaDisponible > 0) {
-            posicionAleatoria = rt.nextInt(cantidadDecomidaNecesariaPorPez.size());
+            posicionAleatoria = rt.nextInt(cantidadDeComidaNecesariaPorPez.size());
 
             if (!posicionesPecesAlimentados.contains(posicionAleatoria)) {
-                comidaDisponible -= cantidadDecomidaNecesariaPorPez.get(posicionAleatoria);
-                cantidadDecomidaNecesariaPorPez.set(posicionAleatoria, 0);
+                comidaDisponible -= cantidadDeComidaNecesariaPorPez.get(posicionAleatoria);
+                cantidadDeComidaNecesariaPorPez.set(posicionAleatoria, 0);
                 posicionesPecesAlimentados.add(posicionAleatoria);
             }
-            if (comidaDisponible == 1 && !cantidadDecomidaNecesariaPorPez.contains(1)) {
+            if (comidaDisponible == 1 && !cantidadDeComidaNecesariaPorPez.contains(1)) {
                 break;
             }
         }
