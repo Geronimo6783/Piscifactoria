@@ -155,7 +155,7 @@ public class Tanque {
      */
     public void showStatus() {
         System.out.println(
-                "=============== Tanque ===============\nOcupación: " + peces.size() + " / " + capacidadMaximaPeces
+                "=============== Tanque"+numeroTanque+"===============\nOcupación: " + peces.size() + " / " + capacidadMaximaPeces
                         + "(" + String.format("%.2f", ((float) peces.size()) / (float) capacidadMaximaPeces)
                         + ")\nPeces vivos: " + pecesVivos() + " / " + peces.size() + "("
                         + String.format("%.2f", ((float) pecesVivos() / (float) peces.size()))

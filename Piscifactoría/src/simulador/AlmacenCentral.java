@@ -11,9 +11,19 @@ public class AlmacenCentral {
     private int capacidadComidaAnimal;
 
     /**
+     * Cantidad de comida animal en el almacén.
+     */
+    private int cantidadComidaAnimal;
+
+    /**
      * Capacidad para comida vegetal en el almacén.
      */
     private int capacidadComidaVegetal;
+
+    /**
+     * Cantidad para comida vegetal en el almacén.
+     */
+    private int cantidadComidaVegetal;
 
     /**
      * Constructor de almacenes centrales.
@@ -21,6 +31,14 @@ public class AlmacenCentral {
     public AlmacenCentral(){
         capacidadComidaAnimal = 200;
         capacidadComidaVegetal = 200;
+    }
+
+    /**
+     * 
+     * @return Cantidad de comida animal del almacén central.
+     */
+    public int getCantidadComidaAnimal() {
+        return cantidadComidaAnimal;
     }
 
     /**
@@ -45,6 +63,14 @@ public class AlmacenCentral {
      */
     public int getCapacidadComidaVegetal() {
         return capacidadComidaVegetal;
+    }
+
+    /**
+     * 
+     * @return Cantidad para comida vegetal del almacén central.
+     */
+    public int getCantidadComidaVegetal() {
+        return cantidadComidaVegetal;
     }
 
     /**
