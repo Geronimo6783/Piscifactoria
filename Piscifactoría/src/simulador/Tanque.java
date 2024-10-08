@@ -293,6 +293,8 @@ public class Tanque {
         for (Pez pez : peces) {
             if (pez.isVivo() && !pez.isAlimentado()) {
                 cantidadDeComidaNecesariaPorPez.add(pez.comer());
+            } else {
+                cantidadDeComidaNecesariaPorPez.add(0);
             }
         }
 
