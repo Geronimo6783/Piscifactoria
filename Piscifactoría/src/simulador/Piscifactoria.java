@@ -66,16 +66,10 @@ public class Piscifactoria {
 
     public void showStatus(){
         System.out.println("==============="+nombre+
-        "===============\nTanques: "+tanques.size()+
-        /*"\nOcupación:"+tanques.get(0).getPeces()+"/"+tanqueInicial.getCapacidadMaximaPeces()+" "+(%)+
-         "\nPeces vivos:"+ vivos / total (%)+
-          "\nPeces alimentados:"+alimentados / vivos (%)+
-          "\nPeces adultos:"+ adultos / vivos (%)+
-          "\nHembras / Machos:"+H/M+
-          "\nFértiles:"+ fértiles / vivos"\nAlmacén de comida:"+actual / max (%)*/);
+        "===============\nTanques: "+tanques.size()+datosTanques());
     }
 
-    private String ocupacionTanques(){
+    private String datosTanques(){
         int peces=0;
         int capacidad=0;
         int vivos=0;
@@ -107,12 +101,14 @@ public class Piscifactoria {
                 }
             }
         }
-        return "\nOcupación:"+peces+"/"+capacidad+" "+"("+(peces/capacidad)*100+"%)"+
-         "\nPeces vivos:"+ vivos / total (%)+
-          "\nPeces alimentados:"+alimentados / vivos (%)+
-          "\nPeces adultos:"+ adultos / vivos (%)+
-          "\nHembras / Machos:"+H/M+
-          "\nFértiles:"+ fértiles / vivos"\nAlmacén de comida:"+actual / max (%)+"";
+        return "\nOcupación: "+peces+"/"+capacidad+" "+"("+(peces/capacidad)*100+"%)"+
+         "\nPeces vivos: "+ vivos +"/"+ peces+"("+(vivos/peces)*100+"%)"+
+          "\nPeces alimentados: "+alimentados +"/"+ vivos+"("+(alimentados/vivos)*100+"%)"+
+          "\nPeces adultos: "+ adultos +"/"+ vivos+"("+(adultos/vivos)*100+"%)"+
+          "\nHembras / Machos: "+hembras+"/"+machos+
+          "\nFértiles: "+ fertiles+"/"+ vivos+"("+(fertiles/vivos)*100+"%)"+
+          "\nAlmacén de comida: \n\t-comida carnivoros: "+almacenInicial.getCantidadComidaAnimal() +"/"+ almacenInicial.getCapacidadComidaAnimal() +"("+(almacenInicial.getCantidadComidaAnimal()/almacenInicial.getCapacidadComidaAnimal())*100+"%)"
+          +"\n\t-comida vegetal: "+almacenInicial.getCantidadComidaVegetal()+"/"+almacenInicial.getCapacidadComidaVegetal()+"("+(almacenInicial.getCantidadComidaVegetal()/almacenInicial.getCapacidadComidaVegetal())*100+"%)";
     }
 
     public void showTankStatus() {
@@ -134,10 +130,10 @@ public class Piscifactoria {
     }
 
     public void showFood(){
-        System.out.println("============== Almacen ================\nComida animal: "+almacenInicial.getCantidadComidaAnimal()+"/"+almacenInicial.getCapacidadComidaAnimal()+"
-        ("+(almacenInicial.getCantidadComidaAnimal()/almacenInicial.getCapacidadComidaAnimal())*100+"%)"+
-        "\nComida vegetal: "+almacenInicial.getCantidadComidaVegetal()+"/"+almacenInicial.getCapacidadComidaVegetal()+"
-        ("+(almacenInicial.getCantidadComidaVegetal()/almacenInicial.getCapacidadComidaVegetal())*100+"%)");
+        System.out.println("============== Almacen ================\nComida animal: "+almacenInicial.getCantidadComidaAnimal()+"/"+almacenInicial.getCapacidadComidaAnimal()+
+        "("+(almacenInicial.getCantidadComidaAnimal()/almacenInicial.getCapacidadComidaAnimal())*100+"%)"+
+        "\nComida vegetal: "+almacenInicial.getCantidadComidaVegetal()+"/"+almacenInicial.getCapacidadComidaVegetal()+
+        "("+(almacenInicial.getCantidadComidaVegetal()/almacenInicial.getCapacidadComidaVegetal())*100+"%)");
     }
 
     public void nextDay() {
