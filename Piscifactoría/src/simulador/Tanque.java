@@ -7,6 +7,8 @@ import simulador.pez.filtrador.*;
 import simulador.pez.omnivoro.*;
 import java.util.Random;
 
+import propiedades.AlmacenPropiedades;
+
 /**
  * Clase que representa a un tanque de una piscifactoría que contiene un número
  * de peces.
@@ -411,5 +413,25 @@ public class Tanque {
 
     public void nextDay() {
 
+    }
+
+    /*
+     * Metodo auxiliar de sellFish en piscifactoria que vende los peces de un tanque y devuelve el valor de monedas
+     */
+    public int ventaPeces(){
+        int valorPez=AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
+        int validos=0;
+        if(pecesAdultos()<pecesVivos()){
+            validos=pecesAdultos()+(pecesAdultos()-pecesVivos());
+        }else{
+            validos=pecesAdultos()-(pecesAdultos()-pecesVivos());
+        }
+        valorPez=valorPez*validos;
+        for (int i=0;i<peces.size();i++) {
+            if (peces.get(i).isMaduro()) {
+                peces.remove(i);
+            }
+        }
+        return valorPez;
     }
 }
