@@ -11,7 +11,12 @@ public class Piscifactoria {
     private AlmacenCentral almacenInicial;
     private String nombre = "";
 
-
+    /**
+     * Constructor de Piscifactoria que diferencia entre si el primer tanque es de mar o de rio
+     * @param tanques
+     * @param tipoAgua
+     * @param nombre
+     */
     public Piscifactoria(ArrayList<Tanque> tanques, boolean tipoAgua, String nombre) {
         this.tanques.add(tanqueInicial);
         this.tipoAgua = tipoAgua;
@@ -27,52 +32,97 @@ public class Piscifactoria {
         this.nombre = nombre;
     }
 
+    /**
+     * Devuelve los tanques de la piscifactoria
+     * @return tanques
+     */
     public ArrayList<Tanque> getTanques() {
         return tanques;
     }
 
+    /**
+     * Establece el ArrayList de tanques de la piscifactoria
+     * @param tanques
+     */
     public void setTanques(ArrayList<Tanque> tanques) {
         this.tanques = tanques;
     }
 
+    /**
+     * Devuelve el tanque inicial de la piscifactoria
+     * @return 
+     */
     public Tanque getTanqueInicial() {
         return tanqueInicial;
     }
 
+    /**
+     * Establece el tanque inicial de la piscifactoria
+     * @param tanqueInicial
+     */
     public void setTanqueInicial(Tanque tanqueInicial) {
         this.tanqueInicial = tanqueInicial;
     }
 
+    /**
+     * Devuelve el nombre de la piscifactoria
+     * @return
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Devuelve el tipo de agua de la piscifactoria
+     * @return
+     */
     public boolean isTipoAgua() {
         return tipoAgua;
     }
 
+    /**
+     * Establece el tipo de agua de la piscifactoria
+     * @param tipoAgua
+     */
     public void setTipoAgua(boolean tipoAgua) {
         this.tipoAgua = tipoAgua;
     }
 
+    /**
+     * devuelve el almacen inicial de la piscifactoria
+     * @return
+     */
     public AlmacenCentral getAlmacenInicial() {
         return almacenInicial;
     }
 
+    /**
+     * Establece el almacen inicial de la piscifactoria
+     * @param almacenInicial
+     */
     public void setAlmacenInicial(AlmacenCentral almacenInicial) {
         this.almacenInicial = almacenInicial;
     }
 
+    /**
+     * Establece el nombre de la piscifactoria
+     * @param nombre
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * Metodo que muestra el estado de la piscifactoria y todos sus tanques
+     */
     public void showStatus() {
         System.out.println("===============" + nombre +
                 "===============\nTanques: " + tanques.size() + datosTanques());
     }
 
-    /*Metodo auxiliar de showStatus que realiza los calculos de cantidades y porcentajes para devolver como string el resto del mensaje*/
+    /**
+     * Metodo auxiliar de showStatus que realiza los calculos de cantidades y porcentajes para devolver como string el resto del mensaje
+     */
     private String datosTanques() {
         int peces = 0;
         int capacidad = 0;
@@ -85,26 +135,14 @@ public class Piscifactoria {
         for (int i = 0; i < tanques.size(); i++) {
             peces += tanques.get(i).getPeces().size();
             capacidad += tanques.get(i).getCapacidadMaximaPeces();
-            for (int j = 0; j < tanques.get(i).getPeces().size(); j++) {
-                if (tanques.get(i).getPeces().get(j).isVivo()) {
-                    vivos += 1;
-                }
-                if (tanques.get(i).getPeces().get(j).isAlimentado()) {
-                    alimentados += 1;
-                }
-                if (tanques.get(i).getPeces().get(j).isMaduro()) {
-                    adultos += 1;
-                }
-                if (tanques.get(i).getPeces().get(j).isSexo()) {
-                    hembras += 1;
-                } else {
-                    machos += 1;
-                }
-                if (tanques.get(i).getPeces().get(j).isFertil()) {
-                    fertiles += 1;
-                }
+            vivos += tanques.get(i).pecesVivos();
+            alimentados += tanques.get(i).pecesAlimentados();
+            adultos += tanques.get(i).pecesAdultos();
+            hembras += tanques.get(i).pecesHembra();
+            machos += tanques.get(i).pecesMacho();
+            fertiles += tanques.get(i).pecesFertiles();
             }
-        }
+        
         return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
                 "\nPeces vivos: " + vivos + "/" + peces + "(" + (vivos / peces) * 100 + "%)" +
                 "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + (alimentados / vivos) * 100 + "%)" +
@@ -119,25 +157,34 @@ public class Piscifactoria {
                 + (almacenInicial.getCantidadComidaVegetal() / almacenInicial.getCapacidadComidaVegetal()) * 100 + "%)";
     }
 
+    /**
+     * Metodo que muestra el estado de los tanques
+     */
     public void showTankStatus() {
         for (int i = 0; i < tanques.size(); i++) {
             tanques.get(i).showStatus();
         }
     }
 
+    /**
+     * Metodo que muestra el estado de los peces de los tanques
+     */
     public void showFishStatus() {
         for (int i = 0; i < tanques.size(); i++) {
             tanques.get(i).showFishStatus();
         }
     }
 
+    /**
+     * Metodo que muestra la capacidad de los tanques
+     */
     public void showCapacity() {
         for (int i = 0; i < tanques.size(); i++) {
             tanques.get(i).showCapacity(nombre);
         }
     }
 
-    /*
+    /**
      * Metodo que muestra por mensaje el estado del Almacen
      */
     public void showFood() {
@@ -155,8 +202,9 @@ public class Piscifactoria {
 
     }
 
-    /*
+    /**
      * Metodo que vende los peces maduros y vivos de los tanques devolviendo el valor de monedas conseguidas.
+     * @return Cantidad de monedas ganadas de la venta 
      */
     public int sellFish() {
         int monedasGanadas=0;
@@ -166,7 +214,7 @@ public class Piscifactoria {
         return monedasGanadas;
     }
     
-    /*
+    /**
      * Metodo que mejora el almacen
      */
     public void upgradeFood() {
@@ -176,4 +224,3 @@ public class Piscifactoria {
                 + almacenInicial.getCapacidadComidaAnimal());
     }
 }
-

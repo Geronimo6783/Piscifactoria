@@ -174,7 +174,7 @@ public class Tanque {
      * 
      * @return Número de peces vivos en el tanque.
      */
-    private int pecesVivos() {
+    public int pecesVivos() {
         int pecesVivos = 0;
 
         for (Pez pez : peces) {
@@ -190,7 +190,7 @@ public class Tanque {
      * 
      * @return Número de peces alimentados en el tanque.
      */
-    private int pecesAlimentados() {
+    public int pecesAlimentados() {
         int pecesAlimentados = 0;
 
         for (Pez pez : peces) {
@@ -206,7 +206,7 @@ public class Tanque {
      * 
      * @return Número de peces vivos en el tanque.
      */
-    private int pecesAdultos() {
+    public int pecesAdultos() {
         int pecesAdultos = 0;
 
         for (Pez pez : peces) {
@@ -222,7 +222,7 @@ public class Tanque {
      * 
      * @return Número de peces macho en el tanque.
      */
-    private int pecesMacho() {
+    public int pecesMacho() {
         int pecesMacho = 0;
 
         for (Pez pez : peces) {
@@ -238,7 +238,7 @@ public class Tanque {
      * 
      * @return Número de peces hembra en el tanque.
      */
-    private int pecesHembra() {
+    public int pecesHembra() {
         int pecesHembra = 0;
 
         for (Pez pez : peces) {
@@ -254,7 +254,7 @@ public class Tanque {
      * 
      * @return Número de peces fértiles en el tanque.
      */
-    private int pecesFertiles() {
+    public int pecesFertiles() {
         int pecesFertiles = 0;
 
         for (Pez pez : peces) {
@@ -415,8 +415,9 @@ public class Tanque {
 
     }
 
-    /*
+    /**
      * Metodo auxiliar de sellFish en piscifactoria que vende los peces de un tanque y devuelve el valor de monedas
+     * @return valor de la venta de peces
      */
     public int ventaPeces(){
         int valorPez=AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
@@ -426,6 +427,7 @@ public class Tanque {
         }else{
             validos=pecesAdultos()-(pecesAdultos()-pecesVivos());
         }
+
         valorPez=valorPez*validos;
         for (int i=0;i<peces.size();i++) {
             if (peces.get(i).isMaduro()) {
