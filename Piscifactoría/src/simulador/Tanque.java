@@ -6,6 +6,9 @@ import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
 import simulador.pez.omnivoro.*;
 import java.util.Random;
+import java.util.Iterator;
+
+import propiedades.AlmacenPropiedades;
 
 /**
  * Clase que representa a un tanque de una piscifactoría que contiene un número de peces.
@@ -440,6 +443,48 @@ public class Tanque {
 
     private void reproducir(){
         
+    }
+
+    /**
+     * Vende todos los peces que se encuentran en una edad óptima para ser vendidos.
+     * @return Monedas obtenidas por la venta de todos los peces que se encuentran en una edad óptima para ser vendidos.
+     */
+    private int venderPecesOptimos(){
+        int pecesAVender = 0;
+        Iterator<Pez> iterador = peces.iterator();
+        
+        while(iterador.hasNext()){
+            Pez pez = iterador.next();
+
+            if(pez.isEdadOptima()){
+                pecesAVender++;
+                iterador.remove();
+            }
+        }
+
+        return pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
+    }
+
+    public int venderPeces(){
+        int monedasAObtener = 0;
+        Iterator<Pez> iterador = peces.iterator();
+
+        while(iterador.hasNext()){
+            Pez pez = iterador.next();
+
+            if(pez.isMaduro() && !pez.isEdadOptima()){
+                monedasAObtener += (AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas() / 2);
+                iterador.remove();
+            }
+            else{
+                if(pez.isEdadOptima()){
+                    monedasAObtener += AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
+                    iterador.remove();
+                }
+            }
+        }
+
+        return monedasAObtener;
     }
 
     public void nextDay() {
