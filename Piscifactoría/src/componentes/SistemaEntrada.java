@@ -61,6 +61,36 @@ public class SistemaEntrada {
     }
 
     /**
+     * Gestiona la entrada de un número entero positivo introducido por el usuario.
+     * @return Número entero positivo introducido por el usuario.
+     */
+    public static int entradaOpcionNumericaEnteraPositiva(){
+        int opcion = 0;
+        boolean error;
+
+        do{
+            try{
+                opcion = Integer.parseInt(BUFER_ENTRADA.readLine());
+                error = false;
+                if(opcion < 0){
+                    System.out.println("No introduzca valores negativos.");
+                    error = true;
+                }
+            }
+            catch(NumberFormatException e){
+                System.out.println("Introduzca un número entero.");
+                error = true;
+            }
+            catch(IOException e){
+                System.out.println("Hubo un problema a la hora de leer la entrada del usuario.");
+                error = true;
+            }
+        }while(error);
+
+        return opcion;
+    }
+
+    /**
      * Cierra el búfer de entrada de datos.
      */
     public static void close(){
