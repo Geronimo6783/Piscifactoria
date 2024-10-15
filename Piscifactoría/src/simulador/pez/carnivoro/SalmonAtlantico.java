@@ -60,4 +60,20 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
             }
         }
     }
+
+    /**
+     * Indica si el salmón atlántico está maduro.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.SALMON_ATLANTICO.getMadurez();
+    }
+
+    /**
+     * Indica si el salmón atlántico está en la edad óptima para ser vendido.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.SALMON_ATLANTICO.getOptimo();
+    }
 }

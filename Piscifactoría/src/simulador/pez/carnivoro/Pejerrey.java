@@ -60,4 +60,20 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
             }
         }
     }
+
+    /**
+     * Indica si el pejerrey está maduro.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.PEJERREY.getMadurez();
+    }
+
+    /**
+     * Indica si el pejerrey está en la edad óptima para ser vendido.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.PEJERREY.getOptimo();
+    }
 }

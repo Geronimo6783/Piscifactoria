@@ -60,4 +60,20 @@ public class Caballa extends Pez implements Carnivoro, Mar{
             }
         }
     }
+
+    /**
+     * Indica si la caballa está madura.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.CABALLA.getMadurez();
+    }
+
+    /**
+     * Indica si la caballa está en la edad óptima para ser vendida.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.CABALLA.getOptimo();
+    }
 }

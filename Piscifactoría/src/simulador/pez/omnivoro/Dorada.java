@@ -60,4 +60,20 @@ public class Dorada extends Pez implements Omnivoro, Rio, Mar{
             }
         }
     }
+
+    /**
+     * Indica si la dorada está madura.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.DORADA.getMadurez();
+    }
+
+    /**
+     * Indica si la dorada está en la edad óptima para ser vendida.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.DORADA.getOptimo();
+    }
 }

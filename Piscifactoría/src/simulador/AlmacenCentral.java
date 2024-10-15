@@ -16,6 +16,16 @@ public class AlmacenCentral {
     private int capacidadComidaVegetal;
 
     /**
+     * Cantidad de comida animal disponible en el almacén central.
+     */
+    private int cantidadComidaAnimal;
+
+    /**
+     * Cantidad de comida vegetal disponible en el almacén central.
+     */
+    private int cantidadComidaVegetal;
+
+    /**
      * Constructor de almacenes centrales.
      */
     public AlmacenCentral(){
@@ -55,5 +65,43 @@ public class AlmacenCentral {
         this.capacidadComidaVegetal = capacidadComidaVegetal;
     }
 
+    /**
+     * 
+     * @return Cantidad de comida animal disponible en el almacén central.
+     */
+    public int getCantidadComidaAnimal() {
+        return cantidadComidaAnimal;
+    }
 
+    /**
+     * Permite establecer la cantidad de comida animal disponible en el almacén central.
+     * @param cantidadComidaAnimal Cantidad de comida animal disponible en el almacén central a establecer.
+     */
+    public void setCantidadComidaAnimal(int cantidadComidaAnimal) {
+        this.cantidadComidaAnimal = cantidadComidaAnimal;
+    }
+
+    /**
+     * 
+     * @return Cantidad de comida vegetal disponible en el almacén central.
+     */
+    public int getCantidadComidaVegetal() {
+        return cantidadComidaVegetal;
+    }
+
+    /**
+     * Permite establecer la cantidad de comida vegetal disponible en el almacén central.
+     * @param cantidadComidaVegetal Cantidad de comida vegetal disponible a establecer.
+     */
+    public void setCantidadComidaVegetal(int cantidadComidaVegetal) {
+        this.cantidadComidaVegetal = cantidadComidaVegetal;
+    }
+
+    /**
+     * Mejora el almacén centrar aumentado la capacidad de ambas comidas en 50 unidades.
+     */
+    public void mejorar(){
+        capacidadComidaAnimal += 50;
+        capacidadComidaVegetal += 50;
+    }
 }

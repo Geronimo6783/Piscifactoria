@@ -68,4 +68,20 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
     public int comer(){
         return (new Random().nextBoolean()) ? 2 : 1;
     }
+
+    /**
+     * Indica si la perca europea está madura.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.PERCA_EUROPEA.getMadurez();
+    }
+
+    /**
+     * Indica si la perca europea está en la edad óptima para ser vendida.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.PERCA_EUROPEA.getOptimo();
+    }
 }

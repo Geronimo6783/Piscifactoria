@@ -68,4 +68,20 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
         return (new Random().nextInt(4) < 3) ? 0 : 1;
 
     }
+
+    /**
+     * Indica si el carpín de tres espinas está maduro.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez();
+    }
+
+    /**
+     * Indica si el carpín de tres espinas está en la edad óptima para ser vendido.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.CARPIN_TRES_ESPINAS.getOptimo();
+    }
 }

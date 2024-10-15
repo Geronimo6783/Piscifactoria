@@ -11,7 +11,6 @@ import simulador.pez.omnivoro.*;
 public class Simulador {
     
     public static void main(String[] args) {
-       CarpinTresEspinas pez = new CarpinTresEspinas(false);
-       System.out.println(pez.comer());
+       SistemaEntrada.entradaOpcionNumericaEnteraPositiva();
     }
 }

@@ -59,4 +59,20 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
             }
         }
     }
+
+    /**
+     * Indica si el arenque del atlántico está maduro.
+     */
+    @Override
+    public boolean isMaduro(){
+        return edad > AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez();
+    }
+
+    /**
+     * Indica si el arenque del atlántico está en la edad óptima para ser vendido.
+     */
+    @Override
+    public boolean isEdadOptima(){
+        return edad == AlmacenPropiedades.ARENQUE_ATLANTICO.getOptimo();
+    }
 }
