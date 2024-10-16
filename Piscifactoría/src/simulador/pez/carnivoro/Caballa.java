@@ -4,6 +4,7 @@ import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
+import simulador.pez.omnivoro.Sargo;
 
 /**
  * Clase que representa a una caballa.
@@ -75,5 +76,23 @@ public class Caballa extends Pez implements Carnivoro, Mar{
     @Override
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.CABALLA.getOptimo();
+    }
+
+    /**
+     * 
+     * @return Devuelve una caballa nueva de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Caballa(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve una caballa nueva de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Caballa(true);
     }
 }

@@ -76,4 +76,22 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.ABADEJO.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve un abadejo nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Abadejo(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un abadejo nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Abadejo(true);
+    }
 }

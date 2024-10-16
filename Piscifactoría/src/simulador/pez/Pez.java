@@ -204,4 +204,16 @@ public abstract class Pez {
      * @return True si el pez está en la edad optima para ser vendido.
      */
     public abstract boolean isEdadOptima();
+
+    /**
+     * 
+     * @return Pez nuevo de sexo masculino.
+     */
+    public abstract Pez obtenerPezHijo();
+
+    /**
+     * 
+     * @return Pez nuevo de sexo femenino.
+     */
+    public abstract Pez obtenerPezHija();
 }

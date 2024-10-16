@@ -4,6 +4,7 @@ import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
+import simulador.pez.omnivoro.Sargo;
 
 /**
  * Clase que representa a un pejerrey.
@@ -75,5 +76,23 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
     @Override
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.PEJERREY.getOptimo();
+    }
+
+    /**
+     * 
+     * @return Devuelve un pejerrey nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Pejerrey(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un pejerrey nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Pejerrey(true);
     }
 }

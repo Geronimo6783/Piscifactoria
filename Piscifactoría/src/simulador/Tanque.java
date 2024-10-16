@@ -441,13 +441,16 @@ public class Tanque {
         return false;
     }
 
+    /**
+     * Gestiona la lógica de reporudcción de los peces del tanque.
+     */
     private void reproducir(){
         int numeroHuevos = 0;
         int numeroHuevosPorHembra = AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getHuevos();
 
         if(hayMachoFertil() && hayHembraFertil()){
             for(Pez pez : peces){
-                if(pez.isSexo() && pez.isSexo()){
+                if(pez.isSexo() && pez.isFertil()){
                     pez.setFertil(false);
                     pez.setDiasSinReproducirse(0);
                     numeroHuevos += numeroHuevosPorHembra;
@@ -456,11 +459,13 @@ public class Tanque {
 
             while(peces.size() < capacidadMaximaPeces || numeroHuevos > 0){
                 if(pecesMacho() >= pecesHembra()){
-                    //Implementar lógica para añadir un pez hembra.
+                    peces.add(peces.getFirst().obtenerPezHija());
                 }
                 else{
-                    //Implmentar lógica para añadir un pez macho.
+                    peces.add(peces.getFirst().obtenerPezHijo())
                 }
+
+                numeroHuevos--;
             }
         }
     }

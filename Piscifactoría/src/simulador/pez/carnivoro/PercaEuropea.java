@@ -4,6 +4,7 @@ import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
+import simulador.pez.omnivoro.Sargo;
 
 /**
  * Clase que representa a una perca europea.
@@ -83,5 +84,23 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
     @Override
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.PERCA_EUROPEA.getOptimo();
+    }
+
+    /**
+     * 
+     * @return Devuelve una perca europea nueva de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new PercaEuropea(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve una perca europea de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new PercaEuropea(true);
     }
 }

@@ -76,4 +76,22 @@ public class Sargo extends Pez implements Omnivoro, Mar{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.SARGO.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve un sargo nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Sargo(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un sargo nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Sargo(true);
+    }
 }

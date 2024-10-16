@@ -4,6 +4,7 @@ import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
+import simulador.pez.omnivoro.Sargo;
 
 /**
  * Clase que representa a una tilapia del nilo.
@@ -75,5 +76,23 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
     @Override
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.TILAPIA_NILO.getOptimo();
+    }
+
+    /**
+     * 
+     * @return Devuelve una tilapia del nilo nueva de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new TilapiaDelNilo(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve una tilapia del nilo nueva de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new TilapiaDelNilo(true);
     }
 }

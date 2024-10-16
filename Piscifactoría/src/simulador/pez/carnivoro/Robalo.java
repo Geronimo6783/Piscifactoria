@@ -4,6 +4,7 @@ import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
+import simulador.pez.omnivoro.Sargo;
 
 /**
  * Clase que representa a un róbalo.
@@ -75,5 +76,23 @@ public class Robalo extends Pez implements Carnivoro, Mar{
     @Override
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.ROBALO.getOptimo();
+    }
+
+    /**
+     * 
+     * @return Devuelve un robalo nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Robalo(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un robalo nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Robalo(true);
     }
 }

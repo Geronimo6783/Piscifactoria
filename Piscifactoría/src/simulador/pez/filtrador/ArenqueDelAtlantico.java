@@ -2,6 +2,8 @@ package simulador.pez.filtrador;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
+import simulador.pez.omnivoro.Sargo;
+
 import java.util.Random;
 
 /**
@@ -74,5 +76,23 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
     @Override
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.ARENQUE_ATLANTICO.getOptimo();
+    }
+
+    /**
+     * 
+     * @return Devuelve un arenque del atlántico nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new ArenqueDelAtlantico(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un arenque del atlántico nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new ArenqueDelAtlantico(true);
     }
 }
