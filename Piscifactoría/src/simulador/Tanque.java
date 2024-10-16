@@ -10,8 +10,11 @@ import java.util.Iterator;
 
 import propiedades.AlmacenPropiedades;
 
+import propiedades.AlmacenPropiedades;
+
 /**
- * Clase que representa a un tanque de una piscifactoría que contiene un número de peces.
+ * Clase que representa a un tanque de una piscifactoría que contiene un número
+ * de peces.
  */
 public class Tanque {
 
@@ -174,7 +177,7 @@ public class Tanque {
      * 
      * @return Número de peces vivos en el tanque.
      */
-    private int pecesVivos() {
+    public int pecesVivos() {
         int pecesVivos = 0;
 
         for (Pez pez : peces) {
@@ -190,7 +193,7 @@ public class Tanque {
      * 
      * @return Número de peces alimentados en el tanque.
      */
-    private int pecesAlimentados() {
+    public int pecesAlimentados() {
         int pecesAlimentados = 0;
 
         for (Pez pez : peces) {
@@ -206,7 +209,7 @@ public class Tanque {
      * 
      * @return Número de peces vivos en el tanque.
      */
-    private int pecesAdultos() {
+    public int pecesAdultos() {
         int pecesAdultos = 0;
 
         for (Pez pez : peces) {
@@ -222,7 +225,7 @@ public class Tanque {
      * 
      * @return Número de peces macho en el tanque.
      */
-    private int pecesMacho() {
+    public int pecesMacho() {
         int pecesMacho = 0;
 
         for (Pez pez : peces) {
@@ -238,7 +241,7 @@ public class Tanque {
      * 
      * @return Número de peces hembra en el tanque.
      */
-    private int pecesHembra() {
+    public int pecesHembra() {
         int pecesHembra = 0;
 
         for (Pez pez : peces) {
@@ -254,7 +257,7 @@ public class Tanque {
      * 
      * @return Número de peces fértiles en el tanque.
      */
-    private int pecesFertiles() {
+    public int pecesFertiles() {
         int pecesFertiles = 0;
 
         for (Pez pez : peces) {
@@ -465,6 +468,10 @@ public class Tanque {
         return pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
     }
 
+    /**
+     * Vende todos los peces maduros.
+     * @return Monedas obtenidas por la venta de todos los peces maduros.
+     */
     public int venderPeces(){
         int monedasAObtener = 0;
         Iterator<Pez> iterador = peces.iterator();
