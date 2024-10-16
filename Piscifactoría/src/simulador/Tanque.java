@@ -442,7 +442,27 @@ public class Tanque {
     }
 
     private void reproducir(){
-        
+        int numeroHuevos = 0;
+        int numeroHuevosPorHembra = AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getHuevos();
+
+        if(hayMachoFertil() && hayHembraFertil()){
+            for(Pez pez : peces){
+                if(pez.isSexo() && pez.isSexo()){
+                    pez.setFertil(false);
+                    pez.setDiasSinReproducirse(0);
+                    numeroHuevos += numeroHuevosPorHembra;
+                }
+            }
+
+            while(peces.size() < capacidadMaximaPeces || numeroHuevos > 0){
+                if(pecesMacho() >= pecesHembra()){
+                    //Implementar lógica para añadir un pez hembra.
+                }
+                else{
+                    //Implmentar lógica para añadir un pez macho.
+                }
+            }
+        }
     }
 
     /**
@@ -465,6 +485,10 @@ public class Tanque {
         return pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
     }
 
+    /**
+     * Vende todos los peces que estén maduros.
+     * @return Monedas obtenidas por la venta de todos los peces que estén maduros.
+     */
     public int venderPeces(){
         int monedasAObtener = 0;
         Iterator<Pez> iterador = peces.iterator();
