@@ -516,7 +516,16 @@ public class Tanque {
         return monedasAObtener;
     }
 
+    /**
+     * Implementa la lógica de que haya pasado un día haciendo crecer a los
+     * peces, realizando la lógica de reproducción y vendiendo los peces que
+     * están en la edad óptima.
+     */
     public void nextDay() {
-
+        for(Pez pez : peces){
+            pez.grow();
+        }
+        reproducir();
+        venderPecesOptimos();
     }
 }
