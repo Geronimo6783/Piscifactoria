@@ -84,4 +84,22 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.CARPIN_TRES_ESPINAS.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve un carpín de tres espinas nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new CarpinTresEspinas(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un carpín de tres espinas nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new CarpinTresEspinas(true);
+    }
 }

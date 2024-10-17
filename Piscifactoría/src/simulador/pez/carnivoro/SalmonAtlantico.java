@@ -76,4 +76,22 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.SALMON_ATLANTICO.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve un salmón atlántico nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new SalmonAtlantico(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un salmón atlántico nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new SalmonAtlantico(true);
+    }
 }

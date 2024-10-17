@@ -84,4 +84,22 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.PERCA_EUROPEA.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve una perca europea nueva de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new PercaEuropea(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve una perca europea de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new PercaEuropea(true);
+    }
 }

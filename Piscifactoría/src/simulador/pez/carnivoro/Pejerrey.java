@@ -76,4 +76,22 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.PEJERREY.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve un pejerrey nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Pejerrey(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un pejerrey nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Pejerrey(true);
+    }
 }

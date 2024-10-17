@@ -11,7 +11,19 @@ import simulador.pez.omnivoro.*;
 public class Simulador {
     
     public static void main(String[] args) {
-       CarpinTresEspinas pez = new CarpinTresEspinas(false);
-       System.out.println(pez.comer());
+       Tanque tanque = new Tanque(1, 25);
+       tanque.showStatus();
+       tanque.getPeces().add(new Sargo(false));
+       tanque.getPeces().add(new Sargo(true));
+       tanque.showFishStatus();
+       tanque.alimentar();
+       tanque.showFishStatus();
+       tanque.showStatus();
+       for(int i = 0; i < 12; i++){
+        tanque.alimentar();
+        tanque.nextDay();
+        tanque.showFishStatus();
+        tanque.showStatus();
+       }
     }
 }

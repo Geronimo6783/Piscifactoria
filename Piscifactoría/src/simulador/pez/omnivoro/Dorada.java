@@ -76,4 +76,22 @@ public class Dorada extends Pez implements Omnivoro, Rio, Mar{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.DORADA.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve una dorada nueva de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Dorada(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve una dorada nueva de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Dorada(true);
+    }
 }

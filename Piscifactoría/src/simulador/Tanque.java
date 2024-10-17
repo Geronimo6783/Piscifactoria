@@ -4,8 +4,10 @@ import simulador.pez.*;
 import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
-import simulador.pez.omnivoro.*;
 import java.util.Random;
+import java.util.Iterator;
+
+import propiedades.AlmacenPropiedades;
 
 /**
  * Clase que representa a un tanque de una piscifactoría que contiene un número
@@ -143,11 +145,13 @@ public class Tanque {
      * 
      * @param numeroTanque Número del tanque.
      */
-    public Tanque(int numeroTanque) {
+    public Tanque(int numeroTanque, int capacidadMaximaPeces) {
         capacidadMaximaComida = 200;
         comidaAnimal = 200;
         comidaVegetal = 200;
         this.numeroTanque = numeroTanque;
+        peces = new ArrayList<>();
+        this.capacidadMaximaPeces = capacidadMaximaPeces;
     }
 
     /**
@@ -155,15 +159,15 @@ public class Tanque {
      */
     public void showStatus() {
         System.out.println(
-                "=============== Tanque ===============\nOcupación: " + peces.size() + " / " + capacidadMaximaPeces
-                        + "(" + String.format("%.2f", ((float) peces.size()) / (float) capacidadMaximaPeces)
-                        + ")\nPeces vivos: " + pecesVivos() + " / " + peces.size() + "("
-                        + String.format("%.2f", ((float) pecesVivos() / (float) peces.size()))
-                        + ")\nPeces alimentados: " + pecesAlimentados() + " / " + peces.size() + "("
-                        + String.format("%.2f", ((float) pecesAlimentados() / (float) peces.size()))
-                        + ")\nPeces adultos: " + pecesAdultos() + " / " + peces.size() + "("
-                        + String.format("%.2f", ((float) pecesAdultos() / (float) peces.size()))
-                        + ")\nHembras / Machos: " + pecesHembra() + " / " + pecesMacho()
+                "=============== Tanque " + numeroTanque + " ===============\nOcupación: " + peces.size() + " / " + capacidadMaximaPeces
+                        + "(" + String.format("%.2f", (((float) peces.size()) / (float) capacidadMaximaPeces) *100)
+                        + "%)\nPeces vivos: " + pecesVivos() + " / " + peces.size() + "("
+                        + String.format("%.2f", (((float) pecesVivos() / (float) peces.size())) * 100)
+                        + "%)\nPeces alimentados: " + pecesAlimentados() + " / " + peces.size() + "("
+                        + String.format("%.2f", (((float) pecesAlimentados() / (float) peces.size())) * 100)
+                        + "%)\nPeces adultos: " + pecesAdultos() + " / " + peces.size() + "("
+                        + String.format("%.2f", (((float) pecesAdultos() / (float) peces.size())) * 100)
+                        + "%)\nHembras / Machos: " + pecesHembra() + " / " + pecesMacho()
                         + "\nFértiles: " + pecesFertiles() + " / " + pecesVivos());
 
     }
@@ -293,6 +297,8 @@ public class Tanque {
         for (Pez pez : peces) {
             if (pez.isVivo() && !pez.isAlimentado()) {
                 cantidadDeComidaNecesariaPorPez.add(pez.comer());
+            } else {
+                cantidadDeComidaNecesariaPorPez.add(0);
             }
         }
 
@@ -409,7 +415,119 @@ public class Tanque {
         }
     }
 
-    public void nextDay() {
+    /**
+     * Indica si hay un macho fértil en el tanque.
+     * @return True si hay un macho fértil en el tanque.
+     */
+    private boolean hayMachoFertil(){
+        for(Pez pez : peces){
+            if(!pez.isSexo() && pez.isFertil()){
+                return true;
+            }
+        }
 
+        return false;
+    }
+
+    /**
+     * Indica si hay una hembra fértil en el tanque.
+     * @return True si hay una hembra fértil en el tanque.
+     */
+    private boolean hayHembraFertil(){
+        for(Pez pez : peces){
+            if(pez.isSexo() && pez.isFertil()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gestiona la lógica de reporudcción de los peces del tanque.
+     */
+    private void reproducir(){
+        int numeroHuevos = 0;
+        int numeroHuevosPorHembra = AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getHuevos();
+
+        if(hayMachoFertil() && hayHembraFertil()){
+            for(Pez pez : peces){
+                if(pez.isSexo() && pez.isFertil()){
+                    pez.setFertil(false);
+                    pez.setDiasSinReproducirse(0);
+                    numeroHuevos += numeroHuevosPorHembra;
+                }
+            }
+
+            while(peces.size() < capacidadMaximaPeces && numeroHuevos > 0){
+                if(pecesMacho() >= pecesHembra()){
+                    peces.add(peces.getFirst().obtenerPezHija());
+                }
+                else{
+                    peces.add(peces.getFirst().obtenerPezHijo());
+                }
+
+                numeroHuevos--;
+            }
+        }
+    }
+
+    /**
+     * Vende todos los peces que se encuentran en una edad óptima para ser vendidos.
+     * @return Monedas obtenidas por la venta de todos los peces que se encuentran en una edad óptima para ser vendidos.
+     */
+    private int venderPecesOptimos(){
+        int pecesAVender = 0;
+        Iterator<Pez> iterador = peces.iterator();
+        
+        while(iterador.hasNext()){
+            Pez pez = iterador.next();
+
+            if(pez.isEdadOptima()){
+                pecesAVender++;
+                iterador.remove();
+            }
+        }
+
+        return pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
+    }
+
+    /**
+     * Vende todos los peces que estén maduros.
+     * @return Monedas obtenidas por la venta de todos los peces que estén maduros.
+     */
+    public int venderPeces(){
+        int monedasAObtener = 0;
+        Iterator<Pez> iterador = peces.iterator();
+
+        while(iterador.hasNext()){
+            Pez pez = iterador.next();
+
+            if(pez.isMaduro() && !pez.isEdadOptima()){
+                monedasAObtener += (AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas() / 2);
+                iterador.remove();
+            }
+            else{
+                if(pez.isEdadOptima()){
+                    monedasAObtener += AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
+                    iterador.remove();
+                }
+            }
+        }
+
+        return monedasAObtener;
+    }
+
+    /**
+     * Implementa la lógica de que haya pasado un día haciendo crecer a los
+     * peces, realizando la lógica de reproducción y vendiendo los peces que
+     * están en la edad óptima.
+     */
+    public void nextDay() {
+        for(Pez pez : peces){
+            pez.grow();
+        }
+        reproducir();
+        venderPecesOptimos();
     }
 }

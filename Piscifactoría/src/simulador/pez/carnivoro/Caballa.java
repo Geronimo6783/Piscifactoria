@@ -76,4 +76,22 @@ public class Caballa extends Pez implements Carnivoro, Mar{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.CABALLA.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve una caballa nueva de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Caballa(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve una caballa nueva de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Caballa(true);
+    }
 }

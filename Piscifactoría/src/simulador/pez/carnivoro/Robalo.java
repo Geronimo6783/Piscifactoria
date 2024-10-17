@@ -76,4 +76,22 @@ public class Robalo extends Pez implements Carnivoro, Mar{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.ROBALO.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve un robalo nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new Robalo(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un robalo nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new Robalo(true);
+    }
 }

@@ -76,4 +76,22 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.SALMON_CHINOOK.getOptimo();
     }
+
+    /**
+     * 
+     * @return Devuelve un salmón chinook nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        return new SalmonChinook(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un salmón chinook nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        return new SalmonChinook(true);
+    }
 }
