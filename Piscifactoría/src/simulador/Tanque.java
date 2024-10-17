@@ -11,7 +11,8 @@ import java.util.Iterator;
 import propiedades.AlmacenPropiedades;
 
 /**
- * Clase que representa a un tanque de una piscifactoría que contiene un número de peces.
+ * Clase que representa a un tanque de una piscifactoría que contiene un número
+ * de peces.
  */
 public class Tanque {
 
