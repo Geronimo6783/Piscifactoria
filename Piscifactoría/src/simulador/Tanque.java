@@ -462,7 +462,7 @@ public class Tanque {
                     peces.add(peces.getFirst().obtenerPezHija());
                 }
                 else{
-                    peces.add(peces.getFirst().obtenerPezHijo())
+                    peces.add(peces.getFirst().obtenerPezHijo());
                 }
 
                 numeroHuevos--;
