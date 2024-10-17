@@ -4,7 +4,6 @@ import simulador.pez.*;
 import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
-import simulador.pez.omnivoro.*;
 import java.util.Random;
 import java.util.Iterator;
 
@@ -145,11 +144,13 @@ public class Tanque {
      * 
      * @param numeroTanque Número del tanque.
      */
-    public Tanque(int numeroTanque) {
+    public Tanque(int numeroTanque, int capacidadMaximaPeces) {
         capacidadMaximaComida = 200;
         comidaAnimal = 200;
         comidaVegetal = 200;
         this.numeroTanque = numeroTanque;
+        peces = new ArrayList<>();
+        this.capacidadMaximaPeces = capacidadMaximaPeces;
     }
 
     /**
@@ -157,15 +158,15 @@ public class Tanque {
      */
     public void showStatus() {
         System.out.println(
-                "=============== Tanque ===============\nOcupación: " + peces.size() + " / " + capacidadMaximaPeces
-                        + "(" + String.format("%.2f", ((float) peces.size()) / (float) capacidadMaximaPeces)
-                        + ")\nPeces vivos: " + pecesVivos() + " / " + peces.size() + "("
-                        + String.format("%.2f", ((float) pecesVivos() / (float) peces.size()))
-                        + ")\nPeces alimentados: " + pecesAlimentados() + " / " + peces.size() + "("
-                        + String.format("%.2f", ((float) pecesAlimentados() / (float) peces.size()))
-                        + ")\nPeces adultos: " + pecesAdultos() + " / " + peces.size() + "("
-                        + String.format("%.2f", ((float) pecesAdultos() / (float) peces.size()))
-                        + ")\nHembras / Machos: " + pecesHembra() + " / " + pecesMacho()
+                "=============== Tanque " + numeroTanque + " ===============\nOcupación: " + peces.size() + " / " + capacidadMaximaPeces
+                        + "(" + String.format("%.2f", (((float) peces.size()) / (float) capacidadMaximaPeces) *100)
+                        + "%)\nPeces vivos: " + pecesVivos() + " / " + peces.size() + "("
+                        + String.format("%.2f", (((float) pecesVivos() / (float) peces.size())) * 100)
+                        + "%)\nPeces alimentados: " + pecesAlimentados() + " / " + peces.size() + "("
+                        + String.format("%.2f", (((float) pecesAlimentados() / (float) peces.size())) * 100)
+                        + "%)\nPeces adultos: " + pecesAdultos() + " / " + peces.size() + "("
+                        + String.format("%.2f", (((float) pecesAdultos() / (float) peces.size())) * 100)
+                        + "%)\nHembras / Machos: " + pecesHembra() + " / " + pecesMacho()
                         + "\nFértiles: " + pecesFertiles() + " / " + pecesVivos());
 
     }
@@ -457,7 +458,7 @@ public class Tanque {
                 }
             }
 
-            while(peces.size() < capacidadMaximaPeces || numeroHuevos > 0){
+            while(peces.size() < capacidadMaximaPeces && numeroHuevos > 0){
                 if(pecesMacho() >= pecesHembra()){
                     peces.add(peces.getFirst().obtenerPezHija());
                 }

@@ -4,7 +4,6 @@ import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
-import simulador.pez.omnivoro.Sargo;
 
 /**
  * Clase que representa a una perca europea.
