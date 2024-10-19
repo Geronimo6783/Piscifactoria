@@ -63,7 +63,9 @@ public class Simulador {
         GeneradorMenus.generarMenu(opcionesMenuPrincipal);
     }
 
-
+    /**
+     * Muestra el estado general de la simulación.
+     */
     private static void showGeneralStatus(){
         for(Piscifactoria piscifactoria : piscifactorias){
             piscifactoria.showStatus();
@@ -79,13 +81,14 @@ public class Simulador {
             System.out.println("Comida vegetal disponible en el almacén central: " + cantidadComidaVegetalAlmacen);
             System.out.println("Capacidad máxima de comida animal en el almacén central: " + capacidadComidaAnimalAlmacen);
             System.out.println("Capacidad máxima de comida vegetal en el almacén central: " + capacidadComidaVegetalAlmacen);
-            System.out.println("% de capacidad de la comida animal del almacén central " + String.format("%.2f", ((float) cantidadComidaAnimalAlmacen) / (float) capacidadComidaAnimalAlmacen));
-            System.out.println("% de capacidad de la comida vegetal del almacén central " + String.format("%.2f", ((float) cantidadComidaVegetalAlmacen / (float) capacidadComidaVegetalAlmacen)));
+            System.out.println("% de capacidad de la comida animal del almacén central " + String.format("%.2f", ((float) cantidadComidaAnimalAlmacen) / (float) capacidadComidaAnimalAlmacen) + "%");
+            System.out.println("% de capacidad de la comida vegetal del almacén central " + String.format("%.2f", ((float) cantidadComidaVegetalAlmacen / (float) capacidadComidaVegetalAlmacen)) + "%");
         }
     }
 
     public static void main(String[] args) {
         init();
+        almacenCentral = new AlmacenCentral();
        showGeneralStatus();
     }
 }
