@@ -86,7 +86,7 @@ public class Simulador {
     }
 
     public static void main(String[] args) {
-        Tanque tanque = new Tanque(1, 25, 25);
+        Tanque tanque = new Tanque(1,  25);
         tanque.showCapacity("Piscifactoría");
 
     }

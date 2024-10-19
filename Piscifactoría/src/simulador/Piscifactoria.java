@@ -8,6 +8,95 @@ import java.util.ArrayList;
 public class Piscifactoria {
 
     /**
+     * Clase que representa al almacén de comida de una piscifactoría.
+     */
+    class AlmacenComida{
+
+        /**
+         * Capacidad máxima de comida de cada tipo del almacén.
+         */
+        private int capacidadMaximaComida;
+
+        /**
+         * Cantidad comida animal que hay en el almacén.
+         */
+        private int cantidadComidaAnimal;
+
+        /**
+         * Cantidad comida vegetal que hay en el almacén.
+         */
+        private int cantidadComidaVegetal;
+
+        /**
+         * Constructor de almacenes de comida.
+         * @param capacidadMaximaComida Capacidad máxima de comida de cada tipo.
+         * @param cantidadComidaAnimal Cantidad de comida animal del almacén.
+         * @param cantidadComidaVegetal Cantidad de comida animal del alamacén.
+         */
+        public AlmacenComida(int capacidadMaximaComida, int cantidadComidaAnimal, int cantidadComidaVegetal) {
+            this.capacidadMaximaComida = capacidadMaximaComida;
+            this.cantidadComidaAnimal = cantidadComidaAnimal;
+            this.cantidadComidaVegetal = cantidadComidaVegetal;
+        }
+
+        /**
+         * 
+         * @return Capacidad máxima de comida de cada tipo del almacén.
+         */
+        public int getCapacidadMaximaComida() {
+            return capacidadMaximaComida;
+        }
+
+        /**
+         * Permite establecer la capacidad máxima de comida de cada tipo del almacén.
+         * @param capacidadMaximaComida Capacidad máxima de comida de cada tipo del almacén.
+         */
+        public void setCapacidadMaximaComida(int capacidadMaximaComida) {
+            this.capacidadMaximaComida = capacidadMaximaComida;
+        }
+
+        /**
+         * 
+         * @return Cantidad de comida animal del almacén.
+         */
+        public int getCantidadComidaAnimal() {
+            return cantidadComidaAnimal;
+        }
+
+        /**
+         * Permite establecer la cantidad de comida animal del almacén.
+         * @param cantidadComidaAnimal Cantidad de comida animal del almacén a establecer.
+         */
+        public void setCantidadComidaAnimal(int cantidadComidaAnimal) {
+            this.cantidadComidaAnimal = cantidadComidaAnimal;
+        }
+
+        /**
+         * 
+         * @return Cantidad de comida vegetal del almacén.
+         */
+        public int getCantidadComidaVegetal() {
+            return cantidadComidaVegetal;
+        }
+
+        /**
+         * Permite establecer la cantidad de comida vegetal del almacén.
+         * @param cantidadComidaVegetal Cantidad de comida vegetal del almacén a establecer.
+         */
+        public void setCantidadComidaVegetal(int cantidadComidaVegetal) {
+            this.cantidadComidaVegetal = cantidadComidaVegetal;
+        }
+
+        /**
+         * Mejora el almacen aumentando en 50 unidades la capacidad máxima de comida de cada tipo.
+         */
+        public void mejorar(){
+            capacidadMaximaComida += 50;
+        }
+
+    }
+
+    /**
      * Tanques de los que dispone la piscifactoría.
      */
     private ArrayList<Tanque> tanques;
@@ -18,7 +107,11 @@ public class Piscifactoria {
     private boolean tipoAgua;
     
     private Tanque tanqueInicial;
-    private AlmacenCentral almacenInicial;
+
+    /**
+     * Almacén de comida de la piscifactoría.
+     */
+    private AlmacenComida almacenInicial;
 
     /**
      * Nombre de la piscifactoría.
@@ -35,9 +128,9 @@ public class Piscifactoria {
         tanques = new ArrayList<>();
         this.tipoAgua = tipoAgua;
         if (tipoAgua) {
-            tanqueInicial = new Tanque(1, 100, 100);
+            tanqueInicial = new Tanque(1, 100);
         } else {
-            tanqueInicial = new Tanque(1, 25, 25);
+            tanqueInicial = new Tanque(1, 25);
         }
         this.nombre = nombre;
         this.tanques.add(tanqueInicial);
@@ -103,7 +196,7 @@ public class Piscifactoria {
      * devuelve el almacen inicial de la piscifactoria
      * @return
      */
-    public AlmacenCentral getAlmacenInicial() {
+    public AlmacenComida getAlmacenInicial() {
         return almacenInicial;
     }
 
@@ -111,7 +204,7 @@ public class Piscifactoria {
      * Establece el almacen inicial de la piscifactoria
      * @param almacenInicial
      */
-    public void setAlmacenInicial(AlmacenCentral almacenInicial) {
+    public void setAlmacenInicial(AlmacenComida almacenInicial) {
         this.almacenInicial = almacenInicial;
     }
 
@@ -143,9 +236,7 @@ public class Piscifactoria {
         int hembras = 0;
         int machos = 0;
         int fertiles = 0;
-        int cantidadComidaAnimal = 0;
-        int cantidadComidaVegetal = 0;
-        int capacidadMaximaComida = 0;
+
         for (int i = 0; i < tanques.size(); i++) {
             peces += tanques.get(i).getPeces().size();
             capacidad += tanques.get(i).getCapacidadMaximaPeces();
@@ -155,9 +246,6 @@ public class Piscifactoria {
             hembras += tanques.get(i).pecesHembra();
             machos += tanques.get(i).pecesMacho();
             fertiles += tanques.get(i).pecesFertiles();
-            cantidadComidaAnimal += tanques.get(i).getComidaAnimal();
-            cantidadComidaVegetal += tanques.get(i).getComidaVegetal();
-            capacidadMaximaComida += tanques.get(i).getCapacidadMaximaComida();
             }
         
         if(peces != 0){
@@ -167,12 +255,12 @@ public class Piscifactoria {
                     "\nPeces adultos: " + adultos + "/" + vivos + "(" + (adultos / vivos) * 100 + "%)" +
                     "\nHembras / Machos: " + hembras + "/" + machos +
                     "\nFértiles: " + fertiles + "/" + vivos + "(" + (fertiles / vivos) * 100 + "%)" +
-                    "\nAlmacén de comida: \n\t-comida carnivoros: " + cantidadComidaAnimal + "/"
-                    + capacidadMaximaComida + "("
-                    + (cantidadComidaAnimal / capacidadMaximaComida) * 100 + "%)"
-                    + "\n\t-comida vegetal: " + cantidadComidaVegetal + "/"
-                    + capacidadMaximaComida + "("
-                    + (cantidadComidaVegetal / capacidadMaximaComida) * 100 + "%)";
+                    "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
+                    + almacenInicial.capacidadMaximaComida + "("
+                    + String.format("%.2f",(almacenInicial.cantidadComidaAnimal/ almacenInicial.capacidadMaximaComida) * 100) + "%)"
+                    + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
+                    + almacenInicial.capacidadMaximaComida + "("
+                    + String.format("%.2f", (almacenInicial.cantidadComidaVegetal / almacenInicial.capacidadMaximaComida) * 100) + "%)";
         }
         else{
             return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
@@ -181,12 +269,12 @@ public class Piscifactoria {
             "\nPeces adultos: " + adultos + "/" + vivos + "(100%)" +
             "\nHembras / Machos: " + hembras + "/" + machos +
             "\nFértiles: " + fertiles + "/" + vivos + "(100%)" +
-            "\nAlmacén de comida: \n\t-comida carnivoros: " + cantidadComidaAnimal + "/"
-            + capacidadMaximaComida + "("
-            + (cantidadComidaAnimal / capacidadMaximaComida) * 100 + "%)"
-            + "\n\t-comida vegetal: " + cantidadComidaVegetal + "/"
-            + capacidadMaximaComida + "("
-            + (cantidadComidaVegetal / capacidadMaximaComida) * 100 + "%)";
+            "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
+            + almacenInicial.capacidadMaximaComida + "("
+            + String.format("%.2f", (almacenInicial.cantidadComidaAnimal / almacenInicial.capacidadMaximaComida) * 100) + "%)"
+            + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
+            + almacenInicial.capacidadMaximaComida + "("
+            + String.format("%.2f", (almacenInicial.cantidadComidaVegetal / almacenInicial.capacidadMaximaComida) * 100) + "%)";
         }
     }
 
@@ -222,12 +310,12 @@ public class Piscifactoria {
      */
     public void showFood() {
         System.out.println("============== Almacen ================\nComida animal: "
-                + almacenInicial.getCantidadComidaAnimal() + "/" + almacenInicial.getCapacidadComidaAnimal() +
-                "(" + (almacenInicial.getCantidadComidaAnimal() / almacenInicial.getCapacidadComidaAnimal()) * 100
+                + almacenInicial.getCantidadComidaAnimal() + "/" + almacenInicial.getCapacidadMaximaComida() +
+                "(" + (almacenInicial.getCantidadComidaAnimal() / almacenInicial.getCapacidadMaximaComida()) * 100
                 + "%)" +
                 "\nComida vegetal: " + almacenInicial.getCantidadComidaVegetal() + "/"
-                + almacenInicial.getCapacidadComidaVegetal() +
-                "(" + (almacenInicial.getCantidadComidaVegetal() / almacenInicial.getCapacidadComidaVegetal()) * 100
+                + almacenInicial.getCapacidadMaximaComida() +
+                "(" + (almacenInicial.getCantidadComidaVegetal() / almacenInicial.getCapacidadMaximaComida()) * 100
                 + "%)");
     }
 
@@ -254,6 +342,6 @@ public class Piscifactoria {
         almacenInicial.mejorar();
         System.out.println("Almacén de la piscifactoria " + nombre
                 + " mejorado. Su capacidad ha aumentado en 50 hasta un total de "
-                + almacenInicial.getCapacidadComidaAnimal());
+                + almacenInicial.getCapacidadMaximaComida());
     }
 }

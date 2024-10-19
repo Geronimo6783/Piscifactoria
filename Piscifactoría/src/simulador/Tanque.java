@@ -1,5 +1,6 @@
 package simulador;
 
+import simulador.Piscifactoria.AlmacenComida;
 import simulador.pez.*;
 import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
@@ -31,21 +32,6 @@ public class Tanque {
      * Peces del tanque.
      */
     private ArrayList<Pez> peces;
-
-    /**
-     * Capacidad máxima de comida en el tanque por tipo.
-     */
-    private int capacidadMaximaComida;
-
-    /**
-     * Cantidad de comida animal disponible.
-     */
-    private int comidaAnimal;
-
-    /**
-     * Cantidad de comida vegetal disponible.
-     */
-    private int comidaVegetal;
 
     /**
      * 
@@ -84,58 +70,6 @@ public class Tanque {
 
     /**
      * 
-     * @return Capacidad máxima de comida por tipo.
-     */
-    public int getCapacidadMaximaComida() {
-        return capacidadMaximaComida;
-    }
-
-    /**
-     * Permite establecer la capacidad máxima de comida por tipo.
-     * 
-     * @param capacidadMaximaComida Capacidad máxima de comida por tipo a
-     *                              establecer.
-     */
-    public void setCapacidadMaximaComida(int capacidadMaximaComida) {
-        this.capacidadMaximaComida = capacidadMaximaComida;
-    }
-
-    /**
-     * 
-     * @return Cantidad de comida animal disponible.
-     */
-    public int getComidaAnimal() {
-        return comidaAnimal;
-    }
-
-    /**
-     * Permite establecer la cantidad de comida animal disponible.
-     * 
-     * @param comidaAnimal Cantidad de comida animal a establecer.
-     */
-    public void setComidaAnimal(int comidaAnimal) {
-        this.comidaAnimal = comidaAnimal;
-    }
-
-    /**
-     * 
-     * @return Cantidad de comidad vegatal disponible
-     */
-    public int getComidaVegetal() {
-        return comidaVegetal;
-    }
-
-    /**
-     * Permite establecer la cantidad de comida vegetal disponible.
-     * 
-     * @param comidaVegetal Cantidad de comida vegetal disponible a establecer.
-     */
-    public void setComidaVegetal(int comidaVegetal) {
-        this.comidaVegetal = comidaVegetal;
-    }
-
-    /**
-     * 
      * @return Número del tanque.
      */
     public int getNumeroTanque() {
@@ -147,14 +81,10 @@ public class Tanque {
      * 
      * @param numeroTanque Número del tanque.
      */
-    public Tanque(int numeroTanque, int capacidadMaximaPeces, int capacidadMaximaComida) {
-        capacidadMaximaComida = 200;
-        comidaAnimal = 200;
-        comidaVegetal = 200;
+    public Tanque(int numeroTanque, int capacidadMaximaPeces) {
         this.numeroTanque = numeroTanque;
         peces = new ArrayList<>();
         this.capacidadMaximaPeces = capacidadMaximaPeces;
-        this.capacidadMaximaComida = capacidadMaximaComida;
     }
 
     /**
@@ -293,9 +223,11 @@ public class Tanque {
     /**
      *  Gestiona la lógica para alimentar a los peces.
      */
-    public void alimentar() {
+    public void alimentar(Piscifactoria.AlmacenComida almacenComida) {
         int comidaNecesaria = 0;
         ArrayList<Integer> cantidadDeComidaNecesariaPorPez = new ArrayList<>();
+        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
+        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
         for (Pez pez : peces) {
             if (pez.isVivo() && !pez.isAlimentado()) {
@@ -318,7 +250,7 @@ public class Tanque {
                     }
                 }
             } else{
-                alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaAnimal);
+                alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal);
             }
         } else {
             if (peces.get(0) instanceof Filtrador) {
@@ -330,7 +262,7 @@ public class Tanque {
                         }
                     }
                 } else{
-                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaVegetal);
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaVegetal);
                 }
             } else {
                 if ((comidaVegetal + comidaAnimal) >= comidaNecesaria) {
@@ -358,7 +290,7 @@ public class Tanque {
                         }
                     }
                 } else{
-                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaAnimal + comidaVegetal);
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaVegetal);
                 }
             }
         }
@@ -368,9 +300,11 @@ public class Tanque {
      * Gestiona la lógica para alimentar a los peces.
      * @param almacenCentral Almacén central de donde se obtiene la comida si el tanque se queda sin ella.
      */
-    public void alimentar(AlmacenCentral almacenCentral) {
+    public void alimentar(Piscifactoria.AlmacenComida almacenComida, AlmacenCentral almacenCentral) {
         int comidaNecesaria = 0;
         ArrayList<Integer> cantidadDeComidaNecesariaPorPez = new ArrayList<>();
+        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
+        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
         int comidaAnimalAlmacen = almacenCentral.getCantidadComidaAnimal();
         int comidaVegetalAlmacen = almacenCentral.getCantidadComidaVegetal();
 
@@ -399,7 +333,7 @@ public class Tanque {
                     }
                 }
             } else{
-                alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaAnimal + comidaAnimalAlmacen, almacenCentral);
+                alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaAnimalAlmacen, almacenCentral);
             }
         } else {
             if (peces.get(0) instanceof Filtrador) {
@@ -415,7 +349,7 @@ public class Tanque {
                         }
                     }
                 } else{
-                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaVegetal + comidaVegetalAlmacen, almacenCentral);
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaVegetal + comidaVegetalAlmacen, almacenCentral);
                 }
             } else {
                 if ((comidaVegetal + comidaAnimal + comidaAnimalAlmacen + comidaVegetalAlmacen) >= comidaNecesaria) {
@@ -471,7 +405,7 @@ public class Tanque {
                         }
                     }
                 } else{
-                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaAnimal + comidaVegetal + comidaAnimalAlmacen + comidaVegetalAlmacen, almacenCentral);
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaVegetal + comidaAnimalAlmacen + comidaVegetalAlmacen, almacenCentral);
                 }
             }
         }
@@ -482,10 +416,12 @@ public class Tanque {
      * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada Pez para alimentarse.
      * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
      */
-    private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, int comidaDisponible) {
+    private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
         Random rt = new Random();
         ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
         int posicionAleatoria = 0;
+        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
+        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
         for (int i = 0; i < cantidadDeComidaNecesariaPorPez.size(); i++) {
             if (cantidadDeComidaNecesariaPorPez.get(i) == 0) {
@@ -538,10 +474,12 @@ public class Tanque {
      * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
      * @param almacenCentral Almacén central de donde se obtiene la comida cuando se agota la comida del tanque.
      */
-    private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, int comidaDisponible, AlmacenCentral almacenCentral) {
+    private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, Piscifactoria.AlmacenComida almacenComida, int comidaDisponible, AlmacenCentral almacenCentral) {
         Random rt = new Random();
         ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
         int posicionAleatoria = 0;
+        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
+        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
         for (int i = 0; i < cantidadDeComidaNecesariaPorPez.size(); i++) {
             if (cantidadDeComidaNecesariaPorPez.get(i) == 0) {
