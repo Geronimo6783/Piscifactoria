@@ -87,8 +87,8 @@ public class Simulador {
     }
 
     public static void main(String[] args) {
-        init();
-        almacenCentral = new AlmacenCentral();
-       showGeneralStatus();
+        Tanque tanque = new Tanque(1, 25, 25);
+        tanque.showCapacity("Piscifactoría");
+
     }
 }
