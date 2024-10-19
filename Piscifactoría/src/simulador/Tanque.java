@@ -147,13 +147,14 @@ public class Tanque {
      * 
      * @param numeroTanque Número del tanque.
      */
-    public Tanque(int numeroTanque, int capacidadMaximaPeces) {
+    public Tanque(int numeroTanque, int capacidadMaximaPeces, int capacidadMaximaComida) {
         capacidadMaximaComida = 200;
         comidaAnimal = 200;
         comidaVegetal = 200;
         this.numeroTanque = numeroTanque;
         peces = new ArrayList<>();
         this.capacidadMaximaPeces = capacidadMaximaPeces;
+        this.capacidadMaximaComida = capacidadMaximaComida;
     }
 
     /**

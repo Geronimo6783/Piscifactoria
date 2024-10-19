@@ -2,13 +2,27 @@ package simulador;
 
 import java.util.ArrayList;
 
-import propiedades.AlmacenPropiedades;
-
+/**
+ * Clase que representa a una piscifactoría con múltiples tanques.
+ */
 public class Piscifactoria {
+
+    /**
+     * Tanques de los que dispone la piscifactoría.
+     */
     private ArrayList<Tanque> tanques;
-    private boolean tipoAgua;// true de mar, false de rio
+
+    /**
+     * Tipo de agua de la piscifactoría si es true es de mar y si es false es de rio.
+     */
+    private boolean tipoAgua;
+    
     private Tanque tanqueInicial;
     private AlmacenCentral almacenInicial;
+
+    /**
+     * Nombre de la piscifactoría.
+     */
     private String nombre = "";
 
     /**
@@ -18,18 +32,14 @@ public class Piscifactoria {
      * @param nombre
      */
     public Piscifactoria(ArrayList<Tanque> tanques, boolean tipoAgua, String nombre) {
-        this.tanques.add(tanqueInicial);
         this.tipoAgua = tipoAgua;
         if (tipoAgua) {
-            this.tanqueInicial.setCapacidadMaximaPeces(100);
-            this.almacenInicial.setCapacidadComidaAnimal(100);
-            this.almacenInicial.setCapacidadComidaVegetal(100);
+            tanqueInicial = new Tanque(1, 100, 100);
         } else {
-            this.tanqueInicial.setCapacidadMaximaPeces(25);
-            this.almacenInicial.setCapacidadComidaAnimal(25);
-            this.almacenInicial.setCapacidadComidaVegetal(25);
+            tanqueInicial = new Tanque(1, 25, 25);
         }
         this.nombre = nombre;
+        this.tanques.add(tanqueInicial);
     }
 
     /**
