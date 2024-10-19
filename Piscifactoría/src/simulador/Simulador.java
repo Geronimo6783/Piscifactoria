@@ -11,7 +11,7 @@ import simulador.pez.omnivoro.*;
 public class Simulador {
     
     public static void main(String[] args) {
-       Tanque tanque = new Tanque(1, 25);
+       Tanque tanque = new Tanque(1, 25, 25);
        tanque.showStatus();
        tanque.getPeces().add(new Sargo(false));
        tanque.getPeces().add(new Sargo(true));
