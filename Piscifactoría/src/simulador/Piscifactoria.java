@@ -31,7 +31,8 @@ public class Piscifactoria {
      * @param tipoAgua
      * @param nombre
      */
-    public Piscifactoria(ArrayList<Tanque> tanques, boolean tipoAgua, String nombre) {
+    public Piscifactoria(boolean tipoAgua, String nombre) {
+        tanques = new ArrayList<>();
         this.tipoAgua = tipoAgua;
         if (tipoAgua) {
             tanqueInicial = new Tanque(1, 100, 100);
@@ -142,6 +143,9 @@ public class Piscifactoria {
         int hembras = 0;
         int machos = 0;
         int fertiles = 0;
+        int cantidadComidaAnimal = 0;
+        int cantidadComidaVegetal = 0;
+        int capacidadMaximaComida = 0;
         for (int i = 0; i < tanques.size(); i++) {
             peces += tanques.get(i).getPeces().size();
             capacidad += tanques.get(i).getCapacidadMaximaPeces();
@@ -151,20 +155,39 @@ public class Piscifactoria {
             hembras += tanques.get(i).pecesHembra();
             machos += tanques.get(i).pecesMacho();
             fertiles += tanques.get(i).pecesFertiles();
+            cantidadComidaAnimal += tanques.get(i).getComidaAnimal();
+            cantidadComidaVegetal += tanques.get(i).getComidaVegetal();
+            capacidadMaximaComida += tanques.get(i).getCapacidadMaximaComida();
             }
         
-        return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
-                "\nPeces vivos: " + vivos + "/" + peces + "(" + (vivos / peces) * 100 + "%)" +
-                "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + (alimentados / vivos) * 100 + "%)" +
-                "\nPeces adultos: " + adultos + "/" + vivos + "(" + (adultos / vivos) * 100 + "%)" +
-                "\nHembras / Machos: " + hembras + "/" + machos +
-                "\nFértiles: " + fertiles + "/" + vivos + "(" + (fertiles / vivos) * 100 + "%)" +
-                "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.getCantidadComidaAnimal() + "/"
-                + almacenInicial.getCapacidadComidaAnimal() + "("
-                + (almacenInicial.getCantidadComidaAnimal() / almacenInicial.getCapacidadComidaAnimal()) * 100 + "%)"
-                + "\n\t-comida vegetal: " + almacenInicial.getCantidadComidaVegetal() + "/"
-                + almacenInicial.getCapacidadComidaVegetal() + "("
-                + (almacenInicial.getCantidadComidaVegetal() / almacenInicial.getCapacidadComidaVegetal()) * 100 + "%)";
+        if(peces != 0){
+            return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
+                    "\nPeces vivos: " + vivos + "/" + peces + "(" + (vivos / peces) * 100 + "%)" +
+                    "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + (alimentados / vivos) * 100 + "%)" +
+                    "\nPeces adultos: " + adultos + "/" + vivos + "(" + (adultos / vivos) * 100 + "%)" +
+                    "\nHembras / Machos: " + hembras + "/" + machos +
+                    "\nFértiles: " + fertiles + "/" + vivos + "(" + (fertiles / vivos) * 100 + "%)" +
+                    "\nAlmacén de comida: \n\t-comida carnivoros: " + cantidadComidaAnimal + "/"
+                    + capacidadMaximaComida + "("
+                    + (cantidadComidaAnimal / capacidadMaximaComida) * 100 + "%)"
+                    + "\n\t-comida vegetal: " + cantidadComidaVegetal + "/"
+                    + capacidadMaximaComida + "("
+                    + (cantidadComidaVegetal / capacidadMaximaComida) * 100 + "%)";
+        }
+        else{
+            return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
+            "\nPeces vivos: " + vivos + "/" + peces + "(100%)" +
+            "\nPeces alimentados: " + alimentados + "/" + vivos + "(100%)" +
+            "\nPeces adultos: " + adultos + "/" + vivos + "(100%)" +
+            "\nHembras / Machos: " + hembras + "/" + machos +
+            "\nFértiles: " + fertiles + "/" + vivos + "(100%)" +
+            "\nAlmacén de comida: \n\t-comida carnivoros: " + cantidadComidaAnimal + "/"
+            + capacidadMaximaComida + "("
+            + (cantidadComidaAnimal / capacidadMaximaComida) * 100 + "%)"
+            + "\n\t-comida vegetal: " + cantidadComidaVegetal + "/"
+            + capacidadMaximaComida + "("
+            + (cantidadComidaVegetal / capacidadMaximaComida) * 100 + "%)";
+        }
     }
 
     /**

@@ -697,6 +697,21 @@ public class Tanque {
     }
 
     /**
+     * Elimina los peces muertos del tanque.
+     */
+    public void eliminarPecesMuertos(){
+        Iterator<Pez> iterador = peces.iterator();
+
+        while(iterador.hasNext()){
+            Pez pez = iterador.next();
+
+            if(!pez.isVivo()){
+                iterador.remove();
+            }
+        }
+    }
+
+    /**
      * Implementa la lógica de que haya pasado un día haciendo crecer a los
      * peces, realizando la lógica de reproducción y vendiendo los peces que
      * están en la edad óptima.
