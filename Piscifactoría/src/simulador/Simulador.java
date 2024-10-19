@@ -75,14 +75,13 @@ public class Simulador {
         if(almacenCentral != null){
             int cantidadComidaAnimalAlmacen = almacenCentral.getCantidadComidaAnimal();
             int cantidadComidaVegetalAlmacen = almacenCentral.getCantidadComidaVegetal();
-            int capacidadComidaAnimalAlmacen = almacenCentral.getCapacidadComidaAnimal();
-            int capacidadComidaVegetalAlmacen = almacenCentral.getCapacidadComidaVegetal();
+            int capacidadComidaAlmacen = almacenCentral.getCapacidadComida();
             System.out.println("Comida animal disponible en el almacén central: " + cantidadComidaAnimalAlmacen);
             System.out.println("Comida vegetal disponible en el almacén central: " + cantidadComidaVegetalAlmacen);
-            System.out.println("Capacidad máxima de comida animal en el almacén central: " + capacidadComidaAnimalAlmacen);
-            System.out.println("Capacidad máxima de comida vegetal en el almacén central: " + capacidadComidaVegetalAlmacen);
-            System.out.println("% de capacidad de la comida animal del almacén central " + String.format("%.2f", ((float) cantidadComidaAnimalAlmacen) / (float) capacidadComidaAnimalAlmacen) + "%");
-            System.out.println("% de capacidad de la comida vegetal del almacén central " + String.format("%.2f", ((float) cantidadComidaVegetalAlmacen / (float) capacidadComidaVegetalAlmacen)) + "%");
+            System.out.println("Capacidad máxima de comida animal en el almacén central: " + capacidadComidaAlmacen);
+            System.out.println("Capacidad máxima de comida vegetal en el almacén central: " + capacidadComidaAlmacen);
+            System.out.println("% de capacidad de la comida animal del almacén central " + String.format("%.2f", ((float) cantidadComidaAnimalAlmacen) / (float) capacidadComidaAlmacen) + "%");
+            System.out.println("% de capacidad de la comida vegetal del almacén central " + String.format("%.2f", ((float) cantidadComidaVegetalAlmacen / (float) capacidadComidaAlmacen)) + "%");
         }
     }
 
