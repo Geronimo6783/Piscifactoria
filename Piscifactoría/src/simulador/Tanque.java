@@ -249,6 +249,8 @@ public class Tanque {
                         pez.setAlimentado(true);
                     }
                 }
+
+                almacenComida.setCantidadComidaAnimal(comidaAnimal);
             } else{
                 alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal);
             }
@@ -261,6 +263,8 @@ public class Tanque {
                             pez.setAlimentado(true);
                         }
                     }
+
+                    almacenComida.setCantidadComidaVegetal(comidaVegetal);
                 } else{
                     alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaVegetal);
                 }
@@ -289,6 +293,9 @@ public class Tanque {
                             pez.setAlimentado(true);
                         }
                     }
+
+                    almacenComida.setCantidadComidaAnimal(comidaAnimal);
+                    almacenComida.setCantidadComidaVegetal(comidaVegetal);
                 } else{
                     alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaVegetal);
                 }
@@ -332,6 +339,8 @@ public class Tanque {
                         pez.setAlimentado(true);
                     }
                 }
+
+                almacenComida.setCantidadComidaAnimal(comidaAnimal);
             } else{
                 alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaAnimalAlmacen, almacenCentral);
             }
@@ -348,6 +357,8 @@ public class Tanque {
                             pez.setAlimentado(true);
                         }
                     }
+
+                    almacenComida.setCantidadComidaVegetal(comidaVegetalAlmacen);
                 } else{
                     alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaVegetal + comidaVegetalAlmacen, almacenCentral);
                 }
@@ -404,6 +415,9 @@ public class Tanque {
                             pez.setAlimentado(true);
                         }
                     }
+
+                    almacenComida.setCantidadComidaAnimal(comidaAnimal);
+                    almacenComida.setCantidadComidaVegetal(comidaVegetal);
                 } else{
                     alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaVegetal + comidaAnimalAlmacen + comidaVegetalAlmacen, almacenCentral);
                 }
@@ -466,6 +480,9 @@ public class Tanque {
                 peces.get(posicion).setAlimentado(true);
             }
         }
+
+        almacenComida.setCantidadComidaAnimal(comidaAnimal);
+        almacenComida.setCantidadComidaVegetal(comidaVegetal);
     }
 
     /**
@@ -478,8 +495,6 @@ public class Tanque {
         Random rt = new Random();
         ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
         int posicionAleatoria = 0;
-        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
-        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
         for (int i = 0; i < cantidadDeComidaNecesariaPorPez.size(); i++) {
             if (cantidadDeComidaNecesariaPorPez.get(i) == 0) {
@@ -501,22 +516,22 @@ public class Tanque {
         }
 
         if (peces.get(0) instanceof Carnivoro) {
-            comidaAnimal = 0;
+            almacenComida.setCantidadComidaAnimal(0);;
             almacenCentral.setCantidadComidaAnimal(comidaDisponible);
         } else {
             if (peces.get(0) instanceof Filtrador) {
-                comidaVegetal = 0;
+                almacenComida.setCantidadComidaVegetal(0);;
                 almacenCentral.setCantidadComidaVegetal(comidaDisponible);
                
             } else {
                 if (almacenCentral.getCantidadComidaAnimal() > almacenCentral.getCantidadComidaVegetal()) {
-                    comidaAnimal = 0;
-                    comidaVegetal = 0;
+                    almacenComida.setCantidadComidaAnimal(0);;
+                    almacenComida.setCantidadComidaVegetal(0);;
                     almacenCentral.setCantidadComidaAnimal(0);
                     almacenCentral.setCantidadComidaVegetal(comidaDisponible);
                 } else {
-                    comidaVegetal = 0;
-                    comidaAnimal = 0;
+                    almacenComida.setCantidadComidaAnimal(0);
+                    almacenComida.setCantidadComidaVegetal(0);
                     almacenCentral.setCantidadComidaVegetal(0);
                     almacenCentral.setCantidadComidaAnimal(comidaDisponible);
                 }

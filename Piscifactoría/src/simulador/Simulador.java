@@ -55,6 +55,12 @@ public class Simulador {
                                                                 "Tilapia del Nilo"};
 
     /**
+     * Cabecera del menú para seleccionar una piscifacotoría.
+     */
+    private static final String[] cabeceraMenuPiscifactoria = {"Seleccione una opción:", "--------------------------- Piscifactorías ---------------------------", 
+                                                                "[Peces vivos/ Peces totales/ Espacio total]"};
+
+    /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init(){
@@ -70,7 +76,32 @@ public class Simulador {
      * Imprime por pantalla el menú principal,
      */
     private static void menu(){
-        GeneradorMenus.generarMenu(opcionesMenuPrincipal);
+        GeneradorMenus.generarMenu(opcionesMenuPrincipal, 1);
+    }
+
+    /**
+     * Imprime un menú para seleccionar una piscifactoría de la simulación.
+     */
+    private static void menuPisc(){
+        String[] opciones = new String[piscifactorias.size() + 1];
+        opciones[0] = "Cancelar";
+
+        for(int i = 0; i < piscifactorias.size(); i++){
+            Piscifactoria piscifactoria = piscifactorias.get(i);
+            opciones[i + 1] = piscifactoria.getNombre() + " [" + piscifactoria.getPecesVivos() + "/" + piscifactoria.getPecesTotales() + "/" + piscifactoria.getEspacioPeces() + "]";
+        }
+
+        GeneradorMenus.generarMenu(cabeceraMenuPiscifactoria, opciones, 0);
+    }
+
+    /**
+     * Permite seleccionar una piscifactoría del menú de piscifactoría.
+     * @return Opción seleccionada.
+     */
+    private static int selectPisc(){
+        menuPisc();
+
+        return SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
     }
 
     /**
@@ -99,21 +130,21 @@ public class Simulador {
      * Muestra la información relativa a un pez seleccionado por el usuario.
      */
     private static void showIctio(){
-        int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles);
+        int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0);
 
         switch(opcion){
-            case 2 -> mostrarInformacionPez(AlmacenPropiedades.ABADEJO);
-            case 3 -> mostrarInformacionPez(AlmacenPropiedades.ARENQUE_ATLANTICO);
-            case 4 -> mostrarInformacionPez(AlmacenPropiedades.CABALLA);
-            case 5 -> mostrarInformacionPez(AlmacenPropiedades.CARPIN_TRES_ESPINAS);
-            case 6 -> mostrarInformacionPez(AlmacenPropiedades.DORADA);
-            case 7-> mostrarInformacionPez(AlmacenPropiedades.PEJERREY);
-            case 8 -> mostrarInformacionPez(AlmacenPropiedades.PERCA_EUROPEA);
-            case 9 -> mostrarInformacionPez(AlmacenPropiedades.ROBALO);
-            case 10 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_ATLANTICO);
-            case 11 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_CHINOOK);
-            case 12 -> mostrarInformacionPez(AlmacenPropiedades.SARGO);
-            case 13 -> mostrarInformacionPez(AlmacenPropiedades.TILAPIA_NILO);
+            case 1 -> mostrarInformacionPez(AlmacenPropiedades.ABADEJO);
+            case 2 -> mostrarInformacionPez(AlmacenPropiedades.ARENQUE_ATLANTICO);
+            case 3 -> mostrarInformacionPez(AlmacenPropiedades.CABALLA);
+            case 4 -> mostrarInformacionPez(AlmacenPropiedades.CARPIN_TRES_ESPINAS);
+            case 5 -> mostrarInformacionPez(AlmacenPropiedades.DORADA);
+            case 6 -> mostrarInformacionPez(AlmacenPropiedades.PEJERREY);
+            case 7 -> mostrarInformacionPez(AlmacenPropiedades.PERCA_EUROPEA);
+            case 8 -> mostrarInformacionPez(AlmacenPropiedades.ROBALO);
+            case 9 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_ATLANTICO);
+            case 10 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_CHINOOK);
+            case 11 -> mostrarInformacionPez(AlmacenPropiedades.SARGO);
+            case 12 -> mostrarInformacionPez(AlmacenPropiedades.TILAPIA_NILO);
         }
     }
 
@@ -122,9 +153,11 @@ public class Simulador {
      * @param datosDelPez Datos relativos a un pez a mostrar.
      */
     private static void mostrarInformacionPez(PecesDatos datosDelPez){
+        System.out.println("Nombre: " + datosDelPez.getNombre());
+        System.out.println("Nombre científico: " + datosDelPez.getCientifico());
         System.out.println("Coste: " + datosDelPez.getCoste() + " monedas");
         System.out.println("Precio de venta: " + datosDelPez.getMonedas() + " monedas");
-        System.out.println("Huevos que pone por pez: " + datosDelPez.getHuevos());
+        System.out.println("Huevos que pone: " + datosDelPez.getHuevos());
         System.out.println("Ciclo de reproducción: " + datosDelPez.getCiclo() + " días");
         System.out.println("Madurez: " + datosDelPez.getMadurez() + " días");
         System.out.println("Edad óptima para la venta: " + datosDelPez.getOptimo() + " días");
@@ -139,7 +172,8 @@ public class Simulador {
     }
 
     public static void main(String[] args) {
-        System.out.println(AlmacenPropiedades.CABALLA.getNombre());
-        showIctio();
+        init();
+        int opcion = selectPisc();
+        System.out.println("Opción: " + opcion);
     }
 }

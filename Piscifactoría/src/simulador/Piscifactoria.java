@@ -319,8 +319,25 @@ public class Piscifactoria {
                 + "%)");
     }
 
+    /**
+     * Realiza la lógica de que se pasa un día cuando no se dispone de almacén central.
+     */
     public void nextDay() {
+        for(Tanque tanque : tanques){
+            tanque.alimentar(almacenInicial);
+            tanque.nextDay();
+        }
+    }
 
+    /**
+     * Realiza la lógica de que se pasa un día cuando se dispono de almacén central.
+     * @param almacenCentral Almacén central del que se dispone.
+     */
+    public void nextDay(AlmacenCentral almacenCentral){
+        for(Tanque tanque : tanques){
+            tanque.alimentar(almacenInicial, almacenCentral);
+            tanque.nextDay();
+        }
     }
 
     /**
@@ -343,5 +360,44 @@ public class Piscifactoria {
         System.out.println("Almacén de la piscifactoria " + nombre
                 + " mejorado. Su capacidad ha aumentado en 50 hasta un total de "
                 + almacenInicial.getCapacidadMaximaComida());
+    }
+
+    /**
+     * 
+     * @return Número de peces vivos en la piscifactoría.
+     */
+    public int getPecesVivos(){
+        int pecesVivos = 0;
+        for(Tanque tanque : tanques){
+            pecesVivos += tanque.pecesVivos();
+        }
+
+        return pecesVivos;
+    }
+
+    /**
+     * 
+     * @return Número de peces totales en la piscifactoría.
+     */
+    public int getPecesTotales(){
+        int peces = 0;
+        for(Tanque tanque : tanques){
+            peces += tanque.getPeces().size();
+        }
+
+        return peces;
+    }
+
+    /**
+     * 
+     * @return Espacio total para peces en la piscifactoría.
+     */
+    public int getEspacioPeces(){
+        int espacioPeces = 0;
+        for(Tanque tanque : tanques){
+            espacioPeces += tanque.getCapacidadMaximaPeces();
+        }
+
+        return espacioPeces;
     }
 }
