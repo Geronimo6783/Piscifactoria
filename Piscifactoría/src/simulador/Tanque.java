@@ -1,5 +1,6 @@
 package simulador;
 
+import simulador.Piscifactoria.AlmacenComida;
 import simulador.pez.*;
 import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
@@ -31,21 +32,6 @@ public class Tanque {
      * Peces del tanque.
      */
     private ArrayList<Pez> peces;
-
-    /**
-     * Capacidad máxima de comida en el tanque por tipo.
-     */
-    private int capacidadMaximaComida;
-
-    /**
-     * Cantidad de comida animal disponible.
-     */
-    private int comidaAnimal;
-
-    /**
-     * Cantidad de comida vegetal disponible.
-     */
-    private int comidaVegetal;
 
     /**
      * 
@@ -84,58 +70,6 @@ public class Tanque {
 
     /**
      * 
-     * @return Capacidad máxima de comida por tipo.
-     */
-    public int getCapacidadMaximaComida() {
-        return capacidadMaximaComida;
-    }
-
-    /**
-     * Permite establecer la capacidad máxima de comida por tipo.
-     * 
-     * @param capacidadMaximaComida Capacidad máxima de comida por tipo a
-     *                              establecer.
-     */
-    public void setCapacidadMaximaComida(int capacidadMaximaComida) {
-        this.capacidadMaximaComida = capacidadMaximaComida;
-    }
-
-    /**
-     * 
-     * @return Cantidad de comida animal disponible.
-     */
-    public int getComidaAnimal() {
-        return comidaAnimal;
-    }
-
-    /**
-     * Permite establecer la cantidad de comida animal disponible.
-     * 
-     * @param comidaAnimal Cantidad de comida animal a establecer.
-     */
-    public void setComidaAnimal(int comidaAnimal) {
-        this.comidaAnimal = comidaAnimal;
-    }
-
-    /**
-     * 
-     * @return Cantidad de comidad vegatal disponible
-     */
-    public int getComidaVegetal() {
-        return comidaVegetal;
-    }
-
-    /**
-     * Permite establecer la cantidad de comida vegetal disponible.
-     * 
-     * @param comidaVegetal Cantidad de comida vegetal disponible a establecer.
-     */
-    public void setComidaVegetal(int comidaVegetal) {
-        this.comidaVegetal = comidaVegetal;
-    }
-
-    /**
-     * 
      * @return Número del tanque.
      */
     public int getNumeroTanque() {
@@ -148,9 +82,6 @@ public class Tanque {
      * @param numeroTanque Número del tanque.
      */
     public Tanque(int numeroTanque, int capacidadMaximaPeces) {
-        capacidadMaximaComida = 200;
-        comidaAnimal = 200;
-        comidaVegetal = 200;
         this.numeroTanque = numeroTanque;
         peces = new ArrayList<>();
         this.capacidadMaximaPeces = capacidadMaximaPeces;
@@ -292,9 +223,11 @@ public class Tanque {
     /**
      *  Gestiona la lógica para alimentar a los peces.
      */
-    public void alimentar() {
+    public void alimentar(Piscifactoria.AlmacenComida almacenComida) {
         int comidaNecesaria = 0;
         ArrayList<Integer> cantidadDeComidaNecesariaPorPez = new ArrayList<>();
+        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
+        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
         for (Pez pez : peces) {
             if (pez.isVivo() && !pez.isAlimentado()) {
@@ -317,7 +250,7 @@ public class Tanque {
                     }
                 }
             } else{
-                alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaAnimal);
+                alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal);
             }
         } else {
             if (peces.get(0) instanceof Filtrador) {
@@ -329,7 +262,7 @@ public class Tanque {
                         }
                     }
                 } else{
-                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaVegetal);
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaVegetal);
                 }
             } else {
                 if ((comidaVegetal + comidaAnimal) >= comidaNecesaria) {
@@ -357,7 +290,122 @@ public class Tanque {
                         }
                     }
                 } else{
-                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, comidaAnimal + comidaVegetal);
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaVegetal);
+                }
+            }
+        }
+    }
+
+    /**
+     * Gestiona la lógica para alimentar a los peces.
+     * @param almacenCentral Almacén central de donde se obtiene la comida si el tanque se queda sin ella.
+     */
+    public void alimentar(Piscifactoria.AlmacenComida almacenComida, AlmacenCentral almacenCentral) {
+        int comidaNecesaria = 0;
+        ArrayList<Integer> cantidadDeComidaNecesariaPorPez = new ArrayList<>();
+        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
+        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
+        int comidaAnimalAlmacen = almacenCentral.getCantidadComidaAnimal();
+        int comidaVegetalAlmacen = almacenCentral.getCantidadComidaVegetal();
+
+        for (Pez pez : peces) {
+            if (pez.isVivo() && !pez.isAlimentado()) {
+                cantidadDeComidaNecesariaPorPez.add(pez.comer());
+            } else {
+                cantidadDeComidaNecesariaPorPez.add(0);
+            }
+        }
+
+        for (Integer cantidadComida : cantidadDeComidaNecesariaPorPez) {
+            comidaNecesaria += cantidadComida;
+        }
+
+        if (peces.get(0) instanceof Carnivoro) {
+            if ((comidaAnimal + comidaAnimalAlmacen) >= comidaNecesaria) {
+                comidaAnimal -= comidaNecesaria;
+                if(comidaAnimal < 0){
+                    almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen + comidaAnimal);
+                    comidaAnimal = 0;
+                }
+                for (Pez pez : peces) {
+                    if (pez.isVivo() && !pez.isAlimentado()) {
+                        pez.setAlimentado(true);
+                    }
+                }
+            } else{
+                alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaAnimalAlmacen, almacenCentral);
+            }
+        } else {
+            if (peces.get(0) instanceof Filtrador) {
+                if ((comidaVegetal + comidaVegetalAlmacen)>= comidaNecesaria) {
+                    comidaVegetal -= comidaNecesaria;
+                    if(comidaVegetal < 0){
+                        almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
+                        comidaVegetal = 0;
+                    }
+                    for (Pez pez : peces) {
+                        if (pez.isVivo() && !pez.isAlimentado()) {
+                            pez.setAlimentado(true);
+                        }
+                    }
+                } else{
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaVegetal + comidaVegetalAlmacen, almacenCentral);
+                }
+            } else {
+                if ((comidaVegetal + comidaAnimal + comidaAnimalAlmacen + comidaVegetalAlmacen) >= comidaNecesaria) {
+                    if(comidaVegetal + comidaAnimal >= comidaNecesaria){
+                        if (comidaVegetal > comidaAnimal) {
+                            if (comidaVegetal >= comidaNecesaria) {
+                                comidaVegetal -= comidaNecesaria;
+                            } else {
+                                comidaVegetal -= comidaNecesaria;
+                                comidaAnimal += comidaVegetal;
+                                comidaVegetal = 0;
+                            }
+                        } else {
+                            if (comidaAnimal >= comidaNecesaria) {
+                                comidaAnimal -= comidaNecesaria;
+                            } else {
+                                comidaAnimal -= comidaNecesaria;
+                                comidaVegetal += comidaAnimal;
+                                comidaAnimal = 0;
+                            }
+                        }
+                    }
+                    else{
+                        comidaNecesaria -= (comidaVegetal + comidaAnimal);
+                        comidaVegetal = 0;
+                        comidaAnimal = 0;
+
+                        if (comidaVegetalAlmacen > comidaAnimalAlmacen) {
+                            if (comidaVegetalAlmacen >= comidaNecesaria) {
+                                almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen - comidaNecesaria);
+                            } else {
+                                comidaVegetalAlmacen -= comidaNecesaria;
+                                comidaAnimalAlmacen += comidaVegetal;
+                                comidaVegetal = 0;
+                                almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
+                                almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
+                            }
+                        } else {
+                            if (comidaAnimalAlmacen >= comidaNecesaria) {
+                                almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen + comidaNecesaria);
+                            } else {
+                                comidaAnimalAlmacen -= comidaNecesaria;
+                                comidaVegetalAlmacen += comidaAnimal;
+                                comidaAnimalAlmacen = 0;
+                                almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
+                                almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
+                            }
+                        }
+                    }
+                    for (Pez pez : peces) {
+                        if (pez.isVivo() && !pez.isAlimentado()) {
+                            pez.setAlimentado(true);
+                        }
+                    }
+                } else{
+                    alimentarAleatorio(cantidadDeComidaNecesariaPorPez, almacenComida, comidaAnimal + comidaVegetal + comidaAnimalAlmacen + comidaVegetalAlmacen, almacenCentral);
                 }
             }
         }
@@ -368,10 +416,12 @@ public class Tanque {
      * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada Pez para alimentarse.
      * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
      */
-    private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, int comidaDisponible) {
+    private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
         Random rt = new Random();
         ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
         int posicionAleatoria = 0;
+        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
+        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
         for (int i = 0; i < cantidadDeComidaNecesariaPorPez.size(); i++) {
             if (cantidadDeComidaNecesariaPorPez.get(i) == 0) {
@@ -410,6 +460,70 @@ public class Tanque {
                 
             }
         }
+
+        for (Integer posicion : posicionesPecesAlimentados) {
+            if (peces.get(posicion).isVivo()) {
+                peces.get(posicion).setAlimentado(true);
+            }
+        }
+    }
+
+    /**
+     * Gestiona la lógica para alimentar a los peces cuando la comida es insuficiente.
+     * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada Pez para alimentarse.
+     * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
+     * @param almacenCentral Almacén central de donde se obtiene la comida cuando se agota la comida del tanque.
+     */
+    private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, Piscifactoria.AlmacenComida almacenComida, int comidaDisponible, AlmacenCentral almacenCentral) {
+        Random rt = new Random();
+        ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
+        int posicionAleatoria = 0;
+        int comidaAnimal = almacenComida.getCantidadComidaAnimal();
+        int comidaVegetal = almacenComida.getCantidadComidaVegetal();
+
+        for (int i = 0; i < cantidadDeComidaNecesariaPorPez.size(); i++) {
+            if (cantidadDeComidaNecesariaPorPez.get(i) == 0) {
+                posicionesPecesAlimentados.add(i);
+            }
+        }
+
+        while (comidaDisponible > 0) {
+            posicionAleatoria = rt.nextInt(cantidadDeComidaNecesariaPorPez.size());
+
+            if (!posicionesPecesAlimentados.contains(posicionAleatoria)) {
+                comidaDisponible -= cantidadDeComidaNecesariaPorPez.get(posicionAleatoria);
+                cantidadDeComidaNecesariaPorPez.set(posicionAleatoria, 0);
+                posicionesPecesAlimentados.add(posicionAleatoria);
+            }
+            if (comidaDisponible == 1 && !cantidadDeComidaNecesariaPorPez.contains(1)) {
+                break;
+            }
+        }
+
+        if (peces.get(0) instanceof Carnivoro) {
+            comidaAnimal = 0;
+            almacenCentral.setCantidadComidaAnimal(comidaDisponible);
+        } else {
+            if (peces.get(0) instanceof Filtrador) {
+                comidaVegetal = 0;
+                almacenCentral.setCantidadComidaVegetal(comidaDisponible);
+               
+            } else {
+                if (almacenCentral.getCantidadComidaAnimal() > almacenCentral.getCantidadComidaVegetal()) {
+                    comidaAnimal = 0;
+                    comidaVegetal = 0;
+                    almacenCentral.setCantidadComidaAnimal(0);
+                    almacenCentral.setCantidadComidaVegetal(comidaDisponible);
+                } else {
+                    comidaVegetal = 0;
+                    comidaAnimal = 0;
+                    almacenCentral.setCantidadComidaVegetal(0);
+                    almacenCentral.setCantidadComidaAnimal(comidaDisponible);
+                }
+                
+            }
+        }
+        
         for (Integer posicion : posicionesPecesAlimentados) {
             if (peces.get(posicion).isVivo()) {
                 peces.get(posicion).setAlimentado(true);
@@ -518,6 +632,21 @@ public class Tanque {
         }
 
         return monedasAObtener;
+    }
+
+    /**
+     * Elimina los peces muertos del tanque.
+     */
+    public void eliminarPecesMuertos(){
+        Iterator<Pez> iterador = peces.iterator();
+
+        while(iterador.hasNext()){
+            Pez pez = iterador.next();
+
+            if(!pez.isVivo()){
+                iterador.remove();
+            }
+        }
     }
 
     /**
