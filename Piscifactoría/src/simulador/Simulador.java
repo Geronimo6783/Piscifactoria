@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
 import componentes.SistemaMonedas;
+import propiedades.AlmacenPropiedades;
+import propiedades.PecesDatos;
+import propiedades.PecesProps;
 import simulador.pez.filtrador.ArenqueDelAtlantico;
 import simulador.pez.filtrador.TilapiaDelNilo;
 import simulador.pez.carnivoro.*;
@@ -40,9 +43,16 @@ public class Simulador {
     /**
      * Opciones del menú principal.
      */
-    private static String[] opcionesMenuPrincipal = {"Estado general", "Estado piscifactoría", "Estado tanques", "Informes", "Ictiopedia", "Pasar día",
+    private static final String[] opcionesMenuPrincipal = {"Estado general", "Estado piscifactoría", "Estado tanques", "Informes", "Ictiopedia", "Pasar día",
                                                     "Comprar comida", "Comprar peces", "Vender peces", "Limpiar tanques", "Vaciar tanque", "Mejorar",
                                                     "Pasar varios días", "Salir"};
+
+    /**
+     * Opciones de todos los peces disponibles.
+     */
+    private static final String[] opcionesPecesDisponibles = {"Cancelar", "Abadejo", "Arenque del Atlántico", "Caballa", "Carpín Tres Espinas", "Dorada",
+                                                                "Pejerrey", "Perca Europea", "Robalo", "Salmón Atlántico", "Salmón Chinook", "Sargo",
+                                                                "Tilapia del Nilo"};
 
     /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
@@ -85,9 +95,51 @@ public class Simulador {
         }
     }
 
-    public static void main(String[] args) {
-        Tanque tanque = new Tanque(1,  25);
-        tanque.showCapacity("Piscifactoría");
+    /**
+     * Muestra la información relativa a un pez seleccionado por el usuario.
+     */
+    private static void showIctio(){
+        int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles);
 
+        switch(opcion){
+            case 2 -> mostrarInformacionPez(AlmacenPropiedades.ABADEJO);
+            case 3 -> mostrarInformacionPez(AlmacenPropiedades.ARENQUE_ATLANTICO);
+            case 4 -> mostrarInformacionPez(AlmacenPropiedades.CABALLA);
+            case 5 -> mostrarInformacionPez(AlmacenPropiedades.CARPIN_TRES_ESPINAS);
+            case 6 -> mostrarInformacionPez(AlmacenPropiedades.DORADA);
+            case 7-> mostrarInformacionPez(AlmacenPropiedades.PEJERREY);
+            case 8 -> mostrarInformacionPez(AlmacenPropiedades.PERCA_EUROPEA);
+            case 9 -> mostrarInformacionPez(AlmacenPropiedades.ROBALO);
+            case 10 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_ATLANTICO);
+            case 11 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_CHINOOK);
+            case 12 -> mostrarInformacionPez(AlmacenPropiedades.SARGO);
+            case 13 -> mostrarInformacionPez(AlmacenPropiedades.TILAPIA_NILO);
+        }
+    }
+
+    /**
+     * Imprime por pantalla los datos relativos a un pez.
+     * @param datosDelPez Datos relativos a un pez a mostrar.
+     */
+    private static void mostrarInformacionPez(PecesDatos datosDelPez){
+        System.out.println("Coste: " + datosDelPez.getCoste() + " monedas");
+        System.out.println("Precio de venta: " + datosDelPez.getMonedas() + " monedas");
+        System.out.println("Huevos que pone por pez: " + datosDelPez.getHuevos());
+        System.out.println("Ciclo de reproducción: " + datosDelPez.getCiclo() + " días");
+        System.out.println("Madurez: " + datosDelPez.getMadurez() + " días");
+        System.out.println("Edad óptima para la venta: " + datosDelPez.getOptimo() + " días");
+        
+        System.out.print("Propiedades: ");
+        for(PecesProps propiedad : datosDelPez.getPropiedades()){
+            System.out.print(propiedad + " ");
+        }
+
+        System.out.println("\nTipo: " + datosDelPez.getTipo());
+        
+    }
+
+    public static void main(String[] args) {
+        System.out.println(AlmacenPropiedades.CABALLA.getNombre());
+        showIctio();
     }
 }
