@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
 import java.util.Random;
+
+import componentes.SistemaEntrada;
+import componentes.SistemaMonedas;
+
 import java.util.Iterator;
 
 import propiedades.AlmacenPropiedades;
@@ -605,9 +609,9 @@ public class Tanque {
 
     /**
      * Vende todos los peces que se encuentran en una edad óptima para ser vendidos.
-     * @return Monedas obtenidas por la venta de todos los peces que se encuentran en una edad óptima para ser vendidos.
+     * @param sistemaMonedas Sistema de monedas donde se realiza el ingreso de las monedas obtenidas.
      */
-    private int venderPecesOptimos(){
+    private void venderPecesOptimos(SistemaMonedas sistemaMonedas){
         int pecesAVender = 0;
         Iterator<Pez> iterador = peces.iterator();
         
@@ -620,7 +624,7 @@ public class Tanque {
             }
         }
 
-        return pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
+        sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() + (pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas()));;
     }
 
     /**
@@ -668,12 +672,13 @@ public class Tanque {
      * Implementa la lógica de que haya pasado un día haciendo crecer a los
      * peces, realizando la lógica de reproducción y vendiendo los peces que
      * están en la edad óptima.
+     * @param sistemaMonedas Sistema de monedas donde se realiza el ingreso de las monedas obtenidas con las ventas.
      */
-    public void nextDay() {
+    public void nextDay(SistemaMonedas sistemaMonedas) {
         for(Pez pez : peces){
             pez.grow();
         }
         reproducir();
-        venderPecesOptimos();
+        venderPecesOptimos(sistemaMonedas);
     }
 }

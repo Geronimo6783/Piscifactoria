@@ -172,8 +172,7 @@ public class Simulador {
     }
 
     public static void main(String[] args) {
-        init();
-        int opcion = selectPisc();
-        System.out.println("Opción: " + opcion);
+        showIctio();
+        SistemaEntrada.close();
     }
 }
