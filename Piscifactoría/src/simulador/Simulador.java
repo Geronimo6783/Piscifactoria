@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
 import componentes.SistemaMonedas;
+import estadisticas.Estadisticas;
 import propiedades.AlmacenPropiedades;
 import propiedades.PecesDatos;
 import propiedades.PecesProps;
@@ -41,6 +42,11 @@ public class Simulador {
     public static AlmacenCentral almacenCentral = null;
 
     /**
+     * Estadísticas de los peces de la simualción.
+     */
+    public static Estadisticas estadisticas;
+
+    /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init(){
@@ -50,6 +56,11 @@ public class Simulador {
         String nombrePiscifactoria = SistemaEntrada.entradaTexto();
         sistemaMonedas = new SistemaMonedas(100);
         piscifactorias.add(new Piscifactoria(nombrePiscifactoria));
+        String[] pecesDisponibles = {AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+                                    AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
+                                    AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                                    AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+        estadisticas = new Estadisticas(pecesDisponibles);
     }
 
     /**
@@ -123,6 +134,13 @@ public class Simulador {
     }
 
     /**
+     * Muestra un desglose de las estadísticas por cada tipo de pez.
+     */
+    private static void showStats(){
+        estadisticas.mostrar();
+    }
+
+    /**
      * Muestra la información relativa a un pez seleccionado por el usuario.
      */
     private static void showIctio(){
@@ -181,7 +199,8 @@ public class Simulador {
         System.out.println("Ciclo de reproducción: " + datosDelPez.getCiclo() + " días");
         System.out.println("Madurez: " + datosDelPez.getMadurez() + " días");
         System.out.println("Edad óptima para la venta: " + datosDelPez.getOptimo() + " días");
-        
+        System.out.println("Piscifactoria: " + datosDelPez.getPiscifactoria());
+
         System.out.print("Propiedades: ");
         for(PecesProps propiedad : datosDelPez.getPropiedades()){
             System.out.print(propiedad + " ");
@@ -193,7 +212,6 @@ public class Simulador {
 
     public static void main(String[] args) {
         init();
-        showGeneralStatus();
-        showSpecificStatus();
+        SistemaEntrada.close();
     }
 }
