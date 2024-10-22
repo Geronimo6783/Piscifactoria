@@ -1,10 +1,12 @@
 package simulador;
 
-import simulador.Piscifactoria.AlmacenComida;
 import simulador.pez.*;
 import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
+import simulador.piscifactoria.Piscifactoria;
+import simulador.piscifactoria.Piscifactoria.AlmacenComida;
+
 import java.util.Random;
 
 import componentes.SistemaEntrada;
