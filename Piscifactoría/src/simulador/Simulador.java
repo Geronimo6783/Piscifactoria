@@ -13,6 +13,7 @@ import simulador.pez.filtrador.ArenqueDelAtlantico;
 import simulador.pez.filtrador.TilapiaDelNilo;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
+import simulador.piscifactoria.*;
 
 public class Simulador {
     
@@ -24,7 +25,7 @@ public class Simulador {
     /**
      * Piscifactorías de la simulación.
      */
-    private static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
+    public static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
 
     /**
      * Nombre de la entidad, empresa o partida des la simulación.
@@ -55,7 +56,7 @@ public class Simulador {
         System.out.print("Introduzca el nombre de la primera piscifactoría: ");
         String nombrePiscifactoria = SistemaEntrada.entradaTexto();
         sistemaMonedas = new SistemaMonedas(100);
-        piscifactorias.add(new Piscifactoria(nombrePiscifactoria));
+        piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
         String[] pecesDisponibles = {AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
                                     AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
                                     AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
@@ -212,6 +213,8 @@ public class Simulador {
 
     public static void main(String[] args) {
         init();
+        showSpecificStatus();
+        showStats();
         SistemaEntrada.close();
     }
 }
