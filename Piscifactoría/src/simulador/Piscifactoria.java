@@ -90,10 +90,11 @@ public class Piscifactoria {
         }
 
         /**
-         * Mejora el almacen aumentando en 50 unidades la capacidad máxima de comida de cada tipo.
+         * Mejora el almacen aumentando la capacidad máxima de comida de cada tipo.
+         * @param capacidadAAumentar Unidades a aumentar la capacidad máxima de comida de cada tipo.
          */
-        public void mejorar(){
-            capacidadMaximaComida += 50;
+        public void mejorar(int capacidadAAumentar){
+            capacidadMaximaComida += capacidadAAumentar;
         }
 
     }
@@ -131,9 +132,26 @@ public class Piscifactoria {
         this.tipoAgua = tipoAgua;
         if (tipoAgua) {
             tanqueInicial = new Tanque(1, 100);
+            almacenInicial = new AlmacenComida(100, 0, 0);
         } else {
             tanqueInicial = new Tanque(1, 25);
+            almacenInicial = new AlmacenComida(25, 0, 0);
         }
+        this.nombre = nombre;
+        this.tanques.add(tanqueInicial);
+    }
+
+    /**
+     * Constructor de Piscifactoria iniciales.
+     * @param tanques
+     * @param tipoAgua
+     * @param nombre
+     */
+    public Piscifactoria(String nombre) {
+        tanques = new ArrayList<>();
+        this.tipoAgua = false;
+        tanqueInicial = new Tanque(1, 25);
+        almacenInicial = new AlmacenComida(25, 25, 25);
         this.nombre = nombre;
         this.tanques.add(tanqueInicial);
     }
@@ -259,10 +277,10 @@ public class Piscifactoria {
                     "\nFértiles: " + fertiles + "/" + vivos + "(" + (fertiles / vivos) * 100 + "%)" +
                     "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
-                    + String.format("%.2f",(almacenInicial.cantidadComidaAnimal/ almacenInicial.capacidadMaximaComida) * 100) + "%)"
+                    + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
                     + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
-                    + String.format("%.2f", (almacenInicial.cantidadComidaVegetal / almacenInicial.capacidadMaximaComida) * 100) + "%)";
+                    + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
         }
         else{
             return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
@@ -273,10 +291,10 @@ public class Piscifactoria {
             "\nFértiles: " + fertiles + "/" + vivos + "(100%)" +
             "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
             + almacenInicial.capacidadMaximaComida + "("
-            + String.format("%.2f", (almacenInicial.cantidadComidaAnimal / almacenInicial.capacidadMaximaComida) * 100) + "%)"
+            + String.format("%.2f", ((float)almacenInicial.cantidadComidaAnimal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
             + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
             + almacenInicial.capacidadMaximaComida + "("
-            + String.format("%.2f", (almacenInicial.cantidadComidaVegetal / almacenInicial.capacidadMaximaComida) * 100) + "%)";
+            + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
         }
     }
 
@@ -347,10 +365,18 @@ public class Piscifactoria {
      * Metodo que mejora el almacen
      */
     public void upgradeFood() {
-        almacenInicial.mejorar();
-        System.out.println("Almacén de la piscifactoria " + nombre
-                + " mejorado. Su capacidad ha aumentado en 50 hasta un total de "
+        if(tipoAgua){
+            almacenInicial.mejorar(100);
+            System.out.println("Almacén de la piscifactoria " + nombre
+                + " mejorado. Su capacidad ha aumentado en 100 hasta un total de "
                 + almacenInicial.getCapacidadMaximaComida());
+        }
+        else{
+            almacenInicial.mejorar(25);
+            System.out.println("Almacén de la piscifactoria " + nombre
+                + " mejorado. Su capacidad ha aumentado en 25 hasta un total de "
+                + almacenInicial.getCapacidadMaximaComida());
+        }
     }
 
     /**

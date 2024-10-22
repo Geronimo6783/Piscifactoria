@@ -23,7 +23,7 @@ public class Simulador {
     /**
      * Piscifactorías de la simulación.
      */
-    private static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
+    public static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
 
     /**
      * Nombre de la entidad, empresa o partida des la simulación.
@@ -112,6 +112,17 @@ public class Simulador {
     }
 
     /**
+     * Muestra por pantalla el estado de todos los tanque de una piscifactoría seleccionada por el usuario.
+     */
+    private static void showSpecificStatus(){
+        int piscifactoriaSeleccionada = selectPisc();
+
+        if(piscifactoriaSeleccionada != 0){
+            piscifactorias.get(piscifactoriaSeleccionada - 1).showTankStatus();
+        }
+    }
+
+    /**
      * Muestra la información relativa a un pez seleccionado por el usuario.
      */
     private static void showIctio(){
@@ -181,7 +192,8 @@ public class Simulador {
     }
 
     public static void main(String[] args) {
-        showIctio();
-        SistemaEntrada.close();
+        init();
+        showGeneralStatus();
+        showSpecificStatus();
     }
 }
