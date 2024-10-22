@@ -2,7 +2,6 @@ package simulador.pez.filtrador;
 
 import propiedades.AlmacenPropiedades;
 import simulador.pez.*;
-import simulador.pez.omnivoro.Sargo;
 
 import java.util.Random;
 
