@@ -23,7 +23,7 @@ public class Simulador {
     /**
      * Piscifactorías de la simulación.
      */
-    public static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
+    private static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
 
     /**
      * Nombre de la entidad, empresa o partida des la simulación.
@@ -49,7 +49,7 @@ public class Simulador {
         System.out.print("Introduzca el nombre de la primera piscifactoría: ");
         String nombrePiscifactoria = SistemaEntrada.entradaTexto();
         sistemaMonedas = new SistemaMonedas(100);
-        piscifactorias.add(new Piscifactoria(false, nombrePiscifactoria));
+        piscifactorias.add(new Piscifactoria(nombrePiscifactoria));
     }
 
     /**
