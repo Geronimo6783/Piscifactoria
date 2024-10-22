@@ -35,7 +35,7 @@ public class SistemaEntrada {
                 }
             }
             catch(IOException | NumberFormatException e){
-                System.out.println("Introduzca una opción c .");
+                System.out.println("Introduzca una opción válida.");
                 error = true;
             }
         }while(error);

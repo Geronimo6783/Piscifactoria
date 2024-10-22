@@ -2,6 +2,8 @@ package simulador;
 
 import java.util.ArrayList;
 
+import componentes.SistemaMonedas;
+
 /**
  * Clase que representa a una piscifactoría con múltiples tanques.
  */
@@ -88,10 +90,11 @@ public class Piscifactoria {
         }
 
         /**
-         * Mejora el almacen aumentando en 50 unidades la capacidad máxima de comida de cada tipo.
+         * Mejora el almacen aumentando la capacidad máxima de comida de cada tipo.
+         * @param capacidadAAumentar Unidades a aumentar la capacidad máxima de comida de cada tipo.
          */
-        public void mejorar(){
-            capacidadMaximaComida += 50;
+        public void mejorar(int capacidadAAumentar){
+            capacidadMaximaComida += capacidadAAumentar;
         }
 
     }
@@ -129,9 +132,26 @@ public class Piscifactoria {
         this.tipoAgua = tipoAgua;
         if (tipoAgua) {
             tanqueInicial = new Tanque(1, 100);
+            almacenInicial = new AlmacenComida(100, 0, 0);
         } else {
             tanqueInicial = new Tanque(1, 25);
+            almacenInicial = new AlmacenComida(25, 0, 0);
         }
+        this.nombre = nombre;
+        this.tanques.add(tanqueInicial);
+    }
+
+    /**
+     * Constructor de Piscifactoria iniciales.
+     * @param tanques
+     * @param tipoAgua
+     * @param nombre
+     */
+    public Piscifactoria(String nombre) {
+        tanques = new ArrayList<>();
+        this.tipoAgua = false;
+        tanqueInicial = new Tanque(1, 25);
+        almacenInicial = new AlmacenComida(25, 25, 25);
         this.nombre = nombre;
         this.tanques.add(tanqueInicial);
     }
@@ -257,10 +277,10 @@ public class Piscifactoria {
                     "\nFértiles: " + fertiles + "/" + vivos + "(" + (fertiles / vivos) * 100 + "%)" +
                     "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
-                    + String.format("%.2f",(almacenInicial.cantidadComidaAnimal/ almacenInicial.capacidadMaximaComida) * 100) + "%)"
+                    + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
                     + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
-                    + String.format("%.2f", (almacenInicial.cantidadComidaVegetal / almacenInicial.capacidadMaximaComida) * 100) + "%)";
+                    + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
         }
         else{
             return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
@@ -271,10 +291,10 @@ public class Piscifactoria {
             "\nFértiles: " + fertiles + "/" + vivos + "(100%)" +
             "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
             + almacenInicial.capacidadMaximaComida + "("
-            + String.format("%.2f", (almacenInicial.cantidadComidaAnimal / almacenInicial.capacidadMaximaComida) * 100) + "%)"
+            + String.format("%.2f", ((float)almacenInicial.cantidadComidaAnimal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
             + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
             + almacenInicial.capacidadMaximaComida + "("
-            + String.format("%.2f", (almacenInicial.cantidadComidaVegetal / almacenInicial.capacidadMaximaComida) * 100) + "%)";
+            + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
         }
     }
 
@@ -319,8 +339,14 @@ public class Piscifactoria {
                 + "%)");
     }
 
+    /**
+     * Realiza la lógica de que se pasa un día cuando no se dispone de almacén central.
+     */
     public void nextDay() {
-
+        for(Tanque tanque : tanques){
+            tanque.alimentar(almacenInicial);
+            tanque.nextDay();
+        }
     }
 
     /**
@@ -339,9 +365,56 @@ public class Piscifactoria {
      * Metodo que mejora el almacen
      */
     public void upgradeFood() {
-        almacenInicial.mejorar();
-        System.out.println("Almacén de la piscifactoria " + nombre
-                + " mejorado. Su capacidad ha aumentado en 50 hasta un total de "
+        if(tipoAgua){
+            almacenInicial.mejorar(100);
+            System.out.println("Almacén de la piscifactoria " + nombre
+                + " mejorado. Su capacidad ha aumentado en 100 hasta un total de "
                 + almacenInicial.getCapacidadMaximaComida());
+        }
+        else{
+            almacenInicial.mejorar(25);
+            System.out.println("Almacén de la piscifactoria " + nombre
+                + " mejorado. Su capacidad ha aumentado en 25 hasta un total de "
+                + almacenInicial.getCapacidadMaximaComida());
+        }
+    }
+
+    /**
+     * 
+     * @return Número de peces vivos en la piscifactoría.
+     */
+    public int getPecesVivos(){
+        int pecesVivos = 0;
+        for(Tanque tanque : tanques){
+            pecesVivos += tanque.pecesVivos();
+        }
+
+        return pecesVivos;
+    }
+
+    /**
+     * 
+     * @return Número de peces totales en la piscifactoría.
+     */
+    public int getPecesTotales(){
+        int peces = 0;
+        for(Tanque tanque : tanques){
+            peces += tanque.getPeces().size();
+        }
+
+        return peces;
+    }
+
+    /**
+     * 
+     * @return Espacio total para peces en la piscifactoría.
+     */
+    public int getEspacioPeces(){
+        int espacioPeces = 0;
+        for(Tanque tanque : tanques){
+            espacioPeces += tanque.getCapacidadMaximaPeces();
+        }
+
+        return espacioPeces;
     }
 }

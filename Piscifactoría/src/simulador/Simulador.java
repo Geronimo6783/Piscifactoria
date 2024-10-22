@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
 import componentes.SistemaMonedas;
+import estadisticas.Estadisticas;
+import propiedades.AlmacenPropiedades;
+import propiedades.PecesDatos;
+import propiedades.PecesProps;
 import simulador.pez.filtrador.ArenqueDelAtlantico;
 import simulador.pez.filtrador.TilapiaDelNilo;
 import simulador.pez.carnivoro.*;
@@ -30,19 +34,17 @@ public class Simulador {
     /**
      * Sistema de monedas de la simulación.
      */
-    private static SistemaMonedas sistemaMonedas;
+    public static SistemaMonedas sistemaMonedas;
 
     /**
      * Almacén central de comida usado en la simulación.
      */
-    private static AlmacenCentral almacenCentral = null;
+    public static AlmacenCentral almacenCentral = null;
 
     /**
-     * Opciones del menú principal.
+     * Estadísticas de los peces de la simualción.
      */
-    private static String[] opcionesMenuPrincipal = {"Estado general", "Estado piscifactoría", "Estado tanques", "Informes", "Ictiopedia", "Pasar día",
-                                                    "Comprar comida", "Comprar peces", "Vender peces", "Limpiar tanques", "Vaciar tanque", "Mejorar",
-                                                    "Pasar varios días", "Salir"};
+    public static Estadisticas estadisticas;
 
     /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
@@ -53,14 +55,49 @@ public class Simulador {
         System.out.print("Introduzca el nombre de la primera piscifactoría: ");
         String nombrePiscifactoria = SistemaEntrada.entradaTexto();
         sistemaMonedas = new SistemaMonedas(100);
-        piscifactorias.add(new Piscifactoria(false, nombrePiscifactoria));
+        piscifactorias.add(new Piscifactoria(nombrePiscifactoria));
+        String[] pecesDisponibles = {AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+                                    AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
+                                    AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                                    AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+        estadisticas = new Estadisticas(pecesDisponibles);
     }
 
     /**
      * Imprime por pantalla el menú principal,
      */
     private static void menu(){
-        GeneradorMenus.generarMenu(opcionesMenuPrincipal);
+        String[] opcionesMenuPrincipal = {"Estado general", "Estado piscifactoría", "Estado tanques", "Informes", "Ictiopedia", "Pasar día",
+                                                    "Comprar comida", "Comprar peces", "Vender peces", "Limpiar tanques", "Vaciar tanque", "Mejorar",
+                                                    "Pasar varios días", "Salir"};
+        GeneradorMenus.generarMenu(opcionesMenuPrincipal, 1);
+    }
+
+    /**
+     * Imprime un menú para seleccionar una piscifactoría de la simulación.
+     */
+    private static void menuPisc(){
+        String[] cabeceraMenuPiscifactoria = {"Seleccione una opción:", "--------------------------- Piscifactorías ---------------------------", 
+                                                                "[Peces vivos/ Peces totales/ Espacio total]"};
+        String[] opciones = new String[piscifactorias.size() + 1];
+        opciones[0] = "Cancelar";
+
+        for(int i = 0; i < piscifactorias.size(); i++){
+            Piscifactoria piscifactoria = piscifactorias.get(i);
+            opciones[i + 1] = piscifactoria.getNombre() + " [" + piscifactoria.getPecesVivos() + "/" + piscifactoria.getPecesTotales() + "/" + piscifactoria.getEspacioPeces() + "]";
+        }
+
+        GeneradorMenus.generarMenu(cabeceraMenuPiscifactoria, opciones, 0);
+    }
+
+    /**
+     * Permite seleccionar una piscifactoría del menú de piscifactoría.
+     * @return Opción seleccionada.
+     */
+    private static int selectPisc(){
+        menuPisc();
+
+        return SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
     }
 
     /**
@@ -85,9 +122,96 @@ public class Simulador {
         }
     }
 
-    public static void main(String[] args) {
-        Tanque tanque = new Tanque(1,  25);
-        tanque.showCapacity("Piscifactoría");
+    /**
+     * Muestra por pantalla el estado de todos los tanque de una piscifactoría seleccionada por el usuario.
+     */
+    private static void showSpecificStatus(){
+        int piscifactoriaSeleccionada = selectPisc();
 
+        if(piscifactoriaSeleccionada != 0){
+            piscifactorias.get(piscifactoriaSeleccionada - 1).showTankStatus();
+        }
+    }
+
+    /**
+     * Muestra un desglose de las estadísticas por cada tipo de pez.
+     */
+    private static void showStats(){
+        estadisticas.mostrar();
+    }
+
+    /**
+     * Muestra la información relativa a un pez seleccionado por el usuario.
+     */
+    private static void showIctio(){
+        String[] opcionesPecesDisponibles = {"Cancelar", "Abadejo", "Arenque del Atlántico", "Caballa", "Carpín Tres Espinas", "Dorada",
+                                                                "Pejerrey", "Perca Europea", "Robalo", "Salmón Atlántico", "Salmón Chinook", "Sargo",
+                                                                "Tilapia del Nilo"};
+        int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0);
+
+        switch(opcion){
+            case 1 -> mostrarInformacionPez(AlmacenPropiedades.ABADEJO);
+            case 2 -> mostrarInformacionPez(AlmacenPropiedades.ARENQUE_ATLANTICO);
+            case 3 -> mostrarInformacionPez(AlmacenPropiedades.CABALLA);
+            case 4 -> mostrarInformacionPez(AlmacenPropiedades.CARPIN_TRES_ESPINAS);
+            case 5 -> mostrarInformacionPez(AlmacenPropiedades.DORADA);
+            case 6 -> mostrarInformacionPez(AlmacenPropiedades.PEJERREY);
+            case 7 -> mostrarInformacionPez(AlmacenPropiedades.PERCA_EUROPEA);
+            case 8 -> mostrarInformacionPez(AlmacenPropiedades.ROBALO);
+            case 9 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_ATLANTICO);
+            case 10 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_CHINOOK);
+            case 11 -> mostrarInformacionPez(AlmacenPropiedades.SARGO);
+            case 12 -> mostrarInformacionPez(AlmacenPropiedades.TILAPIA_NILO);
+        }
+    }
+
+    /**
+     * Avanza un día en todas las piscifactorías y muestra el número de peces vendidos y las monedas ganadas con ello.
+     */
+    private static void nextDay(){
+        int pecesAntesDePasarDia;
+        int dineroAntesDePasarDia;
+        int pecesVendidos = 0;
+        int monedasGanadas = 0;
+
+        for(Piscifactoria piscifactoria : piscifactorias){
+            pecesAntesDePasarDia = piscifactoria.getPecesTotales();
+            dineroAntesDePasarDia = sistemaMonedas.getMonedas();
+            piscifactoria.nextDay();
+            System.out.println("Piscifactoría " + piscifactoria.getNombre() + ":" + (pecesAntesDePasarDia - piscifactoria.getPecesTotales()) + " peces vendidos por un total de " + (sistemaMonedas.getMonedas() - dineroAntesDePasarDia) + " monedas.");
+            pecesVendidos += pecesAntesDePasarDia - piscifactoria.getPecesTotales();
+            monedasGanadas += sistemaMonedas.getMonedas() - dineroAntesDePasarDia;
+        }
+
+        System.out.println(pecesVendidos + " peces vendidos por un total de " + monedasGanadas + " monedas.");
+    }
+
+    /**
+     * Imprime por pantalla los datos relativos a un pez.
+     * @param datosDelPez Datos relativos a un pez a mostrar.
+     */
+    private static void mostrarInformacionPez(PecesDatos datosDelPez){
+        System.out.println("Nombre: " + datosDelPez.getNombre());
+        System.out.println("Nombre científico: " + datosDelPez.getCientifico());
+        System.out.println("Coste: " + datosDelPez.getCoste() + " monedas");
+        System.out.println("Precio de venta: " + datosDelPez.getMonedas() + " monedas");
+        System.out.println("Huevos que pone: " + datosDelPez.getHuevos());
+        System.out.println("Ciclo de reproducción: " + datosDelPez.getCiclo() + " días");
+        System.out.println("Madurez: " + datosDelPez.getMadurez() + " días");
+        System.out.println("Edad óptima para la venta: " + datosDelPez.getOptimo() + " días");
+        System.out.println("Piscifactoria: " + datosDelPez.getPiscifactoria());
+
+        System.out.print("Propiedades: ");
+        for(PecesProps propiedad : datosDelPez.getPropiedades()){
+            System.out.print(propiedad + " ");
+        }
+
+        System.out.println("\nTipo: " + datosDelPez.getTipo());
+        
+    }
+
+    public static void main(String[] args) {
+        init();
+        SistemaEntrada.close();
     }
 }
