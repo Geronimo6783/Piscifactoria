@@ -16,3 +16,5 @@ La base de este proyecto es crear un programa que simule una piscifactoría y to
 
 - Miriam Betanzos Jamardo
 
+> [!NOTE]
+> El software tiene copyright.
