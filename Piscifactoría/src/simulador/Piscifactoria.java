@@ -323,24 +323,11 @@ public class Piscifactoria {
 
     /**
      * Realiza la lógica de que se pasa un día cuando no se dispone de almacén central.
-     * @param sistemaMonedas Sistema de monedas donde se realiza el ingreso  de la monedas obtenidas con la venta de los peces.
      */
-    public void nextDay(SistemaMonedas sistemaMonedas) {
+    public void nextDay() {
         for(Tanque tanque : tanques){
             tanque.alimentar(almacenInicial);
-            tanque.nextDay(sistemaMonedas);
-        }
-    }
-
-    /**
-     * Realiza la lógica de que se pasa un día cuando se dispono de almacén central.
-     * @param almacenCentral Almacén central del que se dispone.
-     * @param sistemaMonedas Sistema de monedas donde se realiza el ingreso de las monedas obtenidas con la venta de los peces.
-     */
-    public void nextDay(AlmacenCentral almacenCentral, SistemaMonedas sistemaMonedas){
-        for(Tanque tanque : tanques){
-            tanque.alimentar(almacenInicial, almacenCentral);
-            tanque.nextDay(sistemaMonedas);
+            tanque.nextDay();
         }
     }
 

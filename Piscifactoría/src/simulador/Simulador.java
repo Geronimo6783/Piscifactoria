@@ -33,12 +33,12 @@ public class Simulador {
     /**
      * Sistema de monedas de la simulación.
      */
-    private static SistemaMonedas sistemaMonedas;
+    public static SistemaMonedas sistemaMonedas;
 
     /**
      * Almacén central de comida usado en la simulación.
      */
-    private static AlmacenCentral almacenCentral = null;
+    public static AlmacenCentral almacenCentral = null;
 
     /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
@@ -148,7 +148,7 @@ public class Simulador {
         for(Piscifactoria piscifactoria : piscifactorias){
             pecesAntesDePasarDia = piscifactoria.getPecesTotales();
             dineroAntesDePasarDia = sistemaMonedas.getMonedas();
-            piscifactoria.nextDay(sistemaMonedas);
+            piscifactoria.nextDay();
             System.out.println("Piscifactoría " + piscifactoria.getNombre() + ":" + (pecesAntesDePasarDia - piscifactoria.getPecesTotales()) + " peces vendidos por un total de " + (sistemaMonedas.getMonedas() - dineroAntesDePasarDia) + " monedas.");
             pecesVendidos += pecesAntesDePasarDia - piscifactoria.getPecesTotales();
             monedasGanadas += sistemaMonedas.getMonedas() - dineroAntesDePasarDia;
