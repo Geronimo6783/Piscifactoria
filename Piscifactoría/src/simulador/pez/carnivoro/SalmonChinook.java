@@ -43,12 +43,10 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.SALMON_CHINOOK.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.SALMON_CHINOOK.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -60,6 +58,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**

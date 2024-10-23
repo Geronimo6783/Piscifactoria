@@ -43,12 +43,10 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.PERCA_EUROPEA.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.PERCA_EUROPEA.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -60,6 +58,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**

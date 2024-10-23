@@ -216,12 +216,16 @@ public class Simulador {
     public static void main(String[] args) {
         init();
         Tanque tanque = new Tanque(1, 10);
-        tanque.getPeces().add(new CarpinTresEspinas(false));
-        tanque.getPeces().add(new CarpinTresEspinas(true));
-        Piscifactoria.AlmacenComida almacenComida = new Piscifactoria.AlmacenComida(100, 100, 100);
-        for(int i = 0; i < 1; i++){
+        tanque.getPeces().add(new Caballa(false));
+        tanque.getPeces().add(new Caballa(true));
+        Piscifactoria.AlmacenComida almacenComida = new Piscifactoria.AlmacenComida(10, 10, 10);
+        for(int i = 0; i < 5; i++){
             tanque.alimentar(almacenComida);
+            System.out.println("=============== Antes del nextDay() ===============");
+            tanque.showStatus();
+            tanque.showFishStatus();
             tanque.nextDay();
+            System.out.println("=============== Después del nextDay() ===============");
             tanque.showStatus();
             tanque.showFishStatus();
         }

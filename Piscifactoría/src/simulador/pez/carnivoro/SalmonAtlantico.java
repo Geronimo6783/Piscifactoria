@@ -43,12 +43,10 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.SALMON_ATLANTICO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.SALMON_ATLANTICO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -60,6 +58,7 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**

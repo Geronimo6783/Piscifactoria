@@ -43,12 +43,10 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.TILAPIA_NILO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.TILAPIA_NILO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -60,6 +58,7 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
