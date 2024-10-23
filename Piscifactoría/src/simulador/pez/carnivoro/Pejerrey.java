@@ -3,6 +3,7 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -66,7 +67,7 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.PEJERREY.getMadurez();
+        return edad >= AlmacenPropiedades.PEJERREY.getMadurez();
     }
 
     /**
@@ -83,6 +84,7 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Pejerrey(false);
     }
 
@@ -92,6 +94,7 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Pejerrey(true);
     }
 }

@@ -3,6 +3,7 @@ package simulador.pez.filtrador;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -66,7 +67,7 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.TILAPIA_NILO.getMadurez();
+        return edad >= AlmacenPropiedades.TILAPIA_NILO.getMadurez();
     }
 
     /**
@@ -83,6 +84,7 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new TilapiaDelNilo(false);
     }
 
@@ -92,6 +94,7 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new TilapiaDelNilo(true);
     }
 }

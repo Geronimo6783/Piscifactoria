@@ -585,12 +585,14 @@ public class Tanque {
     private void venderPecesOptimos(){
         int pecesAVender = 0;
         Iterator<Pez> iterador = peces.iterator();
+        String nombrePez = peces.get(0).getNombre();
         
         while(iterador.hasNext()){
             Pez pez = iterador.next();
 
             if(pez.isEdadOptima()){
                 pecesAVender++;
+                Simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
                 iterador.remove();
             }
         }
@@ -605,19 +607,16 @@ public class Tanque {
     public int venderPeces(){
         int monedasAObtener = 0;
         Iterator<Pez> iterador = peces.iterator();
+        String nombrePez = peces.get(0).getNombre();
+        int monedasPez = (AlmacenPropiedades.getPropByName(nombrePez).getMonedas() / 2);
 
         while(iterador.hasNext()){
             Pez pez = iterador.next();
 
             if(pez.isMaduro() && !pez.isEdadOptima()){
-                monedasAObtener += (AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas() / 2);
+                monedasAObtener += monedasPez;
+                Simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
                 iterador.remove();
-            }
-            else{
-                if(pez.isEdadOptima()){
-                    monedasAObtener += AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
-                    iterador.remove();
-                }
             }
         }
 

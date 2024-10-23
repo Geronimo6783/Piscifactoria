@@ -15,6 +15,3 @@ La base de este proyecto es crear un programa que simule una piscifactoría y to
 - Manuel Bértolo Blanco
 
 - Miriam Betanzos Jamardo
-
-> [!NOTE]
-> El software tiene derechos de autor.

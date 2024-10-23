@@ -1,6 +1,7 @@
 package simulador.pez.filtrador;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 import java.util.Random;
@@ -66,7 +67,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez();
+        return edad >= AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez();
     }
 
     /**
@@ -83,6 +84,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new ArenqueDelAtlantico(false);
     }
 
@@ -92,6 +94,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new ArenqueDelAtlantico(true);
     }
 }

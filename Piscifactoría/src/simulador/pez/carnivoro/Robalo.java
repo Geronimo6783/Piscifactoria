@@ -3,6 +3,7 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -66,7 +67,7 @@ public class Robalo extends Pez implements Carnivoro, Mar{
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.ROBALO.getMadurez();
+        return edad >= AlmacenPropiedades.ROBALO.getMadurez();
     }
 
     /**
@@ -83,6 +84,7 @@ public class Robalo extends Pez implements Carnivoro, Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Robalo(false);
     }
 
@@ -92,6 +94,7 @@ public class Robalo extends Pez implements Carnivoro, Mar{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Robalo(true);
     }
 }

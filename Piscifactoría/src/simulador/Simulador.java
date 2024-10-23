@@ -14,6 +14,7 @@ import simulador.pez.filtrador.TilapiaDelNilo;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
 import simulador.piscifactoria.*;
+import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
 public class Simulador {
     
@@ -145,9 +146,10 @@ public class Simulador {
      * Muestra la información relativa a un pez seleccionado por el usuario.
      */
     private static void showIctio(){
-        String[] opcionesPecesDisponibles = {"Cancelar", "Abadejo", "Arenque del Atlántico", "Caballa", "Carpín Tres Espinas", "Dorada",
-                                                                "Pejerrey", "Perca Europea", "Robalo", "Salmón Atlántico", "Salmón Chinook", "Sargo",
-                                                                "Tilapia del Nilo"};
+        String[] opcionesPecesDisponibles = {"Cancelar", AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+        AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
+        AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+        AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()};
         int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0);
 
         switch(opcion){
@@ -213,8 +215,17 @@ public class Simulador {
 
     public static void main(String[] args) {
         init();
-        showSpecificStatus();
+        Tanque tanque = new Tanque(1, 10);
+        tanque.getPeces().add(new CarpinTresEspinas(false));
+        tanque.getPeces().add(new CarpinTresEspinas(true));
+        Piscifactoria.AlmacenComida almacenComida = new Piscifactoria.AlmacenComida(100, 100, 100);
+        for(int i = 0; i < 1; i++){
+            tanque.alimentar(almacenComida);
+            tanque.nextDay();
+            tanque.showStatus();
+            tanque.showFishStatus();
+        }
+        tanque.venderPeces();
         showStats();
-        SistemaEntrada.close();
     }
 }
