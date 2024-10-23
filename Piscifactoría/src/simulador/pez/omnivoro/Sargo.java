@@ -3,6 +3,7 @@ package simulador.pez.omnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -66,7 +67,7 @@ public class Sargo extends Pez implements Omnivoro, Mar{
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.SARGO.getMadurez();
+        return edad >= AlmacenPropiedades.SARGO.getMadurez();
     }
 
     /**
@@ -83,6 +84,7 @@ public class Sargo extends Pez implements Omnivoro, Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Sargo(false);
     }
 
@@ -92,6 +94,7 @@ public class Sargo extends Pez implements Omnivoro, Mar{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Sargo(true);
     }
 }

@@ -3,6 +3,7 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -74,7 +75,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.PERCA_EUROPEA.getMadurez();
+        return edad >= AlmacenPropiedades.PERCA_EUROPEA.getMadurez();
     }
 
     /**
@@ -91,6 +92,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new PercaEuropea(false);
     }
 
@@ -100,6 +102,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new PercaEuropea(true);
     }
 }

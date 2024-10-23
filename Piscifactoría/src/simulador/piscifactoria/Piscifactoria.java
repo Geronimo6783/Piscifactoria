@@ -13,7 +13,7 @@ public abstract class Piscifactoria {
     /**
      * Clase que representa al almacén de comida de una piscifactoría.
      */
-    public class AlmacenComida{
+    public static class AlmacenComida{
 
         /**
          * Capacidad máxima de comida de cada tipo del almacén.

@@ -3,6 +3,7 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -66,7 +67,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.SALMON_CHINOOK.getMadurez();
+        return edad >= AlmacenPropiedades.SALMON_CHINOOK.getMadurez();
     }
 
     /**
@@ -83,6 +84,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new SalmonChinook(false);
     }
 
@@ -92,6 +94,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new SalmonChinook(true);
     }
 }
