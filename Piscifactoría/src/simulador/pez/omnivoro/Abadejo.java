@@ -43,12 +43,10 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.ABADEJO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.ABADEJO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -60,6 +58,7 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**

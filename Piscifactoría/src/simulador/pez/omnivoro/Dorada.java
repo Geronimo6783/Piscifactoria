@@ -43,12 +43,10 @@ public class Dorada extends Pez implements Omnivoro, Rio, Mar{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.DORADA.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.DORADA.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -60,6 +58,7 @@ public class Dorada extends Pez implements Omnivoro, Rio, Mar{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
