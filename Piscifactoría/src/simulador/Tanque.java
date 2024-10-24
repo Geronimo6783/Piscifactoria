@@ -551,28 +551,13 @@ public class Tanque {
     }
 
     /**
-     * Indica si hay una hembra fértil en el tanque.
-     * 
-     * @return True si hay una hembra fértil en el tanque.
-     */
-    private boolean hayHembraFertil() {
-        for (Pez pez : peces) {
-            if (pez.isSexo() && pez.isFertil()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Gestiona la lógica de reporudcción de los peces del tanque.
      */
     private void reproducir() {
         int numeroHuevos = 0;
         int numeroHuevosPorHembra = AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getHuevos();
 
-        if (hayMachoFertil() && hayHembraFertil()) {
+        if (hayMachoFertil() ) {
             for (Pez pez : peces) {
                 if (pez.isSexo() && pez.isFertil()) {
                     pez.setFertil(false);
