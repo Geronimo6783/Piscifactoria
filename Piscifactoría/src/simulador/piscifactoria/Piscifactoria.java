@@ -13,7 +13,7 @@ public abstract class Piscifactoria {
     /**
      * Clase que representa al almacén de comida de una piscifactoría.
      */
-    public static class AlmacenComida{
+    public class AlmacenComida{
 
         /**
          * Capacidad máxima de comida de cada tipo del almacén.
@@ -283,13 +283,13 @@ public abstract class Piscifactoria {
      * Metodo que muestra por mensaje el estado del Almacen
      */
     public void showFood() {
-        System.out.println("============== Almacen ================\nComida animal: "
+        System.out.println("============== Almacén ================\nComida animal: "
                 + almacenInicial.getCantidadComidaAnimal() + "/" + almacenInicial.getCapacidadMaximaComida() +
-                "(" + (almacenInicial.getCantidadComidaAnimal() / almacenInicial.getCapacidadMaximaComida()) * 100
+                "(" + String.format("%.2f", (((float)almacenInicial.getCantidadComidaAnimal() / (float)almacenInicial.getCapacidadMaximaComida()) * 100))
                 + "%)" +
                 "\nComida vegetal: " + almacenInicial.getCantidadComidaVegetal() + "/"
                 + almacenInicial.getCapacidadMaximaComida() +
-                "(" + (almacenInicial.getCantidadComidaVegetal() / almacenInicial.getCapacidadMaximaComida()) * 100
+                "(" + String.format("%.2f", (((float)almacenInicial.getCantidadComidaVegetal() / (float)almacenInicial.getCapacidadMaximaComida()) * 100))
                 + "%)");
     }
 
@@ -304,15 +304,12 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Metodo que vende los peces maduros y vivos de los tanques devolviendo el valor de monedas conseguidas.
-     * @return Cantidad de monedas ganadas de la venta 
+     * Metodo que vende los peces maduros y vivos de los tanques.
      */
-    public int sellFish() {
-        int monedasGanadas=0;
-        for (int i = 0; i < tanques.size(); i++) {
-            monedasGanadas=+tanques.get(i).venderPeces();
+    public void sellFish() {
+        for (Tanque tanque : tanques) {
+            tanque.venderPeces();
         }
-        return monedasGanadas;
     }
     
     /**
