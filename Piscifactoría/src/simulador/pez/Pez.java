@@ -155,7 +155,7 @@ public abstract class Pez {
      * @param nombreCientifico Nombre científico del pez.
      * @param sexo Sexo del pez.
      */
-    public Pez(String nombre, String nombreCientifico, boolean sexo) {
+    protected Pez(String nombre, String nombreCientifico, boolean sexo) {
         this.nombre = nombre;
         this.nombreCientifico = nombreCientifico;
         this.sexo = sexo;
