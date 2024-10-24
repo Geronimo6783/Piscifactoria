@@ -602,9 +602,8 @@ public class Tanque {
 
     /**
      * Vende todos los peces que estén maduros.
-     * @return Monedas obtenidas por la venta de todos los peces que estén maduros.
      */
-    public int venderPeces(){
+    public void venderPeces(){
         int monedasAObtener = 0;
         Iterator<Pez> iterador = peces.iterator();
         String nombrePez = peces.get(0).getNombre();
@@ -620,7 +619,7 @@ public class Tanque {
             }
         }
 
-        return monedasAObtener;
+        Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas() + monedasAObtener);;
     }
 
     /**
