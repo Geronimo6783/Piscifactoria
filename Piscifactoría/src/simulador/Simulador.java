@@ -150,7 +150,7 @@ public class Simulador {
         AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
         AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
         AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()};
-        int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0);
+        int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0, 12);
 
         switch(opcion){
             case 1 -> mostrarInformacionPez(AlmacenPropiedades.ABADEJO);
@@ -214,10 +214,6 @@ public class Simulador {
     }
 
     public static void main(String[] args) {
-        init();
-        piscifactorias.get(0).showFood();
-        piscifactorias.get(0).upgradeFood();
-        piscifactorias.get(0).showFood();
-        piscifactorias.get(0).showStatus();
+        showIctio();
     }
 }
