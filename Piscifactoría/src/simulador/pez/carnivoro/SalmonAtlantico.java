@@ -13,7 +13,7 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
 
     /**
      * Constructor de salmones atlánticos.
-     * @param sexo Sexo del salmón atlántico.
+     * @param sexo Sexo del salmón atlántico si es true es hembra y si es false es macho.
      */
     public SalmonAtlantico(boolean sexo){
         super(AlmacenPropiedades.SALMON_ATLANTICO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
 
     /**
      * Indica si el salmón atlántico está maduro.
+     * @return True si el salmón atlántico está maduro.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
 
     /**
      * Indica si el salmón atlántico está en la edad óptima para ser vendido.
+     * @return True si el salmón atlántico está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){

@@ -86,6 +86,7 @@ public class Tanque {
      * Constructor de tanques.
      * 
      * @param numeroTanque Número del tanque.
+     * @param capacidadMaximaPeces Capacidad máxima de peces del tanque.
      */
     public Tanque(int numeroTanque, int capacidadMaximaPeces) {
         this.numeroTanque = numeroTanque;
@@ -156,7 +157,7 @@ public class Tanque {
 
     /**
      * 
-     * @return Número de peces vivos en el tanque.
+     * @return Número de peces adultos en el tanque.
      */
     public int pecesAdultos() {
         int pecesAdultos = 0;
@@ -238,7 +239,8 @@ public class Tanque {
     }
 
     /**
-     *  Gestiona la lógica para alimentar a los peces.
+     * Gestiona la lógica para alimentar a los peces.
+     * @param almacenComida Almacén de comida de la piscifactoría donde se sitúa el tanque.
      */
     public void alimentar(Piscifactoria.AlmacenComida almacenComida) {
         int comidaNecesaria = 0;
@@ -438,6 +440,7 @@ public class Tanque {
     /**
      * Gestiona la lógica para alimentar a los peces cuando la comida es insuficiente.
      * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada Pez para alimentarse.
+     * @param almacenComida Almacén de comida de la piscifactoría donde se sitúa el tanque.
      * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
      */
     private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez, Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
@@ -551,7 +554,7 @@ public class Tanque {
     }
 
     /**
-     * Gestiona la lógica de reporudcción de los peces del tanque.
+     * Gestiona la lógica de reproducción de los peces del tanque.
      */
     private void reproducir(){
         int numeroHuevos = 0;

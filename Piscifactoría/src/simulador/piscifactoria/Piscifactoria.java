@@ -21,12 +21,12 @@ public abstract class Piscifactoria {
         private int capacidadMaximaComida;
 
         /**
-         * Cantidad comida animal que hay en el almacén.
+         * Cantidad de comida animal que hay en el almacén.
          */
         private int cantidadComidaAnimal;
 
         /**
-         * Cantidad comida vegetal que hay en el almacén.
+         * Cantidad de comida vegetal que hay en el almacén.
          */
         private int cantidadComidaVegetal;
 
@@ -105,6 +105,9 @@ public abstract class Piscifactoria {
      */
     protected ArrayList<Tanque> tanques;
     
+    /**
+     * Tanque con el que empieza obligatoriamente la piscifactoría.
+     */
     protected Tanque tanqueInicial;
 
     /**
@@ -118,7 +121,7 @@ public abstract class Piscifactoria {
     protected String nombre = "";
 
     /**
-     * Constructor de Piscifactoria que diferencia entre si el primer tanque es de mar o de rio
+     * Constructor de Ppiscifactorías.
      * @param nombre Nombre de la piscifactoría.
      */
     protected Piscifactoria(String nombre) {
@@ -127,32 +130,32 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Devuelve los tanques de la piscifactoria
-     * @return tanques
+     * Devuelve los tanques de la piscifactoria.
+     * @return Tanques de la piscifactoría.
      */
     public ArrayList<Tanque> getTanques() {
         return tanques;
     }
 
     /**
-     * Establece el ArrayList de tanques de la piscifactoria
-     * @param tanques
+     * Establece el ArrayList de tanques de la piscifactoria.
+     * @param tanques ArrayList de tanques a establecer.
      */
     public void setTanques(ArrayList<Tanque> tanques) {
         this.tanques = tanques;
     }
 
     /**
-     * Devuelve el tanque inicial de la piscifactoria
-     * @return 
+     * Devuelve el tanque inicial de la piscifactoria.
+     * @return Tanque inicial de la piscifactoría.
      */
     public Tanque getTanqueInicial() {
         return tanqueInicial;
     }
 
     /**
-     * Establece el tanque inicial de la piscifactoria
-     * @param tanqueInicial
+     * Establece el tanque inicial de la piscifactoria.
+     * @param tanqueInicial Tanque inicial de la piscifactoría a establecer.
      */
     public void setTanqueInicial(Tanque tanqueInicial) {
         this.tanqueInicial = tanqueInicial;

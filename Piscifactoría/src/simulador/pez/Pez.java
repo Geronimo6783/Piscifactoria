@@ -201,7 +201,7 @@ public abstract class Pez {
 
     /**
      * 
-     * @return True si el pez está en la edad optima para ser vendido.
+     * @return True si el pez está en la edad óptima para ser vendido.
      */
     public abstract boolean isEdadOptima();
 

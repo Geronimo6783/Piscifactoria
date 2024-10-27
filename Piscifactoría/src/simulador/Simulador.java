@@ -29,7 +29,7 @@ public class Simulador {
     public static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
 
     /**
-     * Nombre de la entidad, empresa o partida des la simulación.
+     * Nombre de la entidad, empresa o partida de la simulación.
      */
     private static String nombre;
 

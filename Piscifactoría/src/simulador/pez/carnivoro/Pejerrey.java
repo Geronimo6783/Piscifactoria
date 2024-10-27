@@ -13,7 +13,7 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
 
     /**
      * Constructor de pejerreyes.
-     * @param sexo Sexo del pejerrey.
+     * @param sexo Sexo del pejerrey si es true es hembra y si es false es macho.
      */
     public Pejerrey(boolean sexo){
         super(AlmacenPropiedades.PEJERREY.getNombre(), AlmacenPropiedades.PEJERREY.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
 
     /**
      * Indica si el pejerrey está maduro.
+     * @return True si el pejerrey está maduro.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
 
     /**
      * Indica si el pejerrey está en la edad óptima para ser vendido.
+     * @return True si el pejerrey está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){
