@@ -13,7 +13,7 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
 
     /**
      * Constructor de abadejos.
-     * @param sexo Sexo del abadejo.
+     * @param sexo Sexo del abadejo si es true es hembra y si es false es macho.
      */
     public Abadejo(boolean sexo){
         super(AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ABADEJO.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
 
     /**
      * Indica si el abadejo está maduro.
+     * @return True si el abadejo está maduro.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
 
     /**
      * Indica si el abadejo está en la edad óptima para ser vendido.
+     * @return True si el abadejo está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){

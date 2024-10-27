@@ -12,8 +12,8 @@ import java.util.Random;
 public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
     
     /**
-     * Contructor de arenque del atlántico.
-     * @param sexo Sexo del arenque del atlántico.
+     * Contructor de arenques del atlántico.
+     * @param sexo Sexo del arenque del atlántico si es true es hembra y si es false es macho.
      */
     public ArenqueDelAtlantico(boolean sexo) {
         super(AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
 
     /**
      * Indica si el arenque del atlántico está maduro.
+     * @return True si el arenque del atlántico está maduro.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
 
     /**
      * Indica si el arenque del atlántico está en la edad óptima para ser vendido.
+     * @return True si el arenque del atlántico está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){

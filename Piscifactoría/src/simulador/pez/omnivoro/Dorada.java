@@ -13,7 +13,7 @@ public class Dorada extends Pez implements Omnivoro, Rio, Mar{
 
     /**
      * Constructor de doradas.
-     * @param sexo Sexo de la dorada.
+     * @param sexo Sexo de la dorada si es true es hembra y si es false es macho.
      */
     public Dorada(boolean sexo){
         super(AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.DORADA.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class Dorada extends Pez implements Omnivoro, Rio, Mar{
 
     /**
      * Indica si la dorada está madura.
+     * @return True si la dorada está madura.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class Dorada extends Pez implements Omnivoro, Rio, Mar{
 
     /**
      * Indica si la dorada está en la edad óptima para ser vendida.
+     * @return True si la dorada está en la edad óptima para ser vendida.
      */
     @Override
     public boolean isEdadOptima(){

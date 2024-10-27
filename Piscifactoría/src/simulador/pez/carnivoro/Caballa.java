@@ -13,7 +13,7 @@ public class Caballa extends Pez implements Carnivoro, Mar{
 
     /**
      * Constructor de caballas.
-     * @param sexo Sexo de la caballa.
+     * @param sexo Sexo de la caballa si es true es hembra y si es false es macho.
      */
     public Caballa(boolean sexo){
         super(AlmacenPropiedades.CABALLA.getNombre(), AlmacenPropiedades.CABALLA.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class Caballa extends Pez implements Carnivoro, Mar{
 
     /**
      * Indica si la caballa está madura.
+     * @return True si la caballa está madura.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class Caballa extends Pez implements Carnivoro, Mar{
 
     /**
      * Indica si la caballa está en la edad óptima para ser vendida.
+     * @return True si la caballa está en la edad óptima para ser vendida.
      */
     @Override
     public boolean isEdadOptima(){

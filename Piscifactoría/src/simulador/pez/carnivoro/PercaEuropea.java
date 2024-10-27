@@ -13,7 +13,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
 
     /**
      * Constructor de percas europeas.
-     * @param sexo Sexo de la perca europea.
+     * @param sexo Sexo de la perca europea si es true es hembra y si es false es macho.
      */
     public PercaEuropea(boolean sexo){
         super(AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.PERCA_EUROPEA.getCientifico(), sexo);
@@ -71,6 +71,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
 
     /**
      * Indica si la perca europea está madura.
+     * @return True si la perca europea está madura.
      */
     @Override
     public boolean isMaduro(){
@@ -79,6 +80,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
 
     /**
      * Indica si la perca europea está en la edad óptima para ser vendida.
+     * @return True si la perca europea está en la edad óptima para ser vendida.
      */
     @Override
     public boolean isEdadOptima(){

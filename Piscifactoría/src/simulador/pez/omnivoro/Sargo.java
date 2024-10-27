@@ -13,7 +13,7 @@ public class Sargo extends Pez implements Omnivoro, Mar{
 
     /**
      * Constructor de sargos.
-     * @param sexo Sexo del sargo.
+     * @param sexo Sexo del sargo si es true es hembra y si es false es macho.
      */
     public Sargo(boolean sexo){
         super(AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.SARGO.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class Sargo extends Pez implements Omnivoro, Mar{
 
     /**
      * Indica si el sargo está maduro.
+     * @return True si el sargo está maduro.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class Sargo extends Pez implements Omnivoro, Mar{
 
     /**
      * Indica si el sargo está en la edad óptima para ser vendido.
+     * @return True si el sargo está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){

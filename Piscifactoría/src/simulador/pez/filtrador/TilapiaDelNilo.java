@@ -13,7 +13,7 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
 
     /**
      * Constructor de tilapias del nilo.
-     * @param sexo Sexo de la tilapia del nilo.
+     * @param sexo Sexo de la tilapia del nilo si es true es hembra y si es false es macho.
      */
     public TilapiaDelNilo(boolean sexo){
         super(AlmacenPropiedades.TILAPIA_NILO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
 
     /**
      * Indica si la tirapia del nilo está madura.
+     * @return True si la tirapia del nilo está madura.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class TilapiaDelNilo extends Pez implements Filtrador, Rio{
 
     /**
      * Indica si la tirapia del nilo está en la edad óptima para ser vendida.
+     * @return True si la tirapia del nilo está en la edad óptima para ser vendida.
      */
     @Override
     public boolean isEdadOptima(){

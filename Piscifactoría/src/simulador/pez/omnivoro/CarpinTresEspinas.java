@@ -13,7 +13,7 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
 
     /**
      * Constructor de carpines de tres espinas.
-     * @param sexo Sexo del carpín de tres espinas.
+     * @param sexo Sexo del carpín de tres espinas si es true es hembra y si es false es macho.
      */
     public CarpinTresEspinas(boolean sexo){
         super(AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.CARPIN_TRES_ESPINAS.getCientifico(), sexo);
@@ -61,7 +61,7 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
 
     /**
      * Indica la cantidad de comida que come el carpín de tres espinas un día.
-     * @return Cantidad de comida que comer el carpín de tres espinas.
+     * @return Cantidad de comida que come el carpín de tres espinas.
      */
     @Override
     public int comer(){
@@ -71,6 +71,7 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
 
     /**
      * Indica si el carpín de tres espinas está maduro.
+     * @return True si el carpín de tres espinas está maduro.
      */
     @Override
     public boolean isMaduro(){
@@ -79,6 +80,7 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
 
     /**
      * Indica si el carpín de tres espinas está en la edad óptima para ser vendido.
+     * @return True si el carpín de tres espinas está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){

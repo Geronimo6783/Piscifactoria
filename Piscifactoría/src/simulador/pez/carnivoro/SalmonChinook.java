@@ -13,7 +13,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
 
     /**
      * Constructor de salomnes chinooks.
-     * @param sexo Sexo del salmón chinook.
+     * @param sexo Sexo del salmón chinook si es true es hembra y si es false es macho.
      */
     public SalmonChinook(boolean sexo){
         super(AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SALMON_CHINOOK.getCientifico(), sexo);
@@ -63,6 +63,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
 
     /**
      * Indica si el salmón chinook está maduro.
+     * @return True si el salmón chinook está maduro.
      */
     @Override
     public boolean isMaduro(){
@@ -71,6 +72,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
 
     /**
      * Indica si el salmón chinook está en la edad óptima para ser vendido.
+     * @return True si el salmón chinook está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){
