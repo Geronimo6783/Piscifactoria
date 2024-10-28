@@ -11,6 +11,7 @@ import propiedades.PecesDatos;
 import propiedades.PecesProps;
 import simulador.pez.filtrador.ArenqueDelAtlantico;
 import simulador.pez.filtrador.TilapiaDelNilo;
+import simulador.pez.Pez;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
 
@@ -130,8 +131,9 @@ public class Simulador {
 
         for (int i = 0; i < tanques.size(); i++) {
             Tanque tanque = tanques.get(i);
+            String nombrePez = tanque.getPeces().isEmpty() ? "Sin peces" : tanque.getPeces().get(0).getNombre();
             opcionesTanques[i + 1] = "Tanque " + (i + 1) + " - Ocupación: " + tanque.getPeces().size() + "/"
-                    + tanque.getCapacidadMaximaPeces();
+                    + tanque.getCapacidadMaximaPeces() + " - Pez: " + nombrePez;
         }
 
         GeneradorMenus.generarMenu(opcionesTanques, 1);
