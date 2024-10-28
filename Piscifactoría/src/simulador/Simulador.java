@@ -115,14 +115,10 @@ public class Simulador {
      * Muestra el menú de tanques de una piscifactoría seleccionada y permite al
      * usuario seleccionar uno.
      * 
-     * @return El índice del tanque seleccionado o -1 si el usuario cancela.
+     * @return El índice del tanque seleccionado.
      */
     private static int selectTank() {
         int piscifactoriaSeleccionada = selectPisc();
-
-        if (piscifactoriaSeleccionada == 0) {
-            return -1;
-        }
 
         Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
         ArrayList<Tanque> tanques = piscifactoria.getTanques();
@@ -140,9 +136,8 @@ public class Simulador {
 
         GeneradorMenus.generarMenu(opcionesTanques, 1);
 
-        int opcion = SistemaEntrada.entradaOpcionNumerica(0, tanques.size());
+        return SistemaEntrada.entradaOpcionNumerica(0, tanques.size());
 
-        return opcion == 0 ? -1 : opcion - 1;
     }
 
     /**
@@ -208,10 +203,6 @@ public class Simulador {
 
         System.out.println("Seleccione un tanque para ver el estado de sus peces:");
         int opcionTanque = GeneradorMenus.generarMenuOperativo(opcionesTanques, 1, tanques.size() + 1 );
-
-        if (opcionTanque == 0) {
-            return;
-        }
 
         Tanque tanqueSeleccionado = tanques.get(opcionTanque - 1);
 
@@ -309,6 +300,11 @@ public class Simulador {
 
         System.out.println("\nTipo: " + datosDelPez.getTipo());
 
+    }
+
+    private static void cleanTank(Piscifactoria piscifactoria){
+        ArrayList<Tanque> tanques = piscifactoria.getTanques();
+    
     }
 
     public static void main(String[] args) {
