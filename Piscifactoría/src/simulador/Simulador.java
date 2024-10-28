@@ -59,10 +59,14 @@ public class Simulador {
         String nombrePiscifactoria = SistemaEntrada.entradaTexto();
         sistemaMonedas = new SistemaMonedas(100);
         piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
-        String[] pecesDisponibles = {AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
-                                    AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
-                                    AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-                                    AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+        String[] pecesDisponibles = { AlmacenPropiedades.ABADEJO.getNombre(),
+                AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+                AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                AlmacenPropiedades.PEJERREY.getNombre(),
+                AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),
+                AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
+                AlmacenPropiedades.TILAPIA_NILO.getNombre() };
         estadisticas = new Estadisticas(pecesDisponibles);
     }
 
@@ -180,6 +184,48 @@ public class Simulador {
     }
 
     /**
+     * Muestra un menú para seleccionar un tanque de una una piscifactoría y posteriormente
+     * el estado de los peces en dicho tanque,
+     * 
+     * @param piscifactoria La piscifactoría que contiene los tanques disponibles.
+     */
+    public void showTankStatus(Piscifactoria piscifactoria) {
+        ArrayList<Tanque> tanques = piscifactoria.getTanques();
+
+        if (tanques.isEmpty()) {
+            System.out.println("No hay tanques disponibles en esta piscifactoría.");
+            return;
+        }
+
+        String[] opcionesTanques = new String[tanques.size()];
+        opcionesTanques[0] = "Cancelar"; 
+        for (int i = 0; i < tanques.size(); i++) {
+            Tanque tanque = tanques.get(i);
+            String nombrePez = tanque.getPeces().isEmpty() ? "Sin peces" : tanque.getPeces().get(0).getNombre();
+            opcionesTanques[i] = "Tanque " + (i + 1) + " - Ocupación: " + tanque.getPeces().size() + "/"
+                    + tanque.getCapacidadMaximaPeces() + " - Pez: " + nombrePez;
+        }
+
+        System.out.println("Seleccione un tanque para ver el estado de sus peces:");
+        int opcionTanque = GeneradorMenus.generarMenuOperativo(opcionesTanques, 1, tanques.size() + 1 );
+
+        if (opcionTanque == 0) {
+            return;
+        }
+
+        Tanque tanqueSeleccionado = tanques.get(opcionTanque - 1);
+
+        if (tanqueSeleccionado.getPeces().isEmpty()) {
+            System.out.println("El tanque seleccionado no contiene peces.");
+        } else {
+            System.out.println("Estado de los peces en el tanque " + opcionTanque + ":");
+            for (Pez pez : tanqueSeleccionado.getPeces()) {
+                pez.showStatus(); 
+            }
+        }
+    }
+
+    /**
      * Muestra un desglose de las estadísticas por cada tipo de pez.
      */
     private static void showStats() {
@@ -189,11 +235,15 @@ public class Simulador {
     /**
      * Muestra la información relativa a un pez seleccionado por el usuario.
      */
-    private static void showIctio(){
-        String[] opcionesPecesDisponibles = {"Cancelar", AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
-        AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
-        AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-        AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+    private static void showIctio() {
+        String[] opcionesPecesDisponibles = { "Cancelar", AlmacenPropiedades.ABADEJO.getNombre(),
+                AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+                AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                AlmacenPropiedades.PEJERREY.getNombre(),
+                AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),
+                AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
+                AlmacenPropiedades.TILAPIA_NILO.getNombre() };
         int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0, 12);
 
         switch (opcion) {
