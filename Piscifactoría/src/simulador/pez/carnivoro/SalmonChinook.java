@@ -3,6 +3,7 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -12,7 +13,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
 
     /**
      * Constructor de salomnes chinooks.
-     * @param sexo Sexo del salmón chinook.
+     * @param sexo Sexo del salmón chinook si es true es hembra y si es false es macho.
      */
     public SalmonChinook(boolean sexo){
         super(AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SALMON_CHINOOK.getCientifico(), sexo);
@@ -42,12 +43,10 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.SALMON_CHINOOK.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.SALMON_CHINOOK.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -59,18 +58,21 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
      * Indica si el salmón chinook está maduro.
+     * @return True si el salmón chinook está maduro.
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.SALMON_CHINOOK.getMadurez();
+        return edad >= AlmacenPropiedades.SALMON_CHINOOK.getMadurez();
     }
 
     /**
      * Indica si el salmón chinook está en la edad óptima para ser vendido.
+     * @return True si el salmón chinook está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){
@@ -83,6 +85,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new SalmonChinook(false);
     }
 
@@ -92,6 +95,7 @@ public class SalmonChinook extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new SalmonChinook(true);
     }
 }

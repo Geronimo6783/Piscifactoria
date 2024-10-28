@@ -14,6 +14,8 @@ import simulador.pez.filtrador.TilapiaDelNilo;
 import simulador.pez.Pez;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
+import simulador.piscifactoria.*;
+import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
 public class Simulador {
 
@@ -25,10 +27,10 @@ public class Simulador {
     /**
      * Piscifactorías de la simulación.
      */
-    private static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
+    public static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
 
     /**
-     * Nombre de la entidad, empresa o partida des la simulación.
+     * Nombre de la entidad, empresa o partida de la simulación.
      */
     private static String nombre;
 
@@ -56,15 +58,11 @@ public class Simulador {
         System.out.print("Introduzca el nombre de la primera piscifactoría: ");
         String nombrePiscifactoria = SistemaEntrada.entradaTexto();
         sistemaMonedas = new SistemaMonedas(100);
-        piscifactorias.add(new Piscifactoria(nombrePiscifactoria));
-        String[] pecesDisponibles = { AlmacenPropiedades.ABADEJO.getNombre(),
-                AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
-                AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
-                AlmacenPropiedades.PEJERREY.getNombre(),
-                AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),
-                AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
-                AlmacenPropiedades.TILAPIA_NILO.getNombre() };
+        piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
+        String[] pecesDisponibles = {AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+                                    AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
+                                    AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                                    AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()};
         estadisticas = new Estadisticas(pecesDisponibles);
     }
 
@@ -191,12 +189,12 @@ public class Simulador {
     /**
      * Muestra la información relativa a un pez seleccionado por el usuario.
      */
-    private static void showIctio() {
-        String[] opcionesPecesDisponibles = { "Cancelar", "Abadejo", "Arenque del Atlántico", "Caballa",
-                "Carpín Tres Espinas", "Dorada",
-                "Pejerrey", "Perca Europea", "Robalo", "Salmón Atlántico", "Salmón Chinook", "Sargo",
-                "Tilapia del Nilo" };
-        int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0);
+    private static void showIctio(){
+        String[] opcionesPecesDisponibles = {"Cancelar", AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+        AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.PEJERREY.getNombre(),
+        AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+        AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+        int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0, 12);
 
         switch (opcion) {
             case 1 -> mostrarInformacionPez(AlmacenPropiedades.ABADEJO);
@@ -264,7 +262,6 @@ public class Simulador {
     }
 
     public static void main(String[] args) {
-        init();
-        SistemaEntrada.close();
+        showIctio();
     }
 }

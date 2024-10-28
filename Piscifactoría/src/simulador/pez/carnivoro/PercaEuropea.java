@@ -3,6 +3,7 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -12,7 +13,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
 
     /**
      * Constructor de percas europeas.
-     * @param sexo Sexo de la perca europea.
+     * @param sexo Sexo de la perca europea si es true es hembra y si es false es macho.
      */
     public PercaEuropea(boolean sexo){
         super(AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.PERCA_EUROPEA.getCientifico(), sexo);
@@ -42,12 +43,10 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.PERCA_EUROPEA.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.PERCA_EUROPEA.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -59,6 +58,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
@@ -71,14 +71,16 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
 
     /**
      * Indica si la perca europea está madura.
+     * @return True si la perca europea está madura.
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.PERCA_EUROPEA.getMadurez();
+        return edad >= AlmacenPropiedades.PERCA_EUROPEA.getMadurez();
     }
 
     /**
      * Indica si la perca europea está en la edad óptima para ser vendida.
+     * @return True si la perca europea está en la edad óptima para ser vendida.
      */
     @Override
     public boolean isEdadOptima(){
@@ -91,6 +93,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new PercaEuropea(false);
     }
 
@@ -100,6 +103,7 @@ public class PercaEuropea extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new PercaEuropea(true);
     }
 }
