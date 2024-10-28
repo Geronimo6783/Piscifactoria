@@ -9,7 +9,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a un abadejo.
  */
-public class Abadejo extends Pez implements Omnivoro, Mar{
+public class Abadejo extends Omnivoro implements Mar{
 
     /**
      * Constructor de abadejos.

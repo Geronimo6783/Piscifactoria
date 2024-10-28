@@ -9,7 +9,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a una dorada.
  */
-public class Dorada extends Pez implements Omnivoro, Rio, Mar{
+public class Dorada extends Omnivoro implements Rio, Mar{
 
     /**
      * Constructor de doradas.

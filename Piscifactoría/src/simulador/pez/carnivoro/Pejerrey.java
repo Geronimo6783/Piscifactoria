@@ -9,7 +9,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a un pejerrey.
  */
-public class Pejerrey extends Pez implements Carnivoro, Rio{
+public class Pejerrey extends Carnivoro implements Rio{
 
     /**
      * Constructor de pejerreyes.
