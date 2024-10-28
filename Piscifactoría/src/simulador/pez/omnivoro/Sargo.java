@@ -9,7 +9,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a un sargo.
  */
-public class Sargo extends Pez implements Omnivoro, Mar{
+public class Sargo extends Omnivoro implements Mar{
 
     /**
      * Constructor de sargos.

@@ -13,7 +13,7 @@ public abstract class Piscifactoria {
     /**
      * Clase que representa al almacén de comida de una piscifactoría.
      */
-    public class AlmacenComida{
+    public static class AlmacenComida{
 
         /**
          * Capacidad máxima de comida de cada tipo del almacén.
@@ -162,24 +162,24 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Devuelve el nombre de la piscifactoria
-     * @return
+     * Devuelve el nombre de la piscifactoria.
+     * @return Nombre de la piscifactoría.
      */
     public String getNombre() {
         return nombre;
     }
 
     /**
-     * devuelve el almacen inicial de la piscifactoria
-     * @return
+     * Devuelve el almacén inicial de la piscifactoría.
+     * @return Almacén inicial de la piscifactoría.
      */
     public AlmacenComida getAlmacenInicial() {
         return almacenInicial;
     }
 
     /**
-     * Establece el almacen inicial de la piscifactoria
-     * @param almacenInicial
+     * Establece el almacén inicial de la piscifactoría
+     * @param almacenInicial Almacén inicial de la piscifactoría a establecer.
      */
     public void setAlmacenInicial(AlmacenComida almacenInicial) {
         this.almacenInicial = almacenInicial;
@@ -187,14 +187,14 @@ public abstract class Piscifactoria {
 
     /**
      * Establece el nombre de la piscifactoria
-     * @param nombre
+     * @param nombre Nombre de la piscifactoría a establecer.
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
     /**
-     * Metodo que muestra el estado de la piscifactoria y todos sus tanques
+     * Método que muestra el estado de la piscifactoria y de todos sus tanques.
      */
     public void showStatus() {
         System.out.println("===============" + nombre +
@@ -202,7 +202,7 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Metodo auxiliar de showStatus que realiza los calculos de cantidades y porcentajes para devolver como string el resto del mensaje
+     * Método auxiliar de showStatus que realiza los calculos de cantidades y porcentajes para devolver como string al resto del mensaje.
      */
     private String datosTanques() {
         int peces = 0;
@@ -256,7 +256,7 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Metodo que muestra el estado de los tanques
+     * Método que muestra el estado de los tanques.
      */
     public void showTankStatus() {
         for (int i = 0; i < tanques.size(); i++) {
@@ -265,7 +265,7 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Metodo que muestra el estado de los peces de los tanques
+     * Método que muestra el estado de los peces de los tanques.
      */
     public void showFishStatus() {
         for (int i = 0; i < tanques.size(); i++) {
@@ -274,7 +274,7 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Metodo que muestra la capacidad de los tanques
+     * Método que muestra la capacidad de los tanques.
      */
     public void showCapacity() {
         for (int i = 0; i < tanques.size(); i++) {
@@ -283,7 +283,7 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Metodo que muestra por mensaje el estado del Almacen
+     * Método que muestra por mensaje el estado del almacén.
      */
     public void showFood() {
         System.out.println("============== Almacén ================\nComida animal: "
@@ -307,7 +307,7 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Metodo que vende los peces maduros y vivos de los tanques.
+     * Método que vende los peces maduros y vivos de los tanques.
      */
     public void sellFish() {
         for (Tanque tanque : tanques) {
@@ -316,7 +316,7 @@ public abstract class Piscifactoria {
     }
     
     /**
-     * Método que mejora el almacen
+     * Método que mejora el almacen.
      */
     public abstract void upgradeFood();
 
