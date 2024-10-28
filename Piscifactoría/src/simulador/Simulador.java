@@ -260,6 +260,21 @@ public class Simulador {
     }
 
     public static void main(String[] args) {
-        showIctio();
+        sistemaMonedas = new SistemaMonedas(200);
+        Tanque tanque = new Tanque(1, 25);
+        tanque.getPeces().add(new Dorada(false));
+        tanque.getPeces().add(new Dorada(true));
+        almacenCentral = new AlmacenCentral();
+        almacenCentral.setCantidadComidaAnimal(3);
+        almacenCentral.setCantidadComidaVegetal(2);
+        tanque.alimentar(new Piscifactoria.AlmacenComida(25, 0, 0));
+        tanque.showFishStatus();
+        tanque.nextDay();
+        tanque.alimentar(new Piscifactoria.AlmacenComida(25, 0, 0));
+        tanque.showFishStatus();
+        tanque.nextDay();
+        tanque.alimentar(new Piscifactoria.AlmacenComida(25, 0, 0));
+        tanque.showFishStatus();
+        tanque.nextDay();
     }
 }

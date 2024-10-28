@@ -416,7 +416,7 @@ public class Tanque {
                             } else {
                                 if (comidaAnimalAlmacen >= comidaNecesaria) {
                                     Simulador.almacenCentral
-                                            .setCantidadComidaAnimal(comidaAnimalAlmacen + comidaNecesaria);
+                                            .setCantidadComidaAnimal(comidaAnimalAlmacen - comidaNecesaria);
                                 } else {
                                     comidaAnimalAlmacen -= comidaNecesaria;
                                     comidaVegetalAlmacen += comidaAnimal;
