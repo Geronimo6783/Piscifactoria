@@ -657,11 +657,6 @@ public class Tanque {
      * están vivos o muertos.
      */
     public void vaciarTanque() {
-        Iterator<Pez> iterador = peces.iterator();
-
-        while (iterador.hasNext()) {
-            Pez pez = iterador.next();
-            iterador.remove();
-        }
+        peces.clear();
     }
 }
