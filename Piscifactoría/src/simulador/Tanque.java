@@ -1,10 +1,12 @@
 package simulador;
 
-import simulador.Piscifactoria.AlmacenComida;
 import simulador.pez.*;
 import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
+import simulador.piscifactoria.Piscifactoria;
+import simulador.piscifactoria.Piscifactoria.AlmacenComida;
+
 import java.util.Random;
 
 import componentes.SistemaEntrada;
@@ -84,6 +86,7 @@ public class Tanque {
      * Constructor de tanques.
      * 
      * @param numeroTanque Número del tanque.
+     * @param capacidadMaximaPeces Capacidad máxima de peces del tanque.
      */
     public Tanque(int numeroTanque, int capacidadMaximaPeces) {
         this.numeroTanque = numeroTanque;
@@ -155,7 +158,7 @@ public class Tanque {
 
     /**
      * 
-     * @return Número de peces vivos en el tanque.
+     * @return Número de peces adultos en el tanque.
      */
     public int pecesAdultos() {
         int pecesAdultos = 0;
@@ -238,6 +241,7 @@ public class Tanque {
 
     /**
      * Gestiona la lógica para alimentar a los peces.
+     * @param almacenComida Almacén de comida de la piscifactoría donde se sitúa el tanque.
      */
     public void alimentar(Piscifactoria.AlmacenComida almacenComida) {
         int comidaNecesaria = 0;
@@ -440,13 +444,10 @@ public class Tanque {
     }
 
     /**
-     * Gestiona la lógica para alimentar a los peces cuando la comida es
-     * insuficiente.
-     * 
-     * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada
-     *                                        Pez para alimentarse.
-     * @param comidaDisponible                Comida de la que se dispone para
-     *                                        alimentar a los peces.
+     * Gestiona la lógica para alimentar a los peces cuando la comida es insuficiente.
+     * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada Pez para alimentarse.
+     * @param almacenComida Almacén de comida de la piscifactoría donde se sitúa el tanque.
+     * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
      */
     private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez,
             Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
@@ -551,7 +552,7 @@ public class Tanque {
     }
 
     /**
-     * Gestiona la lógica de reporudcción de los peces del tanque.
+     * Gestiona la lógica de reproducción de los peces del tanque.
      */
     private void reproducir() {
         int numeroHuevos = 0;
@@ -584,12 +585,14 @@ public class Tanque {
     private void venderPecesOptimos() {
         int pecesAVender = 0;
         Iterator<Pez> iterador = peces.iterator();
-
-        while (iterador.hasNext()) {
+        String nombrePez = peces.get(0).getNombre();
+        
+        while(iterador.hasNext()){
             Pez pez = iterador.next();
 
             if (pez.isEdadOptima()) {
                 pecesAVender++;
+                Simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
                 iterador.remove();
             }
         }
@@ -601,28 +604,24 @@ public class Tanque {
 
     /**
      * Vende todos los peces que estén maduros.
-     * 
-     * @return Monedas obtenidas por la venta de todos los peces que estén maduros.
      */
-    public int venderPeces() {
+    public void venderPeces(){
         int monedasAObtener = 0;
         Iterator<Pez> iterador = peces.iterator();
+        String nombrePez = peces.get(0).getNombre();
+        int monedasPez = (AlmacenPropiedades.getPropByName(nombrePez).getMonedas() / 2);
 
         while (iterador.hasNext()) {
             Pez pez = iterador.next();
 
-            if (pez.isMaduro() && !pez.isEdadOptima()) {
-                monedasAObtener += (AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas() / 2);
+            if(pez.isMaduro() && !pez.isEdadOptima()){
+                monedasAObtener += monedasPez;
+                Simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
                 iterador.remove();
-            } else {
-                if (pez.isEdadOptima()) {
-                    monedasAObtener += AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas();
-                    iterador.remove();
-                }
             }
         }
 
-        return monedasAObtener;
+        Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas() + monedasAObtener);;
     }
 
     /**

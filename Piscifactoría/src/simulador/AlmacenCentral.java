@@ -1,12 +1,12 @@
 package simulador;
 
 /**
- * Clase que representa a un alamcén central que almacena comida y la distribuye equitativamente entre las piscifactrías.
+ * Clase que representa a un almacén central que almacena comida y la distribuye equitativamente entre las piscifactrías.
  */
 public class AlmacenCentral {
 
     /**
-     * Capacidad para máxima del almacén para cada tipo de comida.
+     * Capacidad máxima del almacén para cada tipo de comida.
      */
     private int capacidadComida;
 

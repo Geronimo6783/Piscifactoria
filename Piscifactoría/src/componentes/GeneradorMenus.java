@@ -37,23 +37,24 @@ public class GeneradorMenus{
      * Genera un menú operativo a partir de unas opciones.
      * @param opciones Opciones del menú.
      * @param numeroOpcionInicial Número de la opción inicial.
+     * @param numeroOpcionFinal Número de la opción final.
      * @return Opción elegida por el usuario.
      */
-    public static int generarMenuOperativo(String[] opciones, int numeroOpcionInicial){
+    public static int generarMenuOperativo(String[] opciones, int numeroOpcionInicial, int numeroOpcionFinal){
         generarMenu(opciones, numeroOpcionInicial);
-        return SistemaEntrada.entradaOpcionNumerica(numeroOpcionInicial, opciones.length);
+        return SistemaEntrada.entradaOpcionNumerica(numeroOpcionInicial, numeroOpcionFinal);
     }
-
 
     /**
      * Genera un menú operativo con cabecera y unas opciones.
      * @param cabecera Cabecera del menú.
      * @param opciones Opciones del menú.
      * @param numeroOpcionInicial Número de la opción inicial.
+     * @param numeroOpcionFinal Número de la opción final.
      * @return Opción elegida por el usuario.
      */
-    public static int generarMenuOperativo(String[] cabecera, String[] opciones, int numeroOpcionInicial){
+    public static int generarMenuOperativo(String[] cabecera, String[] opciones, int numeroOpcionInicial, int numeroOpcionFinal){
         generarMenu(cabecera, opciones, numeroOpcionInicial);
-        return SistemaEntrada.entradaOpcionNumerica(numeroOpcionInicial, opciones.length);
+        return SistemaEntrada.entradaOpcionNumerica(numeroOpcionInicial, numeroOpcionFinal);
     }
 }

@@ -155,7 +155,7 @@ public abstract class Pez {
      * @param nombreCientifico Nombre científico del pez.
      * @param sexo Sexo del pez.
      */
-    public Pez(String nombre, String nombreCientifico, boolean sexo) {
+    protected Pez(String nombre, String nombreCientifico, boolean sexo) {
         this.nombre = nombre;
         this.nombreCientifico = nombreCientifico;
         this.sexo = sexo;
@@ -201,7 +201,7 @@ public abstract class Pez {
 
     /**
      * 
-     * @return True si el pez está en la edad optima para ser vendido.
+     * @return True si el pez está en la edad óptima para ser vendido.
      */
     public abstract boolean isEdadOptima();
 

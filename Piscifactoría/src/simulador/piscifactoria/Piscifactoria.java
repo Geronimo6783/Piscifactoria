@@ -1,18 +1,19 @@
-package simulador;
+package simulador.piscifactoria;
 
 import java.util.ArrayList;
 
 import componentes.SistemaMonedas;
+import simulador.Tanque;
 
 /**
  * Clase que representa a una piscifactoría con múltiples tanques.
  */
-public class Piscifactoria {
+public abstract class Piscifactoria {
 
     /**
      * Clase que representa al almacén de comida de una piscifactoría.
      */
-    class AlmacenComida{
+    public class AlmacenComida{
 
         /**
          * Capacidad máxima de comida de cada tipo del almacén.
@@ -20,12 +21,12 @@ public class Piscifactoria {
         private int capacidadMaximaComida;
 
         /**
-         * Cantidad comida animal que hay en el almacén.
+         * Cantidad de comida animal que hay en el almacén.
          */
         private int cantidadComidaAnimal;
 
         /**
-         * Cantidad comida vegetal que hay en el almacén.
+         * Cantidad de comida vegetal que hay en el almacén.
          */
         private int cantidadComidaVegetal;
 
@@ -102,87 +103,59 @@ public class Piscifactoria {
     /**
      * Tanques de los que dispone la piscifactoría.
      */
-    private ArrayList<Tanque> tanques;
-
-    /**
-     * Tipo de agua de la piscifactoría si es true es de mar y si es false es de rio.
-     */
-    private boolean tipoAgua;
+    protected ArrayList<Tanque> tanques;
     
-    private Tanque tanqueInicial;
+    /**
+     * Tanque con el que empieza obligatoriamente la piscifactoría.
+     */
+    protected Tanque tanqueInicial;
 
     /**
      * Almacén de comida de la piscifactoría.
      */
-    private AlmacenComida almacenInicial;
+    protected AlmacenComida almacenInicial;
 
     /**
      * Nombre de la piscifactoría.
      */
-    private String nombre = "";
+    protected String nombre = "";
 
     /**
-     * Constructor de Piscifactoria que diferencia entre si el primer tanque es de mar o de rio
-     * @param tanques
-     * @param tipoAgua
-     * @param nombre
+     * Constructor de Ppiscifactorías.
+     * @param nombre Nombre de la piscifactoría.
      */
-    public Piscifactoria(boolean tipoAgua, String nombre) {
+    protected Piscifactoria(String nombre) {
         tanques = new ArrayList<>();
-        this.tipoAgua = tipoAgua;
-        if (tipoAgua) {
-            tanqueInicial = new Tanque(1, 100);
-            almacenInicial = new AlmacenComida(100, 0, 0);
-        } else {
-            tanqueInicial = new Tanque(1, 25);
-            almacenInicial = new AlmacenComida(25, 0, 0);
-        }
         this.nombre = nombre;
-        this.tanques.add(tanqueInicial);
     }
 
     /**
-     * Constructor de Piscifactoria iniciales.
-     * @param tanques
-     * @param tipoAgua
-     * @param nombre
-     */
-    public Piscifactoria(String nombre) {
-        tanques = new ArrayList<>();
-        this.tipoAgua = false;
-        tanqueInicial = new Tanque(1, 25);
-        almacenInicial = new AlmacenComida(25, 25, 25);
-        this.nombre = nombre;
-        this.tanques.add(tanqueInicial);
-    }
-
-    /**
-     * Devuelve los tanques de la piscifactoria
-     * @return tanques
+     * Devuelve los tanques de la piscifactoria.
+     * @return Tanques de la piscifactoría.
      */
     public ArrayList<Tanque> getTanques() {
         return tanques;
     }
 
     /**
-     * Establece el ArrayList de tanques de la piscifactoria
-     * @param tanques
+     * Establece el ArrayList de tanques de la piscifactoria.
+     * @param tanques ArrayList de tanques a establecer.
      */
     public void setTanques(ArrayList<Tanque> tanques) {
         this.tanques = tanques;
     }
 
     /**
-     * Devuelve el tanque inicial de la piscifactoria
-     * @return 
+     * Devuelve el tanque inicial de la piscifactoria.
+     * @return Tanque inicial de la piscifactoría.
      */
     public Tanque getTanqueInicial() {
         return tanqueInicial;
     }
 
     /**
-     * Establece el tanque inicial de la piscifactoria
-     * @param tanqueInicial
+     * Establece el tanque inicial de la piscifactoria.
+     * @param tanqueInicial Tanque inicial de la piscifactoría a establecer.
      */
     public void setTanqueInicial(Tanque tanqueInicial) {
         this.tanqueInicial = tanqueInicial;
@@ -194,22 +167,6 @@ public class Piscifactoria {
      */
     public String getNombre() {
         return nombre;
-    }
-
-    /**
-     * Devuelve el tipo de agua de la piscifactoria
-     * @return
-     */
-    public boolean isTipoAgua() {
-        return tipoAgua;
-    }
-
-    /**
-     * Establece el tipo de agua de la piscifactoria
-     * @param tipoAgua
-     */
-    public void setTipoAgua(boolean tipoAgua) {
-        this.tipoAgua = tipoAgua;
     }
 
     /**
@@ -329,13 +286,13 @@ public class Piscifactoria {
      * Metodo que muestra por mensaje el estado del Almacen
      */
     public void showFood() {
-        System.out.println("============== Almacen ================\nComida animal: "
+        System.out.println("============== Almacén ================\nComida animal: "
                 + almacenInicial.getCantidadComidaAnimal() + "/" + almacenInicial.getCapacidadMaximaComida() +
-                "(" + (almacenInicial.getCantidadComidaAnimal() / almacenInicial.getCapacidadMaximaComida()) * 100
+                "(" + String.format("%.2f", (((float)almacenInicial.getCantidadComidaAnimal() / (float)almacenInicial.getCapacidadMaximaComida()) * 100))
                 + "%)" +
                 "\nComida vegetal: " + almacenInicial.getCantidadComidaVegetal() + "/"
                 + almacenInicial.getCapacidadMaximaComida() +
-                "(" + (almacenInicial.getCantidadComidaVegetal() / almacenInicial.getCapacidadMaximaComida()) * 100
+                "(" + String.format("%.2f", (((float)almacenInicial.getCantidadComidaVegetal() / (float)almacenInicial.getCapacidadMaximaComida()) * 100))
                 + "%)");
     }
 
@@ -350,34 +307,18 @@ public class Piscifactoria {
     }
 
     /**
-     * Metodo que vende los peces maduros y vivos de los tanques devolviendo el valor de monedas conseguidas.
-     * @return Cantidad de monedas ganadas de la venta 
+     * Metodo que vende los peces maduros y vivos de los tanques.
      */
-    public int sellFish() {
-        int monedasGanadas=0;
-        for (int i = 0; i < tanques.size(); i++) {
-            monedasGanadas=+tanques.get(i).venderPeces();
+    public void sellFish() {
+        for (Tanque tanque : tanques) {
+            tanque.venderPeces();
         }
-        return monedasGanadas;
     }
     
     /**
-     * Metodo que mejora el almacen
+     * Método que mejora el almacen
      */
-    public void upgradeFood() {
-        if(tipoAgua){
-            almacenInicial.mejorar(100);
-            System.out.println("Almacén de la piscifactoria " + nombre
-                + " mejorado. Su capacidad ha aumentado en 100 hasta un total de "
-                + almacenInicial.getCapacidadMaximaComida());
-        }
-        else{
-            almacenInicial.mejorar(25);
-            System.out.println("Almacén de la piscifactoria " + nombre
-                + " mejorado. Su capacidad ha aumentado en 25 hasta un total de "
-                + almacenInicial.getCapacidadMaximaComida());
-        }
-    }
+    public abstract void upgradeFood();
 
     /**
      * 

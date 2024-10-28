@@ -1,6 +1,7 @@
 package simulador.pez.filtrador;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 import java.util.Random;
@@ -11,8 +12,8 @@ import java.util.Random;
 public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
     
     /**
-     * Contructor de arenque del atlántico.
-     * @param sexo Sexo del arenque del atlántico.
+     * Contructor de arenques del atlántico.
+     * @param sexo Sexo del arenque del atlántico si es true es hembra y si es false es macho.
      */
     public ArenqueDelAtlantico(boolean sexo) {
         super(AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(), sexo);
@@ -42,12 +43,10 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -59,18 +58,21 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
      * Indica si el arenque del atlántico está maduro.
+     * @return True si el arenque del atlántico está maduro.
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez();
+        return edad >= AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez();
     }
 
     /**
      * Indica si el arenque del atlántico está en la edad óptima para ser vendido.
+     * @return True si el arenque del atlántico está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){
@@ -83,6 +85,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new ArenqueDelAtlantico(false);
     }
 
@@ -92,6 +95,7 @@ public class ArenqueDelAtlantico extends Pez implements Filtrador, Mar{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new ArenqueDelAtlantico(true);
     }
 }

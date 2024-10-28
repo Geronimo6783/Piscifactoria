@@ -3,6 +3,7 @@ package simulador.pez.omnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
@@ -12,7 +13,7 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
 
     /**
      * Constructor de abadejos.
-     * @param sexo Sexo del abadejo.
+     * @param sexo Sexo del abadejo si es true es hembra y si es false es macho.
      */
     public Abadejo(boolean sexo){
         super(AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ABADEJO.getCientifico(), sexo);
@@ -42,12 +43,10 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.ABADEJO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.ABADEJO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -59,18 +58,21 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
      * Indica si el abadejo está maduro.
+     * @return True si el abadejo está maduro.
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.ABADEJO.getMadurez();
+        return edad >= AlmacenPropiedades.ABADEJO.getMadurez();
     }
 
     /**
      * Indica si el abadejo está en la edad óptima para ser vendido.
+     * @return True si el abadejo está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){
@@ -83,6 +85,7 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Abadejo(false);
     }
 
@@ -92,6 +95,7 @@ public class Abadejo extends Pez implements Omnivoro, Mar{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Abadejo(true);
     }
 }
