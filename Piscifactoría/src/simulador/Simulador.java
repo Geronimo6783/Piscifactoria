@@ -134,7 +134,7 @@ public class Simulador {
                     + tanque.getCapacidadMaximaPeces() + " - Pez: " + nombrePez;
         }
 
-        GeneradorMenus.generarMenu(opcionesTanques, 1);
+        GeneradorMenus.generarMenu(opcionesTanques, 0);
 
         return SistemaEntrada.entradaOpcionNumerica(0, tanques.size());
 
@@ -180,30 +180,22 @@ public class Simulador {
 
     /**
      * Muestra un menú para seleccionar un tanque de una una piscifactoría y
-     * posteriormente
-     * el estado de los peces en dicho tanque.
+     * posteriormente el estado de los peces en dicho tanque.
      * 
      * @param piscifactoria La piscifactoría que contiene los tanques disponibles.
      */
-    public void showTankStatus(Piscifactoria piscifactoria) {
-        if (piscifactoria.getTanques().isEmpty()) {
-            System.out.println("No hay tanques disponibles en esta piscifactoría.");
+    public static void showTankStatus(Piscifactoria piscifactoria) {
+        int opcionTanque = selectTank();
+
+        Tanque tanqueSeleccionado = piscifactoria.getTanques().get(opcionTanque - 1);
+
+        if (tanqueSeleccionado.getPeces().isEmpty()) {
+            System.out.println("El tanque seleccionado no contiene peces.");
         } else {
-            int opcionTanque = selectTank();
-
-            Tanque tanqueSeleccionado = piscifactoria.getTanques().get(opcionTanque - 1);
-
-            if (tanqueSeleccionado.getPeces().isEmpty()) {
-                System.out.println("El tanque seleccionado no contiene peces.");
-            } else {
-                System.out.println("Estado de los peces en el tanque " + opcionTanque + ":");
-                for (Pez pez : tanqueSeleccionado.getPeces()) {
-                    pez.showStatus();
-                    pez.showStatus();
-                    pez.showStatus();
-                }
-            }
+            System.out.println("Estado de los peces en el tanque " + opcionTanque + ":");
+            tanqueSeleccionado.showFishStatus();
         }
+        
     }
 
     /**
@@ -432,7 +424,7 @@ public class Simulador {
     /**
      * Añade un pez a una piscifactoría seleccionada por el usuario.
      */
-    public void addFish() { //Falta gestionar el coste
+    public static void addFish() { //Falta gestionar el coste
         int piscifactoriaSeleccionada = selectPisc();
         Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
 
@@ -474,9 +466,16 @@ public class Simulador {
         }
 
         boolean añadido = false;
+        String nombrePezTanque = "";
         for (Tanque tanque : piscifactoria.getTanques()) {
-            if (tanque.getPeces().size() < tanque.getCapacidadMaximaPeces()
-                    && tanque.getPeces().get(0).getNombre().equals(nombrePez)) {
+            if(tanque.getPeces().size() != 0){
+                nombrePezTanque = tanque.getPeces().get(0).getNombre();
+            }
+            else{
+                nombrePezTanque = null;
+            }
+
+            if (tanque.getPeces().size() < tanque.getCapacidadMaximaPeces() && (nombrePezTanque == null || nombrePezTanque.equals(nombrePez))) {
                 Pez nuevoPez = crearPez(nombrePez, sexo);
                 tanque.getPeces().add(nuevoPez);
                 añadido = true;
@@ -506,7 +505,7 @@ public class Simulador {
         }
     }
 
-    private Pez crearPez(String nombrePez, boolean sexo) {
+    private static Pez crearPez(String nombrePez, boolean sexo) {
         switch (nombrePez) {
             case "Abadejo":
                 return new Abadejo(sexo);
@@ -600,25 +599,6 @@ public class Simulador {
 
     public static void main(String[] args) {
         init();
-        sistemaMonedas = new SistemaMonedas(200);
-        Tanque tanque = new Tanque(1, 25);
-        tanque.getPeces().add(new Pejerrey(false));
-        tanque.getPeces().add(new Pejerrey(true));
-        almacenCentral = new AlmacenCentral();
-        almacenCentral.setCantidadComidaAnimal(1);
-        almacenCentral.setCantidadComidaVegetal(1);
-        AlmacenComida almacenComida = new Piscifactoria.AlmacenComida(25, 2, 1);
-        tanque.alimentar(almacenComida);
-        tanque.showStatus();
-        tanque.showFishStatus();
-        tanque.nextDay();
-        tanque.alimentar(almacenComida);
-        tanque.showStatus();
-        tanque.showFishStatus();
-        tanque.nextDay();
-        tanque.alimentar(almacenComida);
-        tanque.showStatus();
-        tanque.showFishStatus();
-        tanque.nextDay();
+        addFish();
     }
 }
