@@ -195,7 +195,7 @@ public class Simulador {
             System.out.println("Estado de los peces en el tanque " + opcionTanque + ":");
             tanqueSeleccionado.showFishStatus();
         }
-        
+
     }
 
     /**
@@ -264,124 +264,149 @@ public class Simulador {
      */
     private static void addFood() {
         if (almacenCentral != null) {
-            int cantidadAnimalAAgregar = menuCantidadComida();
-            int cantidadVegetalAAgregar = menuCantidadComida();
+            int tipoComida = menuTipoComida();
+            int cantidadAAgregar = menuCantidadComida();
 
-            int cantidadComidaAnimalAntes = almacenCentral.getCantidadComidaAnimal();
-            int cantidadComidaVegetalAntes = almacenCentral.getCantidadComidaVegetal();
+            if (tipoComida == 1) {
+                int cantidadComidaAnimalAntes = almacenCentral.getCantidadComidaAnimal();
+                if (cantidadComidaAnimalAntes + cantidadAAgregar <= almacenCentral.getCapacidadComida()) {
+                    almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimalAntes + cantidadAAgregar);
 
-            if (cantidadComidaAnimalAntes + cantidadAnimalAAgregar <= almacenCentral.getCapacidadComida()) {
-                almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimalAntes + cantidadAnimalAAgregar);
-
-                int costoAnimal = calcularCosto(cantidadAnimalAAgregar);
-                if (sistemaMonedas.getMonedas() >= costoAnimal) {
-                    sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoAnimal);
-                    System.out.println("Añadida " + cantidadAnimalAAgregar + " de comida animal.");
-                    System.out.println("Depósito de comida animal en el almacén central " +
-                            cantidadComidaAnimalAntes + "/" + almacenCentral.getCapacidadComida() +
-                            " al " + String.format("%.2f",
-                                    (float) (cantidadComidaAnimalAntes + cantidadAnimalAAgregar) /
-                                            almacenCentral.getCapacidadComida() * 100)
-                            + "%.");
-                } else {
-                    System.out.println("No hay suficientes monedas para comprar la comida animal.");
-                }
-            } else {
-                System.out.println("No se puede añadir comida animal, excede la capacidad del almacén central.");
-            }
-
-            if (cantidadComidaVegetalAntes + cantidadVegetalAAgregar <= almacenCentral.getCapacidadComida()) {
-                almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetalAntes + cantidadVegetalAAgregar);
-
-                int costoVegetal = calcularCosto(cantidadVegetalAAgregar);
-                if (sistemaMonedas.getMonedas() >= costoVegetal) {
-                    sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoVegetal);
-                    System.out.println("Añadida " + cantidadVegetalAAgregar + " de comida vegetal.");
-                    System.out.println("Depósito de comida vegetal en el almacén central " +
-                            cantidadComidaVegetalAntes + "/" + almacenCentral.getCapacidadComida() +
-                            " al " + String.format("%.2f",
-                                    (float) (cantidadComidaVegetalAntes + cantidadVegetalAAgregar) /
-                                            almacenCentral.getCapacidadComida() * 100)
-                            + "%.");
-                } else {
-                    System.out.println("No hay suficientes monedas para comprar la comida vegetal.");
-                }
-            } else {
-                System.out.println("No se puede añadir comida vegetal, excede la capacidad del almacén central.");
-            }
-        } else {
-            int piscifactoriaSeleccionada = selectPisc();
-            if (piscifactoriaSeleccionada != 0) {
-                Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
-                int cantidadAnimalAAgregar = menuCantidadComida();
-                int cantidadVegetalAAgregar = menuCantidadComida();
-
-                int cantidadMaximaAnimal = piscifactoria.getAlmacenInicial().getCapacidadMaximaComida()
-                        - piscifactoria.getAlmacenInicial().getCantidadComidaAnimal();
-                int cantidadMaximaVegetal = piscifactoria.getAlmacenInicial().getCapacidadMaximaComida()
-                        - piscifactoria.getAlmacenInicial().getCantidadComidaVegetal();
-
-                if (cantidadAnimalAAgregar > cantidadMaximaAnimal) {
-                    cantidadAnimalAAgregar = cantidadMaximaAnimal;
-                }
-
-                if (cantidadAnimalAAgregar > 0) {
-                    int cantidadComidaAnimalAntes = piscifactoria.getAlmacenInicial().getCantidadComidaAnimal();
-                    piscifactoria.getAlmacenInicial()
-                            .setCantidadComidaAnimal(cantidadComidaAnimalAntes + cantidadAnimalAAgregar);
-
-                    int costoAnimal = calcularCosto(cantidadAnimalAAgregar);
+                    int costoAnimal = calcularCosto(cantidadAAgregar);
                     if (sistemaMonedas.getMonedas() >= costoAnimal) {
                         sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoAnimal);
-                        System.out.println("Añadida " + cantidadAnimalAAgregar + " de comida animal a la piscifactoria "
-                                + piscifactoria.getNombre() + ".");
-                        System.out.println("Depósito de comida animal en la piscifactoria " + piscifactoria.getNombre()
-                                +
-                                ": " + piscifactoria.getAlmacenInicial().getCantidadComidaAnimal() + "/"
-                                + piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() +
+                        System.out.println("Añadida " + cantidadAAgregar + " de comida animal.");
+                        System.out.println("Depósito de comida animal en el almacén central " +
+                                cantidadComidaAnimalAntes + "/" + almacenCentral.getCapacidadComida() +
                                 " al " + String.format("%.2f",
-                                        (float) (cantidadComidaAnimalAntes + cantidadAnimalAAgregar) /
-                                                piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() * 100)
+                                        (float) (cantidadComidaAnimalAntes + cantidadAAgregar) /
+                                                almacenCentral.getCapacidadComida() * 100)
                                 + "%.");
                     } else {
                         System.out.println("No hay suficientes monedas para comprar la comida animal.");
                     }
                 } else {
-                    System.out
-                            .println("No se puede añadir comida animal, la capacidad de la piscifactoría está llena.");
+                    System.out.println("No se puede añadir comida animal, excede la capacidad del almacén central.");
                 }
+            } else if (tipoComida == 2) {
+                int cantidadComidaVegetalAntes = almacenCentral.getCantidadComidaVegetal();
+                if (cantidadComidaVegetalAntes + cantidadAAgregar <= almacenCentral.getCapacidadComida()) {
+                    almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetalAntes + cantidadAAgregar);
 
-                if (cantidadVegetalAAgregar > cantidadMaximaVegetal) {
-                    cantidadVegetalAAgregar = cantidadMaximaVegetal;
-                }
-
-                if (cantidadVegetalAAgregar > 0) {
-                    int cantidadComidaVegetalAntes = piscifactoria.getAlmacenInicial().getCantidadComidaVegetal();
-                    piscifactoria.getAlmacenInicial()
-                            .setCantidadComidaVegetal(cantidadComidaVegetalAntes + cantidadVegetalAAgregar);
-
-                    int costoVegetal = calcularCosto(cantidadVegetalAAgregar);
+                    int costoVegetal = calcularCosto(cantidadAAgregar);
                     if (sistemaMonedas.getMonedas() >= costoVegetal) {
                         sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoVegetal);
-                        System.out.println("Añadida " + cantidadVegetalAAgregar
-                                + " de comida vegetal a la piscifactoria " + piscifactoria.getNombre() + ".");
-                        System.out.println("Depósito de comida vegetal en la piscifactoria " + piscifactoria.getNombre()
-                                +
-                                ": " + piscifactoria.getAlmacenInicial().getCantidadComidaVegetal() + "/"
-                                + piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() +
+                        System.out.println("Añadida " + cantidadAAgregar + " de comida vegetal.");
+                        System.out.println("Depósito de comida vegetal en el almacén central " +
+                                cantidadComidaVegetalAntes + "/" + almacenCentral.getCapacidadComida() +
                                 " al " + String.format("%.2f",
-                                        (float) (cantidadComidaVegetalAntes + cantidadVegetalAAgregar) /
-                                                piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() * 100)
+                                        (float) (cantidadComidaVegetalAntes + cantidadAAgregar) /
+                                                almacenCentral.getCapacidadComida() * 100)
                                 + "%.");
                     } else {
                         System.out.println("No hay suficientes monedas para comprar la comida vegetal.");
                     }
                 } else {
-                    System.out
-                            .println("No se puede añadir comida vegetal, la capacidad de la piscifactoría está llena.");
+                    System.out.println("No se puede añadir comida vegetal, excede la capacidad del almacén central.");
+                }
+            }
+        } else {
+            int piscifactoriaSeleccionada = selectPisc();
+            if (piscifactoriaSeleccionada != 0) {
+                Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
+                int tipoComida = menuTipoComida();
+                int cantidadAAgregar = menuCantidadComida();
+
+                if (tipoComida == 1) {
+
+                    int cantidadMaximaAnimal = piscifactoria.getAlmacenInicial().getCapacidadMaximaComida()
+                            - piscifactoria.getAlmacenInicial().getCantidadComidaAnimal();
+
+                    if (cantidadAAgregar > cantidadMaximaAnimal) {
+                        cantidadAAgregar = cantidadMaximaAnimal;
+                    }
+
+                    if (cantidadAAgregar > 0) {
+                        int cantidadComidaAnimalAntes = piscifactoria.getAlmacenInicial().getCantidadComidaAnimal();
+                        piscifactoria.getAlmacenInicial()
+                                .setCantidadComidaAnimal(cantidadComidaAnimalAntes + cantidadAAgregar);
+
+                        int costoAnimal = calcularCosto(cantidadAAgregar);
+                        if (sistemaMonedas.getMonedas() >= costoAnimal) {
+                            sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoAnimal);
+                            System.out.println("Añadida " + cantidadAAgregar + " de comida animal a la piscifactoria "
+                                    + piscifactoria.getNombre() + ".");
+                            System.out.println("Depósito de comida animal en la piscifactoria "
+                                    + piscifactoria.getNombre()
+                                    + ": " + piscifactoria.getAlmacenInicial().getCantidadComidaAnimal() + "/"
+                                    + piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() +
+                                    " al " + String.format("%.2f",
+                                            (float) (cantidadComidaAnimalAntes + cantidadAAgregar) /
+                                                    piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() * 100)
+                                    + "%.");
+                        } else {
+                            System.out.println("No hay suficientes monedas para comprar la comida animal.");
+                        }
+                    } else {
+                        System.out.println(
+                                "No se puede añadir comida animal, la capacidad de la piscifactoría está llena.");
+                    }
+                } else if (tipoComida == 2) {
+                    int cantidadMaximaVegetal = piscifactoria.getAlmacenInicial().getCapacidadMaximaComida()
+                            - piscifactoria.getAlmacenInicial().getCantidadComidaVegetal();
+
+                    if (cantidadAAgregar > cantidadMaximaVegetal) {
+                        cantidadAAgregar = cantidadMaximaVegetal;
+                    }
+
+                    if (cantidadAAgregar > 0) {
+                        int cantidadComidaVegetalAntes = piscifactoria.getAlmacenInicial().getCantidadComidaVegetal();
+                        piscifactoria.getAlmacenInicial()
+                                .setCantidadComidaVegetal(cantidadComidaVegetalAntes + cantidadAAgregar);
+
+                        int costoVegetal = calcularCosto(cantidadAAgregar);
+                        if (sistemaMonedas.getMonedas() >= costoVegetal) {
+                            sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoVegetal);
+                            System.out.println("Añadida " + cantidadAAgregar + " de comida vegetal a la piscifactoria "
+                                    + piscifactoria.getNombre() + ".");
+                            System.out.println("Depósito de comida vegetal en la piscifactoria "
+                                    + piscifactoria.getNombre()
+                                    + ": " + piscifactoria.getAlmacenInicial().getCantidadComidaVegetal() + "/"
+                                    + piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() +
+                                    " al " + String.format("%.2f",
+                                            (float) (cantidadComidaVegetalAntes + cantidadAAgregar) /
+                                                    piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() * 100)
+                                    + "%.");
+                        } else {
+                            System.out.println("No hay suficientes monedas para comprar la comida vegetal.");
+                        }
+                    } else {
+                        System.out.println(
+                                "No se puede añadir comida vegetal, la capacidad de la piscifactoría está llena.");
+                    }
                 }
             }
         }
+
+    }
+
+    /**
+     * Muestra un menú para seleccionar el tipo de comida (animal o vegetal).
+     * 
+     * @return 1 para comida animal, 2 para comida vegetal, 0 para cancelar.
+     */
+    private static int menuTipoComida() {
+        String[] opciones = { "Cancelar", "Comida animal", "Comida vegetal" };
+        GeneradorMenus.generarMenu(opciones, 0);
+
+        int seleccion = SistemaEntrada.entradaOpcionNumerica(0, 2);
+
+        if (seleccion == 1) {
+            return 1;
+        } else if (seleccion == 2) {
+            return 2;
+        }
+        return 0;
     }
 
     /**
@@ -424,7 +449,7 @@ public class Simulador {
     /**
      * Añade un pez a una piscifactoría seleccionada por el usuario.
      */
-    public static void addFish() { //Falta gestionar el coste
+    public static void addFish() { // Falta gestionar el coste
         int piscifactoriaSeleccionada = selectPisc();
         Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
 
@@ -468,14 +493,14 @@ public class Simulador {
         boolean añadido = false;
         String nombrePezTanque = "";
         for (Tanque tanque : piscifactoria.getTanques()) {
-            if(tanque.getPeces().size() != 0){
+            if (tanque.getPeces().size() != 0) {
                 nombrePezTanque = tanque.getPeces().get(0).getNombre();
-            }
-            else{
+            } else {
                 nombrePezTanque = null;
             }
 
-            if (tanque.getPeces().size() < tanque.getCapacidadMaximaPeces() && (nombrePezTanque == null || nombrePezTanque.equals(nombrePez))) {
+            if (tanque.getPeces().size() < tanque.getCapacidadMaximaPeces()
+                    && (nombrePezTanque == null || nombrePezTanque.equals(nombrePez))) {
                 Pez nuevoPez = crearPez(nombrePez, sexo);
                 tanque.getPeces().add(nuevoPez);
                 añadido = true;
@@ -558,6 +583,22 @@ public class Simulador {
         }
 
         System.out.println("\nTipo: " + datosDelPez.getTipo());
+
+    }
+
+    /**
+     * Método que vende todos los peces adultos que estén vivos en una piscifactoría
+     * seleccionada.
+     */
+    private void sell() {
+        int piscifactoriaSeleccionada = selectPisc();
+
+        Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
+
+        piscifactoria.sellFish();
+
+        System.out.println("Se han vendido todos los peces maduros y vivos de la piscifactoría "
+                + piscifactoria.getNombre() + ".");
 
     }
 
