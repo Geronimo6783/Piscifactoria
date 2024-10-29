@@ -9,7 +9,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a una perca europea.
  */
-public class PercaEuropea extends Pez implements Carnivoro, Rio{
+public class PercaEuropea extends Carnivoro implements Rio{
 
     /**
      * Constructor de percas europeas.

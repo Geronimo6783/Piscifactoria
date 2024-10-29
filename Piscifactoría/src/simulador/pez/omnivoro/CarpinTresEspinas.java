@@ -9,7 +9,7 @@ import simulador.pez.*;
 /**
  * Clase que representa a un carpín de tres espinas.
  */
-public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
+public class CarpinTresEspinas extends Omnivoro implements Rio{
 
     /**
      * Constructor de carpines de tres espinas.
