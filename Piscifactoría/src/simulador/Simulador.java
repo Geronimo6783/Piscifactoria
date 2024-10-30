@@ -1,9 +1,6 @@
 package simulador;
 
 import java.util.ArrayList;
-
-import javax.management.relation.RoleUnresolved;
-
 import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
 import componentes.SistemaMonedas;
@@ -17,7 +14,6 @@ import simulador.pez.Pez;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
 import simulador.piscifactoria.*;
-import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
 public class Simulador {
 
@@ -689,7 +685,7 @@ public class Simulador {
     /**
      * Crea un pez que puede vivir en una piscifactoría de mar.
      * 
-     * @param pez  Código numérico del pez a crear.
+     * @param pez Código numérico del pez a crear.
      * @param sexo Sexo del pez a crear.
      * @return Pez creado.
      */
@@ -725,7 +721,7 @@ public class Simulador {
     /**
      * Crear un pez que puede vivir en una piscifactoría de río.
      * 
-     * @param pez  Código numérico del pez a crear.
+     * @param pez Código numérico del pez a crear.
      * @param sexo Sexo del pez a crear.
      * @return Pez creado.
      */
@@ -1098,6 +1094,17 @@ public class Simulador {
     }
 
     /**
+     * Gestiona la lógica para mostrar el estado de un tanque de una piscifactoría seleccionada.
+     */
+    private static void mostrarEstadoTanque(){
+        int piscifactoriaSeleccionada = selectPisc();
+
+        if(piscifactoriaSeleccionada != 0){
+            showTankStatus(piscifactorias.get(piscifactoriaSeleccionada - 1));
+        }
+    }
+
+    /**
      * Método principal del programa que gestiona el uso del programa por parte del usuario.
      * @param args Argumentos pasados por línea de comandos.
      */
@@ -1116,13 +1123,7 @@ public class Simulador {
             switch(opcion){
                 case 1 -> {showGeneralStatus();}
                 case 2 -> {showSpecificStatus();}
-                case 3 -> {
-                    int piscifactoriaSeleccionada = selectPisc();
-
-                    if(piscifactoriaSeleccionada != 0){
-                        showTankStatus(piscifactorias.get(piscifactoriaSeleccionada - 1));
-                    }
-                }
+                case 3 -> {mostrarEstadoTanque();}
                 case 4 -> {showStats();}
                 case 5 -> {showIctio();}
                 case 6 -> {nextDay();
