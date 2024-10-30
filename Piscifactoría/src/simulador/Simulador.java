@@ -586,6 +586,7 @@ public class Simulador {
     /**
      * Añade un pez a una piscifactoría seleccionada por el usuario.
      */
+    /*
     private static void addFish() {
         int piscifactoriaSeleccionada = selectPisc();
 
@@ -687,7 +688,7 @@ public class Simulador {
             }
         }
     }
-
+    */
     /**
      * Crea un pez que puede vivir en una piscifactoría de mar.
      * 
@@ -786,7 +787,7 @@ public class Simulador {
      * Método que vende todos los peces adultos que estén vivos en una piscifactoría
      * seleccionada.
      */
-    private void sell() {
+    private static void sell() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -841,9 +842,9 @@ public class Simulador {
      */
     private static void upgrade() {
         String[] opciones = {
-                "1. Comprar edificios",
-                "2. Mejorar edificios",
-                "3. Cancelar"
+                "Comprar edificios",
+                "Mejorar edificios",
+                "Cancelar"
         };
 
         int opcion = GeneradorMenus.generarMenuOperativo(opciones, 1, 3);
@@ -858,9 +859,6 @@ public class Simulador {
             case 3:
                 System.out.println("Operación cancelada.");
                 break;
-            default:
-                System.out.println("Opción no válida.");
-                break;
         }
     }
 
@@ -870,8 +868,8 @@ public class Simulador {
     private static void comprarEdificio() {
         if (almacenCentral != null) { 
             
-            String[] opciones = { "1. Comprar Piscifactoría", "2. Cancelar" };
-            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 1, 2);
+            String[] opciones = { "Cancelar", "Comprar piscifactoría"};
+            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
 
             if (opcion == 1) {
                 comprarPiscifactoria();
@@ -879,10 +877,13 @@ public class Simulador {
                 System.out.println("Operación cancelada.");
             }
         } else {
-            String[] opciones = { "1. Comprar Piscifactoría", "2. Comprar Almacén Central", "3. Cancelar" };
-            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 1, 3);
+            String[] opciones = {"Cancelar", "Comprar piscifactoría", "Comprar almacén central"};
+            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
 
             switch (opcion) {
+                case 0:
+                    System.out.println("Operación cancelada.");
+                    break;
                 case 1:
                     comprarPiscifactoria();
                     break;
@@ -895,12 +896,6 @@ public class Simulador {
                         System.out.println("No tienes suficientes monedas para comprar el almacén central.");
                     }
                     break;
-                case 3:
-                    System.out.println("Operación cancelada.");
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
-                    break;
             }
         }
     }
@@ -911,7 +906,7 @@ public class Simulador {
     private static void comprarPiscifactoria() {
         String tipoPiscifactoría = seleccionarTipoPiscifactoría();
         if (tipoPiscifactoría != null) {
-            System.out.println("Escribe el nombre de la piscifactoría");
+            System.out.println("Escriba el nombre de la piscifactoría: ");
             String nombrePiscifactoría = SistemaEntrada.entradaTexto();
             int costoPiscifactoría = calcularCostoPiscifactoría(tipoPiscifactoría);
     
@@ -943,28 +938,33 @@ public class Simulador {
     private static void mejorarEdificio() {
         if (almacenCentral != null) { 
             String[] opciones = {
-                    "1. Mejorar una Piscifactoría",
-                    "2. Mejorar el Almacén Central",
-                    "3. Cancelar"
+                    "Cancelar",
+                    "Mejorar una piscifactoría",
+                    "Mejorar el almacén central"
             };
-            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 1, 3);
+            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
 
             switch (opcion) {
+                case 0:
+                    System.out.println("Operación cancelada.");
+                    break;
                 case 1:
                     mejorarPiscifactoria();
                     break;
                 case 2:
                     aumentarCapacidadAlmacenCentral();
                     break;
-                case 3:
-                    System.out.println("Operación cancelada.");
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
-                    break;
             }
         } else {
-            mejorarPiscifactoria();
+            String[] opciones = {"Cancelar", "Mejorar una piscifactoría"};
+            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
+
+            if(opcion != 0){
+                mejorarPiscifactoria();
+            }
+            else{
+                System.out.println("Operación cancelada.");                
+            }
         }
     }
 
@@ -978,25 +978,22 @@ public class Simulador {
         if (piscifactoriaSeleccionada != 0) {
             Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
             String[] opcionesMejora = {
-                    "1. Comprar tanque",
-                    "2. Aumentar almacén de comida",
-                    "3. Cancelar"
+                    "Cancelar",
+                    "Comprar tanque",
+                    "Aumentar almacén de comida"
             };
 
-            int opcionMejora = GeneradorMenus.generarMenuOperativo(opcionesMejora, 1, 3);
+            int opcionMejora = GeneradorMenus.generarMenuOperativo(opcionesMejora, 0, 2);
 
             switch (opcionMejora) {
+                case 0:
+                    System.out.println("Operación cancelada.");
+                    break;
                 case 1:
                     comprarTanque(piscifactoria);
                     break;
                 case 2:
-                    aumentarAlmacenComida();
-                    break;
-                case 3:
-                    System.out.println("Operación cancelada.");
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
+                    piscifactoria.upgradeFood();
                     break;
             }
         }
@@ -1041,29 +1038,6 @@ public class Simulador {
     }
 
     /**
-     * Aumenta el almacén de comida de la piscifactoría seleccionada por el usuario.
-     */
-    private static void aumentarAlmacenComida() {
-
-        int opcion = selectPisc();
-
-        if (opcion < 1 || opcion > piscifactorias.size()) {
-            System.out.println("Opción no válida. Por favor, seleccione una opción válida.");
-            return;
-        }
-
-        Piscifactoria piscifactoriaSeleccionada = piscifactorias.get(opcion - 1);
-
-        if (piscifactoriaSeleccionada instanceof PiscifactoriaRio) {
-            piscifactoriaSeleccionada.upgradeFood();
-        } else if (piscifactoriaSeleccionada instanceof PiscifactoriaMar) {
-            piscifactoriaSeleccionada.upgradeFood();
-        } else {
-            System.out.println("Tipo de piscifactoría no reconocido.");
-        }
-    }
-
-    /**
      * Aumenta la capacidad del almacén central.
      */
     private static void aumentarCapacidadAlmacenCentral() {
@@ -1084,21 +1058,21 @@ public class Simulador {
      */
     private static String seleccionarTipoPiscifactoría() {
         String[] opcionesTipo = {
-                "1. Río",
-                "2. Mar",
-                "3. Cancelar"
+                "Cancelar",
+                "Río",
+                "Mar"
         };
 
-        int opcionTipo = GeneradorMenus.generarMenuOperativo(opcionesTipo, 1, 3);
+        int opcionTipo = GeneradorMenus.generarMenuOperativo(opcionesTipo, 0, 2);
 
         switch (opcionTipo) {
+            case 0:
+                System.out.println("Operación cancelada.");
+                return null;
             case 1:
                 return "Río";
             case 2:
                 return "Mar";
-            case 3:
-                System.out.println("Operación cancelada.");
-                return null;
             default:
                 return null;
         }
@@ -1112,6 +1086,7 @@ public class Simulador {
      */
     private static int calcularCostoPiscifactoría(String tipo) {
         int cantidadPiscifactoria = (int) piscifactorias.stream().filter(p -> p instanceof PiscifactoriaRio).count();
+
         if (tipo.equals("Río")) {
             return Math.max(500 * cantidadPiscifactoria, 500);
         } else if (tipo.equals("Mar")) {
@@ -1121,8 +1096,44 @@ public class Simulador {
         return 0;
     }
 
+    /**
+     * Método principal del programa que gestiona el uso del programa por parte del usuario.
+     * @param args Argumentos pasados por línea de comandos.
+     */
     public static void main(String[] args) {
         init();
-        addFood();
+
+        int opcion = 0;
+        int[] opcionesNumericas = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 98, 99};
+        
+        while(opcion != 14){
+            System.out.println("Día actual: " + (diasPasados + 1));
+            menu();
+
+            opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
+
+            switch(opcion){
+                case 1 -> {showGeneralStatus();}
+                case 2 -> {showSpecificStatus();}
+                case 3 -> {System.out.println("Operación no disponible.");}
+                case 4 -> {showStats();}
+                case 5 -> {showIctio();}
+                case 6 -> {nextDay();
+                            showGeneralStatus();}
+                case 7 -> {addFood();}
+                case 8 -> {System.out.println("Operación no disponible.");}
+                case 9 -> {sell();}
+                case 10 -> {cleanTank();}
+                case 11 -> {emptyTank();}
+                case 12 -> {upgrade();}
+                case 13 -> {System.out.println("Operación no disponible.");}
+                case 14 -> {System.out.println("Cerrando...");}
+                case 98 -> {System.out.println("Opción no disponible.");}
+                case 99 -> {sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() + 1000);}
+            }
+        }
+
+        SistemaEntrada.close();
     }
+
 }

@@ -645,11 +645,13 @@ public class Tanque {
      * están en la edad óptima.
      */
     public void nextDay() {
-        for (Pez pez : peces) {
-            pez.grow();
+        if(!peces.isEmpty()){
+            for (Pez pez : peces) {
+                pez.grow();
+            }
+            reproducir();
+            venderPecesOptimos();
         }
-        reproducir();
-        venderPecesOptimos();
     }
 
     /**
