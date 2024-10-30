@@ -25,6 +25,6 @@ public class PiscifactoriaMar extends Piscifactoria {
         almacenInicial.mejorar(100);
         System.out.println("Almacén de la piscifactoria " + nombre
             + " mejorado. Su capacidad ha aumentado en 100 hasta un total de "
-            + almacenInicial.getCapacidadMaximaComida());
+            + almacenInicial.getCapacidadMaximaComida() + ".");
     }
 }
