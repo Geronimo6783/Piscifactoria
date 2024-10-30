@@ -360,4 +360,34 @@ public abstract class Piscifactoria {
 
         return espacioPeces;
     }
+
+    /**
+     * Permite obtener el índice de un tanque vacio de la piscifactoría.
+     * @return Índice de un tanque vación de la piscifactoría o -1 si no hay un tanque vacio en la piscifactoría.
+     */
+    public int getIndiceTanqueVacio(){
+        for(Tanque tanque : tanques){
+            if(tanque.getPeces().isEmpty()){
+                return tanques.indexOf(tanque);
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Permite obtener el índice de un tanque que tiene un espacio para un pez en concreto.
+     * @param nombrePez Nombre del pez.
+     * @return Índice de un tanque que tiene un espacio para un pez en concreto o -1 
+     * si no hay un tanque con un espacio para un pez en concreto.
+     */
+    public int getIndiceTanqueConEspacioParaPez(String nombrePez){
+        for(Tanque tanque : tanques){
+            if(!tanque.getPeces().isEmpty() && tanque.getPeces().get(0).getNombre().equals(nombrePez)){
+                return tanques.indexOf(tanque);
+            }
+        }
+
+        return -1;
+    }
 }

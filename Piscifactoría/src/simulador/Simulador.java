@@ -456,232 +456,157 @@ public class Simulador {
         return Math.max(costo, 0);
     }
 
-    // /**
-    // * Añade un pez a una piscifactoría seleccionada por el usuario.
-    // */
-    // private static void addFish() { // Falta gestionar el coste
-    // int piscifactoriaSeleccionada = selectPisc();
-
-    // if(piscifactoriaSeleccionada != 0){
-    // Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada -
-    // 1);
-
-    // if(piscifactoria instanceof PiscifactoriaMar){
-    // addFishMar();
-    // }
-    // else{
-    // addFishRio();
-    // }
-
-    // /*
-    // GeneradorMenus.generarMenu(pecesDisponibles, 1);
-    // int opcionPez = SistemaEntrada.entradaOpcionNumerica(1,
-    // pecesDisponibles.length);
-    // String nombrePez = pecesDisponibles[opcionPez - 1];
-
-    // boolean sexo;
-    // int machos = 0, hembras = 0;
-
-    // for (Tanque tanque : piscifactoria.getTanques()) {
-    // if (tanque.getPeces().size() > 0 &&
-    // tanque.getPeces().get(0).getNombre().equals(nombrePez)) {
-    // machos += tanque.pecesMacho();
-    // hembras += tanque.pecesHembra();
-    // }
-    // }
-
-    // if (hembras == 0 && machos == 0) {
-    // sexo = true;
-    // } else if (hembras == machos) {
-    // sexo = true;
-    // } else {
-    // sexo = hembras < machos;
-    // }
-
-    // boolean añadido = false;
-    // String nombrePezTanque = "";
-    // for (Tanque tanque : piscifactoria.getTanques()) {
-    // if (tanque.getPeces().size() != 0) {
-    // nombrePezTanque = tanque.getPeces().get(0).getNombre();
-    // } else {
-    // nombrePezTanque = null;
-    // }
-
-    // if (tanque.getPeces().size() < tanque.getCapacidadMaximaPeces()
-    // && (nombrePezTanque == null || nombrePezTanque.equals(nombrePez))) {
-    // Pez nuevoPez = crearPez(nombrePez, sexo);
-    // tanque.getPeces().add(nuevoPez);
-    // añadido = true;
-    // System.out.println("Pez añadido al tanque existente.");
-    // break;
-    // }
-    // }
-
-    // if (!añadido) {
-    // for (Tanque tanque : piscifactoria.getTanques()) {
-    // if (tanque.getPeces().isEmpty()) {
-    // Pez nuevoPez = crearPez(nombrePez, sexo);
-    // tanque.getPeces().add(nuevoPez);
-    // añadido = true;
-    // System.out.println("Pez añadido a un tanque vacío.");
-    // break;
-    // }
-    // }
-    // }
-
-    // if (!añadido) {
-    // System.out.println("No se pudo añadir el pez. No hay espacio disponible.");
-    // }
-
-    // for (Tanque tanque : piscifactoria.getTanques()) {
-    // tanque.showStatus();
-    // }
-    // */
-    // }
-    // }
-
-    // /**
-    // * Gestiona la lógica de añadir un pez a una piscifactoría de mar.
-    // */
-    // private static void addFishMar(){
-    // String[] pecesDisponiblesMar = {
-    // "Cancelar",
-    // AlmacenPropiedades.ABADEJO.getNombre(),
-    // AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-    // AlmacenPropiedades.CABALLA.getNombre(),
-    // AlmacenPropiedades.DORADA.getNombre(),
-    // AlmacenPropiedades.ROBALO.getNombre(),
-    // AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-    // AlmacenPropiedades.SARGO.getNombre(),
-    // };
-
-    // int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesMar, 0, 6);
-    // }
-
-    // /**
-    // * Gestiona la lógica de añadir un pez a una piscifactoría de río.
-    // */
-    // private static void addFishRio(){
-    // String[] pecesDisponiblesRio = {
-    // "Cancelar",
-    // AlmacenPropiedades.DORADA.getNombre(),
-    // AlmacenPropiedades.PEJERREY.getNombre(),
-    // AlmacenPropiedades.PERCA_EUROPEA.getNombre(),
-    // AlmacenPropiedades.ROBALO.getNombre(),
-    // AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-    // AlmacenPropiedades.SALMON_CHINOOK.getNombre(),
-    // AlmacenPropiedades.TILAPIA_NILO.getNombre()
-    // };
-
-    // int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesRio, 0, 6);
-    // }
-
     /**
-     * Añade un pez a una piscifactoría seleccionada por el usuario.
-     */
-    /*
+    * Añade un pez a una piscifactoría seleccionada por el usuario.
+    */
     private static void addFish() {
         int piscifactoriaSeleccionada = selectPisc();
 
-        if (piscifactoriaSeleccionada != 0) {
-            Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
-
-            String[] pecesDisponibles;
-            if (piscifactoria instanceof PiscifactoriaMar) {
-                pecesDisponibles = new String[] {
-                        "Cancelar",
-                        AlmacenPropiedades.ABADEJO.getNombre(),
-                        AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-                        AlmacenPropiedades.CABALLA.getNombre(),
-                        AlmacenPropiedades.DORADA.getNombre(),
-                        AlmacenPropiedades.ROBALO.getNombre(),
-                        AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-                        AlmacenPropiedades.SARGO.getNombre()
-                };
-            } else {
-                pecesDisponibles = new String[] {
-                        "Cancelar",
-                        AlmacenPropiedades.DORADA.getNombre(),
-                        AlmacenPropiedades.PEJERREY.getNombre(),
-                        AlmacenPropiedades.PERCA_EUROPEA.getNombre(),
-                        AlmacenPropiedades.ROBALO.getNombre(),
-                        AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-                        AlmacenPropiedades.SALMON_CHINOOK.getNombre(),
-                        AlmacenPropiedades.TILAPIA_NILO.getNombre()
-                };
+        if(piscifactoriaSeleccionada != 0){
+            Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1); 
+            
+            if(piscifactoria instanceof PiscifactoriaMar){
+                addFishMar(piscifactoria);
             }
+            else{
+                addFishRio(piscifactoria);
+            }
+        }
+    }
 
-            // Muestra el menú para elegir un pez
-            GeneradorMenus.generarMenu(pecesDisponibles, 1);
-            int opcionPez = SistemaEntrada.entradaOpcionNumerica(1, pecesDisponibles.length);
+    /**
+    * Gestiona la lógica de añadir un pez a una piscifactoría de mar.
+    * @param piscifactoria Piscifactoría donde se va a añadir el pez.
+    */
+    private static void addFishMar(Piscifactoria piscifactoria){
+        String[] pecesDisponiblesMar = {
+            "Cancelar",
+            AlmacenPropiedades.ABADEJO.getNombre() + " " + AlmacenPropiedades.ABADEJO.getCoste() + " monedas",
+            AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre() + " " + AlmacenPropiedades.ARENQUE_ATLANTICO.getCoste() + " monedas",
+            AlmacenPropiedades.CABALLA.getNombre() + " " + AlmacenPropiedades.CABALLA.getCoste() + " monedas",
+            AlmacenPropiedades.DORADA.getNombre() + " " + AlmacenPropiedades.DORADA.getCoste() + " monedas",
+            AlmacenPropiedades.ROBALO.getNombre() + " " + AlmacenPropiedades.ROBALO.getCoste() + " monedas",
+            AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + " " + AlmacenPropiedades.SALMON_ATLANTICO.getCoste() + " monedas",
+            AlmacenPropiedades.SARGO.getNombre() + " " + AlmacenPropiedades.SARGO.getCoste() + " monedas",
+        };
 
-            if (opcionPez != 0) {
-                String nombrePez = pecesDisponibles[opcionPez - 1];
-                PecesDatos propiedadesPez = AlmacenPropiedades.getPropByName(nombrePez);
-                int costePez = AlmacenPropiedades.getPropByName(nombrePez).getCoste();
-                String nombreCientifico = propiedadesPez.getCientifico();
+        int monedas = sistemaMonedas.getMonedas();
+        System.out.println("Cartera: " +  monedas + " monedas.");
+        int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesMar, 0, 6);
 
-                if (sistemaMonedas.getMonedas() >= costePez) {
-                    sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costePez);
+        if(opcion != 0){
+            String nombrePez = pecesDisponiblesMar[opcion].split(" ")[0];
 
-                    boolean sexo;
-                    int machos = 0, hembras = 0;
+            int indiceTanqueConEspacioParaPez = piscifactoria.getIndiceTanqueConEspacioParaPez(nombrePez);
+            
+            if(indiceTanqueConEspacioParaPez != -1){
+                int coste = AlmacenPropiedades.getPropByName(nombrePez).getCoste();
 
-                    // Verifica si hay tanques con peces del mismo tipo y calcula machos y hembras
-                    for (Tanque tanque : piscifactoria.getTanques()) {
-                        if (!tanque.getPeces().isEmpty() && tanque.getPeces().get(0).getNombre().equals(nombrePez)) {
-                            machos = tanque.pecesMacho();
-                            hembras = tanque.pecesHembra();
-                            break;
-                        }
+                if(monedas >= coste){
+                    Tanque tanque = piscifactoria.getTanques().get(indiceTanqueConEspacioParaPez);
+
+                    if(tanque.pecesMacho() >= tanque.pecesHembra()){
+                        tanque.getPeces().add(crearPezMar(opcion, true));
+                        tanque.showCapacity(piscifactoria.getNombre());
                     }
-
-                    // Determina el sexo del pez nuevo
-                    sexo = (hembras == 0 && machos == 0) || hembras < machos;
-
-                    boolean añadido = false;
-
-                    // Intenta añadir el pez a un tanque existente o vacío
-                    for (Tanque tanque : piscifactoria.getTanques()) {
-                        String nombrePezTanque = tanque.getPeces().isEmpty() ? null
-                                : tanque.getPeces().get(0).getNombre();
-
-                        if (tanque.getPeces().size() < tanque.getCapacidadMaximaPeces()
-                                && (nombrePezTanque == null || nombrePezTanque.equals(nombrePez))) {
-                            Pez nuevoPez = new Pez(nombrePez, nombreCientifico, sexo);
-                            tanque.getPeces().add(nuevoPez);
-                            añadido = true;
-                            System.out.println("Pez añadido al tanque.");
-                            break;
-                        }
+                    else{
+                        tanque.getPeces().add(crearPezMar(opcion, false));
+                        tanque.showCapacity(piscifactoria.getNombre());
                     }
+                }
+                else{
+                    System.out.println("No se disponen de las suficientes monedas para comprar el pez, faltan " + (coste - monedas) + " monedas.");
+                }
+            }
+            else{
+                int indiceTanqueVacio = piscifactoria.getIndiceTanqueVacio();
+                if(indiceTanqueVacio != -1){
+                    int coste = AlmacenPropiedades.getPropByName(nombrePez).getCoste();
 
-                    // Si no se pudo añadir a un tanque existente, busca un tanque vacío
-                    if (!añadido) {
-                        for (Tanque tanque : piscifactoria.getTanques()) {
-                            if (tanque.getPeces().isEmpty()) {
-                                Pez nuevoPez = crearPez(nombrePez, sexo);
-                                tanque.getPeces().add(nuevoPez);
-                                añadido = true;
-                                System.out.println("Pez añadido a un tanque vacío.");
-                                break;
-                            }
-                        }
-                    } else {
-                        System.out.println("No se pudo añadir el pez. No hay espacio disponible.");
+                    if(monedas >= coste){
+                        Tanque tanque = piscifactoria.getTanques().get(indiceTanqueVacio);
+                        tanque.getPeces().add(crearPezMar(opcion, true));
+                        sistemaMonedas.setMonedas(monedas - coste);
+                        tanque.showCapacity(piscifactoria.getNombre());
                     }
-
-                    // Mostrar estado de los tanques después de añadir el pez
-                    for (Tanque tanque : piscifactoria.getTanques()) {
-                        tanque.showStatus();
+                    else{
+                        System.out.println("No se disponen de las suficientes monedas para comprar el pez, faltan " + (coste - monedas) + " monedas.");
                     }
-                } else {
-                    System.out.println("No tienes suficientes monedas para comprar este pez.");
+                }
+                else{
+                    System.out.println("No se puede añadir el pez a la piscifactoría.");
                 }
             }
         }
     }
+
+    /**
+    * Gestiona la lógica de añadir un pez a una piscifactoría de río.
     */
+    private static void addFishRio(Piscifactoria piscifactoria){
+        String[] pecesDisponiblesRio = {
+            "Cancelar",
+            AlmacenPropiedades.DORADA.getNombre() + " " + AlmacenPropiedades.DORADA.getCoste() + " monedas",
+            AlmacenPropiedades.PEJERREY.getNombre() + " " + AlmacenPropiedades.PEJERREY.getCoste() + " monedas",
+            AlmacenPropiedades.PERCA_EUROPEA.getNombre() + " " + AlmacenPropiedades.PERCA_EUROPEA.getCoste() + " monedas",
+            AlmacenPropiedades.ROBALO.getNombre() + " " + AlmacenPropiedades.ROBALO.getCoste() + " monedas",
+            AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + " " + AlmacenPropiedades.SALMON_ATLANTICO.getCoste() + " monedas",
+            AlmacenPropiedades.SALMON_CHINOOK.getNombre() + " " + AlmacenPropiedades.SALMON_CHINOOK.getCoste() + " monedas",
+            AlmacenPropiedades.TILAPIA_NILO.getNombre() + " " + AlmacenPropiedades.TILAPIA_NILO.getCoste() + " monedas"
+            };
+
+        int monedas = sistemaMonedas.getMonedas();
+        System.out.println("Cartera: " +  monedas + " monedas.");
+        int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesRio, 0, 7);
+
+        if(opcion != 0){
+            String nombrePez = pecesDisponiblesRio[opcion].split(" ")[0];
+
+            int indiceTanqueConEspacioParaPez = piscifactoria.getIndiceTanqueConEspacioParaPez(nombrePez);
+            
+            if(indiceTanqueConEspacioParaPez != -1){
+                int coste = AlmacenPropiedades.getPropByName(nombrePez).getCoste();
+                monedas = sistemaMonedas.getMonedas();
+
+                if(monedas >= coste){
+                    Tanque tanque = piscifactoria.getTanques().get(indiceTanqueConEspacioParaPez);
+
+                    if(tanque.pecesMacho() >= tanque.pecesHembra()){
+                        tanque.getPeces().add(crearPezRio(opcion, true));
+                        tanque.showCapacity(piscifactoria.getNombre());
+                    }
+                    else{
+                        tanque.getPeces().add(crearPezRio(opcion, false));
+                        tanque.showCapacity(piscifactoria.getNombre());
+                    }
+                }
+                else{
+                    System.out.println("No se disponen de las suficientes monedas para comprar el pez, faltan " + (coste - monedas) + " monedas.");
+                }
+            }
+            else{
+                int indiceTanqueVacio = piscifactoria.getIndiceTanqueVacio();
+                if(indiceTanqueVacio != -1){
+                    int coste = AlmacenPropiedades.getPropByName(nombrePez).getCoste();
+                    monedas = sistemaMonedas.getMonedas();
+
+                    if(monedas >= coste){
+                        Tanque tanque = piscifactoria.getTanques().get(indiceTanqueVacio);
+                        tanque.getPeces().add(crearPezRio(opcion, true));
+                        sistemaMonedas.setMonedas(monedas - coste);
+                        tanque.showCapacity(piscifactoria.getNombre());
+                    }
+                    else{
+                        System.out.println("No se disponen de las suficientes monedas para comprar el pez, faltan " + (coste - monedas) + " monedas.");
+                    }
+                }
+                else{
+                    System.out.println("No se puede añadir el pez a la piscifactoría.");
+                }
+            }
+        }
+    }
+
     /**
      * Crea un pez que puede vivir en una piscifactoría de mar.
      * 
@@ -737,12 +662,15 @@ public class Simulador {
                 return new PercaEuropea(sexo);
             }
             case 4 -> {
-                return new SalmonAtlantico(sexo);
+                return new Robalo(sexo);
             }
             case 5 -> {
-                return new SalmonChinook(sexo);
+                return new SalmonAtlantico(sexo);
             }
             case 6 -> {
+                return new SalmonChinook(sexo);
+            }
+            case 7 -> {
                 return new TilapiaDelNilo(sexo);
             }
             default -> {
@@ -853,9 +781,6 @@ public class Simulador {
             case 2:
                 mejorarEdificio();
                 break;
-            case 3:
-                System.out.println("Operación cancelada.");
-                break;
         }
     }
 
@@ -878,9 +803,6 @@ public class Simulador {
             int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
 
             switch (opcion) {
-                case 0:
-                    System.out.println("Operación cancelada.");
-                    break;
                 case 1:
                     comprarPiscifactoria();
                     break;
@@ -942,9 +864,6 @@ public class Simulador {
             int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
 
             switch (opcion) {
-                case 0:
-                    System.out.println("Operación cancelada.");
-                    break;
                 case 1:
                     mejorarPiscifactoria();
                     break;
@@ -983,9 +902,6 @@ public class Simulador {
             int opcionMejora = GeneradorMenus.generarMenuOperativo(opcionesMejora, 0, 2);
 
             switch (opcionMejora) {
-                case 0:
-                    System.out.println("Operación cancelada.");
-                    break;
                 case 1:
                     comprarTanque(piscifactoria);
                     break;
@@ -1063,9 +979,6 @@ public class Simulador {
         int opcionTipo = GeneradorMenus.generarMenuOperativo(opcionesTipo, 0, 2);
 
         switch (opcionTipo) {
-            case 0:
-                System.out.println("Operación cancelada.");
-                return null;
             case 1:
                 return "Río";
             case 2:
@@ -1129,7 +1042,7 @@ public class Simulador {
                 case 6 -> {nextDay();
                             showGeneralStatus();}
                 case 7 -> {addFood();}
-                case 8 -> {System.out.println("Operación no disponible.");}
+                case 8 -> {addFish();}
                 case 9 -> {sell();}
                 case 10 -> {cleanTank();}
                 case 11 -> {emptyTank();}
