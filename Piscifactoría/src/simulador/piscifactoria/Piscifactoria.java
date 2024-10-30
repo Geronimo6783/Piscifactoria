@@ -301,7 +301,9 @@ public abstract class Piscifactoria {
      */
     public void nextDay() {
         for(Tanque tanque : tanques){
-            tanque.alimentar(almacenInicial);
+            if(!tanque.getPeces().isEmpty()){
+                tanque.alimentar(almacenInicial);
+            }
             tanque.nextDay();
         }
     }

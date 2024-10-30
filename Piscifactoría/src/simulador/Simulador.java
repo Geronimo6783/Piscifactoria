@@ -1118,7 +1118,8 @@ public class Simulador {
                 case 3 -> {System.out.println("Operación no disponible.");}
                 case 4 -> {showStats();}
                 case 5 -> {showIctio();}
-                case 6 -> {nextDay();}
+                case 6 -> {nextDay();
+                            showGeneralStatus();}
                 case 7 -> {addFood();}
                 case 8 -> {System.out.println("Operación no disponible.");}
                 case 9 -> {sell();}
