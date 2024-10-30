@@ -1,9 +1,6 @@
 package simulador;
 
 import java.util.ArrayList;
-
-import javax.management.relation.RoleUnresolved;
-
 import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
 import componentes.SistemaMonedas;
@@ -17,7 +14,6 @@ import simulador.pez.Pez;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
 import simulador.piscifactoria.*;
-import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
 public class Simulador {
 
@@ -114,15 +110,13 @@ public class Simulador {
     }
 
     /**
-     * Muestra el menú de tanques de una piscifactoría seleccionada y permite al
+     * Muestra el menú de tanques de una piscifactoría y permite al
      * usuario seleccionar uno.
      * 
+     * @param piscifactoria Piscifactoría de la cúal se muestra el menú de tanques.
      * @return El índice del tanque seleccionado.
      */
-    private static int selectTank() {
-        int piscifactoriaSeleccionada = selectPisc();
-
-        Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
+    private static int selectTank(Piscifactoria piscifactoria) {
         ArrayList<Tanque> tanques = piscifactoria.getTanques();
 
         String[] cabeceraMenuPiscifactoria = { "----------- Tanques de " + piscifactoria.getNombre() + " -----------" };
@@ -136,9 +130,7 @@ public class Simulador {
                     + tanque.getCapacidadMaximaPeces() + " - Pez: " + nombrePez;
         }
 
-        GeneradorMenus.generarMenu(opcionesTanques, 0);
-
-        return SistemaEntrada.entradaOpcionNumerica(0, tanques.size());
+        return GeneradorMenus.generarMenuOperativo(cabeceraMenuPiscifactoria, opcionesTanques, 0, tanques.size());
     }
 
     /**
@@ -186,17 +178,18 @@ public class Simulador {
      * @param piscifactoria La piscifactoría que contiene los tanques disponibles.
      */
     public static void showTankStatus(Piscifactoria piscifactoria) {
-        int opcionTanque = selectTank();
+        int opcionTanque = selectTank(piscifactoria);
 
-        Tanque tanqueSeleccionado = piscifactoria.getTanques().get(opcionTanque - 1);
+        if(opcionTanque != 0){
+            Tanque tanqueSeleccionado = piscifactoria.getTanques().get(opcionTanque - 1);
 
-        if (tanqueSeleccionado.getPeces().isEmpty()) {
-            System.out.println("El tanque seleccionado no contiene peces.");
-        } else {
-            System.out.println("Estado de los peces en el tanque " + opcionTanque + ":");
-            tanqueSeleccionado.showFishStatus();
+            if (tanqueSeleccionado.getPeces().isEmpty()) {
+                System.out.println("El tanque seleccionado no contiene peces.");
+            } else {
+                System.out.println("Estado de los peces en el tanque " + opcionTanque + ":");
+                tanqueSeleccionado.showFishStatus();
+            }
         }
-
     }
 
     /**
@@ -692,7 +685,7 @@ public class Simulador {
     /**
      * Crea un pez que puede vivir en una piscifactoría de mar.
      * 
-     * @param pez  Código numérico del pez a crear.
+     * @param pez Código numérico del pez a crear.
      * @param sexo Sexo del pez a crear.
      * @return Pez creado.
      */
@@ -728,7 +721,7 @@ public class Simulador {
     /**
      * Crear un pez que puede vivir en una piscifactoría de río.
      * 
-     * @param pez  Código numérico del pez a crear.
+     * @param pez Código numérico del pez a crear.
      * @param sexo Sexo del pez a crear.
      * @return Pez creado.
      */
@@ -823,18 +816,22 @@ public class Simulador {
      * Elimina todos los peces de un tanque, estén vivos o muertos.
      */
     private static void emptyTank() {
-
         int piscifactoriaSeleccionada = selectPisc();
-        Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
+        
+        if(piscifactoriaSeleccionada != 0){
+            Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
 
-        int tanqueSeleccionado = selectTank();
+            int tanqueSeleccionado = selectTank(piscifactoria);
 
-        Tanque tanque = piscifactoria.getTanques().get(tanqueSeleccionado - 1);
+            if(tanqueSeleccionado != 0){
+            Tanque tanque = piscifactoria.getTanques().get(tanqueSeleccionado - 1);
 
-        tanque.vaciarTanque();
+            tanque.vaciarTanque();
 
-        System.out.println("El tanque " + tanqueSeleccionado + " de la piscifactoría "
-                + piscifactoria.getNombre() + " ha sido vaciado.");
+            System.out.println("El tanque " + tanqueSeleccionado + " de la piscifactoría "
+                    + piscifactoria.getNombre() + " ha sido vaciado.");
+            }
+        }
     }
 
     /**
@@ -1097,6 +1094,17 @@ public class Simulador {
     }
 
     /**
+     * Gestiona la lógica para mostrar el estado de un tanque de una piscifactoría seleccionada.
+     */
+    private static void mostrarEstadoTanque(){
+        int piscifactoriaSeleccionada = selectPisc();
+
+        if(piscifactoriaSeleccionada != 0){
+            showTankStatus(piscifactorias.get(piscifactoriaSeleccionada - 1));
+        }
+    }
+
+    /**
      * Método principal del programa que gestiona el uso del programa por parte del usuario.
      * @param args Argumentos pasados por línea de comandos.
      */
@@ -1115,7 +1123,7 @@ public class Simulador {
             switch(opcion){
                 case 1 -> {showGeneralStatus();}
                 case 2 -> {showSpecificStatus();}
-                case 3 -> {System.out.println("Operación no disponible.");}
+                case 3 -> {mostrarEstadoTanque();}
                 case 4 -> {showStats();}
                 case 5 -> {showIctio();}
                 case 6 -> {nextDay();
