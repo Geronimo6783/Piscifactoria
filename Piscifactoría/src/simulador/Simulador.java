@@ -1107,6 +1107,9 @@ public class Simulador {
         }
     }
 
+    /**
+     * Método para pasar varios días en la simulación. 
+     */
     private static void pasarDias() {
         int pecesAntes;
         int dineroAntes;
