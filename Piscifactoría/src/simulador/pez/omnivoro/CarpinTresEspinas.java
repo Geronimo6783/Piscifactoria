@@ -3,16 +3,17 @@ package simulador.pez.omnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
  * Clase que representa a un carpín de tres espinas.
  */
-public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
+public class CarpinTresEspinas extends Omnivoro implements Rio{
 
     /**
      * Constructor de carpines de tres espinas.
-     * @param sexo Sexo del carpín de tres espinas.
+     * @param sexo Sexo del carpín de tres espinas si es true es hembra y si es false es macho.
      */
     public CarpinTresEspinas(boolean sexo){
         super(AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.CARPIN_TRES_ESPINAS.getCientifico(), sexo);
@@ -40,12 +41,10 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -57,11 +56,12 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
      * Indica la cantidad de comida que come el carpín de tres espinas un día.
-     * @return Cantidad de comida que comer el carpín de tres espinas.
+     * @return Cantidad de comida que come el carpín de tres espinas.
      */
     @Override
     public int comer(){
@@ -71,14 +71,16 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
 
     /**
      * Indica si el carpín de tres espinas está maduro.
+     * @return True si el carpín de tres espinas está maduro.
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez();
+        return edad >= AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez();
     }
 
     /**
      * Indica si el carpín de tres espinas está en la edad óptima para ser vendido.
+     * @return True si el carpín de tres espinas está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){
@@ -91,6 +93,7 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new CarpinTresEspinas(false);
     }
 
@@ -100,6 +103,7 @@ public class CarpinTresEspinas extends Pez implements Omnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new CarpinTresEspinas(true);
     }
 }

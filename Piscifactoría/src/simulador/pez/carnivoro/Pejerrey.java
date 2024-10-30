@@ -3,16 +3,17 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
  * Clase que representa a un pejerrey.
  */
-public class Pejerrey extends Pez implements Carnivoro, Rio{
+public class Pejerrey extends Carnivoro implements Rio{
 
     /**
      * Constructor de pejerreyes.
-     * @param sexo Sexo del pejerrey.
+     * @param sexo Sexo del pejerrey si es true es hembra y si es false es macho.
      */
     public Pejerrey(boolean sexo){
         super(AlmacenPropiedades.PEJERREY.getNombre(), AlmacenPropiedades.PEJERREY.getCientifico(), sexo);
@@ -42,12 +43,10 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.PEJERREY.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.PEJERREY.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -59,18 +58,21 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
      * Indica si el pejerrey está maduro.
+     * @return True si el pejerrey está maduro.
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.PEJERREY.getMadurez();
+        return edad >= AlmacenPropiedades.PEJERREY.getMadurez();
     }
 
     /**
      * Indica si el pejerrey está en la edad óptima para ser vendido.
+     * @return True si el pejerrey está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){
@@ -83,6 +85,7 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Pejerrey(false);
     }
 
@@ -92,6 +95,7 @@ public class Pejerrey extends Pez implements Carnivoro, Rio{
      */
     @Override
     public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
         return new Pejerrey(true);
     }
 }

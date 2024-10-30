@@ -1,19 +1,14 @@
 package simulador;
 
 /**
- * Clase que representa a un alamcén central que almacena comida y la distribuye equitativamente entre las piscifactrías.
+ * Clase que representa a un almacén central que almacena comida y la distribuye equitativamente entre las piscifactrías.
  */
 public class AlmacenCentral {
-    
-    /**
-     * Capacidad para comida animal en el almacén.
-     */
-    private int capacidadComidaAnimal;
 
     /**
-     * Capacidad para comida vegetal en el almacén.
+     * Capacidad máxima del almacén para cada tipo de comida.
      */
-    private int capacidadComidaVegetal;
+    private int capacidadComida;
 
     /**
      * Cantidad de comida animal disponible en el almacén central.
@@ -29,40 +24,23 @@ public class AlmacenCentral {
      * Constructor de almacenes centrales.
      */
     public AlmacenCentral(){
-        capacidadComidaAnimal = 200;
-        capacidadComidaVegetal = 200;
+        capacidadComida = 200;
     }
 
     /**
      * 
-     * @return Capacidad para comida animal del almacén central.
+     * @return Capacidad máxima de cada tipo de comida del almacén central.
      */
-    public int getCapacidadComidaAnimal() {
-        return capacidadComidaAnimal;
+    public int getCapacidadComida() {
+        return capacidadComida;
     }
 
     /**
-     * Permite establecer la capacidad de comida animal del almacén central.
-     * @param capacidadComidaAnimal Capacidad de comida animal a establecer.
+     * Permite establecer la capacidad máxima de cada tipo de comida del almacén central
+     * @param capacidadComidaAnimal Capacidad máxima de cada tipo de comida a establecer.
      */
-    public void setCapacidadComidaAnimal(int capacidadComidaAnimal) {
-        this.capacidadComidaAnimal = capacidadComidaAnimal;
-    }
-
-    /**
-     * 
-     * @return Capacidad para comida vegetal del almacén central.
-     */
-    public int getCapacidadComidaVegetal() {
-        return capacidadComidaVegetal;
-    }
-
-    /**
-     * Permite establecer la capacidad de comida vegetal del almacén central.
-     * @param capacidadComidaAnimal Capacidad de comida vegetal a establecer.
-     */
-    public void setCapacidadComidaVegetal(int capacidadComidaVegetal) {
-        this.capacidadComidaVegetal = capacidadComidaVegetal;
+    public void setCapacidadComidaAnimal(int capacidadComida) {
+        this.capacidadComida = capacidadComida;
     }
 
     /**
@@ -98,10 +76,9 @@ public class AlmacenCentral {
     }
 
     /**
-     * Mejora el almacén centrar aumentado la capacidad de ambas comidas en 50 unidades.
+     * Mejora el almacén centrar aumentado la capacidad máxima de cada tipo de comida en 50 unidades.
      */
     public void mejorar(){
-        capacidadComidaAnimal += 50;
-        capacidadComidaVegetal += 50;
+        capacidadComida += 50;
     }
 }
