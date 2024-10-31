@@ -236,7 +236,7 @@ public class Tanque {
      */
     public void showCapacity(String piscifactoria) {
         System.out.println("Tanque " + numeroTanque + " de la piscifactoría " + piscifactoria + " al "
-                + String.format("%.2f", ((float) peces.size() / (float) capacidadMaximaPeces)) + "% de capacidad.");
+                + String.format("%.2f", ((float) peces.size() / (float) capacidadMaximaPeces) * 100) + "% de capacidad.");
     }
 
     /**
@@ -450,7 +450,7 @@ public class Tanque {
      * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
      */
     private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez,
-            Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
+        Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
         Random rt = new Random();
         ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
         int posicionAleatoria = 0;
@@ -583,45 +583,49 @@ public class Tanque {
      * Vende todos los peces que se encuentran en una edad óptima para ser vendidos.
      */
     private void venderPecesOptimos() {
-        int pecesAVender = 0;
-        Iterator<Pez> iterador = peces.iterator();
-        String nombrePez = peces.get(0).getNombre();
-        
-        while(iterador.hasNext()){
-            Pez pez = iterador.next();
+        if(!peces.isEmpty()){
+            int pecesAVender = 0;
+            Iterator<Pez> iterador = peces.iterator();
+            String nombrePez = peces.get(0).getNombre();
+            
+            while(iterador.hasNext()){
+                Pez pez = iterador.next();
 
-            if (pez.isEdadOptima()) {
-                pecesAVender++;
-                Simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
-                iterador.remove();
+                if (pez.isEdadOptima()) {
+                    pecesAVender++;
+                    Simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
+                    iterador.remove();
+                }
             }
-        }
 
-        Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas()
-                + (pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas()));
-        ;
+            Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas()
+                    + (pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas()));
+        
+        }
     }
 
     /**
      * Vende todos los peces que estén maduros.
      */
     public void venderPeces(){
-        int monedasAObtener = 0;
-        Iterator<Pez> iterador = peces.iterator();
-        String nombrePez = peces.get(0).getNombre();
-        int monedasPez = (AlmacenPropiedades.getPropByName(nombrePez).getMonedas() / 2);
+        if(!peces.isEmpty()){
+            int monedasAObtener = 0;
+            Iterator<Pez> iterador = peces.iterator();
+            String nombrePez = peces.get(0).getNombre();
+            int monedasPez = (AlmacenPropiedades.getPropByName(nombrePez).getMonedas() / 2);
 
-        while (iterador.hasNext()) {
-            Pez pez = iterador.next();
+            while (iterador.hasNext()) {
+                Pez pez = iterador.next();
 
-            if(pez.isMaduro() && !pez.isEdadOptima()){
-                monedasAObtener += monedasPez;
-                Simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
-                iterador.remove();
+                if(pez.isMaduro() && !pez.isEdadOptima()){
+                    monedasAObtener += monedasPez;
+                    Simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
+                    iterador.remove();
+                }
             }
-        }
 
-        Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas() + monedasAObtener);;
+            Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas() + monedasAObtener);
+        }
     }
 
     /**
