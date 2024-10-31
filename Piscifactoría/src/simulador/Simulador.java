@@ -238,19 +238,18 @@ public class Simulador {
      * vendidos y las monedas ganadas con ello.
      */
     private static void nextDay() {
-        int pecesAntesDePasarDia;
         int dineroAntesDePasarDia;
+        int pecesVendidoPiscifactoria = 0;
         int pecesVendidos = 0;
         int monedasGanadas = 0;
 
         for (Piscifactoria piscifactoria : piscifactorias) {
-            pecesAntesDePasarDia = piscifactoria.getPecesTotales();
             dineroAntesDePasarDia = sistemaMonedas.getMonedas();
-            piscifactoria.nextDay();
-            System.out.println("Piscifactoría " + piscifactoria.getNombre() + ":"
-                    + (pecesAntesDePasarDia - piscifactoria.getPecesTotales()) + " peces vendidos por un total de "
+            pecesVendidoPiscifactoria += piscifactoria.nextDay();
+            pecesVendidos += pecesVendidoPiscifactoria;
+            System.out.println("Piscifactoría " + piscifactoria.getNombre() + ": "
+                    + pecesVendidoPiscifactoria + " peces vendidos por un total de "
                     + (sistemaMonedas.getMonedas() - dineroAntesDePasarDia) + " monedas.");
-            pecesVendidos += pecesAntesDePasarDia - piscifactoria.getPecesTotales();
             monedasGanadas += sistemaMonedas.getMonedas() - dineroAntesDePasarDia;
         }
 
@@ -480,21 +479,21 @@ public class Simulador {
     private static void addFishMar(Piscifactoria piscifactoria){
         String[] pecesDisponiblesMar = {
             "Cancelar",
-            AlmacenPropiedades.ABADEJO.getNombre() + " " + AlmacenPropiedades.ABADEJO.getCoste() + " monedas",
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre() + " " + AlmacenPropiedades.ARENQUE_ATLANTICO.getCoste() + " monedas",
-            AlmacenPropiedades.CABALLA.getNombre() + " " + AlmacenPropiedades.CABALLA.getCoste() + " monedas",
-            AlmacenPropiedades.DORADA.getNombre() + " " + AlmacenPropiedades.DORADA.getCoste() + " monedas",
-            AlmacenPropiedades.ROBALO.getNombre() + " " + AlmacenPropiedades.ROBALO.getCoste() + " monedas",
-            AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + " " + AlmacenPropiedades.SALMON_ATLANTICO.getCoste() + " monedas",
-            AlmacenPropiedades.SARGO.getNombre() + " " + AlmacenPropiedades.SARGO.getCoste() + " monedas",
+            AlmacenPropiedades.ABADEJO.getNombre() + " - " + AlmacenPropiedades.ABADEJO.getCoste() + " monedas",
+            AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre() + " - " + AlmacenPropiedades.ARENQUE_ATLANTICO.getCoste() + " monedas",
+            AlmacenPropiedades.CABALLA.getNombre() + " - " + AlmacenPropiedades.CABALLA.getCoste() + " monedas",
+            AlmacenPropiedades.DORADA.getNombre() + " - " + AlmacenPropiedades.DORADA.getCoste() + " monedas",
+            AlmacenPropiedades.ROBALO.getNombre() + " - " + AlmacenPropiedades.ROBALO.getCoste() + " monedas",
+            AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + " - " + AlmacenPropiedades.SALMON_ATLANTICO.getCoste() + " monedas",
+            AlmacenPropiedades.SARGO.getNombre() + " - " + AlmacenPropiedades.SARGO.getCoste() + " monedas",
         };
 
         int monedas = sistemaMonedas.getMonedas();
         System.out.println("Cartera: " +  monedas + " monedas.");
-        int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesMar, 0, 6);
+        int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesMar, 0, 7);
 
         if(opcion != 0){
-            String nombrePez = pecesDisponiblesMar[opcion].split(" ")[0];
+            String nombrePez = pecesDisponiblesMar[opcion].split(" - ")[0];
 
             int indiceTanqueConEspacioParaPez = piscifactoria.getIndiceTanqueConEspacioParaPez(nombrePez);
             
@@ -545,13 +544,13 @@ public class Simulador {
     private static void addFishRio(Piscifactoria piscifactoria){
         String[] pecesDisponiblesRio = {
             "Cancelar",
-            AlmacenPropiedades.DORADA.getNombre() + " " + AlmacenPropiedades.DORADA.getCoste() + " monedas",
-            AlmacenPropiedades.PEJERREY.getNombre() + " " + AlmacenPropiedades.PEJERREY.getCoste() + " monedas",
-            AlmacenPropiedades.PERCA_EUROPEA.getNombre() + " " + AlmacenPropiedades.PERCA_EUROPEA.getCoste() + " monedas",
-            AlmacenPropiedades.ROBALO.getNombre() + " " + AlmacenPropiedades.ROBALO.getCoste() + " monedas",
-            AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + " " + AlmacenPropiedades.SALMON_ATLANTICO.getCoste() + " monedas",
-            AlmacenPropiedades.SALMON_CHINOOK.getNombre() + " " + AlmacenPropiedades.SALMON_CHINOOK.getCoste() + " monedas",
-            AlmacenPropiedades.TILAPIA_NILO.getNombre() + " " + AlmacenPropiedades.TILAPIA_NILO.getCoste() + " monedas"
+            AlmacenPropiedades.DORADA.getNombre() + " - " + AlmacenPropiedades.DORADA.getCoste() + " monedas",
+            AlmacenPropiedades.PEJERREY.getNombre() + " - " + AlmacenPropiedades.PEJERREY.getCoste() + " monedas",
+            AlmacenPropiedades.PERCA_EUROPEA.getNombre() + " - " + AlmacenPropiedades.PERCA_EUROPEA.getCoste() + " monedas",
+            AlmacenPropiedades.ROBALO.getNombre() + " - " + AlmacenPropiedades.ROBALO.getCoste() + " monedas",
+            AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + " - " + AlmacenPropiedades.SALMON_ATLANTICO.getCoste() + " monedas",
+            AlmacenPropiedades.SALMON_CHINOOK.getNombre() + " - " + AlmacenPropiedades.SALMON_CHINOOK.getCoste() + " monedas",
+            AlmacenPropiedades.TILAPIA_NILO.getNombre() + " - " + AlmacenPropiedades.TILAPIA_NILO.getCoste() + " monedas"
             };
 
         int monedas = sistemaMonedas.getMonedas();
@@ -559,7 +558,7 @@ public class Simulador {
         int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesRio, 0, 7);
 
         if(opcion != 0){
-            String nombrePez = pecesDisponiblesRio[opcion].split(" ")[0];
+            String nombrePez = pecesDisponiblesRio[opcion].split(" - ")[0];
 
             int indiceTanqueConEspacioParaPez = piscifactoria.getIndiceTanqueConEspacioParaPez(nombrePez);
             
@@ -1024,12 +1023,10 @@ public class Simulador {
      * Método para pasar varios días en la simulación. 
      */
     private static void pasarDias() {
-        int pecesAntes;
-        int dineroAntes;
         int pecesVendidos = 0;
+        int dineroAntes;
         int monedasGanadas = 0;
         int dias = 0;
-        int pecesDespues;
         int dineroDespues;
 
         System.out.println("Introduce el número de días que deseas avanzar: ");
@@ -1037,14 +1034,10 @@ public class Simulador {
 
         for (int i = 0; i < dias; i++) {
             for (Piscifactoria piscifactoria : piscifactorias) {
-                pecesAntes = piscifactoria.getPecesTotales();
                 dineroAntes = sistemaMonedas.getMonedas();
-                piscifactoria.nextDay();
-
-                pecesDespues = piscifactoria.getPecesTotales();
+                pecesVendidos += piscifactoria.nextDay();
                 dineroDespues = sistemaMonedas.getMonedas();
 
-                pecesVendidos += (pecesAntes - pecesDespues);
                 monedasGanadas += (dineroDespues - dineroAntes);
 
             }

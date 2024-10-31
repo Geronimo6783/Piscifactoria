@@ -296,14 +296,18 @@ public abstract class Piscifactoria {
 
     /**
      * Realiza la lógica de que se pasa un día cuando no se dispone de almacén central.
+     * @return Peces vendedidos en la piscifactoría cuando pasa el día.
      */
-    public void nextDay() {
+    public int nextDay() {
+        int pecesVendidos = 0;
         for(Tanque tanque : tanques){
             if(!tanque.getPeces().isEmpty()){
                 tanque.alimentar(almacenInicial);
             }
-            tanque.nextDay();
+            pecesVendidos += tanque.nextDay();
         }
+
+        return pecesVendidos;
     }
 
     /**
