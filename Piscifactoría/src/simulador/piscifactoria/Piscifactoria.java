@@ -1,8 +1,6 @@
 package simulador.piscifactoria;
 
 import java.util.ArrayList;
-
-import componentes.SistemaMonedas;
 import simulador.Tanque;
 
 /**
@@ -389,5 +387,19 @@ public abstract class Piscifactoria {
         }
 
         return -1;
+    }
+
+    /**
+     * Indica si todos los tanques de la piscifactoría están llenos.
+     * @return True si todos los tanques de la piscifactoría están llenos.
+     */
+    public boolean isTodosLosTanqueLlenos(){
+        for(Tanque tanque : tanques){
+            if(tanque.getPeces().size() < tanque.getCapacidadMaximaPeces()){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
