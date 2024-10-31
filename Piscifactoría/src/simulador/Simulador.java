@@ -1152,6 +1152,17 @@ public class Simulador {
         }
     }
     
+    private static void repartirComida(){
+        int cantidadComidaAnimal = 0;
+        int cantidadComidaVegetal = 0;
+
+        for(Piscifactoria piscifactoria : piscifactorias){
+            cantidadComidaAnimal += piscifactoria.getAlmacenInicial().getCantidadComidaAnimal();
+            cantidadComidaVegetal += piscifactoria.getAlmacenInicial().getCantidadComidaVegetal();
+        }
+
+        
+    }
 
     /**
      * Método principal del programa que gestiona el uso del programa por parte del

@@ -5,17 +5,8 @@ import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
 import simulador.piscifactoria.Piscifactoria;
-import simulador.piscifactoria.Piscifactoria.AlmacenComida;
-
 import java.util.Random;
-
-import componentes.SistemaEntrada;
-import componentes.SistemaMonedas;
-
 import java.util.Iterator;
-
-import propiedades.AlmacenPropiedades;
-
 import propiedades.AlmacenPropiedades;
 
 /**
@@ -672,5 +663,15 @@ public class Tanque {
      */
     public void vaciarTanque() {
         peces.clear();
+    }
+
+    /**
+     * Devuelve un String con información relevante del tanque.
+     * @return String con información relevante del tanque.
+     */
+    public String toString(){
+        int numeroPeces = peces.size();
+        return "Número tanque: " + numeroTanque + "\nCapacidad máxima peces: " + capacidadMaximaPeces + "\nNúmero de peces: " + numeroPeces
+            + ((numeroPeces != 0) ? "\nPez: " + peces.get(0).getNombre() : "");
     }
 }

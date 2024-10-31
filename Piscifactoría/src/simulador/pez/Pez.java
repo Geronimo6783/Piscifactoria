@@ -216,4 +216,14 @@ public abstract class Pez {
      * @return Pez nuevo de sexo femenino.
      */
     public abstract Pez obtenerPezHija();
+
+    /**
+     * Devuelve un string con información relevante del pez.
+     * @return String con información relevante del pez.
+     */
+    public String toString(){
+        return "Nombre común: " + nombre + "\nNombre científico: " + nombreCientifico + "\nEdad: " + edad 
+            + ((sexo) ? "\nSexo: Hembra" : "\nSexo: Macho") + ((fertil) ? "\nFértil: Sí" : "\nFértil: No" + ((vivo) ? "\nVivo: Sí" : "\nVivo: No")
+            + ((alimentado) ? "\nAlimentado: Sí" : "\nAlimentado: No") + "\nDías sin reproducirse: " + diasSinReproducirse);
+    }
 }

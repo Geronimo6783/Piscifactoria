@@ -96,6 +96,15 @@ public abstract class Piscifactoria {
             capacidadMaximaComida += capacidadAAumentar;
         }
 
+        /**
+         * Devuelve un string con información relevante del almacén de comida.
+         * @return String con información relevante del alamcén de comida.
+         */
+        public String toString(){
+            return "Capacidad máxima de comida por cada tipo: " + capacidadMaximaComida + "\nCantidad comida animal disponible: " + cantidadComidaAnimal
+                    + "\nCantidad comida vegetal disponible: " +cantidadComidaVegetal;
+        }
+
     }
 
     /**
@@ -405,5 +414,13 @@ public abstract class Piscifactoria {
         }
 
         return true;
+    }
+
+    /**
+     * Devuelve un string con información de la piscifactoría.
+     * @return String con información de la piscifactoría.
+     */
+    public String toString(){
+        return "Nombre piscifactoría: " + nombre + "\nNúmero de tanques: " + tanques.size() + "\nAlmacén comida:\n\t" + almacenInicial;
     }
 }

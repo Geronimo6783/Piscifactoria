@@ -42,4 +42,13 @@ public class SistemaMonedas {
         this.monedas = monedas;
     }
 
+    /**
+     * Devuelve un String con información relevante del sistema de monedas.
+     * @return String con información relevante del sistema de monedas.s
+     */
+    @Override
+    public String toString(){
+        return "Monedas: " + monedas;
+    }
+
 }
