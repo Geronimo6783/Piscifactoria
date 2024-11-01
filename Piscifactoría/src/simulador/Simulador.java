@@ -1183,7 +1183,7 @@ public class Simulador {
      * @param mediaCantidadComidaAnimal Media de la cantidad de comida animal.
      * @return True si todas las piscifactorías están en la media en cuanto a cantidad de comida animal.
      */
-    private static boolean todosLasPiscifactoriasEnLaMediaComidaAnimal(int mediaCantidadComidaAnimal){
+    private static boolean todasLasPiscifactoriasEnLaMediaComidaAnimal(int mediaCantidadComidaAnimal){
         for(Piscifactoria piscifactoria : piscifactorias){
             if(piscifactoria.getAlmacenInicial().getCantidadComidaAnimal() != mediaCantidadComidaAnimal){
                 return false;
@@ -1203,7 +1203,7 @@ public class Simulador {
         AlmacenComida almacenComidaPiscifactoria;
         int cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
 
-        if(!todosLasPiscifactoriasEnLaMediaComidaAnimal(mediaCantidadComidaAnimal)){
+        if(!todasLasPiscifactoriasEnLaMediaComidaAnimal(mediaCantidadComidaAnimal)){
             Collections.sort(piscifactoriaOrdenadoPorCantidadComidaAnimal, new Comparator<Piscifactoria>() {
 
                 /**
@@ -1274,7 +1274,7 @@ public class Simulador {
      * @param mediaCantidadComidaVegetal Media de la cantidad de comida vegetal.
      * @return True si todas las piscifactorías están en la media en cuanto a cantidad de comida vegetal.
      */
-    private static boolean todosLasPiscifactoriasEnLaMediaComidaVegetal(int mediaCantidadComidaVegetal){
+    private static boolean todasLasPiscifactoriasEnLaMediaComidaVegetal(int mediaCantidadComidaVegetal){
         for(Piscifactoria piscifactoria : piscifactorias){
             if(piscifactoria.getAlmacenInicial().getCantidadComidaVegetal() != mediaCantidadComidaVegetal){
                 return false;
@@ -1294,7 +1294,7 @@ public class Simulador {
         AlmacenComida almacenComidaPiscifactoria;
         int cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
 
-        if(!todosLasPiscifactoriasEnLaMediaComidaVegetal(mediaCantidadComidaVegetal)){
+        if(!todasLasPiscifactoriasEnLaMediaComidaVegetal(mediaCantidadComidaVegetal)){
             Collections.sort(piscifactoriaOrdenadoPorCantidadComidaVegetal, new Comparator<Piscifactoria>() {
 
                 /**
