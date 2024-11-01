@@ -233,12 +233,12 @@ public abstract class Piscifactoria {
             }
         
         if(peces != 0){
-            return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
-                    "\nPeces vivos: " + vivos + "/" + peces + "(" + (vivos / peces) * 100 + "%)" +
+            return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + String.format("%.2f", (((float)peces / (float)capacidad) * 100))+ "%)" +
+                    "\nPeces vivos: " + vivos + "/" + peces + "(" + String.format("%.2f", (((float)vivos / (float)peces) * 100)) + "%)" +
                     "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + (alimentados / vivos) * 100 + "%)" +
-                    "\nPeces adultos: " + adultos + "/" + vivos + "(" + (adultos / vivos) * 100 + "%)" +
+                    "\nPeces adultos: " + adultos + "/" + vivos + "(" + String.format("%.2f", (((float)adultos / (float)vivos) * 100)) + "%)" +
                     "\nHembras / Machos: " + hembras + "/" + machos +
-                    "\nFértiles: " + fertiles + "/" + vivos + "(" + (fertiles / vivos) * 100 + "%)" +
+                    "\nFértiles: " + fertiles + "/" + vivos + "(" + String.format("%.2f", (((float)fertiles / (float)vivos) * 100))+ "%)" +
                     "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
                     + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
