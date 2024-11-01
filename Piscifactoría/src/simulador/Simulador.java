@@ -114,8 +114,7 @@ public class Simulador {
     }
 
     /**
-     * Muestra el menú de tanques de una piscifactoría y permite al
-     * usuario seleccionar uno.
+     * Muestra el menú de tanques de una piscifactoría y permite al usuario seleccionar uno.
      * 
      * @param piscifactoria Piscifactoría de la cúal se muestra el menú de tanques.
      * @return El índice del tanque seleccionado.
@@ -176,7 +175,7 @@ public class Simulador {
     }
 
     /**
-     * Muestra un menú para seleccionar un tanque de una una piscifactoría y
+     * Muestra un menú para seleccionar un tanque de una piscifactoría y
      * posteriormente el estado de los peces en dicho tanque.
      * 
      * @param piscifactoria La piscifactoría que contiene los tanques disponibles.
@@ -261,7 +260,7 @@ public class Simulador {
     }
 
     /**
-     * Gestiona la compra de comida para una piscifactoría o el almacén central.
+     * Gestiona la compra de comida para una piscifactoría o para el almacén central.
      */
     private static void addFood() {
         if (almacenCentral != null) {
@@ -450,7 +449,7 @@ public class Simulador {
      * unidades.
      * 
      * @param cantidad Cantidad de comida a añadir.
-     * @return costo total en monedas.
+     * @return Costo total en monedas.
      */
     private static int calcularCosto(int cantidad) {
         int costo = cantidad;
@@ -546,6 +545,7 @@ public class Simulador {
 
     /**
     * Gestiona la lógica de añadir un pez a una piscifactoría de río.
+    * @param piscifactoria Piscifactoría donde se va a añadir el pez.
     */
     private static void addFishRio(Piscifactoria piscifactoria){
         String[] pecesDisponiblesRio = {
@@ -964,7 +964,7 @@ public class Simulador {
         if (sistemaMonedas.getMonedas() >= costoAumento) {
             sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoAumento);
             almacenCentral.mejorar();
-            System.out.println("Capacidad del almacén central aumentada.");
+            System.out.println("Capacidad del almacén central aumentada en 50 unidades.");
         } else {
             System.out.println("No tienes suficientes monedas para aumentar la capacidad del almacén central.");
         }
@@ -1002,15 +1002,47 @@ public class Simulador {
      * @return El costo de la piscifactoría.
      */
     private static int calcularCostoPiscifactoría(String tipo) {
-        int cantidadPiscifactoria = (int) piscifactorias.stream().filter(p -> p instanceof PiscifactoriaRio).count();
+        int cantidadPiscifactoria;
 
         if (tipo.equals("Río")) {
+            cantidadPiscifactoria = numeroPiscifactoriasRio();
             return Math.max(500 * cantidadPiscifactoria, 500);
-        } else if (tipo.equals("Mar")) {
-            cantidadPiscifactoria = (int) piscifactorias.stream().filter(p -> p instanceof PiscifactoriaMar).count();
+        } else {
+            cantidadPiscifactoria = numeroPiscifactoriasMar();
             return Math.max(2000 * cantidadPiscifactoria, 2000);
         }
-        return 0;
+    }
+
+    /**
+     * 
+     * @return Número de piscifactorías de río de la simulación.
+     */
+    private static int numeroPiscifactoriasRio(){
+        int numeroPiscifactoriasRio = 0;
+
+        for(Piscifactoria piscifactoria : piscifactorias){
+            if(piscifactoria instanceof PiscifactoriaRio){
+                numeroPiscifactoriasRio += 1;
+            }
+        }
+
+        return numeroPiscifactoriasRio;
+    }
+
+    /**
+     * 
+     * @return Número de piscifactorías de mar de la simulación.
+     */
+    private static int numeroPiscifactoriasMar(){
+        int numeroPiscifactoriasMar = 0;
+
+        for(Piscifactoria piscifactoria : piscifactorias){
+            if(piscifactoria instanceof PiscifactoriaMar){
+                numeroPiscifactoriasMar += 1;
+            }
+        }
+
+        return numeroPiscifactoriasMar;
     }
 
     /**
@@ -1195,7 +1227,7 @@ public class Simulador {
 
     /**
      * Gestiona la lógica de distribución equitativa de la comida animal del almacén central a las piscifactorías.
-     * @param mediaCantidadComidaAnimal Cantidad de comida media por piscifactoría.
+     * @param mediaCantidadComidaAnimal Cantidad de comida animal media por piscifactoría.
      */
     private static void repartirComidaAnimal(int mediaCantidadComidaAnimal){
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaAnimal = new ArrayList<>(piscifactorias);
@@ -1286,7 +1318,7 @@ public class Simulador {
 
     /**
      * Gestiona la lógica de distribución equitativa de la comida vegetal del almacén central a las piscifactorías.
-     * @param mediaCantidadComidaVegetal Cantidad de comida media por piscifactoría.
+     * @param mediaCantidadComidaVegetal Cantidad de comida vegetal media por piscifactoría.
      */
     private static void repartirComidaVegetal(int mediaCantidadComidaVegetal){
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaVegetal = new ArrayList<>(piscifactorias);

@@ -305,7 +305,7 @@ public abstract class Piscifactoria {
 
     /**
      * Realiza la lógica de que se pasa un día cuando no se dispone de almacén central.
-     * @return Peces vendedidos en la piscifactoría cuando pasa el día.
+     * @return Número de peces vendidos en la piscifactoría cuando pasa el día.
      */
     public int nextDay() {
         int pecesVendidos = 0;
