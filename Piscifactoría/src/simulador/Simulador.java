@@ -1,6 +1,8 @@
 package simulador;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
@@ -15,6 +17,7 @@ import simulador.pez.Pez;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
 import simulador.piscifactoria.*;
+import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
 public class Simulador {
 
@@ -254,6 +257,7 @@ public class Simulador {
         }
 
         System.out.println(pecesVendidos + " peces vendidos por un total de " + monedasGanadas + " monedas.");
+        repartirComida();
     }
 
     /**
@@ -311,6 +315,8 @@ public class Simulador {
                                 .println("No se puede añadir comida vegetal, excede la capacidad del almacén central.");
                     }
                 }
+
+                repartirComida();
             }
         } else {
             int piscifactoriaSeleccionada = selectPisc();
@@ -1041,6 +1047,7 @@ public class Simulador {
                 monedasGanadas += (dineroDespues - dineroAntes);
 
             }
+            repartirComida();
         }
 
         System.out.println("En estos " + dias + " días se han vendido " + pecesVendidos
@@ -1152,6 +1159,9 @@ public class Simulador {
         }
     }
     
+    /**
+     * Reparte la comida del almacén central equitativamente entre las piscafactorías.
+     */
     private static void repartirComida(){
         int cantidadComidaAnimal = 0;
         int cantidadComidaVegetal = 0;
@@ -1161,7 +1171,193 @@ public class Simulador {
             cantidadComidaVegetal += piscifactoria.getAlmacenInicial().getCantidadComidaVegetal();
         }
 
-        
+        int mediaCantidadComidaAnimal = cantidadComidaAnimal / piscifactorias.size();
+        int mediaCantidadComidaVegetal = cantidadComidaVegetal / piscifactorias.size();
+
+        repartirComidaAnimal(mediaCantidadComidaAnimal);
+        repartirComidaVegetal(mediaCantidadComidaVegetal);
+    }
+
+    /**
+     * Indica si todas las piscifactorías están en la media en cuanto a cantidad de comida animal.
+     * @param mediaCantidadComidaAnimal Media de la cantidad de comida animal.
+     * @return True si todas las piscifactorías están en la media en cuanto a cantidad de comida animal.
+     */
+    private static boolean todosLasPiscifactoriasEnLaMediaComidaAnimal(int mediaCantidadComidaAnimal){
+        for(Piscifactoria piscifactoria : piscifactorias){
+            if(piscifactoria.getAlmacenInicial().getCantidadComidaAnimal() != mediaCantidadComidaAnimal){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Gestiona la lógica de distribución equitativa de la comida animal del almacén central a las piscifactorías.
+     * @param mediaCantidadComidaAnimal Cantidad de comida media por piscifactoría.
+     */
+    private static void repartirComidaAnimal(int mediaCantidadComidaAnimal){
+        ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaAnimal = new ArrayList<>(piscifactorias);
+
+        AlmacenComida almacenComidaPiscifactoria;
+        int cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
+
+        if(!todosLasPiscifactoriasEnLaMediaComidaAnimal(mediaCantidadComidaAnimal)){
+            Collections.sort(piscifactoriaOrdenadoPorCantidadComidaAnimal, new Comparator<Piscifactoria>() {
+
+                /**
+                 * Compara la cantidad de comida animal de dos piscifactorías.
+                 * @param piscifactoria1 Primera piscifactoría a comparar.
+                 * @param piscifactoria2 Segunda piscifactoría a comparar.
+                 * @return 1 si la primera piscifactoría tiene mayor cantidad de comida animal, 0 si 
+                 * ambas tienen la misma cantidad de comida animal y -1 si la cantidad de comida animal es mayor en
+                 * la segunda.
+                 */
+                @Override
+                public int compare(Piscifactoria piscifactoria1, Piscifactoria piscifactoria2){
+                    int cantidadComidaAnimalPiscifactoria1 = piscifactoria1.getAlmacenInicial().getCantidadComidaAnimal();
+                    int cantidadComidaAnimalPiscifactoria2 = piscifactoria2.getAlmacenInicial().getCantidadComidaAnimal();
+
+                    if(cantidadComidaAnimalPiscifactoria1 > cantidadComidaAnimalPiscifactoria2){
+                        return 1;
+                    }
+                    else{
+                        if(cantidadComidaAnimalPiscifactoria1 == cantidadComidaAnimalPiscifactoria2){
+                            return 0;
+                        }
+                        else{
+                            return -1;
+                        }
+                    }
+                }
+            });
+
+            int cantidadComidaAnimalPiscifactoria;
+            int cantidadDeComidaAAnadir;
+            for(Piscifactoria piscifactoria : piscifactoriaOrdenadoPorCantidadComidaAnimal){
+                almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
+                cantidadComidaAnimalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaAnimal();
+
+                if(cantidadComidaAnimalPiscifactoria < mediaCantidadComidaAnimal){
+                    if(cantidadComidaAnimalAlmacenCentral != 0){
+                        cantidadDeComidaAAnadir = mediaCantidadComidaAnimal - cantidadComidaAnimalPiscifactoria;
+                        if(cantidadComidaAnimalAlmacenCentral >= cantidadDeComidaAAnadir){
+                            almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimalAlmacenCentral - cantidadDeComidaAAnadir);
+                            almacenComidaPiscifactoria.setCantidadComidaAnimal(mediaCantidadComidaAnimal);
+                            cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
+                        }
+                        else{
+                            almacenCentral.setCantidadComidaAnimal(0);
+                            almacenComidaPiscifactoria.setCantidadComidaAnimal(cantidadComidaAnimalAlmacenCentral + cantidadComidaAnimalPiscifactoria);
+                            cantidadComidaAnimalAlmacenCentral = 0;
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            for(Piscifactoria piscifactoria : piscifactorias){
+                almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
+
+                if(cantidadComidaAnimalAlmacenCentral != 0){
+                    almacenComidaPiscifactoria.setCantidadComidaAnimal(almacenComidaPiscifactoria.getCantidadComidaAnimal() + 1);
+                    almacenCentral.setCantidadComidaAnimal(almacenCentral.getCantidadComidaAnimal() - 1);
+                    cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
+                }
+            }
+        }
+    }
+
+    /**
+     * Indica si todas las piscifactorías están en la media en cuanto a cantidad de comida vegetal.
+     * @param mediaCantidadComidaVegetal Media de la cantidad de comida vegetal.
+     * @return True si todas las piscifactorías están en la media en cuanto a cantidad de comida vegetal.
+     */
+    private static boolean todosLasPiscifactoriasEnLaMediaComidaVegetal(int mediaCantidadComidaVegetal){
+        for(Piscifactoria piscifactoria : piscifactorias){
+            if(piscifactoria.getAlmacenInicial().getCantidadComidaVegetal() != mediaCantidadComidaVegetal){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Gestiona la lógica de distribución equitativa de la comida vegetal del almacén central a las piscifactorías.
+     * @param mediaCantidadComidaVegetal Cantidad de comida media por piscifactoría.
+     */
+    private static void repartirComidaVegetal(int mediaCantidadComidaVegetal){
+        ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaVegetal = new ArrayList<>(piscifactorias);
+
+        AlmacenComida almacenComidaPiscifactoria;
+        int cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
+
+        if(!todosLasPiscifactoriasEnLaMediaComidaVegetal(mediaCantidadComidaVegetal)){
+            Collections.sort(piscifactoriaOrdenadoPorCantidadComidaVegetal, new Comparator<Piscifactoria>() {
+
+                /**
+                 * Compara la cantidad de comida vegetal de dos piscifactorías.
+                 * @param piscifactoria1 Primera piscifactoría a comparar.
+                 * @param piscifactoria2 Segunda piscifactoría a comparar.
+                 * @return 1 si la primera piscifactoría tiene mayor cantidad de comida vegetal, 0 si 
+                 * ambas tienen la misma cantidad de comida vegetal y -1 si la cantidad de comida vegetal es mayor en
+                 * la segunda.
+                 */
+                @Override
+                public int compare(Piscifactoria piscifactoria1, Piscifactoria piscifactoria2){
+                    int cantidadComidaVegetalPiscifactoria1 = piscifactoria1.getAlmacenInicial().getCantidadComidaVegetal();
+                    int cantidadComidaVegetalPiscifactoria2 = piscifactoria2.getAlmacenInicial().getCantidadComidaVegetal();
+
+                    if(cantidadComidaVegetalPiscifactoria1 > cantidadComidaVegetalPiscifactoria2){
+                        return 1;
+                    }
+                    else{
+                        if(cantidadComidaVegetalPiscifactoria1 == cantidadComidaVegetalPiscifactoria2){
+                            return 0;
+                        }
+                        else{
+                            return -1;
+                        }
+                    }
+                }
+            });
+
+            int cantidadComidaAnimalPiscifactoria;
+            int cantidadDeComidaAAnadir;
+            for(Piscifactoria piscifactoria : piscifactoriaOrdenadoPorCantidadComidaVegetal){
+                almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
+                cantidadComidaAnimalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaAnimal();
+
+                if(cantidadComidaAnimalPiscifactoria < mediaCantidadComidaVegetal){
+                    if(cantidadComidaVegetalAlmacenCentral != 0){
+                        cantidadDeComidaAAnadir = mediaCantidadComidaVegetal - cantidadComidaAnimalPiscifactoria;
+                        if(cantidadComidaVegetalAlmacenCentral >= cantidadDeComidaAAnadir){
+                            almacenCentral.setCantidadComidaAnimal(cantidadComidaVegetalAlmacenCentral - cantidadDeComidaAAnadir);
+                            almacenComidaPiscifactoria.setCantidadComidaAnimal(mediaCantidadComidaVegetal);
+                            cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
+                        }
+                        else{
+                            almacenCentral.setCantidadComidaAnimal(0);
+                            almacenComidaPiscifactoria.setCantidadComidaAnimal(cantidadComidaVegetalAlmacenCentral + cantidadComidaAnimalPiscifactoria);
+                            cantidadComidaVegetalAlmacenCentral = 0;
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            for(Piscifactoria piscifactoria : piscifactorias){
+                almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
+
+                if(cantidadComidaVegetalAlmacenCentral != 0){
+                    almacenComidaPiscifactoria.setCantidadComidaAnimal(almacenComidaPiscifactoria.getCantidadComidaAnimal() + 1);
+                    almacenCentral.setCantidadComidaAnimal(almacenCentral.getCantidadComidaAnimal() - 1);
+                    cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
+                }
+            }
+        }
     }
 
     /**

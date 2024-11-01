@@ -1,1 +1,0 @@
-En Windows si se tiene java instalado al hacer doble clic sobre el archivo debería ejecutarse. En caso de que no lo haga hacer doble clic sobre el archivo .bat es muy importante que el .jar y el .bat estén en la misma carpeta.
