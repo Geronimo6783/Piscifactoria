@@ -260,6 +260,8 @@ public class Simulador {
         if(almacenCentral != null){
             repartirComida();
         }
+
+        diasPasados++;
     }
 
     /**
@@ -1092,8 +1094,9 @@ public class Simulador {
             if(almacenCentral != null){
                 repartirComida();
             }
-        
         }
+
+        diasPasados += dias;
 
         System.out.println("En estos " + dias + " días se han vendido " + pecesVendidos
                 + " peces y se han ganado " + monedasGanadas + " monedas.");
