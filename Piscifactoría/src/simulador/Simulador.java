@@ -154,10 +154,10 @@ public class Simulador {
             System.out.println("Capacidad máxima de comida animal en el almacén central: " + capacidadComidaAlmacen);
             System.out.println("Capacidad máxima de comida vegetal en el almacén central: " + capacidadComidaAlmacen);
             System.out.println("% de capacidad de la comida animal del almacén central "
-                    + String.format("%.2f", ((float) cantidadComidaAnimalAlmacen) / (float) capacidadComidaAlmacen)
+                    + String.format("%.2f", (((float) cantidadComidaAnimalAlmacen) / (float) capacidadComidaAlmacen) * 100)
                     + "%");
             System.out.println("% de capacidad de la comida vegetal del almacén central "
-                    + String.format("%.2f", ((float) cantidadComidaVegetalAlmacen / (float) capacidadComidaAlmacen))
+                    + String.format("%.2f", (((float) cantidadComidaVegetalAlmacen / (float) capacidadComidaAlmacen)) * 100)
                     + "%");
         }
     }
@@ -458,6 +458,7 @@ public class Simulador {
      * @return Opción seleccionada.
      */
     private static int menuCantidadComida() {
+        System.out.println("========== Cantidad comida ==========");
         String[] opciones = { "Cancelar", "5", "10", "25", "Llenar" };
         GeneradorMenus.generarMenu(opciones, 0);
 
@@ -1285,7 +1286,7 @@ public class Simulador {
             }
         }
 
-       return (cantidadComidaAnimal / piscifactoriasNoLlenas);
+       return (cantidadComidaAnimal % piscifactoriasNoLlenas == 0) ? (cantidadComidaAnimal / piscifactoriasNoLlenas) : ((cantidadComidaAnimal / piscifactoriasNoLlenas) + 1);
     }
 
     /**
@@ -1434,7 +1435,7 @@ public class Simulador {
             }
         }
 
-       return (cantidadComidaVegetal / piscifactoriasNoLlenas);
+       return (cantidadComidaVegetal % piscifactoriasNoLlenas == 0) ? (cantidadComidaVegetal / piscifactoriasNoLlenas) : ((cantidadComidaVegetal / piscifactoriasNoLlenas) + 1);
     }
 
     /**
@@ -1517,7 +1518,7 @@ public class Simulador {
                     cantidadComidaVegetalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaVegetal();
 
                     if(cantidadComidaVegetalAlmacenCentral != 0 && (cantidadComidaVegetalPiscifactoria < almacenComidaPiscifactoria.getCapacidadMaximaComida())){
-                        almacenComidaPiscifactoria.setCantidadComidaVegetal(cantidadComidaVegetalAlmacenCentral + 1);
+                        almacenComidaPiscifactoria.setCantidadComidaVegetal(cantidadComidaVegetalPiscifactoria + 1);
                         almacenCentral.setCantidadComidaVegetal(almacenCentral.getCantidadComidaVegetal() - 1);
                         cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
                     }
