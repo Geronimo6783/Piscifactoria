@@ -1223,29 +1223,23 @@ public class Simulador {
      * Reparte la comida del almacén central equitativamente entre las piscafactorías.
      */
     private static void repartirComida(){
-        int cantidadComidaAnimal = 0;
-        int cantidadComidaVegetal = 0;
-
-        for(Piscifactoria piscifactoria : piscifactorias){
-            cantidadComidaAnimal += piscifactoria.getAlmacenInicial().getCantidadComidaAnimal();
-            cantidadComidaVegetal += piscifactoria.getAlmacenInicial().getCantidadComidaVegetal();
-        }
-
-        int mediaCantidadComidaAnimal = cantidadComidaAnimal / piscifactorias.size();
-        int mediaCantidadComidaVegetal = cantidadComidaVegetal / piscifactorias.size();
-
-        repartirComidaAnimal(mediaCantidadComidaAnimal);
-        repartirComidaVegetal(mediaCantidadComidaVegetal);
+        repartirComidaAnimal();
+        repartirComidaVegetal();
     }
 
     /**
-     * Indica si todas las piscifactorías están en la media en cuanto a cantidad de comida animal.
+     * Indica si todas las piscifactorías que no están llenas están en la media en cuanto a cantidad de comida animal.
      * @param mediaCantidadComidaAnimal Media de la cantidad de comida animal.
-     * @return True si todas las piscifactorías están en la media en cuanto a cantidad de comida animal.
+     * @return True si todas las piscifactorías que no están llenas están en la media en cuanto a cantidad de comida animal.
      */
     private static boolean todasLasPiscifactoriasEnLaMediaComidaAnimal(int mediaCantidadComidaAnimal){
+        Piscifactoria.AlmacenComida almacenComida;
+        int cantidadComidaAnimalPiscifactoria;
+
         for(Piscifactoria piscifactoria : piscifactorias){
-            if(piscifactoria.getAlmacenInicial().getCantidadComidaAnimal() != mediaCantidadComidaAnimal){
+            almacenComida = piscifactoria.getAlmacenInicial();
+            cantidadComidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+            if((cantidadComidaAnimalPiscifactoria != mediaCantidadComidaAnimal) && (cantidadComidaAnimalPiscifactoria != almacenComida.getCapacidadMaximaComida())){
                 return false;
             }
         }
@@ -1271,16 +1265,39 @@ public class Simulador {
     }
 
     /**
+     * Devuelve la media de comida animal de las piscifactorías que no están llenas.
+     * @return Media de comida animal de las piscifactorías que no están llenas.
+     */
+    private static int mediaComidaAnimal(){
+        int cantidadComidaAnimal = 0;
+        int piscifactoriasNoLlenas = 0;
+        Piscifactoria.AlmacenComida almacenComidaPiscifactoria;
+
+        for(Piscifactoria piscifactoria : piscifactorias){
+            almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
+
+            if(almacenComidaPiscifactoria.getCantidadComidaAnimal() != almacenComidaPiscifactoria.getCapacidadMaximaComida()){
+                cantidadComidaAnimal += piscifactoria.getAlmacenInicial().getCantidadComidaAnimal();
+                piscifactoriasNoLlenas += 1;
+            }
+        }
+
+       return (cantidadComidaAnimal / piscifactoriasNoLlenas);
+    }
+
+    /**
      * Gestiona la lógica de distribución equitativa de la comida animal del almacén central a las piscifactorías.
      * @param mediaCantidadComidaAnimal Cantidad de comida animal media por piscifactoría.
      */
-    private static void repartirComidaAnimal(int mediaCantidadComidaAnimal){
+    private static void repartirComidaAnimal(){
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaAnimal = new ArrayList<>(piscifactorias);
 
         AlmacenComida almacenComidaPiscifactoria;
         int cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
+        int mediaCantidadComidaAnimal;
 
         while(!todasLasPiscifactoriasLlenasDeComidaAnimal() && cantidadComidaAnimalAlmacenCentral != 0){
+            mediaCantidadComidaAnimal = mediaComidaAnimal();
             if(!todasLasPiscifactoriasEnLaMediaComidaAnimal(mediaCantidadComidaAnimal)){
                 Collections.sort(piscifactoriaOrdenadoPorCantidadComidaAnimal, new Comparator<Piscifactoria>() {
 
@@ -1359,13 +1376,19 @@ public class Simulador {
     }
 
     /**
-     * Indica si todas las piscifactorías están en la media en cuanto a cantidad de comida vegetal.
+     * Indica si todas las piscifactorías que no están llenas están en la media en cuanto a cantidad de comida vegetal.
      * @param mediaCantidadComidaVegetal Media de la cantidad de comida vegetal.
-     * @return True si todas las piscifactorías están en la media en cuanto a cantidad de comida vegetal.
+     * @return True si todas las piscifactorías que no están llenas están en la media en cuanto a cantidad de comida vegetal.
      */
     private static boolean todasLasPiscifactoriasEnLaMediaComidaVegetal(int mediaCantidadComidaVegetal){
+        Piscifactoria.AlmacenComida almacenComida;
+        int cantidadComidaVegetalPiscifactoria;
+
         for(Piscifactoria piscifactoria : piscifactorias){
-            if(piscifactoria.getAlmacenInicial().getCantidadComidaVegetal() != mediaCantidadComidaVegetal){
+            almacenComida = piscifactoria.getAlmacenInicial();
+            cantidadComidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+
+            if((cantidadComidaVegetalPiscifactoria != mediaCantidadComidaVegetal) && (cantidadComidaVegetalPiscifactoria != almacenComida.getCapacidadMaximaComida())){
                 return false;
             }
         }
@@ -1391,17 +1414,40 @@ public class Simulador {
     }
 
     /**
+     * Devuelve la media de comida vegetal de las piscifactorías que no están llenas.
+     * @return Media de comida vegetal de las piscifactorías que no están llenas.
+     */
+    private static int mediaComidaVegetal(){
+        int cantidadComidaVegetal = 0;
+        int piscifactoriasNoLlenas = 0;
+        Piscifactoria.AlmacenComida almacenComidaPiscifactoria;
+
+        for(Piscifactoria piscifactoria : piscifactorias){
+            almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
+
+            if(almacenComidaPiscifactoria.getCantidadComidaVegetal() != almacenComidaPiscifactoria.getCapacidadMaximaComida()){
+                cantidadComidaVegetal += piscifactoria.getAlmacenInicial().getCantidadComidaVegetal();
+                piscifactoriasNoLlenas += 1;
+            }
+        }
+
+       return (cantidadComidaVegetal / piscifactoriasNoLlenas);
+    }
+
+    /**
      * Gestiona la lógica de distribución equitativa de la comida vegetal del almacén central a las piscifactorías.
      * @param mediaCantidadComidaVegetal Cantidad de comida vegetal media por piscifactoría.
      */
-    private static void repartirComidaVegetal(int mediaCantidadComidaVegetal){
+    private static void repartirComidaVegetal(){
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaVegetal = new ArrayList<>(piscifactorias);
 
         AlmacenComida almacenComidaPiscifactoria;
         int cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
+        int mediaCantidadComidaVegetal; 
 
         while(!todasLasPiscifactoriasLlenasDeComidaVegetal() && cantidadComidaVegetalAlmacenCentral != 0){
-            if(!todasLasPiscifactoriasEnLaMediaComidaVegetal(mediaCantidadComidaVegetal)){
+            mediaCantidadComidaVegetal = mediaComidaVegetal();
+            if(!todasLasPiscifactoriasEnLaMediaComidaVegetal(mediaComidaVegetal())){
                 Collections.sort(piscifactoriaOrdenadoPorCantidadComidaVegetal, new Comparator<Piscifactoria>() {
 
                     /**
