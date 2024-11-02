@@ -33,6 +33,6 @@ public class PiscifactoriaMar extends Piscifactoria {
      * @return String con información de la piscifactoría de mar.
      */
     public String toString(){
-        return "Nombre piscifactoría mar: " + nombre + "\nNúmero de tanques: " + tanques.size() + "\nAlmacén comida:\n\t" + almacenInicial;
+        return "Nombre piscifactoría de mar: " + nombre + "\nNúmero de tanques: " + tanques.size() + "\nAlmacén comida:\n\t" + almacenInicial;
     }
 }

@@ -1342,11 +1342,14 @@ public class Simulador {
                 }
             }
             else{
+                int cantidadComidaAnimalPiscifactoria;
+
                 for(Piscifactoria piscifactoria : piscifactorias){
                     almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
+                    cantidadComidaAnimalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaAnimal();
 
-                    if(cantidadComidaAnimalAlmacenCentral != 0){
-                        almacenComidaPiscifactoria.setCantidadComidaAnimal(almacenComidaPiscifactoria.getCantidadComidaAnimal() + 1);
+                    if(cantidadComidaAnimalAlmacenCentral != 0 && (cantidadComidaAnimalPiscifactoria < almacenComidaPiscifactoria.getCapacidadMaximaComida())){
+                        almacenComidaPiscifactoria.setCantidadComidaAnimal(cantidadComidaAnimalPiscifactoria + 1);
                         almacenCentral.setCantidadComidaAnimal(almacenCentral.getCantidadComidaAnimal() - 1);
                         cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
                     }
@@ -1428,30 +1431,30 @@ public class Simulador {
                     }
                 });
 
-                int cantidadComidaAnimalPiscifactoria;
+                int cantidadComidaVegetalPiscifactoria;
                 int cantidadDeComidaAAnadir;
                 int capacidadComidaAlmacen;
                 for(Piscifactoria piscifactoria : piscifactoriaOrdenadoPorCantidadComidaVegetal){
                     almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
-                    cantidadComidaAnimalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaAnimal();
+                    cantidadComidaVegetalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaVegetal();
                     capacidadComidaAlmacen = almacenComidaPiscifactoria.getCapacidadMaximaComida();
 
-                    if(cantidadComidaAnimalPiscifactoria < mediaCantidadComidaVegetal){
+                    if(cantidadComidaVegetalPiscifactoria < mediaCantidadComidaVegetal){
                         if(cantidadComidaVegetalAlmacenCentral != 0){
-                            cantidadDeComidaAAnadir = mediaCantidadComidaVegetal - cantidadComidaAnimalPiscifactoria;
+                            cantidadDeComidaAAnadir = mediaCantidadComidaVegetal - cantidadComidaVegetalPiscifactoria;
 
-                            if(cantidadDeComidaAAnadir + cantidadComidaAnimalPiscifactoria > capacidadComidaAlmacen){
-                                cantidadDeComidaAAnadir = capacidadComidaAlmacen - cantidadComidaAnimalPiscifactoria;
+                            if(cantidadDeComidaAAnadir + cantidadComidaVegetalPiscifactoria > capacidadComidaAlmacen){
+                                cantidadDeComidaAAnadir = capacidadComidaAlmacen - cantidadComidaVegetalPiscifactoria;
                             }
 
                             if(cantidadComidaVegetalAlmacenCentral >= cantidadDeComidaAAnadir){
-                                almacenCentral.setCantidadComidaAnimal(cantidadComidaVegetalAlmacenCentral - cantidadDeComidaAAnadir);
-                                almacenComidaPiscifactoria.setCantidadComidaAnimal(mediaCantidadComidaVegetal);
-                                cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
+                                almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetalAlmacenCentral - cantidadDeComidaAAnadir);
+                                almacenComidaPiscifactoria.setCantidadComidaVegetal(mediaCantidadComidaVegetal);
+                                cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
                             }
                             else{
-                                almacenCentral.setCantidadComidaAnimal(0);
-                                almacenComidaPiscifactoria.setCantidadComidaAnimal(cantidadComidaVegetalAlmacenCentral + cantidadComidaAnimalPiscifactoria);
+                                almacenCentral.setCantidadComidaVegetal(0);
+                                almacenComidaPiscifactoria.setCantidadComidaVegetal(cantidadComidaVegetalAlmacenCentral + cantidadComidaVegetalPiscifactoria);
                                 cantidadComidaVegetalAlmacenCentral = 0;
                             }
                         }
@@ -1459,17 +1462,27 @@ public class Simulador {
                 }
             }
             else{
+                int cantidadComidaVegetalPiscifactoria;
                 for(Piscifactoria piscifactoria : piscifactorias){
                     almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
+                    cantidadComidaVegetalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaVegetal();
 
-                    if(cantidadComidaVegetalAlmacenCentral != 0){
-                        almacenComidaPiscifactoria.setCantidadComidaAnimal(almacenComidaPiscifactoria.getCantidadComidaAnimal() + 1);
-                        almacenCentral.setCantidadComidaAnimal(almacenCentral.getCantidadComidaAnimal() - 1);
-                        cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
+                    if(cantidadComidaVegetalAlmacenCentral != 0 && (cantidadComidaVegetalPiscifactoria < almacenComidaPiscifactoria.getCapacidadMaximaComida())){
+                        almacenComidaPiscifactoria.setCantidadComidaVegetal(cantidadComidaVegetalAlmacenCentral + 1);
+                        almacenCentral.setCantidadComidaVegetal(almacenCentral.getCantidadComidaVegetal() - 1);
+                        cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Devuelve un string con información relevante de la clase.
+     * @return String con información relevante de la clase.
+     */
+    public String toString(){
+        return "Nombre empresa, entidad o partida: " + nombre + "\nDías pasado en la simulación: " + diasPasados + "\nNúmero piscifactoría simulación: " + piscifactorias.size();
     }
 
     /**

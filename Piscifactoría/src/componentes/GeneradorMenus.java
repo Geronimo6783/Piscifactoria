@@ -57,4 +57,12 @@ public class GeneradorMenus{
         generarMenu(cabecera, opciones, numeroOpcionInicial);
         return SistemaEntrada.entradaOpcionNumerica(numeroOpcionInicial, numeroOpcionFinal);
     }
+
+    /**
+     * Devuelve un string con información relevante de la clase.
+     * @return String con información relevante de la clase.
+     */
+    public String toString(){
+        return "Clase con utilidades para generar menús.";
+    }
 }
