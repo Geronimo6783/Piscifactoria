@@ -140,6 +140,6 @@ public class SistemaEntrada {
      * @return String con información útil de la clase.
      */
     public String toString(){
-        return "Búfer de entrada con codificación UTF-8.";
+        return "El búfer de entrada de la clase tiene codificación UTF-8.";
     }
 }
