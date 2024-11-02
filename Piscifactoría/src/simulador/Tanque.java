@@ -5,17 +5,8 @@ import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
 import simulador.piscifactoria.Piscifactoria;
-import simulador.piscifactoria.Piscifactoria.AlmacenComida;
-
 import java.util.Random;
-
-import componentes.SistemaEntrada;
-import componentes.SistemaMonedas;
-
 import java.util.Iterator;
-
-import propiedades.AlmacenPropiedades;
-
 import propiedades.AlmacenPropiedades;
 
 /**
@@ -581,8 +572,10 @@ public class Tanque {
 
     /**
      * Vende todos los peces que se encuentran en una edad óptima para ser vendidos.
+     * 
+     * @return Peces vendidos.
      */
-    private void venderPecesOptimos() {
+    private int venderPecesOptimos() {
         if(!peces.isEmpty()){
             int pecesAVender = 0;
             Iterator<Pez> iterador = peces.iterator();
@@ -600,8 +593,11 @@ public class Tanque {
 
             Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas()
                     + (pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas()));
-        
+            
+            return pecesAVender;
         }
+
+        return 0;
     }
 
     /**
@@ -647,15 +643,18 @@ public class Tanque {
      * Implementa la lógica de que haya pasado un día haciendo crecer a los
      * peces, realizando la lógica de reproducción y vendiendo los peces que
      * están en la edad óptima.
+     * @return Peces vendidos en el día.
      */
-    public void nextDay() {
+    public int nextDay() {
         if(!peces.isEmpty()){
             for (Pez pez : peces) {
                 pez.grow();
             }
             reproducir();
-            venderPecesOptimos();
+            return venderPecesOptimos();
         }
+
+        return 0;
     }
 
     /**
@@ -664,5 +663,15 @@ public class Tanque {
      */
     public void vaciarTanque() {
         peces.clear();
+    }
+
+    /**
+     * Devuelve un String con información relevante del tanque.
+     * @return String con información relevante del tanque.
+     */
+    public String toString(){
+        int numeroPeces = peces.size();
+        return "Número tanque: " + numeroTanque + "\nCapacidad máxima peces: " + capacidadMaximaPeces + "\nNúmero de peces: " + numeroPeces
+            + ((numeroPeces != 0) ? "\nPez: " + peces.get(0).getNombre() : "");
     }
 }
