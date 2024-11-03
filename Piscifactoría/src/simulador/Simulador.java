@@ -262,6 +262,7 @@ public class Simulador {
         }
 
         diasPasados++;
+        showGeneralStatus();
     }
 
     /**
@@ -1101,6 +1102,7 @@ public class Simulador {
 
         System.out.println("En estos " + dias + " días se han vendido " + pecesVendidos
                 + " peces y se han ganado " + monedasGanadas + " monedas.");
+        showGeneralStatus();
     }
 
     /**
@@ -1559,8 +1561,7 @@ public class Simulador {
                 case 3 -> {mostrarEstadoTanque();}
                 case 4 -> {showStats();}
                 case 5 -> {showIctio();}
-                case 6 -> {nextDay();
-                            showGeneralStatus();}
+                case 6 -> {nextDay();}
                 case 7 -> {addFood();}
                 case 8 -> {addFish();}
                 case 9 -> {sell();}
