@@ -151,14 +151,10 @@ public class Simulador {
             int capacidadComidaAlmacen = almacenCentral.getCapacidadComida();
             System.out.println("Comida animal disponible en el almacén central: " + cantidadComidaAnimalAlmacen);
             System.out.println("Comida vegetal disponible en el almacén central: " + cantidadComidaVegetalAlmacen);
-            System.out.println("Capacidad máxima de comida animal en el almacén central: " + capacidadComidaAlmacen);
-            System.out.println("Capacidad máxima de comida vegetal en el almacén central: " + capacidadComidaAlmacen);
-            System.out.println("% de capacidad de la comida animal del almacén central "
-                    + String.format("%.2f", (((float) cantidadComidaAnimalAlmacen) / (float) capacidadComidaAlmacen) * 100)
-                    + "%");
-            System.out.println("% de capacidad de la comida vegetal del almacén central "
-                    + String.format("%.2f", (((float) cantidadComidaVegetalAlmacen / (float) capacidadComidaAlmacen)) * 100)
-                    + "%");
+            System.out.println("Capacidad máxima de comida animal en el almacén central: " + capacidadComidaAlmacen + " (" + String.format("%.2f", (((float) cantidadComidaAnimalAlmacen) / (float) capacidadComidaAlmacen) * 100)
+            + "%)");
+            System.out.println("Capacidad máxima de comida vegetal en el almacén central: " + capacidadComidaAlmacen + " (" + String.format("%.2f", (((float) cantidadComidaVegetalAlmacen / (float) capacidadComidaAlmacen)) * 100)
+            + "%)");
         }
     }
 
