@@ -3,16 +3,17 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
  * Clase que representa a una caballa.
  */
-public class Caballa extends Pez implements Carnivoro, Mar{
+public class Caballa extends Carnivoro implements Mar{
 
     /**
      * Constructor de caballas.
-     * @param sexo Sexo de la caballa.
+     * @param sexo Sexo de la caballa si es true es hembra y si es false es macho.
      */
     public Caballa(boolean sexo){
         super(AlmacenPropiedades.CABALLA.getNombre(), AlmacenPropiedades.CABALLA.getCientifico(), sexo);
@@ -42,12 +43,10 @@ public class Caballa extends Pez implements Carnivoro, Mar{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.CABALLA.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.CABALLA.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -59,21 +58,44 @@ public class Caballa extends Pez implements Carnivoro, Mar{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
      * Indica si la caballa está madura.
+     * @return True si la caballa está madura.
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.CABALLA.getMadurez();
+        return edad >= AlmacenPropiedades.CABALLA.getMadurez();
     }
 
     /**
      * Indica si la caballa está en la edad óptima para ser vendida.
+     * @return True si la caballa está en la edad óptima para ser vendida.
      */
     @Override
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.CABALLA.getOptimo();
+    }
+
+    /**
+     * 
+     * @return Devuelve una caballa nueva de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
+        return new Caballa(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve una caballa nueva de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
+        return new Caballa(true);
     }
 }

@@ -13,7 +13,7 @@ public class SistemaEntrada {
     /**
      * Búfer de entrada de datos.
      */
-    private static final BufferedReader BUFER_ENTRADA = new BufferedReader(new InputStreamReader(System.in, Charset.forName("ISO-8859-1")));
+    private static final BufferedReader BUFER_ENTRADA = new BufferedReader(new InputStreamReader(System.in, Charset.forName("UTF-8")));
 
     /**
      * Gestiona la entrada de opciones numéricas.
@@ -35,12 +35,45 @@ public class SistemaEntrada {
                 }
             }
             catch(IOException | NumberFormatException e){
-                System.out.println("Introduzca una opción c .");
+                System.out.println("Introduzca una opción válida.");
                 error = true;
             }
         }while(error);
 
         return opcion;
+    }
+
+    /**
+     * Gestiona la entrada de opciones numéricas.
+     * @param opciones Opciones numéricas aceptadas.
+     * @return Opción escogida por el usuario.
+     */
+    public static int entradaOpcionNumerica(int[] opciones){
+        int opcionIntroducida = 0;
+        boolean error;
+
+        do{
+            try{
+                opcionIntroducida = Integer.parseInt(BUFER_ENTRADA.readLine());
+                error = true;
+
+                for(int opcion : opciones){
+                    if(opcionIntroducida == opcion){
+                        error = false;
+                    }
+                }
+
+                if(error){
+                    System.out.println("Introduzca una opción válida.");
+                }
+            }
+            catch(IOException | NumberFormatException e){
+                System.out.println("Introduzca una opción válida.");
+                error = true;
+            }
+        }while(error);
+
+        return opcionIntroducida;
     }
 
     /**
@@ -100,5 +133,13 @@ public class SistemaEntrada {
         catch(IOException e){
             System.out.println("Hubo un problema al cerrar el búfer de lectura.");
         }
+    }
+
+    /**
+     * Devuelve un string con información útil de la clase.
+     * @return String con información útil de la clase.
+     */
+    public String toString(){
+        return "El búfer de entrada de la clase tiene codificación UTF-8.";
     }
 }

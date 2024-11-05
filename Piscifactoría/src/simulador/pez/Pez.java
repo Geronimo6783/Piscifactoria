@@ -155,7 +155,7 @@ public abstract class Pez {
      * @param nombreCientifico Nombre científico del pez.
      * @param sexo Sexo del pez.
      */
-    public Pez(String nombre, String nombreCientifico, boolean sexo) {
+    protected Pez(String nombre, String nombreCientifico, boolean sexo) {
         this.nombre = nombre;
         this.nombreCientifico = nombreCientifico;
         this.sexo = sexo;
@@ -201,7 +201,29 @@ public abstract class Pez {
 
     /**
      * 
-     * @return True si el pez está en la edad optima para ser vendido.
+     * @return True si el pez está en la edad óptima para ser vendido.
      */
     public abstract boolean isEdadOptima();
+
+    /**
+     * 
+     * @return Pez nuevo de sexo masculino.
+     */
+    public abstract Pez obtenerPezHijo();
+
+    /**
+     * 
+     * @return Pez nuevo de sexo femenino.
+     */
+    public abstract Pez obtenerPezHija();
+
+    /**
+     * Devuelve un string con información relevante del pez.
+     * @return String con información relevante del pez.
+     */
+    public String toString(){
+        return "Nombre común: " + nombre + "\nNombre científico: " + nombreCientifico + "\nEdad: " + edad 
+            + ((sexo) ? "\nSexo: Hembra" : "\nSexo: Macho") + ((fertil) ? "\nFértil: Sí" : "\nFértil: No" + ((vivo) ? "\nVivo: Sí" : "\nVivo: No")
+            + ((alimentado) ? "\nAlimentado: Sí" : "\nAlimentado: No") + "\nDías sin reproducirse: " + diasSinReproducirse);
+    }
 }

@@ -3,16 +3,17 @@ package simulador.pez.carnivoro;
 import java.util.Random;
 
 import propiedades.AlmacenPropiedades;
+import simulador.Simulador;
 import simulador.pez.*;
 
 /**
  * Clase que representa a un salmón atlántico.
  */
-public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
+public class SalmonAtlantico extends Carnivoro implements Rio, Mar{
 
     /**
      * Constructor de salmones atlánticos.
-     * @param sexo Sexo del salmón atlántico.
+     * @param sexo Sexo del salmón atlántico si es true es hembra y si es false es macho.
      */
     public SalmonAtlantico(boolean sexo){
         super(AlmacenPropiedades.SALMON_ATLANTICO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getCientifico(), sexo);
@@ -42,12 +43,10 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
             if(!isAlimentado()){
                 boolean pezSigueConVida = rt.nextBoolean();
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if((edad < AlmacenPropiedades.SALMON_ATLANTICO.getMadurez() && edad%2 == 0 && vivo) || (edad == AlmacenPropiedades.SALMON_ATLANTICO.getMadurez() && vivo)){
                 boolean pezSigueConVida = (rt.nextInt( 100) > 5);
                 vivo = pezSigueConVida;
-                alimentado = pezSigueConVida;
             }
             if(vivo){
                 edad++;
@@ -59,21 +58,44 @@ public class SalmonAtlantico extends Pez implements Carnivoro, Rio, Mar{
                 }
             }
         }
+        alimentado = false;
     }
 
     /**
      * Indica si el salmón atlántico está maduro.
+     * @return True si el salmón atlántico está maduro.
      */
     @Override
     public boolean isMaduro(){
-        return edad > AlmacenPropiedades.SALMON_ATLANTICO.getMadurez();
+        return edad >= AlmacenPropiedades.SALMON_ATLANTICO.getMadurez();
     }
 
     /**
      * Indica si el salmón atlántico está en la edad óptima para ser vendido.
+     * @return True si el salmón atlántico está en la edad óptima para ser vendido.
      */
     @Override
     public boolean isEdadOptima(){
         return edad == AlmacenPropiedades.SALMON_ATLANTICO.getOptimo();
+    }
+
+    /**
+     * 
+     * @return Devuelve un salmón atlántico nuevo de sexo masculino.
+     */
+    @Override
+    public Pez obtenerPezHijo(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
+        return new SalmonAtlantico(false);
+    }
+
+    /**
+     * 
+     * @return Devuelve un salmón atlántico nuevo de sexo femenino.
+     */
+    @Override
+    public Pez obtenerPezHija(){
+        Simulador.estadisticas.registrarNacimiento(nombre);
+        return new SalmonAtlantico(true);
     }
 }
