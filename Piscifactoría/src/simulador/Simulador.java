@@ -572,6 +572,7 @@ public class Simulador {
     private static void addFishRio(Piscifactoria piscifactoria){
         String[] pecesDisponiblesRio = {
             "Cancelar",
+            AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre() + " - " + AlmacenPropiedades.CARPIN_TRES_ESPINAS.getCoste() + " monedas",
             AlmacenPropiedades.DORADA.getNombre() + " - " + AlmacenPropiedades.DORADA.getCoste() + " monedas",
             AlmacenPropiedades.PEJERREY.getNombre() + " - " + AlmacenPropiedades.PEJERREY.getCoste() + " monedas",
             AlmacenPropiedades.PERCA_EUROPEA.getNombre() + " - " + AlmacenPropiedades.PERCA_EUROPEA.getCoste() + " monedas",
@@ -583,7 +584,7 @@ public class Simulador {
 
         int monedas = sistemaMonedas.getMonedas();
         System.out.println("Cartera: " +  monedas + " monedas.");
-        int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesRio, 0, 7);
+        int opcion = GeneradorMenus.generarMenuOperativo(pecesDisponiblesRio, 0, 8);
 
         if(opcion != 0){
             String nombrePez = pecesDisponiblesRio[opcion].split(" - ")[0];
@@ -679,24 +680,27 @@ public class Simulador {
     private static Pez crearPezRio(int pez, boolean sexo) {
         switch (pez) {
             case 1 -> {
-                return new Dorada(sexo);
+                return new CarpinTresEspinas(sexo);
             }
             case 2 -> {
-                return new Pejerrey(sexo);
+                return new Dorada(sexo);
             }
             case 3 -> {
-                return new PercaEuropea(sexo);
+                return new Pejerrey(sexo);
             }
             case 4 -> {
-                return new Robalo(sexo);
+                return new PercaEuropea(sexo);
             }
             case 5 -> {
-                return new SalmonAtlantico(sexo);
+                return new Robalo(sexo);
             }
             case 6 -> {
-                return new SalmonChinook(sexo);
+                return new SalmonAtlantico(sexo);
             }
             case 7 -> {
+                return new SalmonChinook(sexo);
+            }
+            case 8 -> {
                 return new TilapiaDelNilo(sexo);
             }
             default -> {
@@ -794,12 +798,12 @@ public class Simulador {
     private static void upgrade() {
         System.out.println("========== Mejorar ==========");
         String[] opciones = {
+                "Cancelar",
                 "Comprar edificios",
                 "Mejorar edificios",
-                "Cancelar"
         };
 
-        int opcion = GeneradorMenus.generarMenuOperativo(opciones, 1, 3);
+        int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
 
         switch (opcion) {
             case 1:
@@ -1172,6 +1176,7 @@ public class Simulador {
             }
             else{
                 String[] pecesDisponiblesRio = {
+                    AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(),
                     AlmacenPropiedades.DORADA.getNombre(),
                     AlmacenPropiedades.PEJERREY.getNombre(),
                     AlmacenPropiedades.PERCA_EUROPEA.getNombre(),
@@ -1192,6 +1197,7 @@ public class Simulador {
                 posiblesPeces.add(4);
                 posiblesPeces.add(5);
                 posiblesPeces.add(6);
+                posiblesPeces.add(7);
 
                 while(!piscifactoria.isTodosLosTanqueLlenos() && pecesAnadidos < 4){
                     pezAleatorio = posiblesPeces.get(rt.nextInt(posiblesPeces.size()));
