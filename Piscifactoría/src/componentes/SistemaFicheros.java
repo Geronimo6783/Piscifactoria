@@ -39,7 +39,7 @@ public class SistemaFicheros {
      * @param estructuraCarpetas Ruta de la estructura de carpetas a crear.
      * @throws IOException Cuando no se puede crear la estructura de carpetas en el sistema de ficheros.
      */
-    public static void crearEstructuraCarpeta(String estructuraCarpetas) throws IOException{
+    public static void crearEstructuraCarpetas(String estructuraCarpetas) throws IOException{
         File estructuraCarpetasACrear = new File(estructuraCarpetas);
 
         if(!estructuraCarpetasACrear.mkdirs()){
