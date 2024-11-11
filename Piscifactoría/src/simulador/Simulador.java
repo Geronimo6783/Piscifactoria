@@ -1,11 +1,13 @@
 package simulador;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
+import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
 import estadisticas.Estadisticas;
 import propiedades.AlmacenPropiedades;
@@ -70,6 +72,30 @@ public class Simulador {
                 AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                 AlmacenPropiedades.TILAPIA_NILO.getNombre() };
         estadisticas = new Estadisticas(pecesDisponibles);
+            
+        try{
+            if(!SistemaFicheros.existeDirectorio("transcripciones")){
+                SistemaFicheros.crearCarpeta("transcripciones");
+            }
+            if(!SistemaFicheros.existeArhivo("transcripciones/" + nombre + ".tr")){
+                SistemaFicheros.crearArchivo("transcripciones/" + nombre + ".tr");
+            }
+            if(!SistemaFicheros.existeDirectorio("logs")){
+                SistemaFicheros.crearCarpeta("logs");
+            }
+            if(!SistemaFicheros.existeArhivo("logs/" + nombre + ".log")){
+                SistemaFicheros.crearArchivo("logs/" + nombre + ".log");
+            }
+            if(!SistemaFicheros.existeArhivo("logs/0_errors.log")){
+                SistemaFicheros.crearArchivo("logs/0_errors.log");
+            }
+            if(!SistemaFicheros.existeDirectorio("rewards")){
+                SistemaFicheros.crearCarpeta("rewards");
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**

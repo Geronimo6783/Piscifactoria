@@ -3,3 +3,6 @@
 *.bat
 *.txt
 Piscifactoría.jar
+**/transcripciones
+**/logs
+**/rewards
