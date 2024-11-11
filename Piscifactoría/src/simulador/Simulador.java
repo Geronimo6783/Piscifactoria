@@ -92,6 +92,29 @@ public class Simulador {
             if(!SistemaFicheros.existeDirectorio("rewards")){
                 SistemaFicheros.crearCarpeta("rewards");
             }
+            if(!SistemaFicheros.existeDirectorio("saves")){
+                SistemaFicheros.crearCarpeta("saves");
+            }
+            if(SistemaFicheros.isDirectorioVacio("saves")){
+                SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+            }
+            else{
+                if(SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
+                    String[] cabecera = {"¿Desea cargar la partida guardada?"};
+                    String[] opciones = {"Sí", "No"};
+                    int opcion = GeneradorMenus.generarMenuOperativo(cabecera, opciones, 1, 2);
+                    if(opcion == 1){
+                        //Cargar archivo de guardado.
+                    }
+                    else{
+                        SistemaFicheros.borrarArchivo("saves/" + nombre + ".save");
+                        SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                    }
+                }
+                else{
+                    SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                }
+            }
         }
         catch(IOException e){
             e.printStackTrace();
