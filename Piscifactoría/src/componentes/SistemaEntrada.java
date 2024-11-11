@@ -134,4 +134,12 @@ public class SistemaEntrada {
             System.out.println("Hubo un problema al cerrar el búfer de lectura.");
         }
     }
+
+    /**
+     * Devuelve un string con información útil de la clase.
+     * @return String con información útil de la clase.
+     */
+    public String toString(){
+        return "El búfer de entrada de la clase tiene codificación UTF-8.";
+    }
 }
