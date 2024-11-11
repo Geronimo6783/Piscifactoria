@@ -19,7 +19,7 @@ public class LecturaEscrituraFicherosPlanos {
      * @param archivo Archivo donde se escribirá el texto.
      * @param texto Texto a escribir.
      * @param coficacion Codificación del texto a escribir.
-     * @throws IOException Cuando surge un error al escribir el texto o cuando se intenta cerrar el bufer de escritura.
+     * @throws IOException Cuando surge un error al escribir el texto o cuando surge un error al cerrar el bufer de escritura.
      */
     public static void escrituraFicheroTextoPlano(File archivo, String texto, String coficacion) throws IOException{
         BufferedWriter buferEscritura = null;
