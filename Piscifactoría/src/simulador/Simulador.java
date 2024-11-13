@@ -1,11 +1,13 @@
 package simulador;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 import componentes.GeneradorMenus;
 import componentes.SistemaEntrada;
+import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
 import estadisticas.Estadisticas;
 import propiedades.AlmacenPropiedades;
@@ -70,6 +72,53 @@ public class Simulador {
                 AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                 AlmacenPropiedades.TILAPIA_NILO.getNombre() };
         estadisticas = new Estadisticas(pecesDisponibles);
+            
+        try{
+            if(!SistemaFicheros.existeDirectorio("transcripciones")){
+                SistemaFicheros.crearCarpeta("transcripciones");
+            }
+            if(!SistemaFicheros.existeArhivo("transcripciones/" + nombre + ".tr")){
+                SistemaFicheros.crearArchivo("transcripciones/" + nombre + ".tr");
+            }
+            if(!SistemaFicheros.existeDirectorio("logs")){
+                SistemaFicheros.crearCarpeta("logs");
+            }
+            if(!SistemaFicheros.existeArhivo("logs/" + nombre + ".log")){
+                SistemaFicheros.crearArchivo("logs/" + nombre + ".log");
+            }
+            if(!SistemaFicheros.existeArhivo("logs/0_errors.log")){
+                SistemaFicheros.crearArchivo("logs/0_errors.log");
+            }
+            if(!SistemaFicheros.existeDirectorio("rewards")){
+                SistemaFicheros.crearCarpeta("rewards");
+            }
+            if(!SistemaFicheros.existeDirectorio("saves")){
+                SistemaFicheros.crearCarpeta("saves");
+            }
+            if(SistemaFicheros.isDirectorioVacio("saves")){
+                SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+            }
+            else{
+                if(SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
+                    String[] cabecera = {"¿Desea cargar la partida guardada?"};
+                    String[] opciones = {"Sí", "No"};
+                    int opcion = GeneradorMenus.generarMenuOperativo(cabecera, opciones, 1, 2);
+                    if(opcion == 1){
+                        //Cargar archivo de guardado.
+                    }
+                    else{
+                        SistemaFicheros.borrarArchivo("saves/" + nombre + ".save");
+                        SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                    }
+                }
+                else{
+                    SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                }
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -202,7 +251,7 @@ public class Simulador {
     /**
      * Muestra la información relativa a un pez seleccionado por el usuario.
      */
-    private static void showIctio() {
+    private static void showIctio(){
         System.out.println("========== Ictiopedia ==========");
 
         String[] opcionesPecesDisponibles = { "Cancelar", AlmacenPropiedades.ABADEJO.getNombre(),
@@ -215,19 +264,24 @@ public class Simulador {
                 AlmacenPropiedades.TILAPIA_NILO.getNombre() };
         int opcion = GeneradorMenus.generarMenuOperativo(opcionesPecesDisponibles, 0, 12);
 
-        switch (opcion) {
-            case 1 -> mostrarInformacionPez(AlmacenPropiedades.ABADEJO);
-            case 2 -> mostrarInformacionPez(AlmacenPropiedades.ARENQUE_ATLANTICO);
-            case 3 -> mostrarInformacionPez(AlmacenPropiedades.CABALLA);
-            case 4 -> mostrarInformacionPez(AlmacenPropiedades.CARPIN_TRES_ESPINAS);
-            case 5 -> mostrarInformacionPez(AlmacenPropiedades.DORADA);
-            case 6 -> mostrarInformacionPez(AlmacenPropiedades.PEJERREY);
-            case 7 -> mostrarInformacionPez(AlmacenPropiedades.PERCA_EUROPEA);
-            case 8 -> mostrarInformacionPez(AlmacenPropiedades.ROBALO);
-            case 9 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_ATLANTICO);
-            case 10 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_CHINOOK);
-            case 11 -> mostrarInformacionPez(AlmacenPropiedades.SARGO);
-            case 12 -> mostrarInformacionPez(AlmacenPropiedades.TILAPIA_NILO);
+        try{
+            switch (opcion) {
+                case 1 -> mostrarInformacionPez(AlmacenPropiedades.ABADEJO);
+                case 2 -> mostrarInformacionPez(AlmacenPropiedades.ARENQUE_ATLANTICO);
+                case 3 -> mostrarInformacionPez(AlmacenPropiedades.CABALLA);
+                case 4 -> mostrarInformacionPez(AlmacenPropiedades.CARPIN_TRES_ESPINAS);
+                case 5 -> mostrarInformacionPez(AlmacenPropiedades.DORADA);
+                case 6 -> mostrarInformacionPez(AlmacenPropiedades.PEJERREY);
+                case 7 -> mostrarInformacionPez(AlmacenPropiedades.PERCA_EUROPEA);
+                case 8 -> mostrarInformacionPez(AlmacenPropiedades.ROBALO);
+                case 9 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_ATLANTICO);
+                case 10 -> mostrarInformacionPez(AlmacenPropiedades.SALMON_CHINOOK);
+                case 11 -> mostrarInformacionPez(AlmacenPropiedades.SARGO);
+                case 12 -> mostrarInformacionPez(AlmacenPropiedades.TILAPIA_NILO);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -709,8 +763,10 @@ public class Simulador {
      * Imprime por pantalla los datos relativos a un pez.
      * 
      * @param datosDelPez Datos relativos a un pez a mostrar.
+     * @throws Exception Cuando el pez no es ni carnívoro, ni filtrador ni omnívoro.
      */
-    private static void mostrarInformacionPez(PecesDatos datosDelPez) {
+    private static void mostrarInformacionPez(PecesDatos datosDelPez) throws Exception{
+        PecesProps alimentacionPez = null;
         System.out.println("Nombre: " + datosDelPez.getNombre());
         System.out.println("Nombre científico: " + datosDelPez.getCientifico());
         System.out.println("Coste: " + datosDelPez.getCoste() + " monedas");
@@ -724,9 +780,19 @@ public class Simulador {
         System.out.print("Propiedades: ");
         for (PecesProps propiedad : datosDelPez.getPropiedades()) {
             System.out.print(propiedad + " ");
+            if(propiedad == PecesProps.CARNIVORO || propiedad == PecesProps.FILTRADOR || propiedad == PecesProps.OMNIVORO){
+                alimentacionPez = propiedad;
+            }
         }
 
-        System.out.println("\nTipo: " + datosDelPez.getTipo());
+        switch(alimentacionPez){
+            case PecesProps.CARNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal");}
+            case PecesProps.FILTRADOR -> {System.out.println("\nTipo de comida que consume: Comida vegetal");}
+            case PecesProps.OMNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal y vegetal");}
+            default -> {throw new Exception("Tipo de alimentación del pez no válida");}
+        }
+
+        System.out.println("Tipo: " + datosDelPez.getTipo());
 
     }
 
