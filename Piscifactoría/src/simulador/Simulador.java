@@ -1,11 +1,13 @@
 package simulador;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 import componentes.GeneradorMenus;
+import componentes.LecturaEscrituraFicherosPlanos;
 import componentes.SistemaEntrada;
 import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
@@ -54,6 +56,26 @@ public class Simulador {
     public static Estadisticas estadisticas;
 
     /**
+     * Archivo compartido entre todas las partidas donde se registran los errores.
+     */
+    public static final File archivoLogsGeneral = new File("/logs/0_errors.log");
+
+    /**
+     * Archivo de log de la partida.
+     */
+    public static File archivoLogPartida;
+
+    /**
+     * Archivo de transcripciones de la partida.
+     */
+    public static File archivoTranscripcionesPartida;
+
+    /**
+     * Archivo de guardado de la partida.
+     */
+    public static File archivoGuardadoPartida;
+
+    /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init() {
@@ -79,12 +101,14 @@ public class Simulador {
             }
             if(!SistemaFicheros.existeArhivo("transcripciones/" + nombre + ".tr")){
                 SistemaFicheros.crearArchivo("transcripciones/" + nombre + ".tr");
+                archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
             }
             if(!SistemaFicheros.existeDirectorio("logs")){
                 SistemaFicheros.crearCarpeta("logs");
             }
             if(!SistemaFicheros.existeArhivo("logs/" + nombre + ".log")){
                 SistemaFicheros.crearArchivo("logs/" + nombre + ".log");
+                archivoLogPartida = new File("logs/" + nombre + ".log");
             }
             if(!SistemaFicheros.existeArhivo("logs/0_errors.log")){
                 SistemaFicheros.crearArchivo("logs/0_errors.log");
@@ -97,6 +121,7 @@ public class Simulador {
             }
             if(SistemaFicheros.isDirectorioVacio("saves")){
                 SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                archivoGuardadoPartida = new File("saves/" + nombre + ".save");
             }
             else{
                 if(SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
@@ -115,6 +140,22 @@ public class Simulador {
                     SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
                 }
             }
+
+            archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
+            archivoLogPartida = new File("logs/" + nombre + ".log");
+
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "========== Arranque ==========", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Inicio de la simulación " + nombre + ".", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "=========== Dinero ===========", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Dinero: " + sistemaMonedas.getMonedas() + " monedas.", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "========== Peces Implementados ==========", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Río:\n-" + AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre() + "\n-" + AlmacenPropiedades.DORADA.getNombre() + "\n-" 
+            + AlmacenPropiedades.PEJERREY.getNombre() + "\n-" + AlmacenPropiedades.PERCA_EUROPEA.getNombre() + "\n-" + AlmacenPropiedades.ROBALO.getNombre() + "\n-" + AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + "\n-"
+            + AlmacenPropiedades.SALMON_CHINOOK.getNombre() + "\n-" + AlmacenPropiedades.TILAPIA_NILO.getNombre() + "\nMar:\n-" + AlmacenPropiedades.ABADEJO.getNombre() + "\n-" + AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre() + "\n-" 
+            + AlmacenPropiedades.CABALLA.getNombre() + "\n-" + AlmacenPropiedades.DORADA.getNombre() + "\n-" + AlmacenPropiedades.ROBALO.getNombre() + "\n-" + AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + "\n-" 
+            + AlmacenPropiedades.SARGO.getNombre(), "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Piscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
         }
         catch(IOException e){
             e.printStackTrace();
@@ -820,16 +861,25 @@ public class Simulador {
     private static void cleanTank() {
 
         int piscifactoriaSeleccionada = selectPisc();
-        Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
 
-        ArrayList<Tanque> tanques = piscifactoria.getTanques();
+        if(piscifactoriaSeleccionada != 0){
+            Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
 
-        for (Tanque tanque : tanques) {
-            tanque.eliminarPecesMuertos();
+            ArrayList<Tanque> tanques = piscifactoria.getTanques();
+
+            for (Tanque tanque : tanques) {
+                tanque.eliminarPecesMuertos();
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Limpiado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                }
+                catch(IOException e){
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.println("Se han eliminado todos los peces muertos de los tanque de la piscifactoría "
+                    + piscifactoria.getNombre() + ".");
         }
-
-        System.out.println("Se han eliminado todos los peces muertos de los tanque de la piscifactoría "
-                + piscifactoria.getNombre() + ".");
     }
 
     /**
@@ -850,6 +900,13 @@ public class Simulador {
 
                 System.out.println("El tanque " + tanqueSeleccionado + " de la piscifactoría "
                         + piscifactoria.getNombre() + " ha sido vaciado.");
+
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Vaciado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                }
+                catch(IOException e){
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -1290,6 +1347,13 @@ public class Simulador {
                     }
                 }
             }
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactorias.get(piscifactoriaSeleccionada - 1).getNombre() + ".", "UTF-8");
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
         }
     }
     
@@ -1598,6 +1662,20 @@ public class Simulador {
     }
 
     /**
+     * Añade 1000 monedas al sistema de monedas de la simulación.
+     */
+    private static void anadirMonedasOculto(){
+        sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() + 1000);
+
+        try{
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, " + sistemaMonedas.getMonedas() + ".", "UTF-8");
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Devuelve un string con información relevante de la clase.
      * @return String con información relevante de la clase.
      */
@@ -1639,7 +1717,7 @@ public class Simulador {
                 case 13 -> {pasarDias();}
                 case 14 -> {System.out.println("Cerrando...");}
                 case 98 -> {anadirPezAleatorio();}
-                case 99 -> {sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() + 1000);}
+                case 99 -> {anadirMonedasOculto();}
             }
         }
 
