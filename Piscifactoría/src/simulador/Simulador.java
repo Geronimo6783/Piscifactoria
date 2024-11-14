@@ -389,6 +389,12 @@ public class Simulador {
                                             (float) (cantidadComidaAnimalAntes + cantidadAAgregar) /
                                                     almacenCentral.getCapacidadComida() * 100)
                                     + "%.");
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoAnimal + " monedas. Se almacena en el almacén central." , "UTF-8");
+                            }
+                            catch(IOException e){
+                                e.printStackTrace();
+                            }
                         } else {
                             System.out.println("No hay suficientes monedas para comprar la comida animal, faltan " + (costoAnimal - sistemaMonedas.getMonedas()) + " monedas.");
                         }
@@ -418,12 +424,17 @@ public class Simulador {
                                             (float) (cantidadComidaVegetalAntes + cantidadAAgregar) /
                                                     almacenCentral.getCapacidadComida() * 100)
                                     + "%.");
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo vegetal comprada por " + costoVegetal + " monedas. Se almacena en el almacén central." , "UTF-8");
+                            }
+                            catch(IOException e){
+                                e.printStackTrace();
+                            }
                         } else {
                             System.out.println("No hay suficientes monedas para comprar la comida vegetal, faltan " + (costoVegetal - sistemaMonedas.getMonedas()) + " monedas.");
                         }
                     } else {
-                        System.out
-                                .println("No se puede añadir comida vegetal, excede la capacidad del almacén central.");
+                        System.out.println("No se puede añadir comida vegetal, excede la capacidad del almacén central.");
                     }
                 }
 
@@ -476,6 +487,12 @@ public class Simulador {
                                                         piscifactoria.getAlmacenInicial().getCapacidadMaximaComida()
                                                         * 100)
                                         + "%.");
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoAnimal + " monedas. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                                }
+                                catch(IOException e){
+                                    e.printStackTrace();
+                                }
                             } else {
                                 System.out.println("No hay suficientes monedas para comprar la comida animal, faltan " + (costoAnimal - sistemaMonedas.getMonedas()) + " monedas.");
                             }
@@ -516,6 +533,12 @@ public class Simulador {
                                                         piscifactoria.getAlmacenInicial().getCapacidadMaximaComida()
                                                         * 100)
                                         + "%.");
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoVegetal + " monedas. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                                }
+                                catch(IOException e){
+                                    e.printStackTrace();
+                                }
                             } else {
                                 System.out.println("No hay suficientes monedas para comprar la comida vegetal, faltan " + (costoVegetal - sistemaMonedas.getMonedas()) + " monedas.");
                             }
