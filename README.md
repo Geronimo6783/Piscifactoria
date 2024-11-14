@@ -4,7 +4,7 @@ La base de este proyecto es crear un programa que simule una piscifactoría y to
 
 ## Dependencias
 
-- Versión 1.2.1 de la librería orca *Orca_lib_1.2.1*
+- Versión 1.2.2 de la librería orca *Orca_lib_1.2.2*
 
 ## Requisitos mínimos
 
