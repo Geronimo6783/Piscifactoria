@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
+
+import componentes.FechaTiempoLocal;
 import componentes.GeneradorMenus;
 import componentes.LecturaEscrituraFicherosPlanos;
 import componentes.SistemaEntrada;
@@ -156,6 +158,8 @@ public class Simulador {
             + AlmacenPropiedades.SARGO.getNombre(), "UTF-8");
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Piscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Inicio de la simulación " + nombre + ".", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " PIscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
         }
         catch(IOException e){
             e.printStackTrace();
@@ -364,6 +368,7 @@ public class Simulador {
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Fin del día " + (diasPasados + 1) + ".", "UTF-8");
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Peces actuales, " + pecesRio + " de río " + pecesMar + " de mar.", "UTF-8");
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, monedasGanadas + " monedas ganadas por un total de " + pecesVendidos + ".", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Fin del día " + (diasPasados + 1) + ".", "UTF-8");
         }
         catch(IOException e){
             e.printStackTrace();
@@ -415,6 +420,7 @@ public class Simulador {
                                     + "%.");
                             try{
                                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoAnimal + " monedas. Se almacena en el almacén central." , "UTF-8");
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo animal comprada. Se almacena en el almacén central.", "UTF-8");
                             }
                             catch(IOException e){
                                 e.printStackTrace();
@@ -450,6 +456,7 @@ public class Simulador {
                                     + "%.");
                             try{
                                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo vegetal comprada por " + costoVegetal + " monedas. Se almacena en el almacén central." , "UTF-8");
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo vegetal comprada. Se almacena en el almacén central.", "UTF-8");
                             }
                             catch(IOException e){
                                 e.printStackTrace();
@@ -513,6 +520,7 @@ public class Simulador {
                                         + "%.");
                                 try{
                                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoAnimal + " monedas. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo animal comprada. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                                 }
                                 catch(IOException e){
                                     e.printStackTrace();
@@ -559,6 +567,7 @@ public class Simulador {
                                         + "%.");
                                 try{
                                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoVegetal + " monedas. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo vegetal comprada. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                                 }
                                 catch(IOException e){
                                     e.printStackTrace();
@@ -674,6 +683,7 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
                             e.printStackTrace();
@@ -685,6 +695,7 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " M comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " M comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
                             e.printStackTrace();
@@ -708,6 +719,7 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
                             e.printStackTrace();
@@ -763,6 +775,7 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
                             e.printStackTrace();
@@ -774,6 +787,7 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " M comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " M comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
                             e.printStackTrace();
@@ -798,6 +812,7 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
                             e.printStackTrace();
@@ -944,7 +959,9 @@ public class Simulador {
                     + piscifactoria.getNombre() + ".");
 
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Vendidos " + (pecesAntes - piscifactoria.getPecesTotales()) + " peces de la piscifactoría " + piscifactoria.getNombre() + " de forma manual por " + (sistemaMonedas.getMonedas() + monedasAntes) + " monedas.", "UTF-8");
+                int pecesVendidos = pecesAntes - piscifactoria.getPecesTotales();
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Vendidos " + pecesVendidos+ " peces de la piscifactoría " + piscifactoria.getNombre() + " de forma manual por " + (sistemaMonedas.getMonedas() + monedasAntes) + " monedas.", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Vendidos " + pecesVendidos + " peces de la piscifactoría " + piscifactoria.getNombre() + " de forma manual.", "UTF-8");
             }
             catch(IOException e){
                 e.printStackTrace();
@@ -969,6 +986,7 @@ public class Simulador {
                 tanque.eliminarPecesMuertos();
                 try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Limpiado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Limpiado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
                 }
                 catch(IOException e){
                     e.printStackTrace();
@@ -1001,6 +1019,7 @@ public class Simulador {
 
                 try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Vaciado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Vaciado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
                 }
                 catch(IOException e){
                     e.printStackTrace();
@@ -1063,6 +1082,7 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado el almacén central.", "UTF-8");
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprado el almacén central.", "UTF-8");
                         }
                         catch(IOException e){
                             e.printStackTrace();
@@ -1094,6 +1114,7 @@ public class Simulador {
 
                     try{
                         LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprada la piscifactoría de río " + nuevaPiscifactoria.getNombre() + " por " + costoPiscifactoría + " monedas.", "UTF-8");
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprada la piscifactoría de río " + nuevaPiscifactoria.getNombre() + ".", "UTF-8");
                     }
                     catch(IOException e){
                         e.printStackTrace();
@@ -1103,6 +1124,7 @@ public class Simulador {
 
                     try{
                         LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprada la piscifactoría de mar " + nuevaPiscifactoria.getNombre() + " por " + costoPiscifactoría + " monedas.", "UTF-8");
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprada la piscifactoría de mar " + nuevaPiscifactoria.getNombre() + ".", "UTF-8");
                     }
                     catch(IOException e){
                         e.printStackTrace();
@@ -1228,6 +1250,13 @@ public class Simulador {
                 System.out.println("No se dispone de las suficientes monedas para aumentar la capacidad de comida del almacén de comida de la piscifactoría, faltan " + (200 - monedasDisponibles) + " monedas.");
             }
         }
+
+        try{
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Mejorada la piscifactoría " + piscifactoria.getNombre() + " aumentando su capacidad de comida.", "UTF-8");
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -1280,6 +1309,13 @@ public class Simulador {
             } else {
                 System.out.println("No tienes suficientes monedas para comprar un tanque, faltan " + (costoTanque - monedasDisponibles) + " monedas.");
             }
+        }
+
+        try{
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprado un tanque para la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+        }
+        catch(IOException e){
+            e.printStackTrace();
         }
     }
 
@@ -1424,6 +1460,7 @@ public class Simulador {
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Fin del día " + (diasPasados + 1) + ".", "UTF-8");
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Peces actuales, " + pecesRio + " de río " + pecesMar + " de mar.", "UTF-8");
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, monedasGanadas + " monedas ganadas por un total de " + pecesVendidos + ".", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Fin del día " + (diasPasados + 1) + ".", "UTF-8");
             }
             catch(IOException e){
                 e.printStackTrace();
@@ -1565,7 +1602,8 @@ public class Simulador {
             }
 
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactorias.get(piscifactoriaSeleccionada - 1).getNombre() + ".", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
             }
             catch(IOException e){
                 e.printStackTrace();
@@ -1885,6 +1923,7 @@ public class Simulador {
 
         try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, " + sistemaMonedas.getMonedas() + ".", "UTF-8");
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Añadidas monedas mediante la opción oculta.", "UTF-8");
         }
         catch(IOException e){
             e.printStackTrace();
@@ -1938,6 +1977,13 @@ public class Simulador {
         }
 
         SistemaEntrada.close();
+
+        try{
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Cierre de la partida.", "UTF-8");
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
 }
