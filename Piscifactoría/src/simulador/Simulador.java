@@ -1474,6 +1474,9 @@ public class Simulador {
             catch(IOException e){
                 e.printStackTrace();
             }
+
+            pecesRio = 0;
+            pecesMar = 0;
         }
 
         System.out.println("En estos " + dias + " días se han vendido " + pecesVendidos
