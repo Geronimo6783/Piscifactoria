@@ -836,7 +836,7 @@ public class Simulador {
      * @param sexo Sexo del pez a crear.
      * @return Pez creado.
      */
-    private static Pez crearPezMar(int pez, boolean sexo) {
+    private static Pez crearPezMar(int pez, boolean sexo) throws IllegalArgumentException{
         switch (pez) {
             case 1 -> {
                 return new Abadejo(sexo);
@@ -1926,10 +1926,26 @@ public class Simulador {
 
         try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, " + sistemaMonedas.getMonedas() + ".", "UTF-8");
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+                
+            }
+        }
+
+        try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Añadidas monedas mediante la opción oculta.", "UTF-8");
         }
         catch(IOException e){
-            e.printStackTrace();
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+                
+            }
         }
     }
 
@@ -1985,7 +2001,12 @@ public class Simulador {
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Cierre de la partida.", "UTF-8");
         }
         catch(IOException e){
-            e.printStackTrace();
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+                
+            }
         }
     }
 
