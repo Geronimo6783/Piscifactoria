@@ -2,6 +2,7 @@ package simulador;
 
 import java.io.IOException;
 import java.io.File;
+import java.io.IOError;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -60,7 +61,7 @@ public class Simulador {
     /**
      * Archivo compartido entre todas las partidas donde se registran los errores.
      */
-    public static final File archivoLogsGeneral = new File("/logs/0_errors.log");
+    public static final File archivoLogsGeneral = new File("logs/0_errors.log");
 
     /**
      * Archivo de log de la partida.
@@ -96,75 +97,308 @@ public class Simulador {
                 AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                 AlmacenPropiedades.TILAPIA_NILO.getNombre() };
         estadisticas = new Estadisticas(pecesDisponibles);
+
+        try{
+            if(!SistemaFicheros.existeDirectorio("logs")){
+                SistemaFicheros.crearCarpeta("logs");
+            }
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
+            if(!SistemaFicheros.existeArhivo("logs/0_errors.log")){
+                SistemaFicheros.crearArchivo("logs/0_errors.log");
+            }
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
             
         try{
             if(!SistemaFicheros.existeDirectorio("transcripciones")){
                 SistemaFicheros.crearCarpeta("transcripciones");
             }
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
             if(!SistemaFicheros.existeArhivo("transcripciones/" + nombre + ".tr")){
                 SistemaFicheros.crearArchivo("transcripciones/" + nombre + ".tr");
                 archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
             }
-            if(!SistemaFicheros.existeDirectorio("logs")){
-                SistemaFicheros.crearCarpeta("logs");
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
             }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
             if(!SistemaFicheros.existeArhivo("logs/" + nombre + ".log")){
                 SistemaFicheros.crearArchivo("logs/" + nombre + ".log");
                 archivoLogPartida = new File("logs/" + nombre + ".log");
             }
-            if(!SistemaFicheros.existeArhivo("logs/0_errors.log")){
-                SistemaFicheros.crearArchivo("logs/0_errors.log");
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
             }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
             if(!SistemaFicheros.existeDirectorio("rewards")){
                 SistemaFicheros.crearCarpeta("rewards");
             }
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
             if(!SistemaFicheros.existeDirectorio("saves")){
                 SistemaFicheros.crearCarpeta("saves");
             }
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
             if(SistemaFicheros.isDirectorioVacio("saves")){
                 SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
                 archivoGuardadoPartida = new File("saves/" + nombre + ".save");
             }
             else{
-                if(SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
-                    String[] cabecera = {"¿Desea cargar la partida guardada?"};
-                    String[] opciones = {"Sí", "No"};
-                    int opcion = GeneradorMenus.generarMenuOperativo(cabecera, opciones, 1, 2);
-                    if(opcion == 1){
-                        //Cargar archivo de guardado.
+                try{
+                    if(SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
+                        String[] cabecera = {"¿Desea cargar la partida guardada?"};
+                        String[] opciones = {"Sí", "No"};
+                        int opcion = GeneradorMenus.generarMenuOperativo(cabecera, opciones, 1, 2);
+                        if(opcion == 1){
+                            //Cargar archivo de guardado.
+                        }
+                        else{
+                            try{
+                                SistemaFicheros.borrarArchivo("saves/" + nombre + ".save");
+                            }
+                            catch(IOException e){
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                                }
+                                catch(IOException ex){
+                    
+                                }
+                            }
+
+                            try{
+                                SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                            }
+                            catch(IOException e){
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                                }
+                                catch(IOException ex){
+                    
+                                }
+                            }
+                        }
                     }
                     else{
-                        SistemaFicheros.borrarArchivo("saves/" + nombre + ".save");
-                        SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                        try{
+                            SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                        }catch(IOException e){
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                            }
+                            catch(IOException ex){
+                
+                            }
+                        }
+                        
                     }
                 }
-                else{
-                    SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                }
+                catch(IOException ex){
+        
+                }
+            }
+            }
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+        
+        archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
+        archivoLogPartida = new File("logs/" + nombre + ".log");
+        
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "========== Arranque ==========", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
                 }
             }
 
-            archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
-            archivoLogPartida = new File("logs/" + nombre + ".log");
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Inicio de la simulación " + nombre + ".", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
 
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "========== Arranque ==========", "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Inicio de la simulación " + nombre + ".", "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "=========== Dinero ===========", "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Dinero: " + sistemaMonedas.getMonedas() + " monedas.", "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "========== Peces Implementados ==========", "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Río:\n-" + AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre() + "\n-" + AlmacenPropiedades.DORADA.getNombre() + "\n-" 
-            + AlmacenPropiedades.PEJERREY.getNombre() + "\n-" + AlmacenPropiedades.PERCA_EUROPEA.getNombre() + "\n-" + AlmacenPropiedades.ROBALO.getNombre() + "\n-" + AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + "\n-"
-            + AlmacenPropiedades.SALMON_CHINOOK.getNombre() + "\n-" + AlmacenPropiedades.TILAPIA_NILO.getNombre() + "\nMar:\n-" + AlmacenPropiedades.ABADEJO.getNombre() + "\n-" + AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre() + "\n-" 
-            + AlmacenPropiedades.CABALLA.getNombre() + "\n-" + AlmacenPropiedades.DORADA.getNombre() + "\n-" + AlmacenPropiedades.ROBALO.getNombre() + "\n-" + AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + "\n-" 
-            + AlmacenPropiedades.SARGO.getNombre(), "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Piscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Inicio de la simulación " + nombre + ".", "UTF-8");
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " PIscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
+                }
+            }
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "=========== Dinero ===========", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Dinero: " + sistemaMonedas.getMonedas() + " monedas.", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "========== Peces Implementados ==========", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Río:\n-" + AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre() + "\n-" + AlmacenPropiedades.DORADA.getNombre() + "\n-" 
+                + AlmacenPropiedades.PEJERREY.getNombre() + "\n-" + AlmacenPropiedades.PERCA_EUROPEA.getNombre() + "\n-" + AlmacenPropiedades.ROBALO.getNombre() + "\n-" + AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + "\n-"
+                + AlmacenPropiedades.SALMON_CHINOOK.getNombre() + "\n-" + AlmacenPropiedades.TILAPIA_NILO.getNombre() + "\nMar:\n-" + AlmacenPropiedades.ABADEJO.getNombre() + "\n-" + AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre() + "\n-" 
+                + AlmacenPropiedades.CABALLA.getNombre() + "\n-" + AlmacenPropiedades.DORADA.getNombre() + "\n-" + AlmacenPropiedades.ROBALO.getNombre() + "\n-" + AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + "\n-" 
+                + AlmacenPropiedades.SARGO.getNombre(), "UTF-8");
+            }catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Piscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Inicio de la simulación " + nombre + ".", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+        
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Piscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
     }
+    
 
     /**
      * Imprime por pantalla el menú principal,
@@ -326,7 +560,12 @@ public class Simulador {
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
         }
     }
 
@@ -366,12 +605,50 @@ public class Simulador {
 
         try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Fin del día " + (diasPasados + 1) + ".", "UTF-8");
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Peces actuales, " + pecesRio + " de río " + pecesMar + " de mar.", "UTF-8");
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, monedasGanadas + " monedas ganadas por un total de " + pecesVendidos + ".", "UTF-8");
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+        
+        try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Fin del día " + (diasPasados + 1) + ".", "UTF-8");
         }
         catch(IOException e){
-            e.printStackTrace();
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
         }
 
         diasPasados++;
@@ -381,7 +658,12 @@ public class Simulador {
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
         }
         catch(IOException e){
-            e.printStackTrace();
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
         }
     }
 
@@ -418,12 +700,29 @@ public class Simulador {
                                             (float) (cantidadComidaAnimalAntes + cantidadAAgregar) /
                                                     almacenCentral.getCapacidadComida() * 100)
                                     + "%.");
+                            
                             try{
                                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoAnimal + " monedas. Se almacena en el almacén central." , "UTF-8");
+                            }
+                            catch(IOException e){
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                                }
+                                catch(IOException ex){
+                
+                                }
+                            }
+
+                            try{
                                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo animal comprada. Se almacena en el almacén central.", "UTF-8");
                             }
                             catch(IOException e){
-                                e.printStackTrace();
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                                }
+                                catch(IOException ex){
+                
+                                }
                             }
                         } else {
                             System.out.println("No hay suficientes monedas para comprar la comida animal, faltan " + (costoAnimal - sistemaMonedas.getMonedas()) + " monedas.");
@@ -454,12 +753,29 @@ public class Simulador {
                                             (float) (cantidadComidaVegetalAntes + cantidadAAgregar) /
                                                     almacenCentral.getCapacidadComida() * 100)
                                     + "%.");
+                            
                             try{
                                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo vegetal comprada por " + costoVegetal + " monedas. Se almacena en el almacén central." , "UTF-8");
+                            }
+                            catch(IOException e){
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                                }
+                                catch(IOException ex){
+                
+                                }
+                            }
+
+                            try{
                                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo vegetal comprada. Se almacena en el almacén central.", "UTF-8");
                             }
                             catch(IOException e){
-                                e.printStackTrace();
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                                }
+                                catch(IOException ex){
+                
+                                }
                             }
                         } else {
                             System.out.println("No hay suficientes monedas para comprar la comida vegetal, faltan " + (costoVegetal - sistemaMonedas.getMonedas()) + " monedas.");
@@ -518,12 +834,29 @@ public class Simulador {
                                                         piscifactoria.getAlmacenInicial().getCapacidadMaximaComida()
                                                         * 100)
                                         + "%.");
+                                
                                 try{
                                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoAnimal + " monedas. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                                }
+                                catch(IOException e){
+                                    try{
+                                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                                    }
+                                    catch(IOException ex){
+                    
+                                    }
+                                }
+
+                                try{
                                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo animal comprada. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                                 }
                                 catch(IOException e){
-                                    e.printStackTrace();
+                                    try{
+                                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                                    }
+                                    catch(IOException ex){
+                    
+                                    }
                                 }
                             } else {
                                 System.out.println("No hay suficientes monedas para comprar la comida animal, faltan " + (costoAnimal - sistemaMonedas.getMonedas()) + " monedas.");
@@ -565,12 +898,29 @@ public class Simulador {
                                                         piscifactoria.getAlmacenInicial().getCapacidadMaximaComida()
                                                         * 100)
                                         + "%.");
+
                                 try{
                                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoVegetal + " monedas. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                                }
+                                catch(IOException e){
+                                    try{
+                                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                                    }
+                                    catch(IOException ex){
+                    
+                                    }
+                                }
+
+                                try{
                                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo vegetal comprada. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                                 }
                                 catch(IOException e){
-                                    e.printStackTrace();
+                                    try{
+                                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                                    }
+                                    catch(IOException ex){
+                    
+                                    }
                                 }
                             } else {
                                 System.out.println("No hay suficientes monedas para comprar la comida vegetal, faltan " + (costoVegetal - sistemaMonedas.getMonedas()) + " monedas.");
@@ -683,10 +1033,26 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                        }
+                        catch(IOException e){
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
+                        }
+
+                        try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
-                            e.printStackTrace();
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
                         }
                     }
                     else{
@@ -695,10 +1061,26 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " M comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                        }
+                        catch(IOException e){
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
+                        }
+
+                        try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " M comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
-                            e.printStackTrace();
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
                         }
                     }
                 }
@@ -719,10 +1101,26 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                        }
+                        catch(IOException e){
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
+                        }
+
+                        try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
-                            e.printStackTrace();
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
                         }
                     }
                     else{
@@ -775,10 +1173,26 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                        }
+                        catch(IOException e){
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
+                        }
+                        
+                        try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
-                            e.printStackTrace();
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
                         }
                     }
                     else{
@@ -787,10 +1201,26 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " M comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                        }
+                        catch(IOException e){
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
+                        }
+                        
+                        try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " M comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
-                            e.printStackTrace();
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
                         }
                     }
                 }
@@ -812,10 +1242,26 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + monedas + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                        }
+                        catch(IOException e){
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
+                        }
+
+                        try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
                         }
                         catch(IOException e){
-                            e.printStackTrace();
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
                         }
                     }
                     else{
@@ -836,7 +1282,7 @@ public class Simulador {
      * @param sexo Sexo del pez a crear.
      * @return Pez creado.
      */
-    private static Pez crearPezMar(int pez, boolean sexo) {
+    private static Pez crearPezMar(int pez, boolean sexo) throws IllegalArgumentException{
         switch (pez) {
             case 1 -> {
                 return new Abadejo(sexo);
@@ -958,13 +1404,30 @@ public class Simulador {
             System.out.println("Se han vendido todos los peces maduros y vivos de la piscifactoría "
                     + piscifactoria.getNombre() + ".");
 
+            int pecesVendidos = pecesAntes - piscifactoria.getPecesTotales();
+
             try{
-                int pecesVendidos = pecesAntes - piscifactoria.getPecesTotales();
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Vendidos " + pecesVendidos+ " peces de la piscifactoría " + piscifactoria.getNombre() + " de forma manual por " + (sistemaMonedas.getMonedas() + monedasAntes) + " monedas.", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+            
+            try{
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Vendidos " + pecesVendidos + " peces de la piscifactoría " + piscifactoria.getNombre() + " de forma manual.", "UTF-8");
             }
             catch(IOException e){
-                e.printStackTrace();
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
             }
         }   
 
@@ -984,12 +1447,29 @@ public class Simulador {
 
             for (Tanque tanque : tanques) {
                 tanque.eliminarPecesMuertos();
+                
                 try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Limpiado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                }
+                catch(IOException e){
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                    }
+                    catch(IOException ex){
+    
+                    }
+                }
+
+                try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Limpiado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
                 }
                 catch(IOException e){
-                    e.printStackTrace();
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                    }
+                    catch(IOException ex){
+    
+                    }
                 }
             }
 
@@ -1019,10 +1499,26 @@ public class Simulador {
 
                 try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Vaciado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
+                }
+                catch(IOException e){
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                    }
+                    catch(IOException ex){
+    
+                    }
+                }
+                
+                try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Vaciado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
                 }
                 catch(IOException e){
-                    e.printStackTrace();
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                    }
+                    catch(IOException ex){
+    
+                    }
                 }
             }
         }
@@ -1082,10 +1578,26 @@ public class Simulador {
 
                         try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado el almacén central.", "UTF-8");
+                        }
+                        catch(IOException e){
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
+                        }
+
+                        try{
                             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprado el almacén central.", "UTF-8");
                         }
                         catch(IOException e){
-                            e.printStackTrace();
+                            try{
+                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                            }
+                            catch(IOException ex){
+            
+                            }
                         }
                     } else {
                         System.out.println("No tiene suficientes monedas para comprar el almacén central, faltan " + (2000 - sistemaMonedas.getMonedas()) + " monedas.");
@@ -1114,20 +1626,52 @@ public class Simulador {
 
                     try{
                         LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprada la piscifactoría de río " + nuevaPiscifactoria.getNombre() + " por " + costoPiscifactoría + " monedas.", "UTF-8");
+                    }
+                    catch(IOException e){
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                        }
+                        catch(IOException ex){
+        
+                        }
+                    }
+
+                    try{
                         LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprada la piscifactoría de río " + nuevaPiscifactoria.getNombre() + ".", "UTF-8");
                     }
                     catch(IOException e){
-                        e.printStackTrace();
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                        }
+                        catch(IOException ex){
+        
+                        }
                     }
                 } else {
                     nuevaPiscifactoria = new PiscifactoriaMar(nombrePiscifactoría);
 
                     try{
                         LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprada la piscifactoría de mar " + nuevaPiscifactoria.getNombre() + " por " + costoPiscifactoría + " monedas.", "UTF-8");
+                    }
+                    catch(IOException e){
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                        }
+                        catch(IOException ex){
+        
+                        }
+                    }
+
+                    try{
                         LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprada la piscifactoría de mar " + nuevaPiscifactoria.getNombre() + ".", "UTF-8");
                     }
                     catch(IOException e){
-                        e.printStackTrace();
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                        }
+                        catch(IOException ex){
+        
+                        }
                     }
                 } 
 
@@ -1218,7 +1762,12 @@ public class Simulador {
                         LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Mejorada la piscifactoría " + piscifactoria.getNombre() + " aumentando su capacidad de comida hasta un total de " + piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() + " por 50 monedas.", "UTF-8");
                     }
                     catch(IOException e){
-                        e.printStackTrace();
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                        }
+                        catch(IOException ex){
+        
+                        }
                     }
                 }
                 else{
@@ -1239,7 +1788,12 @@ public class Simulador {
                         LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Mejorada la piscifactoría " + piscifactoria.getNombre() + " aumentando su capacidad de comida hasta un total de " + piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() + " por 200 monedas.", "UTF-8");
                     }
                     catch(IOException e){
-                        e.printStackTrace();
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                        }
+                        catch(IOException ex){
+        
+                        }
                     }
                 }
                 else{
@@ -1255,7 +1809,12 @@ public class Simulador {
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Mejorada la piscifactoría " + piscifactoria.getNombre() + " aumentando su capacidad de comida.", "UTF-8");
         }
         catch(IOException e){
-            e.printStackTrace();
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
         }
     }
 
@@ -1283,7 +1842,12 @@ public class Simulador {
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado un tanque número " + nuevoTanque.getCapacidadMaximaPeces() + " de la piscifactoría " + piscifactoriaRio.getNombre() + ".", "UTF-8");
                 }
                 catch(IOException e){
-                    e.printStackTrace();
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                    }
+                    catch(IOException ex){
+    
+                    }
                 }
             } else {
                 System.out.println("No tienes suficientes monedas para comprar un tanque, faltan " + (costoTanque - monedasDisponibles) + " monedas.");
@@ -1304,7 +1868,12 @@ public class Simulador {
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado un tanque número " + nuevoTanque.getCapacidadMaximaPeces() + " de la piscifactoría " + piscifactoriaMar.getNombre() + ".", "UTF-8");
                 }
                 catch(IOException e){
-                    e.printStackTrace();
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                    }
+                    catch(IOException ex){
+    
+                    }
                 }
             } else {
                 System.out.println("No tienes suficientes monedas para comprar un tanque, faltan " + (costoTanque - monedasDisponibles) + " monedas.");
@@ -1315,7 +1884,12 @@ public class Simulador {
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprado un tanque para la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
         }
         catch(IOException e){
-            e.printStackTrace();
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
         }
     }
 
@@ -1335,7 +1909,12 @@ public class Simulador {
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Mejorado el almacén central aumentando su capacidad de comida hasta un total de " + almacenCentral.getCapacidadComida() + " por 200 monedas.", "UTF-8");
             }
             catch(IOException e){
-                e.printStackTrace();
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
             }
         } else {
             System.out.println("No tienes suficientes monedas para aumentar la capacidad del almacén central, faltan " + (costoAumento - monedasDisponibles) + " monedas.");
@@ -1458,12 +2037,50 @@ public class Simulador {
 
             try{
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Fin del día " + (diasPasados + 1) + ".", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Peces actuales, " + pecesRio + " de río " + pecesMar + " de mar.", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, monedasGanadas + " monedas ganadas por un total de " + pecesVendidos + ".", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+           
+            try{
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Fin del día " + (diasPasados + 1) + ".", "UTF-8");
             }
             catch(IOException e){
-                e.printStackTrace();
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
             }
 
             diasPasados++;
@@ -1472,7 +2089,12 @@ public class Simulador {
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
             }
             catch(IOException e){
-                e.printStackTrace();
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
             }
 
             pecesRio = 0;
@@ -1606,10 +2228,26 @@ public class Simulador {
 
             try{
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
             }
             catch(IOException e){
-                e.printStackTrace();
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
             }
         }
     }
@@ -1926,10 +2564,26 @@ public class Simulador {
 
         try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, " + sistemaMonedas.getMonedas() + ".", "UTF-8");
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+                
+            }
+        }
+
+        try{
             LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Añadidas monedas mediante la opción oculta.", "UTF-8");
         }
         catch(IOException e){
-            e.printStackTrace();
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+            }
+            catch(IOException ex){
+                
+            }
         }
     }
 
@@ -1948,45 +2602,60 @@ public class Simulador {
      * @param args Argumentos pasados por línea de comandos.
      */
     public static void main(String[] args) {
-        init();
-
-        int opcion = 0;
-        int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 98, 99 };
-
-        while (opcion != 14) {
-            System.out.println("Día actual: " + (diasPasados + 1));
-            menu();
-
-            opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
-
-            switch(opcion){
-                case 1 -> {showGeneralStatus();}
-                case 2 -> {showSpecificStatus();}
-                case 3 -> {mostrarEstadoTanque();}
-                case 4 -> {showStats();}
-                case 5 -> {showIctio();}
-                case 6 -> {nextDay();}
-                case 7 -> {addFood();}
-                case 8 -> {addFish();}
-                case 9 -> {sell();}
-                case 10 -> {cleanTank();}
-                case 11 -> {emptyTank();}
-                case 12 -> {upgrade();}
-                case 13 -> {pasarDias();}
-                case 14 -> {System.out.println("Cerrando...");}
-                case 98 -> {anadirPezAleatorio();}
-                case 99 -> {anadirMonedasOculto();}
-            }
-        }
-
-        SistemaEntrada.close();
-
         try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Cierre de la partida.", "UTF-8");
+            init();
+
+            int opcion = 0;
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 98, 99 };
+
+            while (opcion != 14) {
+                System.out.println("Día actual: " + (diasPasados + 1));
+                menu();
+
+                opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
+
+                switch(opcion){
+                    case 1 -> {showGeneralStatus();}
+                    case 2 -> {showSpecificStatus();}
+                    case 3 -> {mostrarEstadoTanque();}
+                    case 4 -> {showStats();}
+                    case 5 -> {showIctio();}
+                    case 6 -> {nextDay();}
+                    case 7 -> {addFood();}
+                    case 8 -> {addFish();}
+                    case 9 -> {sell();}
+                    case 10 -> {cleanTank();}
+                    case 11 -> {emptyTank();}
+                    case 12 -> {upgrade();}
+                    case 13 -> {pasarDias();}
+                    case 14 -> {System.out.println("Cerrando...");}
+                    case 98 -> {anadirPezAleatorio();}
+                    case 99 -> {anadirMonedasOculto();}
+                }
+            }
+
+            SistemaEntrada.close();
+
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Cierre de la partida.", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+                    
+                }
+            }
+    }
+    catch(Exception e){
+        try{
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
         }
-        catch(IOException e){
-            e.printStackTrace();
+        catch(IOException ex){
+            
         }
+    }
     }
 
 }
