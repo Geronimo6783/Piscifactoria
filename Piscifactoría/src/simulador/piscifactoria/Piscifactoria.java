@@ -237,7 +237,7 @@ public abstract class Piscifactoria {
             if(vivos != 0){
                 return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + String.format("%.2f", (((float)peces / (float)capacidad) * 100))+ "%)" +
                         "\nPeces vivos: " + vivos + "/" + peces + "(" + String.format("%.2f", (((float)vivos / (float)peces) * 100)) + "%)" +
-                        "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + String.format("%.2f",((alimentados / vivos) * 100)) + "%)" +
+                        "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + String.format("%.2f",(((float)alimentados / (float)vivos) * 100)) + "%)" +
                         "\nPeces adultos: " + adultos + "/" + vivos + "(" + String.format("%.2f", (((float)adultos / (float)vivos) * 100)) + "%)" +
                         "\nHembras / Machos: " + hembras + "/" + machos +
                         "\nFértiles: " + fertiles + "/" + vivos + "(" + String.format("%.2f", (((float)fertiles / (float)vivos) * 100))+ "%)" +
