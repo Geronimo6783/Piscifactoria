@@ -2602,50 +2602,60 @@ public class Simulador {
      * @param args Argumentos pasados por línea de comandos.
      */
     public static void main(String[] args) {
-        init();
-
-        int opcion = 0;
-        int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 98, 99 };
-
-        while (opcion != 14) {
-            System.out.println("Día actual: " + (diasPasados + 1));
-            menu();
-
-            opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
-
-            switch(opcion){
-                case 1 -> {showGeneralStatus();}
-                case 2 -> {showSpecificStatus();}
-                case 3 -> {mostrarEstadoTanque();}
-                case 4 -> {showStats();}
-                case 5 -> {showIctio();}
-                case 6 -> {nextDay();}
-                case 7 -> {addFood();}
-                case 8 -> {addFish();}
-                case 9 -> {sell();}
-                case 10 -> {cleanTank();}
-                case 11 -> {emptyTank();}
-                case 12 -> {upgrade();}
-                case 13 -> {pasarDias();}
-                case 14 -> {System.out.println("Cerrando...");}
-                case 98 -> {anadirPezAleatorio();}
-                case 99 -> {anadirMonedasOculto();}
-            }
-        }
-
-        SistemaEntrada.close();
-
         try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Cierre de la partida.", "UTF-8");
-        }
-        catch(IOException e){
+            init();
+
+            int opcion = 0;
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 98, 99 };
+
+            while (opcion != 14) {
+                System.out.println("Día actual: " + (diasPasados + 1));
+                menu();
+
+                opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
+
+                switch(opcion){
+                    case 1 -> {showGeneralStatus();}
+                    case 2 -> {showSpecificStatus();}
+                    case 3 -> {mostrarEstadoTanque();}
+                    case 4 -> {showStats();}
+                    case 5 -> {showIctio();}
+                    case 6 -> {nextDay();}
+                    case 7 -> {addFood();}
+                    case 8 -> {addFish();}
+                    case 9 -> {sell();}
+                    case 10 -> {cleanTank();}
+                    case 11 -> {emptyTank();}
+                    case 12 -> {upgrade();}
+                    case 13 -> {pasarDias();}
+                    case 14 -> {System.out.println("Cerrando...");}
+                    case 98 -> {anadirPezAleatorio();}
+                    case 99 -> {anadirMonedasOculto();}
+                }
+            }
+
+            SistemaEntrada.close();
+
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Cierre de la partida.", "UTF-8");
             }
-            catch(IOException ex){
-                
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+                    
+                }
             }
+    }
+    catch(Exception e){
+        try{
+            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
         }
+        catch(IOException ex){
+            
+        }
+    }
     }
 
 }
