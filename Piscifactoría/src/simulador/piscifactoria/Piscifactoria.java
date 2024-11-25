@@ -226,7 +226,7 @@ public abstract class Piscifactoria {
             capacidad += tanques.get(i).getCapacidadMaximaPeces();
             vivos += tanques.get(i).pecesVivos();
             alimentados += tanques.get(i).pecesAlimentados();
-            adultos += tanques.get(i).pecesAdultos();
+            adultos += tanques.get(i).pecesAdultosVivos();
             hembras += tanques.get(i).pecesHembra();
             machos += tanques.get(i).pecesMacho();
             fertiles += tanques.get(i).pecesFertiles();
