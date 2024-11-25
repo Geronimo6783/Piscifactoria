@@ -81,4 +81,13 @@ public class AlmacenCentral {
     public void mejorar(){
         capacidadComida += 50;
     }
+
+    /**
+     * Devuelve un string con información del almacén central.
+     * @return String con información del almacén central.
+     */
+    public String toString(){
+        return "Capacidad máxima de comida por cada tipo: " + capacidadComida + "\nCantidad comida animal disponible: " + cantidadComidaAnimal
+            + "\nCantidad comida vegetal disponible: " + cantidadComidaVegetal;
+    }
 }

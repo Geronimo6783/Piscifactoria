@@ -2,4 +2,10 @@
 *.sh
 *.bat
 *.txt
-*.jar
+Piscifactoría.jar
+**/transcripciones
+**/logs
+**/rewards
+**/saves
+*.save
+**/lib

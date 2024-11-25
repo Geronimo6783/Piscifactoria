@@ -33,4 +33,12 @@ public class PiscifactoriaRio extends Piscifactoria {
             + " mejorado. Su capacidad ha aumentado en 25 hasta un total de "
             + almacenInicial.getCapacidadMaximaComida() + ".");
     }
+
+    /**
+     * Devuelve un string con información de la piscifactoría de río.
+     * @return String con información de la piscifactoría de río.
+     */
+    public String toString(){
+        return "Nombre piscifactoría de río: " + nombre + "\nNúmero de tanques: " + tanques.size() + "\nAlmacén comida:\n\t" + almacenInicial;
+    }
 }
