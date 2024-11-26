@@ -362,6 +362,18 @@ public class Simulador {
             }
 
             try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "----------------------------------------------", "UTF-8");
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+
+                }
+            }
+
+            try{
                 LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
             }
             catch(IOException e){
@@ -1840,7 +1852,7 @@ public class Simulador {
                         + ". Total de tanques: " + piscifactoriaRio.getTanques().size());
 
                 try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado un tanque número " + nuevoTanque.getCapacidadMaximaPeces() + " de la piscifactoría " + piscifactoriaRio.getNombre() + ".", "UTF-8");
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado un tanque número " + nuevoTanque.getNumeroTanque() + " de la piscifactoría " + piscifactoriaRio.getNombre() + ".", "UTF-8");
                 }
                 catch(IOException e){
                     try{
@@ -1866,7 +1878,7 @@ public class Simulador {
                         + ". Total de tanques: " + piscifactoriaMar.getTanques().size());
 
                 try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado un tanque número " + nuevoTanque.getCapacidadMaximaPeces() + " de la piscifactoría " + piscifactoriaMar.getNombre() + ".", "UTF-8");
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado un tanque número " + nuevoTanque.getNumeroTanque() + " de la piscifactoría " + piscifactoriaMar.getNombre() + ".", "UTF-8");
                 }
                 catch(IOException e){
                     try{
