@@ -136,14 +136,149 @@ public class SistemaRecompensa{
                 }
 
                 if(valor==2){
+                    rootElement.addElement("name").addText("Almacen Central [B]");
+                    rootElement.addElement("origin").addText("Sistema");
+                    rootElement.addElement("desc").addText("Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.");
+                    rootElement.addElement("rarity").addText("3");
+        
+                    Element rootElement2=document.addElement("give");
+                    rootElement2.addElement("building").addAttribute("code", "4").addText("Almacén central");
+                    rootElement2.addElement("part").addText("B");
+                    rootElement2.addElement("total").addText("ABCD");
+                    Element rootElement3=document.addElement("quantity");
+                    rootElement3.addText("1");
+                    rootElement.add(rootElement2);
+                    rootElement.add(rootElement3);
                 }
     
                 if(valor==3){
-
+                    rootElement.addElement("name").addText("Almacen Central [C]");
+                    rootElement.addElement("origin").addText("Sistema");
+                    rootElement.addElement("desc").addText("Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.");
+                    rootElement.addElement("rarity").addText("3");
+        
+                    Element rootElement2=document.addElement("give");
+                    rootElement2.addElement("building").addAttribute("code", "4").addText("Almacén central");
+                    rootElement2.addElement("part").addText("C");
+                    rootElement2.addElement("total").addText("ABCD");
+                    Element rootElement3=document.addElement("quantity");
+                    rootElement3.addText("1");
+                    rootElement.add(rootElement2);
+                    rootElement.add(rootElement3);
                 }
 
                 if(valor==4){
-
+                    rootElement.addElement("name").addText("Almacen Central [D]");
+                    rootElement.addElement("origin").addText("Sistema");
+                    rootElement.addElement("desc").addText("Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.");
+                    rootElement.addElement("rarity").addText("3");
+        
+                    Element rootElement2=document.addElement("give");
+                    rootElement2.addElement("building").addAttribute("code", "4").addText("Almacén central");
+                    rootElement2.addElement("part").addText("D");
+                    rootElement2.addElement("total").addText("ABCD");
+                    Element rootElement3=document.addElement("quantity");
+                    rootElement3.addText("1");
+                    rootElement.add(rootElement2);
+                    rootElement.add(rootElement3);
                 }   
         }
+
+        public void recompensaComida(Document document,Element rootElement){
+            //intento de creacion de recompensa 
+            Random r=new Random();
+            int valor=r.nextInt(5);
+                if(valor==1){
+                    rootElement.addElement("name").addText("Comida general I");
+                    rootElement.addElement("origin").addText("Sistema");
+                    rootElement.addElement("desc").addText("50 unidades de pienso multipropósito para todo tipo de peces.");
+                    rootElement.addElement("rarity").addText("0");
+        
+                    Element rootElement2=document.addElement("give");
+                    rootElement2.addElement("food").addAttribute("type", "general").addText("50");
+                    Element rootElement3=document.addElement("quantity");
+                    rootElement3.addText("1");
+                    rootElement.add(rootElement2);
+                    rootElement.add(rootElement3);
+                }
+            }
+
+            public void recompensaMonedas(Document document,Element rootElement){
+                //intento de creacion de recompensa 
+                Random r=new Random();
+                int valor=r.nextInt(5);
+                    if(valor==1){
+                        rootElement.addElement("name").addText("Monedas I");
+                        rootElement.addElement("origin").addText("Sistema");
+                        rootElement.addElement("desc").addText("100 monedas");
+                        rootElement.addElement("rarity").addText("0");
+            
+                        Element rootElement2=document.addElement("give");
+                        rootElement2.addElement("coins").addText("100");
+                        Element rootElement3=document.addElement("quantity");
+                        rootElement3.addText("1");
+                        rootElement.add(rootElement2);
+                        rootElement.add(rootElement3);
+                    }
+                }
+                public void recompensaPienso(Document document,Element rootElement){
+                    //intento de creacion de recompensa 
+                    Random r=new Random();
+                    int valor=r.nextInt(5);
+                        if(valor==1){
+                            rootElement.addElement("name").addText("Pienso de peces I");
+                            rootElement.addElement("origin").addText("Sistema");
+                            rootElement.addElement("desc").addText("100 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.");
+                            rootElement.addElement("rarity").addText("0");
+                
+                            Element rootElement2=document.addElement("give");
+                            rootElement2.addElement("food").addAttribute("type", "animal").addText("100");
+                            Element rootElement3=document.addElement("quantity");
+                            rootElement3.addText("1");
+                            rootElement.add(rootElement2);
+                            rootElement.add(rootElement3);
+                        }
+                    }
+            
+                    public void recompensaPiscifac(Document document,Element rootElement){
+                        //intento de creacion de recompensa 
+                        Random r=new Random();
+                        int valor=r.nextInt(4);
+                            if(valor==1){
+                                rootElement.addElement("name").addText("Piscifactoría de mar [A]");
+                                rootElement.addElement("origin").addText("Sistema");
+                                rootElement.addElement("desc").addText("Materiales para la construcción de una piscifactoría de mar. Con la parte A y B, puedes obtenerla de forma gratuita.");
+                                rootElement.addElement("rarity").addText("4");
+                    
+                                Element rootElement2=document.addElement("give");
+                                rootElement2.addElement("building").addAttribute("code", "1").addText("Piscifactoría de mar");
+                                rootElement2.addElement("part").addText("A");
+                                rootElement2.addElement("total").addText("AB");
+                                Element rootElement3=document.addElement("quantity");
+                                rootElement3.addText("1");
+                                rootElement.add(rootElement2);
+                                rootElement.add(rootElement3);
+                            }
+                        }
+                    
+                        public void recompensaTanque(Document document,Element rootElement){
+                            //intento de creacion de recompensa 
+                            Random r=new Random();
+                            int valor=r.nextInt(2);
+                                if(valor==1){
+                                    rootElement.addElement("name").addText("Tanque de mar");
+                                    rootElement.addElement("origin").addText("Sistema");
+                                    rootElement.addElement("desc").addText("Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de mar.");
+                                    rootElement.addElement("rarity").addText("3");
+                        
+                                    Element rootElement2=document.addElement("give");
+                                    rootElement2.addElement("building").addAttribute("code", "3").addText("Tanque de mar");
+                                    rootElement2.addElement("part").addText("A");
+                                    rootElement2.addElement("total").addText("A");
+                                    Element rootElement3=document.addElement("quantity");
+                                    rootElement3.addText("1");
+                                    rootElement.add(rootElement2);
+                                    rootElement.add(rootElement3);
+                                }
+                            }
 }
