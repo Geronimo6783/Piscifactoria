@@ -226,25 +226,42 @@ public abstract class Piscifactoria {
             capacidad += tanques.get(i).getCapacidadMaximaPeces();
             vivos += tanques.get(i).pecesVivos();
             alimentados += tanques.get(i).pecesAlimentados();
-            adultos += tanques.get(i).pecesAdultos();
+            adultos += tanques.get(i).pecesAdultosVivos();
             hembras += tanques.get(i).pecesHembra();
             machos += tanques.get(i).pecesMacho();
             fertiles += tanques.get(i).pecesFertiles();
             }
         
         if(peces != 0){
-            return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + String.format("%.2f", (((float)peces / (float)capacidad) * 100))+ "%)" +
+
+            if(vivos != 0){
+                return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + String.format("%.2f", (((float)peces / (float)capacidad) * 100))+ "%)" +
+                        "\nPeces vivos: " + vivos + "/" + peces + "(" + String.format("%.2f", (((float)vivos / (float)peces) * 100)) + "%)" +
+                        "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + String.format("%.2f",(((float)alimentados / (float)vivos) * 100)) + "%)" +
+                        "\nPeces adultos: " + adultos + "/" + vivos + "(" + String.format("%.2f", (((float)adultos / (float)vivos) * 100)) + "%)" +
+                        "\nHembras / Machos: " + hembras + "/" + machos +
+                        "\nFértiles: " + fertiles + "/" + vivos + "(" + String.format("%.2f", (((float)fertiles / (float)vivos) * 100))+ "%)" +
+                        "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
+                        + almacenInicial.capacidadMaximaComida + "("
+                        + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
+                        + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
+                        + almacenInicial.capacidadMaximaComida + "("
+                        + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
+            }
+            else{
+                return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + String.format("%.2f", (((float)peces / (float)capacidad) * 100))+ "%)" +
                     "\nPeces vivos: " + vivos + "/" + peces + "(" + String.format("%.2f", (((float)vivos / (float)peces) * 100)) + "%)" +
-                    "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + (alimentados / vivos) * 100 + "%)" +
-                    "\nPeces adultos: " + adultos + "/" + vivos + "(" + String.format("%.2f", (((float)adultos / (float)vivos) * 100)) + "%)" +
+                    "\nPeces alimentados: " + 0 + "/" + 0 + "(" + 100 + "%)" +
+                    "\nPeces adultos: " + 0 + "/" + 0 + "(" + 100 + "%)" +
                     "\nHembras / Machos: " + hembras + "/" + machos +
-                    "\nFértiles: " + fertiles + "/" + vivos + "(" + String.format("%.2f", (((float)fertiles / (float)vivos) * 100))+ "%)" +
+                    "\nFértiles: " + 0 + "/" + 0 + "(" + 100 + "%)" +
                     "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
                     + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
                     + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
                     + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
+            }
         }
         else{
             return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +

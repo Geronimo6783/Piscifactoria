@@ -90,4 +90,43 @@ public class SistemaFicheros {
             return false;
         }
     }
+
+    /**
+     * Indica si un directorio está vacío.
+     * @param rutaDirectorio Ruta del directorio del que se quiere comprobar que está vacío.
+     * @return Si el directorio está vacío o no.
+     * @throws IOException Si el directorio no existe o se trata de un fichero.
+     */
+    public static boolean isDirectorioVacio(String rutaDirectorio) throws IOException{
+        if(existeDirectorio(rutaDirectorio)){
+            File directorio = new File(rutaDirectorio);
+                
+            if(directorio.listFiles().length == 0){
+                return true;
+            }
+            else{
+                return false;
+            }   
+        }
+        else{
+            throw new IOException("El directorio no existe.");
+        }
+    }
+
+    /**
+     * Borra un archivo del sistema de ficheros.
+     * @param rutaArchivo Ruta del archivo a borrar.
+     * @throws IOException Cuando el archivo no ha podido ser eliminado o el archivo no existe.
+     */
+    public static void borrarArchivo(String rutaArchivo) throws IOException{
+        if(existeArhivo(rutaArchivo)){
+            File archivo = new File(rutaArchivo);
+            if(!archivo.delete()){
+                throw new IOException("El archivo no ha podido ser eliminado.");
+            }
+        }
+        else{
+            throw new IOException("El archivo a eliminar no existe.");
+        }
+    }
 }

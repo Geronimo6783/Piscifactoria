@@ -165,6 +165,22 @@ public class Tanque {
 
     /**
      * 
+     * @return Número de peces adultos vivos en el tanque.
+     */
+    public int pecesAdultosVivos(){
+        int pecesAdultos = 0;
+
+        for(Pez pez : peces){
+            if(pez.isVivo() && pez.isMaduro()){
+                pecesAdultos += 1;
+            }
+        }
+
+        return pecesAdultos;
+    }
+ 
+    /**
+     * 
      * @return Número de peces macho en el tanque.
      */
     public int pecesMacho() {
