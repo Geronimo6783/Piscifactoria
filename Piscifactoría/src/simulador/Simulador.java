@@ -81,21 +81,72 @@ public class Simulador {
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init() {
-        System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
-        nombre = SistemaEntrada.entradaTexto();
-        System.out.print("Introduzca el nombre de la primera piscifactoría: ");
-        String nombrePiscifactoria = SistemaEntrada.entradaTexto();
-        sistemaMonedas = new SistemaMonedas(100);
-        piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
-        String[] pecesDisponibles = { AlmacenPropiedades.ABADEJO.getNombre(),
-                AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
-                AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
-                AlmacenPropiedades.PEJERREY.getNombre(),
-                AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),
-                AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
-                AlmacenPropiedades.TILAPIA_NILO.getNombre() };
-        estadisticas = new Estadisticas(pecesDisponibles);
+        int opcion = 0;
+        String nombrePiscifactoria = "";
+
+        try{
+            if(!SistemaFicheros.existeDirectorio("saves")){
+                SistemaFicheros.crearCarpeta("saves");
+            }
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
+            File[] archivosGuardado = new File("saves").listFiles();
+
+            if(archivosGuardado.length != 0){
+                opcion = GeneradorMenus.generarMenuOperativo(new String[]{"¿Desea cargar una partida guardada?"}, new String[]{"Sí", "No"}, 1, 2);
+                
+                if(opcion  == 1){
+                    String[] partidasGuardadas = new String[archivosGuardado.length];
+                    String[] tokensNombreArchivoGuardado;
+
+                    for(int i = 0; i < archivosGuardado.length; i++){
+                        tokensNombreArchivoGuardado = archivosGuardado[i].getName().split(".save");
+                        partidasGuardadas[i] = tokensNombreArchivoGuardado[(tokensNombreArchivoGuardado.length != 1) ? tokensNombreArchivoGuardado.length - 2 : tokensNombreArchivoGuardado.length - 1];
+                    }
+
+                    opcion = GeneradorMenus.generarMenuOperativo(new String[]{"Escoja la partida que desea cargar:"}, partidasGuardadas, 1, partidasGuardadas.length);
+
+                    /*
+                     * Implementar la lógica de carga del archivo de guardado seleccionado.
+                     */
+                }
+            }
+        }
+        catch(Exception e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        if(opcion == 0 || opcion == 2){
+            System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
+            nombre = SistemaEntrada.entradaTexto();
+            System.out.print("Introduzca el nombre de la primera piscifactoría: ");
+            nombrePiscifactoria = SistemaEntrada.entradaTexto();
+            sistemaMonedas = new SistemaMonedas(100);
+            piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
+            String[] pecesDisponibles = { AlmacenPropiedades.ABADEJO.getNombre(),
+                    AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+                    AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                    AlmacenPropiedades.PEJERREY.getNombre(),
+                    AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),
+                    AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                    AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
+                    AlmacenPropiedades.TILAPIA_NILO.getNombre() };
+            estadisticas = new Estadisticas(pecesDisponibles);
+        }
 
         try{
             if(!SistemaFicheros.existeDirectorio("logs")){
@@ -183,51 +234,18 @@ public class Simulador {
             }
         }
 
-        try{
-            if(!SistemaFicheros.existeDirectorio("saves")){
-                SistemaFicheros.crearCarpeta("saves");
-            }
-        }
-        catch(IOException e){
+        if(opcion == 0 || opcion == 2){
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
-        }
-
-        try{
-            if(SistemaFicheros.isDirectorioVacio("saves")){
-                SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
-                archivoGuardadoPartida = new File("saves/" + nombre + ".save");
-            }
-            else{
-                try{
-                    if(SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
-                        String[] cabecera = {"¿Desea cargar la partida guardada?"};
-                        String[] opciones = {"Sí", "No"};
-                        int opcion = GeneradorMenus.generarMenuOperativo(cabecera, opciones, 1, 2);
-                        if(opcion == 1){
-                            //Cargar archivo de guardado.
-                        }
-                        else{
-                            try{
-                                SistemaFicheros.borrarArchivo("saves/" + nombre + ".save");
-                            }
-                            catch(IOException e){
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                                }
-                                catch(IOException ex){
-                    
-                                }
-                            }
-
+                if(SistemaFicheros.isDirectorioVacio("saves")){
+                    SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                    archivoGuardadoPartida = new File("saves/" + nombre + ".save");
+                }
+                else{
+                    try{
+                        if(!SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
                             try{
                                 SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
-                            }
-                            catch(IOException e){
+                            }catch(IOException e){
                                 try{
                                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
                                 }
@@ -235,41 +253,29 @@ public class Simulador {
                     
                                 }
                             }
+                            
                         }
                     }
-                    else{
-                        try{
-                            SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
-                        }catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                            }
-                            catch(IOException ex){
-                
-                            }
-                        }
-                        
+                catch(IOException e){
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                    }
+                    catch(IOException ex){
+            
                     }
                 }
+                }
+            }
             catch(IOException e){
                 try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
                 }
                 catch(IOException ex){
-        
+
                 }
             }
-            }
         }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
 
-            }
-        }
-        
         archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
         archivoLogPartida = new File("logs/" + nombre + ".log");
         
