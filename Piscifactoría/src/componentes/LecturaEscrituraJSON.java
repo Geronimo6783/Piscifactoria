@@ -3,9 +3,7 @@ package componentes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Clase para gestionar la lectura y escritura de ficheros JSON.
@@ -17,38 +15,36 @@ public class LecturaEscrituraJSON {
     /**
      * Guarda un objeto en un archivo JSON.
      *
-     * @param rutaArchivo Ruta donde se guardará el archivo JSON.
-     * @param objeto      Objeto a guardar.
+     * @param archivo Archivo donde se guardará el objeto JSON.
+     * @param objeto  Objeto a guardar.
      * @throws IOException Si ocurre un error al guardar el archivo.
      */
-    public static void guardarJSON(String rutaArchivo, Object objeto) throws IOException {
-        
-        if (!SistemaFicheros.existeArhivo(rutaArchivo)) {
-            SistemaFicheros.crearArchivo(rutaArchivo);
+    public static void guardarJSON(File archivo, Object objeto) throws IOException {
+        if (!archivo.exists()) {
+            SistemaFicheros.crearArchivo(archivo.getPath());
         }
 
-        try (FileWriter writer = new FileWriter(rutaArchivo)) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
             gson.toJson(objeto, writer);
-            System.out.println("Datos guardados correctamente en: " + rutaArchivo);
+            System.out.println("Datos guardados correctamente en: " + archivo.getPath());
         }
     }
 
     /**
      * Carga un objeto desde un archivo JSON.
      *
-     * @param rutaArchivo Ruta del archivo JSON.
-     * @param clase       Clase del objeto a cargar.
-     * @param <T>         Tipo del objeto a cargar.
+     * @param archivo Archivo JSON desde donde se cargará el objeto.
+     * @param clase   Clase del objeto a cargar.
+     * @param <T>     Tipo del objeto a cargar.
      * @return El objeto cargado.
      * @throws IOException Si ocurre un error al leer el archivo.
      */
-    public static <T> T cargarJSON(String rutaArchivo, Class<T> clase) throws IOException {
-        
-        if (!SistemaFicheros.existeArhivo(rutaArchivo)) {
-            throw new IOException("El archivo no existe: " + rutaArchivo);
+    public static <T> T cargarJSON(File archivo, Class<T> clase) throws IOException {
+        if (!archivo.exists()) {
+            throw new IOException("El archivo no existe: " + archivo.getPath());
         }
 
-        try (FileReader reader = new FileReader(rutaArchivo)) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             return gson.fromJson(reader, clase);
         }
     }
