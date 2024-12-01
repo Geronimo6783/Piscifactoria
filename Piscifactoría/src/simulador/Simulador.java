@@ -1396,9 +1396,9 @@ public class Simulador {
         }
 
         switch(alimentacionPez){
-            case PecesProps.CARNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal");}
-            case PecesProps.FILTRADOR -> {System.out.println("\nTipo de comida que consume: Comida vegetal");}
-            case PecesProps.OMNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal y vegetal");}
+            case CARNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal");}
+            case FILTRADOR -> {System.out.println("\nTipo de comida que consume: Comida vegetal");}
+            case OMNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal y vegetal");}
             default -> {throw new Exception("Tipo de alimentación del pez no válida");}
         }
 
