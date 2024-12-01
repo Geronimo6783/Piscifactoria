@@ -1,5 +1,15 @@
 package componentes;
 
+import java.lang.reflect.Type;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+
 /**
  * Clase que representa a un sistema en el se dispone de una cantidad de monedas.
  */
@@ -51,4 +61,22 @@ public class SistemaMonedas {
         return "Monedas: " + monedas;
     }
 
+    /**
+     * Clase que se encarga de adaptar la clase SistemaMonedas al formato JSON.
+     */
+    @JsonAdapter(SistemaMonedas.class)
+    private class AdaptadorJSON implements JsonSerializer<SistemaMonedas>, JsonDeserializer<SistemaMonedas>{
+
+        @Override
+        public SistemaMonedas deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return new SistemaMonedas(json.getAsInt());
+        }
+
+        @Override
+        public JsonElement serialize(SistemaMonedas src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src.getMonedas());
+        }
+
+        
+    }
 }

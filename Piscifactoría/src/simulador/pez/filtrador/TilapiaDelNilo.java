@@ -85,7 +85,7 @@ public class TilapiaDelNilo extends Filtrador implements Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new TilapiaDelNilo(false);
     }
 
@@ -95,7 +95,7 @@ public class TilapiaDelNilo extends Filtrador implements Rio{
      */
     @Override
     public Pez obtenerPezHija(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new TilapiaDelNilo(true);
     }
 }

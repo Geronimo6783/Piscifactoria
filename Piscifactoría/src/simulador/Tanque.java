@@ -256,7 +256,7 @@ public class Tanque {
         int comidaAnimal = almacenComida.getCantidadComidaAnimal();
         int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
-        if (Simulador.almacenCentral == null) {
+        if (Simulador.simulador.almacenCentral == null) {
             for (Pez pez : peces) {
                 if (pez.isVivo() && !pez.isAlimentado()) {
                     cantidadDeComidaNecesariaPorPez.add(pez.comer());
@@ -331,8 +331,8 @@ public class Tanque {
                 }
             }
         } else {
-            int comidaAnimalAlmacen = Simulador.almacenCentral.getCantidadComidaAnimal();
-            int comidaVegetalAlmacen = Simulador.almacenCentral.getCantidadComidaVegetal();
+            int comidaAnimalAlmacen = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+            int comidaVegetalAlmacen = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
 
             for (Pez pez : peces) {
                 if (pez.isVivo() && !pez.isAlimentado()) {
@@ -350,7 +350,7 @@ public class Tanque {
                 if ((comidaAnimal + comidaAnimalAlmacen) >= comidaNecesaria) {
                     comidaAnimal -= comidaNecesaria;
                     if (comidaAnimal < 0) {
-                        Simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen + comidaAnimal);
+                        Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen + comidaAnimal);
                         comidaAnimal = 0;
                     }
                     for (Pez pez : peces) {
@@ -369,7 +369,7 @@ public class Tanque {
                     if ((comidaVegetal + comidaVegetalAlmacen) >= comidaNecesaria) {
                         comidaVegetal -= comidaNecesaria;
                         if (comidaVegetal < 0) {
-                            Simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
+                            Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
                             comidaVegetal = 0;
                         }
                         for (Pez pez : peces) {
@@ -411,25 +411,25 @@ public class Tanque {
 
                             if (comidaVegetalAlmacen > comidaAnimalAlmacen) {
                                 if (comidaVegetalAlmacen >= comidaNecesaria) {
-                                    Simulador.almacenCentral
+                                    Simulador.simulador.almacenCentral
                                             .setCantidadComidaVegetal(comidaVegetalAlmacen - comidaNecesaria);
                                 } else {
                                     comidaVegetalAlmacen -= comidaNecesaria;
                                     comidaAnimalAlmacen += comidaVegetal;
                                     comidaVegetal = 0;
-                                    Simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
-                                    Simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
+                                    Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
+                                    Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
                                 }
                             } else {
                                 if (comidaAnimalAlmacen >= comidaNecesaria) {
-                                    Simulador.almacenCentral
+                                    Simulador.simulador.almacenCentral
                                             .setCantidadComidaAnimal(comidaAnimalAlmacen - comidaNecesaria);
                                 } else {
                                     comidaAnimalAlmacen -= comidaNecesaria;
                                     comidaVegetalAlmacen += comidaAnimal;
                                     comidaAnimalAlmacen = 0;
-                                    Simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
-                                    Simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
+                                    Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
+                                    Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
                                 }
                             }
                         }
@@ -483,7 +483,7 @@ public class Tanque {
             }
         }
 
-        if (Simulador.almacenCentral == null) {
+        if (Simulador.simulador.almacenCentral == null) {
             if (peces.get(0) instanceof Carnivoro) {
                 comidaAnimal = comidaDisponible;
 
@@ -506,27 +506,27 @@ public class Tanque {
             if (peces.get(0) instanceof Carnivoro) {
                 almacenComida.setCantidadComidaAnimal(0);
                 ;
-                Simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
+                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
             } else {
                 if (peces.get(0) instanceof Filtrador) {
                     almacenComida.setCantidadComidaVegetal(0);
                     ;
-                    Simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
+                    Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
 
                 } else {
-                    if (Simulador.almacenCentral.getCantidadComidaAnimal() > Simulador.almacenCentral
+                    if (Simulador.simulador.almacenCentral.getCantidadComidaAnimal() > Simulador.simulador.almacenCentral
                             .getCantidadComidaVegetal()) {
                         almacenComida.setCantidadComidaAnimal(0);
                         ;
                         almacenComida.setCantidadComidaVegetal(0);
                         ;
-                        Simulador.almacenCentral.setCantidadComidaAnimal(0);
-                        Simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
+                        Simulador.simulador.almacenCentral.setCantidadComidaAnimal(0);
+                        Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
                     } else {
                         almacenComida.setCantidadComidaAnimal(0);
                         almacenComida.setCantidadComidaVegetal(0);
-                        Simulador.almacenCentral.setCantidadComidaVegetal(0);
-                        Simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
+                        Simulador.simulador.almacenCentral.setCantidadComidaVegetal(0);
+                        Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
                     }
 
                 }
@@ -602,12 +602,12 @@ public class Tanque {
 
                 if (pez.isEdadOptima()) {
                     pecesAVender++;
-                    Simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
+                    Simulador.simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
                     iterador.remove();
                 }
             }
 
-            Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas()
+            Simulador.simulador.sistemaMonedas.setMonedas(Simulador.simulador.sistemaMonedas.getMonedas()
                     + (pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas()));
             
             return pecesAVender;
@@ -631,12 +631,12 @@ public class Tanque {
 
                 if(pez.isMaduro() && !pez.isEdadOptima()){
                     monedasAObtener += monedasPez;
-                    Simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
+                    Simulador.simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
                     iterador.remove();
                 }
             }
 
-            Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas() + monedasAObtener);
+            Simulador.simulador.sistemaMonedas.setMonedas(Simulador.simulador.sistemaMonedas.getMonedas() + monedasAObtener);
         }
     }
 

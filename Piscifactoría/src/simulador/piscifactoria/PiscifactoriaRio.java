@@ -15,7 +15,7 @@ public class PiscifactoriaRio extends Piscifactoria {
     public PiscifactoriaRio(String nombre){
         super(nombre);
         tanqueInicial = new Tanque(1, 25);
-        if(Simulador.piscifactorias.size() != 0){
+        if(Simulador.simulador.piscifactorias.size() != 0){
             almacenInicial = new AlmacenComida(25, 0, 0);
         }
         else{

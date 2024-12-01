@@ -1,15 +1,25 @@
 package simulador;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+
 import componentes.FechaTiempoLocal;
 import componentes.GeneradorMenus;
 import componentes.LecturaEscrituraFicherosPlanos;
+import componentes.LecturaEscrituraJSON;
 import componentes.SistemaEntrada;
 import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
@@ -28,34 +38,59 @@ import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 public class Simulador {
 
     /**
+     * Clase que se encarga de adaptar la clase Estadisticas al formato JSON.
+     */
+    @JsonAdapter(Estadisticas.class)
+    private class AdaptadorJSONEstadisticas implements JsonSerializer<Estadisticas>, JsonDeserializer<Estadisticas>{
+
+        @Override
+        public Estadisticas deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return new Estadisticas(new String[]{ AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), 
+                AlmacenPropiedades.CABALLA.getNombre(),AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                AlmacenPropiedades.PEJERREY.getNombre(),AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()}, json.getAsString());
+        }
+
+        @Override
+        public JsonElement serialize(Estadisticas src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src.exportarDatos(new String[]{ AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), 
+                AlmacenPropiedades.CABALLA.getNombre(),AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                AlmacenPropiedades.PEJERREY.getNombre(),AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()}));
+        }
+
+        
+    }
+
+    /**
      * Indica el número de días que han pasado en la simulación.
      */
-    private static int diasPasados = 0;
+    private int diasPasados = 0;
 
     /**
      * Piscifactorías de la simulación.
      */
-    public static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
+    public ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
 
     /**
      * Nombre de la entidad, empresa o partida de la simulación.
      */
-    private static String nombre;
+    private String nombre;
 
     /**
      * Sistema de monedas de la simulación.
      */
-    public static SistemaMonedas sistemaMonedas;
+    public SistemaMonedas sistemaMonedas;
 
     /**
      * Almacén central de comida usado en la simulación.
      */
-    public static AlmacenCentral almacenCentral = null;
+    public AlmacenCentral almacenCentral = null;
 
     /**
      * Estadísticas de los peces de la simualción.
      */
-    public static Estadisticas estadisticas;
+    public Estadisticas estadisticas;
 
     /**
      * Archivo compartido entre todas las partidas donde se registran los errores.
@@ -76,6 +111,11 @@ public class Simulador {
      * Archivo de guardado de la partida.
      */
     public static File archivoGuardadoPartida;
+
+    /**
+     * Simulador que se ejecuta en la partida.
+     */
+    public static Simulador simulador;
 
     /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
@@ -118,6 +158,18 @@ public class Simulador {
                     /*
                      * Implementar la lógica de carga del archivo de guardado seleccionado.
                      */
+
+                     try{
+                        simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivosGuardado[opcion - 1]);
+                     }
+                     catch(IOException e){
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                        }
+                        catch(IOException ex){
+            
+                        }
+                     }
                 }
             }
         }
@@ -131,21 +183,23 @@ public class Simulador {
         }
 
         if(opcion == 0 || opcion == 2){
+            simulador = new Simulador();
             System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
-            nombre = SistemaEntrada.entradaTexto();
+            simulador.nombre = SistemaEntrada.entradaTexto();
             System.out.print("Introduzca el nombre de la primera piscifactoría: ");
             nombrePiscifactoria = SistemaEntrada.entradaTexto();
-            sistemaMonedas = new SistemaMonedas(100);
-            piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
+            simulador.sistemaMonedas = new SistemaMonedas(100);
+            simulador.piscifactorias = new ArrayList<Piscifactoria>();
+            simulador.piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
             String[] pecesDisponibles = { AlmacenPropiedades.ABADEJO.getNombre(),
-                    AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
-                    AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
-                    AlmacenPropiedades.PEJERREY.getNombre(),
-                    AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),
-                    AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-                    AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
-                    AlmacenPropiedades.TILAPIA_NILO.getNombre() };
-            estadisticas = new Estadisticas(pecesDisponibles);
+                AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
+                AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                AlmacenPropiedades.PEJERREY.getNombre(),
+                AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),
+                AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
+                AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+            simulador.estadisticas = new Estadisticas(pecesDisponibles);
         }
 
         try{
@@ -191,9 +245,9 @@ public class Simulador {
         }
 
         try{
-            if(!SistemaFicheros.existeArhivo("transcripciones/" + nombre + ".tr")){
-                SistemaFicheros.crearArchivo("transcripciones/" + nombre + ".tr");
-                archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
+            if(!SistemaFicheros.existeArhivo("transcripciones/" + simulador.nombre + ".tr")){
+                SistemaFicheros.crearArchivo("transcripciones/" + simulador.nombre + ".tr");
+                archivoTranscripcionesPartida = new File("transcripciones/" + simulador.nombre + ".tr");
             }
         }
         catch(IOException e){
@@ -206,9 +260,9 @@ public class Simulador {
         }
 
         try{
-            if(!SistemaFicheros.existeArhivo("logs/" + nombre + ".log")){
-                SistemaFicheros.crearArchivo("logs/" + nombre + ".log");
-                archivoLogPartida = new File("logs/" + nombre + ".log");
+            if(!SistemaFicheros.existeArhivo("logs/" + simulador.nombre + ".log")){
+                SistemaFicheros.crearArchivo("logs/" + simulador.nombre + ".log");
+                archivoLogPartida = new File("logs/" + simulador.nombre + ".log");
             }
         }
         catch(IOException e){
@@ -237,14 +291,15 @@ public class Simulador {
         if(opcion == 0 || opcion == 2){
             try{
                 if(SistemaFicheros.isDirectorioVacio("saves")){
-                    SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
-                    archivoGuardadoPartida = new File("saves/" + nombre + ".save");
+                    SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
+                    archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
                 }
                 else{
                     try{
-                        if(!SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
+                        if(!SistemaFicheros.existeArhivo("saves/" + simulador.nombre + ".save")){
                             try{
-                                SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
+                                SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
+                                archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
                             }catch(IOException e){
                                 try{
                                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
@@ -276,8 +331,8 @@ public class Simulador {
             }
         }
 
-        archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
-        archivoLogPartida = new File("logs/" + nombre + ".log");
+        archivoTranscripcionesPartida = new File("transcripciones/" + simulador.nombre + ".tr");
+        archivoLogPartida = new File("logs/" + simulador.nombre + ".log");
         
 
             try{
@@ -293,7 +348,7 @@ public class Simulador {
             }
 
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Inicio de la simulación " + nombre + ".", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Inicio de la simulación " + simulador.nombre + ".", "UTF-8");
             }
             catch(IOException e){
                 try{
@@ -317,7 +372,7 @@ public class Simulador {
             }
 
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Dinero: " + sistemaMonedas.getMonedas() + " monedas.", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Dinero: " + simulador.sistemaMonedas.getMonedas() + " monedas.", "UTF-8");
             }
             catch(IOException e){
                 try{
@@ -380,7 +435,7 @@ public class Simulador {
             }
 
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (simulador.diasPasados + 1) + ".", "UTF-8");
             }
             catch(IOException e){
                 try{
@@ -392,7 +447,7 @@ public class Simulador {
             }
 
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Inicio de la simulación " + nombre + ".", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Inicio de la simulación " + simulador.nombre + ".", "UTF-8");
             }
             catch(IOException e){
                 try{
@@ -431,7 +486,7 @@ public class Simulador {
     /**
      * Imprime un menú para seleccionar una piscifactoría de la simulación.
      */
-    private static void menuPisc() {
+    private void menuPisc() {
         String[] cabeceraMenuPiscifactoria = { "Seleccione una opción:",
                 "--------------------------- Piscifactorías ---------------------------",
                 "[Peces vivos/ Peces totales/ Espacio total]" };
@@ -452,7 +507,7 @@ public class Simulador {
      * 
      * @return Opción seleccionada.
      */
-    private static int selectPisc() {
+    private int selectPisc() {
         menuPisc();
 
         return SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
@@ -484,7 +539,7 @@ public class Simulador {
     /**
      * Muestra el estado general de la simulación.
      */
-    private static void showGeneralStatus() {
+    private void showGeneralStatus() {
         for (Piscifactoria piscifactoria : piscifactorias) {
             piscifactoria.showStatus();
         }
@@ -507,7 +562,7 @@ public class Simulador {
      * Muestra por pantalla el estado de todos los tanque de una piscifactoría
      * seleccionada por el usuario.
      */
-    private static void showSpecificStatus() {
+    private void showSpecificStatus() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -539,7 +594,7 @@ public class Simulador {
     /**
      * Muestra un desglose de las estadísticas por cada tipo de pez.
      */
-    private static void showStats() {
+    private void showStats() {
         System.out.println("======================================== Estadísticas ========================================");
         estadisticas.mostrar();
     }
@@ -590,7 +645,7 @@ public class Simulador {
      * Avanza un día en todas las piscifactorías y muestra el número de peces
      * vendidos y las monedas ganadas con ello.
      */
-    private static void nextDay() {
+    private void nextDay() {
         int dineroAntesDePasarDia;
         int pecesVendidoPiscifactoria = 0;
         int pecesVendidos = 0;
@@ -687,7 +742,7 @@ public class Simulador {
     /**
      * Gestiona la compra de comida para una piscifactoría o para el almacén central.
      */
-    private static void addFood() {
+    private void addFood() {
         if (almacenCentral != null) {
             int tipoComida = menuTipoComida();
 
@@ -998,7 +1053,7 @@ public class Simulador {
     /**
     * Añade un pez a una piscifactoría seleccionada por el usuario.
     */
-    private static void addFish() {
+    private void addFish() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if(piscifactoriaSeleccionada != 0){
@@ -1017,7 +1072,7 @@ public class Simulador {
     * Gestiona la lógica de añadir un pez a una piscifactoría de mar.
     * @param piscifactoria Piscifactoría donde se va a añadir el pez.
     */
-    private static void addFishMar(Piscifactoria piscifactoria){
+    private void addFishMar(Piscifactoria piscifactoria){
         String[] pecesDisponiblesMar = {
             "Cancelar",
             AlmacenPropiedades.ABADEJO.getNombre() + " - " + AlmacenPropiedades.ABADEJO.getCoste() + " monedas",
@@ -1156,7 +1211,7 @@ public class Simulador {
     * Gestiona la lógica de añadir un pez a una piscifactoría de río.
     * @param piscifactoria Piscifactoría donde se va a añadir el pez.
     */
-    private static void addFishRio(Piscifactoria piscifactoria){
+    private void addFishRio(Piscifactoria piscifactoria){
         String[] pecesDisponiblesRio = {
             "Cancelar",
             AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre() + " - " + AlmacenPropiedades.CARPIN_TRES_ESPINAS.getCoste() + " monedas",
@@ -1410,7 +1465,7 @@ public class Simulador {
      * Método que vende todos los peces adultos que estén vivos en una piscifactoría
      * seleccionada.
      */
-    private static void sell() {
+    private void sell() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -1455,7 +1510,7 @@ public class Simulador {
     /**
      * Elimina los peces muertos de la piscifactoría escogida.
      */
-    private static void cleanTank() {
+    private void cleanTank() {
 
         int piscifactoriaSeleccionada = selectPisc();
 
@@ -1500,7 +1555,7 @@ public class Simulador {
     /**
      * Elimina todos los peces de un tanque, estén vivos o muertos.
      */
-    private static void emptyTank() {
+    private void emptyTank() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -1546,7 +1601,7 @@ public class Simulador {
     /**
      * Muestra un menú para hacer mejoras como comprar o mejorar edificios.
      */
-    private static void upgrade() {
+    private void upgrade() {
         System.out.println("========== Mejorar ==========");
         String[] opciones = {
                 "Cancelar",
@@ -1569,7 +1624,7 @@ public class Simulador {
     /**
      * Muestra un menú para comprar edificios.
      */
-    private static void comprarEdificio() {
+    private void comprarEdificio() {
         System.out.println("========== Comprar edificio ==========");
         if (almacenCentral != null) {
 
@@ -1629,7 +1684,7 @@ public class Simulador {
     /**
      * Permite al usuario comprar una nueva piscifactoría.
      */
-    private static void comprarPiscifactoria() {
+    private void comprarPiscifactoria() {
         int tipoPiscifactoría = seleccionarTipoPiscifactoría();
         if (tipoPiscifactoría != 0) {
             System.out.println("Escriba el nombre de la piscifactoría: ");
@@ -1694,7 +1749,7 @@ public class Simulador {
                     }
                 } 
 
-                Simulador.piscifactorias.add(nuevaPiscifactoria);
+                piscifactorias.add(nuevaPiscifactoria);
                 System.out.println("Piscifactoría " + nombrePiscifactoría + " comprada.");
             } else {
                 System.out.println("No tienes suficientes monedas para comprar esta piscifactoría, faltan " + (costoPiscifactoría - sistemaMonedas.getMonedas()) + " monedas.");
@@ -1705,7 +1760,7 @@ public class Simulador {
     /**
      * Muestra un menú para mejorar edificios existentes.
      */
-    private static void mejorarEdificio() {
+    private void mejorarEdificio() {
         System.out.println("========== Mejorar edificio ==========");
         if (almacenCentral != null) {
             String[] opciones = {
@@ -1738,7 +1793,7 @@ public class Simulador {
     /**
      * Permite al usuario mejorar una piscifactoría seleccionada.
      */
-    private static void mejorarPiscifactoria() {
+    private void mejorarPiscifactoria() {
         menuPisc();
         int piscifactoriaSeleccionada = SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
 
@@ -1768,7 +1823,7 @@ public class Simulador {
      * Gestiona la lógica de mejora del almacén de comida de una piscifactoría.
      * @param piscifactoria Piscifactoría de la que se desea mejorar el almacén de comida.
      */
-    private static void mejorarAlmacenComidaPiscifactoria(Piscifactoria piscifactoria){
+    private void mejorarAlmacenComidaPiscifactoria(Piscifactoria piscifactoria){
         int monedasDisponibles = sistemaMonedas.getMonedas();
 
         if(piscifactoria instanceof PiscifactoriaRio){
@@ -1842,7 +1897,7 @@ public class Simulador {
      * 
      * @param piscifactoria La piscifactoría en la que se comprará el tanque.
      */
-    private static void comprarTanque(Piscifactoria piscifactoria) {
+    private void comprarTanque(Piscifactoria piscifactoria) {
         int monedasDisponibles = sistemaMonedas.getMonedas();
 
         if (piscifactoria instanceof PiscifactoriaRio) {
@@ -1915,7 +1970,7 @@ public class Simulador {
     /**
      * Aumenta la capacidad del almacén central.
      */
-    private static void aumentarCapacidadAlmacenCentral() {
+    private void aumentarCapacidadAlmacenCentral() {
         int costoAumento = 200;
         int monedasDisponibles = sistemaMonedas.getMonedas();
 
@@ -1962,7 +2017,7 @@ public class Simulador {
      * @param tipo El tipo de piscifactoría.
      * @return El costo de la piscifactoría.
      */
-    private static int calcularCostoPiscifactoría(int tipo) {
+    private int calcularCostoPiscifactoría(int tipo) {
         int cantidadPiscifactoria;
 
         if (tipo == 1) {
@@ -1978,7 +2033,7 @@ public class Simulador {
      * 
      * @return Número de piscifactorías de río de la simulación.
      */
-    private static int numeroPiscifactoriasRio(){
+    private int numeroPiscifactoriasRio(){
         int numeroPiscifactoriasRio = 0;
 
         for(Piscifactoria piscifactoria : piscifactorias){
@@ -1994,7 +2049,7 @@ public class Simulador {
      * 
      * @return Número de piscifactorías de mar de la simulación.
      */
-    private static int numeroPiscifactoriasMar(){
+    private int numeroPiscifactoriasMar(){
         int numeroPiscifactoriasMar = 0;
 
         for(Piscifactoria piscifactoria : piscifactorias){
@@ -2010,7 +2065,7 @@ public class Simulador {
      * Gestiona la lógica para mostrar el estado de un tanque de una piscifactoría
      * seleccionada.
      */
-    private static void mostrarEstadoTanque() {
+    private void mostrarEstadoTanque() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -2021,7 +2076,7 @@ public class Simulador {
     /**
      * Método para pasar varios días en la simulación. 
      */
-    private static void pasarDias() {
+    private void pasarDias() {
         int pecesVendidos = 0;
         int dineroAntes;
         int monedasGanadas = 0;
@@ -2128,7 +2183,7 @@ public class Simulador {
     /**
      * Añade 4 peces aleatorios a una piscifactoría seleccionada por el usuario.
      */
-    private static void anadirPezAleatorio(){
+    private void anadirPezAleatorio(){
         int piscifactoriaSeleccionada = selectPisc();
 
         if(piscifactoriaSeleccionada != 0){
@@ -2274,7 +2329,7 @@ public class Simulador {
     /**
      * Reparte la comida del almacén central equitativamente entre las piscafactorías.
      */
-    private static void repartirComida(){
+    private void repartirComida(){
         repartirComidaAnimal();
         repartirComidaVegetal();
     }
@@ -2284,7 +2339,7 @@ public class Simulador {
      * @param mediaCantidadComidaAnimal Media de la cantidad de comida animal.
      * @return True si todas las piscifactorías que no están llenas están en la media en cuanto a cantidad de comida animal.
      */
-    private static boolean todasLasPiscifactoriasEnLaMediaComidaAnimal(int mediaCantidadComidaAnimal){
+    private boolean todasLasPiscifactoriasEnLaMediaComidaAnimal(int mediaCantidadComidaAnimal){
         Piscifactoria.AlmacenComida almacenComida;
         int cantidadComidaAnimalPiscifactoria;
 
@@ -2303,7 +2358,7 @@ public class Simulador {
      * Indica si todas las piscifactorías están llenas de comida animal.
      * @return True si todas las piscifactorías están llenas de comida animal.
      */
-    private static boolean todasLasPiscifactoriasLlenasDeComidaAnimal(){
+    private boolean todasLasPiscifactoriasLlenasDeComidaAnimal(){
         Piscifactoria.AlmacenComida almacenComida;
 
         for(Piscifactoria piscifactoria : piscifactorias){
@@ -2320,7 +2375,7 @@ public class Simulador {
      * Devuelve la media de comida animal de las piscifactorías que no están llenas.
      * @return Media de comida animal de las piscifactorías que no están llenas.
      */
-    private static int mediaComidaAnimal(){
+    private int mediaComidaAnimal(){
         int cantidadComidaAnimal = 0;
         int piscifactoriasNoLlenas = 0;
         Piscifactoria.AlmacenComida almacenComidaPiscifactoria;
@@ -2341,7 +2396,7 @@ public class Simulador {
      * Gestiona la lógica de distribución equitativa de la comida animal del almacén central a las piscifactorías.
      * @param mediaCantidadComidaAnimal Cantidad de comida animal media por piscifactoría.
      */
-    private static void repartirComidaAnimal(){
+    private void repartirComidaAnimal(){
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaAnimal = new ArrayList<>(piscifactorias);
 
         AlmacenComida almacenComidaPiscifactoria;
@@ -2432,7 +2487,7 @@ public class Simulador {
      * @param mediaCantidadComidaVegetal Media de la cantidad de comida vegetal.
      * @return True si todas las piscifactorías que no están llenas están en la media en cuanto a cantidad de comida vegetal.
      */
-    private static boolean todasLasPiscifactoriasEnLaMediaComidaVegetal(int mediaCantidadComidaVegetal){
+    private boolean todasLasPiscifactoriasEnLaMediaComidaVegetal(int mediaCantidadComidaVegetal){
         Piscifactoria.AlmacenComida almacenComida;
         int cantidadComidaVegetalPiscifactoria;
 
@@ -2452,7 +2507,7 @@ public class Simulador {
      * Indica si todas las piscifactorías están llenas de comida vegetal.
      * @return True si todas las piscifactorías están llenas de comida vegetal.
      */
-    private static boolean todasLasPiscifactoriasLlenasDeComidaVegetal(){
+    private boolean todasLasPiscifactoriasLlenasDeComidaVegetal(){
         Piscifactoria.AlmacenComida almacenComida;
 
         for(Piscifactoria piscifactoria : piscifactorias){
@@ -2469,7 +2524,7 @@ public class Simulador {
      * Devuelve la media de comida vegetal de las piscifactorías que no están llenas.
      * @return Media de comida vegetal de las piscifactorías que no están llenas.
      */
-    private static int mediaComidaVegetal(){
+    private int mediaComidaVegetal(){
         int cantidadComidaVegetal = 0;
         int piscifactoriasNoLlenas = 0;
         Piscifactoria.AlmacenComida almacenComidaPiscifactoria;
@@ -2490,7 +2545,7 @@ public class Simulador {
      * Gestiona la lógica de distribución equitativa de la comida vegetal del almacén central a las piscifactorías.
      * @param mediaCantidadComidaVegetal Cantidad de comida vegetal media por piscifactoría.
      */
-    private static void repartirComidaVegetal(){
+    private void repartirComidaVegetal(){
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaVegetal = new ArrayList<>(piscifactorias);
 
         AlmacenComida almacenComidaPiscifactoria;
@@ -2578,7 +2633,7 @@ public class Simulador {
     /**
      * Añade 1000 monedas al sistema de monedas de la simulación.
      */
-    private static void anadirMonedasOculto(){
+    private void anadirMonedasOculto(){
         sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() + 1000);
 
         try{
@@ -2630,28 +2685,28 @@ public class Simulador {
             while (opcion != 14) {
 
                 try{
-                    System.out.println("Día actual: " + (diasPasados + 1));
+                    System.out.println("Día actual: " + (simulador.diasPasados + 1));
                     menu();
 
                     opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
 
                     switch(opcion){
-                        case 1 -> {showGeneralStatus();}
-                        case 2 -> {showSpecificStatus();}
-                        case 3 -> {mostrarEstadoTanque();}
-                        case 4 -> {showStats();}
-                        case 5 -> {showIctio();}
-                        case 6 -> {nextDay();}
-                        case 7 -> {addFood();}
-                        case 8 -> {addFish();}
-                        case 9 -> {sell();}
-                        case 10 -> {cleanTank();}
-                        case 11 -> {emptyTank();}
-                        case 12 -> {upgrade();}
-                        case 13 -> {pasarDias();}
+                        case 1 -> {simulador.showGeneralStatus();}
+                        case 2 -> {simulador.showSpecificStatus();}
+                        case 3 -> {simulador.mostrarEstadoTanque();}
+                        case 4 -> {simulador.showStats();}
+                        case 5 -> {Simulador.showIctio();}
+                        case 6 -> {simulador.nextDay();}
+                        case 7 -> {simulador.addFood();}
+                        case 8 -> {simulador.addFish();}
+                        case 9 -> {simulador.sell();}
+                        case 10 -> {simulador.cleanTank();}
+                        case 11 -> {simulador.emptyTank();}
+                        case 12 -> {simulador.upgrade();}
+                        case 13 -> {simulador.pasarDias();}
                         case 14 -> {System.out.println("Cerrando...");}
-                        case 98 -> {anadirPezAleatorio();}
-                        case 99 -> {anadirMonedasOculto();}
+                        case 98 -> {simulador.anadirPezAleatorio();}
+                        case 99 -> {simulador.anadirMonedasOculto();}
                     }
                 }
                 catch(Exception e){
@@ -2672,6 +2727,18 @@ public class Simulador {
             catch(IOException e){
                 try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                }
+                catch(IOException ex){
+                    
+                }
+            }
+
+            try{
+                LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
                 }
                 catch(IOException ex){
                     
