@@ -13,6 +13,7 @@ import componentes.LecturaEscrituraFicherosPlanos;
 import componentes.SistemaEntrada;
 import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
+import componentes.SistemaRecompensa;
 import estadisticas.Estadisticas;
 import propiedades.AlmacenPropiedades;
 import propiedades.PecesDatos;
@@ -46,6 +47,11 @@ public class Simulador {
      * Sistema de monedas de la simulación.
      */
     public static SistemaMonedas sistemaMonedas;
+
+    /**
+     * Sistema de recompensas de la simulación.
+     */
+    public static SistemaRecompensa sistemaRecompensa;
 
     /**
      * Almacén central de comida usado en la simulación.
@@ -2596,6 +2602,9 @@ public class Simulador {
         return "Nombre empresa, entidad o partida: " + nombre + "\nDías pasado en la simulación: " + diasPasados + "\nNúmero piscifactoría simulación: " + piscifactorias.size();
     }
 
+
+    
+
     /**
      * Método principal del programa que gestiona el uso del programa por parte del
      * usuario.
@@ -2670,4 +2679,30 @@ public class Simulador {
         }
     }
 
+
+    /**
+     * Metodo que añade una recompensa
+     */
+    public static void añadirRecompensa(){
+        sistemaRecompensa.addRandomReward();
+    }
+    /**
+     * Metodo que lista las recompensas que se añadieron
+     */
+    public static void listarRecompensas(){
+
+    }
+    /**
+     * Metodo que lista las recompensas disponibles a reclamar
+     */
+    public static void listarRecompensasDisponibles(){
+        
+    }
+
+    /**
+     * Metodo que reclamará las recompensas disponibles y borrará los archivos al terminar
+     */
+    public static void reclamarRecompensa(){
+        
+    }
 }

@@ -8,7 +8,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 public class SistemaRecompensa {
-    private static final String directorio = "src/componentes/recompensas";
+    private static final String directorio = "src/componentes/rewards";
     private final Random random = new Random();
 
     public SistemaRecompensa() {
@@ -185,11 +185,30 @@ public class SistemaRecompensa {
         writer.close();
     }
 
+    // Borra un documento XML
+    private void deleteDocument(String file){
+        // Crear una referencia al archivo
+        File referencia = new File(directorio + File.separator + file);
+
+        // Verificar si el archivo existe y eliminarlo
+        if (referencia.exists() && referencia.isFile()) {
+            if (referencia.delete()) {
+                System.out.println("Archivo eliminado correctamente.");
+            } else {
+                System.out.println("No se pudo eliminar el archivo.");
+            }
+        } else {
+            System.out.println("El archivo no existe o no es válido.");
+        }
+    }
+   
+
     // Main para pruebas
     public static void main(String[] args) {
         SistemaRecompensa manager = new SistemaRecompensa();
 
         // Generar recompensa aleatoria
         manager.addRandomReward();
+        manager.deleteDocument("Comida general I.xml");
     }
 }
