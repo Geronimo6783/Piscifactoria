@@ -1,8 +1,33 @@
 package simulador.pez;
 
+import java.lang.reflect.Type;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.Gson;
+import propiedades.AlmacenPropiedades;
+import simulador.pez.carnivoro.Caballa;
+import simulador.pez.carnivoro.Pejerrey;
+import simulador.pez.carnivoro.PercaEuropea;
+import simulador.pez.carnivoro.Robalo;
+import simulador.pez.carnivoro.SalmonAtlantico;
+import simulador.pez.carnivoro.SalmonChinook;
+import simulador.pez.filtrador.ArenqueDelAtlantico;
+import simulador.pez.filtrador.TilapiaDelNilo;
+import simulador.pez.omnivoro.Abadejo;
+import simulador.pez.omnivoro.CarpinTresEspinas;
+import simulador.pez.omnivoro.Dorada;
+import simulador.pez.omnivoro.Sargo;
+
 /**
  * Clase abstracta que representa a un pez.
  */
+@JsonAdapter(Pez.AdaptadorJSON.class)
 public abstract class Pez {
 
     /**
@@ -225,5 +250,61 @@ public abstract class Pez {
         return "Nombre común: " + nombre + "\nNombre científico: " + nombreCientifico + "\nEdad: " + edad 
             + ((sexo) ? "\nSexo: Hembra" : "\nSexo: Macho") + ((fertil) ? "\nFértil: Sí" : "\nFértil: No" + ((vivo) ? "\nVivo: Sí" : "\nVivo: No")
             + ((alimentado) ? "\nAlimentado: Sí" : "\nAlimentado: No") + "\nDías sin reproducirse: " + diasSinReproducirse);
+    }
+
+    /**
+     * Clase que se encarga de adaptar la serialización y deserialización de un pez a JSON.
+     */
+    private class AdaptadorJSON implements JsonSerializer<Pez>, JsonDeserializer<Pez>{
+
+        @Override
+        public Pez deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+
+            String nombrePez = json.getAsJsonObject().get("nombre").toString();
+            
+            if(nombrePez.equals(AlmacenPropiedades.ABADEJO.getNombre())){
+                return (Pez) new Gson().fromJson(json, Abadejo.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre())){
+                return (Pez) new Gson().fromJson(json, ArenqueDelAtlantico.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.CABALLA.getNombre())){
+                return (Pez) new Gson().fromJson(json, Caballa.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre())){
+                return (Pez) new Gson().fromJson(json, CarpinTresEspinas.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.DORADA.getNombre())){
+                return (Pez) new Gson().fromJson(json, Dorada.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.PEJERREY.getNombre())){
+                return (Pez) new Gson().fromJson(json, Pejerrey.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.PERCA_EUROPEA.getNombre())){
+                return (Pez) new Gson().fromJson(json, PercaEuropea.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.ROBALO.getNombre())){
+                return (Pez) new Gson().fromJson(json, Robalo.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.SALMON_ATLANTICO.getNombre())){
+                return (Pez) new Gson().fromJson(json, SalmonAtlantico.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.SALMON_CHINOOK.getNombre())){
+                return (Pez) new Gson().fromJson(json, SalmonChinook.class);
+            }
+            else if(nombrePez.equals(AlmacenPropiedades.SARGO.getNombre())){
+                return (Pez) new Gson().fromJson(json, Sargo.class);
+            }
+            else{
+                return (Pez) new Gson().fromJson(json, TilapiaDelNilo.class);
+            }
+        }
+
+        @Override
+        public JsonElement serialize(Pez src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src);
+        }
+        
     }
 }

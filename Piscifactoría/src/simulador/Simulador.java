@@ -15,6 +15,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
 
 import componentes.FechaTiempoLocal;
 import componentes.GeneradorMenus;
@@ -40,7 +41,6 @@ public class Simulador {
     /**
      * Clase que se encarga de adaptar la clase Estadisticas al formato JSON.
      */
-    @JsonAdapter(Estadisticas.class)
     private class AdaptadorJSONEstadisticas implements JsonSerializer<Estadisticas>, JsonDeserializer<Estadisticas>{
 
         @Override
@@ -63,9 +63,35 @@ public class Simulador {
     }
 
     /**
+     * Peces implimentados en la simulación.
+     */
+    @SerializedName("implementados")
+    public String[] pecesImplementados;
+
+    /**
+     * Nombre de la entidad, empresa o partida de la simulación.
+     */
+    @SerializedName("empresa")
+    private String nombre;
+
+    /**
      * Indica el número de días que han pasado en la simulación.
      */
+    @SerializedName("dia")
     private int diasPasados = 0;
+
+    /**
+     * Sistema de monedas de la simulación.
+     */
+    @SerializedName("monedas")
+    public SistemaMonedas sistemaMonedas;
+
+     /**
+     * Estadísticas de los peces de la simualción.
+     */
+    @SerializedName("orca")
+    @JsonAdapter(AdaptadorJSONEstadisticas.class)
+    public Estadisticas estadisticas;
 
     /**
      * Piscifactorías de la simulación.
@@ -73,24 +99,9 @@ public class Simulador {
     public ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
 
     /**
-     * Nombre de la entidad, empresa o partida de la simulación.
-     */
-    private String nombre;
-
-    /**
-     * Sistema de monedas de la simulación.
-     */
-    public SistemaMonedas sistemaMonedas;
-
-    /**
      * Almacén central de comida usado en la simulación.
      */
     public AlmacenCentral almacenCentral = null;
-
-    /**
-     * Estadísticas de los peces de la simualción.
-     */
-    public Estadisticas estadisticas;
 
     /**
      * Archivo compartido entre todas las partidas donde se registran los errores.
@@ -191,7 +202,7 @@ public class Simulador {
             simulador.sistemaMonedas = new SistemaMonedas(100);
             simulador.piscifactorias = new ArrayList<Piscifactoria>();
             simulador.piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
-            String[] pecesDisponibles = { AlmacenPropiedades.ABADEJO.getNombre(),
+            simulador.pecesImplementados = new String[]{ AlmacenPropiedades.ABADEJO.getNombre(),
                 AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
                 AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
                 AlmacenPropiedades.PEJERREY.getNombre(),
@@ -199,7 +210,7 @@ public class Simulador {
                 AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
                 AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                 AlmacenPropiedades.TILAPIA_NILO.getNombre()};
-            simulador.estadisticas = new Estadisticas(pecesDisponibles);
+            simulador.estadisticas = new Estadisticas(simulador.pecesImplementados);
         }
 
         try{

@@ -1,11 +1,23 @@
 package simulador.piscifactoria;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+
 import simulador.Tanque;
 
 /**
  * Clase que representa a una piscifactoría con múltiples tanques.
  */
+@JsonAdapter(Piscifactoria.AdaptadorJSON.class)
 public abstract class Piscifactoria {
 
     /**
@@ -108,6 +120,16 @@ public abstract class Piscifactoria {
     }
 
     /**
+     * Nombre de la piscifactoría.
+     */
+    protected String nombre = "";
+
+    /**
+     * Indica si la piscifactoría es de mar o de río. Si es 0 es de río y si es 1 es de mar.
+     */
+    protected int tipo;
+
+    /**
      * Tanques de los que dispone la piscifactoría.
      */
     protected ArrayList<Tanque> tanques;
@@ -123,17 +145,13 @@ public abstract class Piscifactoria {
     protected AlmacenComida almacenInicial;
 
     /**
-     * Nombre de la piscifactoría.
-     */
-    protected String nombre = "";
-
-    /**
      * Constructor de Ppiscifactorías.
      * @param nombre Nombre de la piscifactoría.
      */
-    protected Piscifactoria(String nombre) {
+    protected Piscifactoria(String nombre, int tipo) {
         tanques = new ArrayList<>();
         this.nombre = nombre;
+        this.tipo = tipo;
     }
 
     /**
@@ -439,5 +457,31 @@ public abstract class Piscifactoria {
      */
     public String toString(){
         return "Nombre piscifactoría: " + nombre + "\nNúmero de tanques: " + tanques.size() + "\nAlmacén comida:\n\t" + almacenInicial;
+    }
+
+    /**
+     * Clase que se encarga de adaptar un objeto Piscifactoria para que pueda ser serializado y deserializado como JSON.
+     */
+    private class AdaptadorJSON implements JsonDeserializer<Piscifactoria>, JsonSerializer<Piscifactoria>{
+
+        @Override
+        public JsonElement serialize(Piscifactoria src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src);
+        }
+
+        @Override
+        public Piscifactoria deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+
+            int tipoPiscifactoria = json.getAsJsonObject().get("tipo").getAsInt();
+
+            if(tipoPiscifactoria == 0){
+                return new Gson().fromJson(json, PiscifactoriaRio.class);
+            }
+            else{
+                return new Gson().fromJson(json, PiscifactoriaMar.class);
+            }
+        }
+
     }
 }

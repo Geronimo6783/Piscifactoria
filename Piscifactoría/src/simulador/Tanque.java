@@ -1,11 +1,23 @@
 package simulador;
 
 import simulador.pez.*;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
 import simulador.piscifactoria.Piscifactoria;
 import java.util.Random;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+
 import java.util.Iterator;
 import propiedades.AlmacenPropiedades;
 
@@ -13,6 +25,7 @@ import propiedades.AlmacenPropiedades;
  * Clase que representa a un tanque de una piscifactoría que contiene un número
  * de peces.
  */
+@JsonAdapter(Tanque.AdaptadorJSON.class)
 public class Tanque {
 
     /**
@@ -23,7 +36,7 @@ public class Tanque {
     /**
      * Capacidad máxima de peces que puede tener el tanque.
      */
-    private int capacidadMaximaPeces;
+    private transient int capacidadMaximaPeces;
 
     /**
      * Peces del tanque.
@@ -83,6 +96,11 @@ public class Tanque {
         this.numeroTanque = numeroTanque;
         peces = new ArrayList<>();
         this.capacidadMaximaPeces = capacidadMaximaPeces;
+    }
+
+    public Tanque(){
+        numeroTanque = 0;
+        capacidadMaximaPeces = 25;
     }
 
     /**
@@ -689,5 +707,20 @@ public class Tanque {
         int numeroPeces = peces.size();
         return "Número tanque: " + numeroTanque + "\nCapacidad máxima peces: " + capacidadMaximaPeces + "\nNúmero de peces: " + numeroPeces
             + ((numeroPeces != 0) ? "\nPez: " + peces.get(0).getNombre() : "");
+    }
+
+    /**
+     * Clase que se encarga de adaptar la serialización y la deserialización de objetos de la clase Tanque.
+     */
+    private class AdaptadorJSON implements JsonDeserializer<Tanque>{
+
+        @Override
+        public Tanque deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            Tanque tanque = new Gson().fromJson(json, Tanque.class);
+            tanque.setCapacidadMaximaPeces(25);
+            return tanque;
+        }
+
     }
 }

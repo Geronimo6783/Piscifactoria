@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Simulador",
+            "request": "launch",
+            "mainClass": "simulador.Simulador",
+            "projectName": "Piscifactoría_ddf4bace"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

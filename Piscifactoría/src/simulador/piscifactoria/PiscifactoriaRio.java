@@ -13,7 +13,7 @@ public class PiscifactoriaRio extends Piscifactoria {
      * @param nombre Nombre de la piscifactoría de río.
      */
     public PiscifactoriaRio(String nombre){
-        super(nombre);
+        super(nombre, 0);
         tanqueInicial = new Tanque(1, 25);
         if(Simulador.simulador.piscifactorias.size() != 0){
             almacenInicial = new AlmacenComida(25, 0, 0);

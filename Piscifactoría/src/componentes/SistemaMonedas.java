@@ -13,6 +13,7 @@ import com.google.gson.annotations.JsonAdapter;
 /**
  * Clase que representa a un sistema en el se dispone de una cantidad de monedas.
  */
+@JsonAdapter(SistemaMonedas.AdaptadorJSON.class)
 public class SistemaMonedas {
     
     /**
@@ -64,7 +65,6 @@ public class SistemaMonedas {
     /**
      * Clase que se encarga de adaptar la clase SistemaMonedas al formato JSON.
      */
-    @JsonAdapter(SistemaMonedas.class)
     private class AdaptadorJSON implements JsonSerializer<SistemaMonedas>, JsonDeserializer<SistemaMonedas>{
 
         @Override
