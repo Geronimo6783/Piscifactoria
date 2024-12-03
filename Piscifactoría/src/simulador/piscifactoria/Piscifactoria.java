@@ -129,6 +129,10 @@ public abstract class Piscifactoria {
      */
     protected int tipo;
 
+    public int getTipo() {
+        return tipo;
+    }
+
     /**
      * Tanques de los que dispone la piscifactoría.
      */
