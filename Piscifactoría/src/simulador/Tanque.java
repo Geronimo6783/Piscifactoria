@@ -25,7 +25,7 @@ import propiedades.AlmacenPropiedades;
  * Clase que representa a un tanque de una piscifactoría que contiene un número
  * de peces.
  */
-@JsonAdapter(Tanque.AdaptadorJSON.class)
+//@JsonAdapter(Tanque.AdaptadorJSON.class)
 public class Tanque {
 
     /**

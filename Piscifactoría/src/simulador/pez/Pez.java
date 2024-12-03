@@ -5,9 +5,12 @@ import java.lang.reflect.Type;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.JsonStreamParser;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.Gson;
 import propiedades.AlmacenPropiedades;
@@ -261,49 +264,114 @@ public abstract class Pez {
         public Pez deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
 
-            String nombrePez = json.getAsJsonObject().get("nombre").toString();
+            JsonObject pezDeserializado = json.getAsJsonObject();
+            JsonObject extras = pezDeserializado.get("extra").getAsJsonObject();
+            String nombrePez = extras.get("nombre").toString();
             
             if(nombrePez.equals(AlmacenPropiedades.ABADEJO.getNombre())){
-                return (Pez) new Gson().fromJson(json, Abadejo.class);
+                Abadejo pez = new Abadejo(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
-            else if(nombrePez.equals(AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre())){
-                return (Pez) new Gson().fromJson(json, ArenqueDelAtlantico.class);
+            else if(nombrePez.equals(AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre())){               
+                ArenqueDelAtlantico pez = new ArenqueDelAtlantico(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.CABALLA.getNombre())){
-                return (Pez) new Gson().fromJson(json, Caballa.class);
+                Caballa pez = new Caballa(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre())){
-                return (Pez) new Gson().fromJson(json, CarpinTresEspinas.class);
+                CarpinTresEspinas pez = new CarpinTresEspinas(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.DORADA.getNombre())){
-                return (Pez) new Gson().fromJson(json, Dorada.class);
+                Dorada pez = new Dorada(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.PEJERREY.getNombre())){
-                return (Pez) new Gson().fromJson(json, Pejerrey.class);
+                Pejerrey pez = new Pejerrey(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.PERCA_EUROPEA.getNombre())){
-                return (Pez) new Gson().fromJson(json, PercaEuropea.class);
+                PercaEuropea pez = new PercaEuropea(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.ROBALO.getNombre())){
-                return (Pez) new Gson().fromJson(json, Robalo.class);
+                Robalo pez = new Robalo(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.SALMON_ATLANTICO.getNombre())){
-                return (Pez) new Gson().fromJson(json, SalmonAtlantico.class);
+                SalmonAtlantico pez = new SalmonAtlantico(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.SALMON_CHINOOK.getNombre())){
-                return (Pez) new Gson().fromJson(json, SalmonChinook.class);
+                SalmonChinook pez = new SalmonChinook(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else if(nombrePez.equals(AlmacenPropiedades.SARGO.getNombre())){
-                return (Pez) new Gson().fromJson(json, Sargo.class);
+                Sargo pez = new Sargo(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
             else{
-                return (Pez) new Gson().fromJson(json, TilapiaDelNilo.class);
+                TilapiaDelNilo pez = new TilapiaDelNilo(pezDeserializado.get("sexo").getAsBoolean());
+                pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                pez.edad = pezDeserializado.get("edad").getAsInt();
+                pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                return (Pez) pez;
             }
         }
 
         @Override
         public JsonElement serialize(Pez src, Type typeOfSrc, JsonSerializationContext context) {
-            return context.serialize(src);
+            String json = "{\"edad\": " + " \"" + src.edad + "\"" + ", \"sexo\": " + " \"" + src.sexo + "\"" + ", \"vivo\": " + " \"" + src.vivo + "\"" + ", \"maduro\": " + " \"" + (src.edad > AlmacenPropiedades.getPropByName(src.nombre).getMadurez()) + "\"" + 
+            ", \"fertil\": " + " \"" + src.fertil + "\"" + ", \"ciclo\": " + " \"" + ((src.sexo && src.edad > AlmacenPropiedades.getPropByName(src.nombre).getMadurez()) ? (AlmacenPropiedades.getPropByName(src.nombre).getCiclo() - src.diasSinReproducirse) : 0) + "\"" + ", \"alimentado\": "
+            + " \"" + src.alimentado + "\"" + ", \"extra\": {" +"\"nombre\" : \"" + src.nombre + "\"" +  " , \"diasSinReproducirse\": " + " \"" + src.diasSinReproducirse + "\"" + "}}";
+            return JsonParser.parseString(json);
         }
         
     }
