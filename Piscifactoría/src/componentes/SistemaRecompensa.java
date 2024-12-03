@@ -1,7 +1,10 @@
 package componentes;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
+
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
@@ -101,7 +104,7 @@ public class SistemaRecompensa {
                 createReward("coins", coinNames[valorAleatorio], "Adrián", coinDescriptions[valorAleatorio], coinRarities[valorAleatorio], null, Cantidades[valorAleatorio], 1, null, null);
             }
             case 2 -> {
-                String[] parteNames = {"Almacén central [A]", "Almacén central [B]", "Almacén central [C]", "Almacén central [D]"};
+                String[] parteNames = {"Almacen central [A]", "Almacen central [B]", "Almacen central [C]", "Almacen central [D]"};
                 String[] parteDescriptions = {
                     "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
                     "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
@@ -146,8 +149,8 @@ public class SistemaRecompensa {
                 createReward("food", piensoNames[valorAleatorio], "Adrián", piensoDescriptions[valorAleatorio], piensoRarities[valorAleatorio], "animal", Cantidades[valorAleatorio], 1, null, null);
             }
             case 5 -> {
-                String[] piscifactoriaMarNames = {"Piscifactoría de mar [A]", "Piscifactoría de mar [B]"};
-                String piscifactoriaMarDesc = "Materiales para la construcción de una piscifactoría de mar. Con la parte A y B, puedes obtenerla de forma gratuita.";
+                String[] piscifactoriaMarNames = {"Piscifactoria de mar [A]", "Piscifactoria de mar [B]"};
+                String piscifactoriaMarDesc = "Materiales para la construcción de una piscifactoria de mar. Con la parte A y B, puedes obtenerla de forma gratuita.";
                 String[] piscifactoriaMarPartes = {"A", "B"};
 
                 int valorAleatorio = random.nextInt(piscifactoriaMarNames.length);
@@ -155,8 +158,8 @@ public class SistemaRecompensa {
 
             }
             case 6 -> {
-                String[] piscifactoriaRioNames = {"Piscifactoría de río [A]", "Piscifactoría de río [B]"};
-                String piscifactoriaRioDesc = "Materiales para la construcción de una piscifactoría de río. Con la parte A y B, puedes obtenerla de forma gratuita.";
+                String[] piscifactoriaRioNames = {"Piscifactoria de rio [A]", "Piscifactoria de rio [B]"};
+                String piscifactoriaRioDesc = "Materiales para la construcción de una piscifactoria de rio. Con la parte A y B, puedes obtenerla de forma gratuita.";
                 String[] piscifactoriaRioPartes = {"A", "B"};
 
                 int valorAleatorio = random.nextInt(piscifactoriaRioNames.length);
@@ -164,10 +167,10 @@ public class SistemaRecompensa {
 
             }
             case 7 -> {
-                String[] tanqueNames = {"Tanque de mar", "Tanque de río"};
+                String[] tanqueNames = {"Tanque de mar", "Tanque de rio"};
                 String[] tanqueDescriptions = {
-                "Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de mar.",
-                "Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de río."
+                "Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoria de mar.",
+                "Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoria de rio."
                 };
                 int[] tanqueRarities = {3, 2};
                 String[] tanqueCodes = {"3", "2"};
@@ -179,14 +182,14 @@ public class SistemaRecompensa {
     }
 
     // Guardar documento XML
-    private void saveDocument(Document doc, File file) throws IOException {
+    public void saveDocument(Document doc, File file) throws IOException {
         XMLWriter writer = new XMLWriter(new FileWriter(file), OutputFormat.createPrettyPrint());
         writer.write(doc);
         writer.close();
     }
 
     // Borra un documento XML
-    private void deleteDocument(String file){
+    public void deleteDocument(String file){
         // Crear una referencia al archivo
         File referencia = new File(directorio + File.separator + file);
 
@@ -201,7 +204,102 @@ public class SistemaRecompensa {
             System.out.println("El archivo no existe o no es válido.");
         }
     }
-   
+
+    // Lista las recompensas que se encuentra en la carpeta "rewards"
+   public void listarRecompensas() {
+    File carpeta = new File(directorio);
+    String[] listado = carpeta.list();
+    if (listado == null || listado.length == 0) {
+        System.out.println("No hay elementos dentro de la carpeta actual");
+        return;
+    } else {
+        for (String nombreArchivo : listado) {
+            // Buscar la posición del último punto
+            int indiceUltimoPunto = nombreArchivo.lastIndexOf('.');
+            // Si hay un punto, extraer el nombre antes del punto, si no, usar el nombre completo
+            String nombreSinExtension = (indiceUltimoPunto > 0) 
+                                        ? nombreArchivo.substring(0, indiceUltimoPunto) 
+                                        : nombreArchivo;
+            System.out.println(nombreSinExtension);
+        }
+    }
+    }
+
+    // Lista las recompensas que se pueden redimir
+    public void listarRecompensasDisponibles() {
+        File carpeta = new File(directorio);
+        String[] listado = carpeta.list();
+    
+        if (listado == null || listado.length == 0) {
+            System.out.println("No hay elementos dentro de la carpeta actual");
+            return;
+        }
+    
+        // Sets para rastrear las versiones encontradas
+        Set<String> piscifactoriaDeMar = new HashSet<>();
+        Set<String> piscifactoriaDeRio = new HashSet<>();
+        Set<String> almacenCentral = new HashSet<>();
+    
+        // Conjunto de nombres específicos
+        Set<String> nombresEspecificos = Set.of(
+            "Piscifactoria de mar [A]", "Piscifactoria de mar [B]",
+            "Piscifactoria de rio [A]", "Piscifactoria de rio [B]",
+            "Almacen central [A]", "Almacen central [B]",
+            "Almacen central [C]", "Almacen central [D]"
+        );
+    
+        // Procesar cada archivo
+        for (String nombreArchivo : listado) {
+            if (nombresEspecificos.contains(nombreArchivo)) {
+                // Clasificar los archivos específicos
+                switch (nombreArchivo) {
+                    case "Piscifactoria de mar [A]": piscifactoriaDeMar.add("A"); break;
+                    case "Piscifactoria de mar [B]": piscifactoriaDeMar.add("B"); break;
+                    case "Piscifactoria de rio [A]": piscifactoriaDeRio.add("A"); break;
+                    case "Piscifactoria de rio [B]": piscifactoriaDeRio.add("B"); break;
+                    case "Almacen central [A]": almacenCentral.add("A"); break;
+                    case "Almacen central [B]": almacenCentral.add("B"); break;
+                    case "Almacen central [C]": almacenCentral.add("C"); break;
+                    case "Almacen central [D]": almacenCentral.add("D"); break;
+                }
+            } else {
+                // Imprimir solo los nombres que no son específicos
+                int indiceUltimoPunto = nombreArchivo.lastIndexOf('.');
+                String nombreSinExtension = (indiceUltimoPunto > 0)
+                    ? nombreArchivo.substring(0, indiceUltimoPunto)
+                    : nombreArchivo;
+                System.out.println(nombreSinExtension);
+            }
+        }
+    
+        // Verificar si se cumplen las condiciones para cada conjunto
+        boolean piscifactoriaDeMarCompleta = piscifactoriaDeMar.contains("A") && piscifactoriaDeMar.contains("B");
+        boolean piscifactoriaDeRioCompleta = piscifactoriaDeRio.contains("A") && piscifactoriaDeRio.contains("B");
+        boolean almacenCentralCompleto = almacenCentral.contains("A") && almacenCentral.contains("B")
+            && almacenCentral.contains("C") && almacenCentral.contains("D");
+    
+        // Mostrar resultados finales según las condiciones
+        if (piscifactoriaDeMarCompleta) {
+            System.out.println("Piscifactoria de mar disponible");
+        } else {
+            System.out.println("Piscifactoria de mar: Faltan versiones");
+        }
+    
+        if (piscifactoriaDeRioCompleta) {
+            System.out.println("Piscifactoria de rio disponible");
+        } else {
+            System.out.println("Piscifactoria de rio: Faltan versiones");
+        }
+    
+        if (almacenCentralCompleto) {
+            System.out.println("Almacen central disponible");
+        } else {
+            System.out.println("Almacen central: Faltan versiones");
+        }
+    }
+    
+    
+    
 
     // Main para pruebas
     public static void main(String[] args) {
@@ -209,6 +307,7 @@ public class SistemaRecompensa {
 
         // Generar recompensa aleatoria
         manager.addRandomReward();
-        manager.deleteDocument("Comida general I.xml");
+        //manager.deleteDocument("Comida general I.xml");
+        manager.listarRecompensasDisponibles();
     }
 }

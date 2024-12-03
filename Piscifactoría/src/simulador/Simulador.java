@@ -2690,13 +2690,13 @@ public class Simulador {
      * Metodo que lista las recompensas que se añadieron
      */
     public static void listarRecompensas(){
-
+        sistemaRecompensa.listarRecompensas();
     }
     /**
      * Metodo que lista las recompensas disponibles a reclamar
      */
     public static void listarRecompensasDisponibles(){
-        
+        sistemaRecompensa.listarRecompensasDisponibles();
     }
 
     /**
