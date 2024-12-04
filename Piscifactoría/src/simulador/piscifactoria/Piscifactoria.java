@@ -7,7 +7,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
@@ -470,22 +472,24 @@ public abstract class Piscifactoria {
 
         @Override
         public JsonElement serialize(Piscifactoria src, Type typeOfSrc, JsonSerializationContext context) {
-            return context.serialize(src);
+            String json = "{ \"nombre\" : \"" + src.nombre + "\" , \"tipo\" : \"" + src.tipo + "\" , \"capacidad\" : \"" + src.almacenInicial.capacidadMaximaComida + "\" , \"comida\" : { "
+            + "\"vegetal\" : \"" + src.almacenInicial.cantidadComidaVegetal + "\" , \"animal\" : \"" + src.almacenInicial.cantidadComidaAnimal + "\" }, \"tanques\" : " + new Gson().toJson(src.tanques) + "}";
+            return JsonParser.parseString(json);
         }
 
         @Override
         public Piscifactoria deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
 
-            int tipoPiscifactoria = json.getAsJsonObject().get("tipo").getAsInt();
+            JsonObject objetoJson = json.getAsJsonObject();
+            int tipoPiscifactoria = objetoJson.get("tipo").getAsInt();
 
             Piscifactoria piscifactoria;
-
             if(tipoPiscifactoria == 0){
-                piscifactoria = new Gson().fromJson(json, PiscifactoriaRio.class);
+                piscifactoria = new PiscifactoriaRio(objetoJson.get("nombre").getAsString());
             }
             else{
-                piscifactoria = new Gson().fromJson(json, PiscifactoriaMar.class);
+                piscifactoria = new PiscifactoriaMar(objetoJson.get("nombre").getAsString());
             }
 
             for (Tanque tanque : piscifactoria.getTanques()) {
