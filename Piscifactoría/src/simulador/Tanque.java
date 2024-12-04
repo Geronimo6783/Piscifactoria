@@ -717,9 +717,7 @@ public class Tanque {
         @Override
         public Tanque deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
-            Tanque tanque = new Gson().fromJson(json, Tanque.class);
-            tanque.setCapacidadMaximaPeces(25);
-            return tanque;
+            return new Gson().fromJson(json, Tanque.class);
         }
 
     }

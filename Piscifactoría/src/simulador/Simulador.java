@@ -2681,26 +2681,6 @@ public class Simulador {
         return "Nombre empresa, entidad o partida: " + nombre + "\nDías pasado en la simulación: " + diasPasados + "\nNúmero piscifactoría simulación: " + piscifactorias.size();
     }
 
-
-    public void capacidadMaximaTanque(){
-
-        for (Piscifactoria piscifactoria : piscifactorias){
-            int tipoPiscifactoria = piscifactoria.getTipo();
-            ArrayList<Tanque> tanques = piscifactoria.getTanques();
-            if (tipoPiscifactoria == 0) {
-                
-                for (Tanque tanque : tanques){
-                    tanque.setCapacidadMaximaPeces(25);                 
-                }
-                
-            } else{
-                for (Tanque tanque : tanques){
-                    tanque.setCapacidadMaximaPeces(50);                 
-                }
-            }
-        }
-    }
-
     /**
      * Método principal del programa que gestiona el uso del programa por parte del
      * usuario.
