@@ -129,6 +129,10 @@ public abstract class Piscifactoria {
      */
     protected int tipo;
 
+    public int getTipo() {
+        return tipo;
+    }
+
     /**
      * Tanques de los que dispone la piscifactoría.
      */
@@ -475,12 +479,24 @@ public abstract class Piscifactoria {
 
             int tipoPiscifactoria = json.getAsJsonObject().get("tipo").getAsInt();
 
+            Piscifactoria piscifactoria;
+
             if(tipoPiscifactoria == 0){
-                return new Gson().fromJson(json, PiscifactoriaRio.class);
+                piscifactoria = new Gson().fromJson(json, PiscifactoriaRio.class);
             }
             else{
-                return new Gson().fromJson(json, PiscifactoriaMar.class);
+                piscifactoria = new Gson().fromJson(json, PiscifactoriaMar.class);
             }
+
+            for (Tanque tanque : piscifactoria.getTanques()) {
+                if (tipoPiscifactoria == 0) { 
+                    tanque.setCapacidadMaximaPeces(25);
+                } else { 
+                    tanque.setCapacidadMaximaPeces(50);
+                }
+            }
+
+            return piscifactoria;
         }
 
     }

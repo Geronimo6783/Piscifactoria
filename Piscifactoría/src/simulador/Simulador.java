@@ -172,6 +172,7 @@ public class Simulador {
 
                      try{
                         simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivosGuardado[opcion - 1]);
+                        
                      }
                      catch(IOException e){
                         try{
