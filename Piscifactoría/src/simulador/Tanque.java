@@ -723,11 +723,12 @@ public class Tanque {
 
         @Override
         public JsonElement serialize(Tanque src, Type typeOfSrc, JsonSerializationContext context) {
-            int peces = src.peces.size();
+            int peces = (src.peces.isEmpty()) ? 0 : src.peces.size();
             Gson gson = new Gson();
-            String pecesJson = " [";
+            String pecesJson;
 
             if(peces != 0){
+                pecesJson = " [";
 
                 for(Pez pez : src.peces){
                     pecesJson += gson.toJson(pez,  Pez.class) + ",";
@@ -736,10 +737,13 @@ public class Tanque {
                 pecesJson = pecesJson.substring(0, pecesJson.length() - 1);
                 pecesJson += " ]";
             }
+            else{
+                pecesJson = " [] ";
+            }
 
-            String json = "{ \"pez\" : \"" + ((peces != 0) ? src.peces.get(0).getNombre() + "\"" : "\"\"\"") + " , \"num\" : " + peces + " , \"datos\" : {"
-            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " }" + ((peces != 0) ? ", \"peces\" : "
-            + pecesJson : "") + "}";
+            String json = "{ \"pez\" : \"" + ((peces != 0) ? src.peces.get(0).getNombre() + "\"" : "\"") + " , \"num\" : " + peces + " , \"datos\" : {"
+            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " }" + ", \"peces\" : "
+            + pecesJson + "}";
             return JsonParser.parseString(json);
         }
 
