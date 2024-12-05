@@ -1,8 +1,20 @@
 package simulador;
 
+import java.lang.reflect.Type;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+
 /**
  * Clase que representa a un almacén central que almacena comida y la distribuye equitativamente entre las piscifactrías.
  */
+@JsonAdapter(AlmacenCentral.AdaptadorJSONAlmacenCentral.class)
 public class AlmacenCentral {
 
     /**
@@ -21,10 +33,16 @@ public class AlmacenCentral {
     private int cantidadComidaVegetal;
 
     /**
+     * Indica si el almecén central está disponible.
+     */
+    private boolean disponible;
+
+    /**
      * Constructor de almacenes centrales.
      */
     public AlmacenCentral(){
         capacidadComida = 200;
+        disponible = false;
     }
 
     /**
@@ -76,6 +94,22 @@ public class AlmacenCentral {
     }
 
     /**
+     * 
+     * @return Si el almacen central está disponible.
+     */
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    /**
+     * Permite establecer la disponibilidad del almacén central.
+     * @param disponible True para establecer que el almacén central está disponible.
+     */
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+
+    /**
      * Mejora el almacén centrar aumentado la capacidad máxima de cada tipo de comida en 50 unidades.
      */
     public void mejorar(){
@@ -89,5 +123,27 @@ public class AlmacenCentral {
     public String toString(){
         return "Capacidad máxima de comida por cada tipo: " + capacidadComida + "\nCantidad comida animal disponible: " + cantidadComidaAnimal
             + "\nCantidad comida vegetal disponible: " + cantidadComidaVegetal;
+    }
+
+    /**
+     * Clase que se encarga de adaptar la clase AlmacenCentral al formato JSON.
+     */
+    private class AdaptadorJSONAlmacenCentral implements JsonSerializer<AlmacenCentral>, JsonDeserializer<AlmacenCentral>{
+
+        @Override
+        public AlmacenCentral deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'deserialize'");
+        }
+
+        @Override
+        public JsonElement serialize(AlmacenCentral src, Type typeOfSrc, JsonSerializationContext context) {
+            String json = "{ \"almacen\" : { \"disponible\" : \"" + src.disponible + "\" , \"capacidad\" : " + src.capacidadComida
+            + " , \"comida\" : { \"vegetal\" : " + src.cantidadComidaVegetal + " , \"animal\" : " + src.cantidadComidaAnimal + " }}}";
+            return JsonParser.parseString(json);
+        }
+
+        
     }
 }

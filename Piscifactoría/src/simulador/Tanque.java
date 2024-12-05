@@ -14,6 +14,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
@@ -25,7 +26,7 @@ import propiedades.AlmacenPropiedades;
  * Clase que representa a un tanque de una piscifactoría que contiene un número
  * de peces.
  */
-//@JsonAdapter(Tanque.AdaptadorJSON.class)
+@JsonAdapter(Tanque.AdaptadorJSON.class)
 public class Tanque {
 
     /**
@@ -712,12 +713,34 @@ public class Tanque {
     /**
      * Clase que se encarga de adaptar la serialización y la deserialización de objetos de la clase Tanque.
      */
-    private class AdaptadorJSON implements JsonDeserializer<Tanque>{
+    private class AdaptadorJSON implements JsonDeserializer<Tanque>, JsonSerializer<Tanque>{
 
         @Override
         public Tanque deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
             return new Gson().fromJson(json, Tanque.class);
+        }
+
+        @Override
+        public JsonElement serialize(Tanque src, Type typeOfSrc, JsonSerializationContext context) {
+            int peces = src.peces.size();
+            Gson gson = new Gson();
+            String pecesJson = " [";
+
+            if(peces != 0){
+
+                for(Pez pez : src.peces){
+                    pecesJson += gson.toJson(pez,  Pez.class) + ",";
+                }
+
+                pecesJson = pecesJson.substring(0, pecesJson.length() - 1);
+                pecesJson += " ]";
+            }
+
+            String json = "{ \"pez\" : \"" + ((peces != 0) ? src.peces.get(0).getNombre() + "\"" : "\"\"\"") + " , \"num\" : " + peces + " , \"datos\" : {"
+            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " }" + ((peces != 0) ? ", \"peces\" : "
+            + pecesJson : "") + "}";
+            return JsonParser.parseString(json);
         }
 
     }

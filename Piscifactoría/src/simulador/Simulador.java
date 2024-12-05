@@ -12,6 +12,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
@@ -94,14 +95,15 @@ public class Simulador {
     public Estadisticas estadisticas;
 
     /**
+     * Almacén central de comida usado en la simulación.
+     */
+    @SerializedName("edificios")
+    public AlmacenCentral almacenCentral = new AlmacenCentral();
+
+    /**
      * Piscifactorías de la simulación.
      */
     public ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
-
-    /**
-     * Almacén central de comida usado en la simulación.
-     */
-    public AlmacenCentral almacenCentral = null;
 
     /**
      * Archivo compartido entre todas las partidas donde se registran los errores.
@@ -557,7 +559,7 @@ public class Simulador {
         }
         System.out.println("Día actual: " + (diasPasados + 1));
         System.out.println("Monedas: " + sistemaMonedas.getMonedas());
-        if (almacenCentral != null) {
+        if (almacenCentral.isDisponible()) {
             int cantidadComidaAnimalAlmacen = almacenCentral.getCantidadComidaAnimal();
             int cantidadComidaVegetalAlmacen = almacenCentral.getCantidadComidaVegetal();
             int capacidadComidaAlmacen = almacenCentral.getCapacidadComida();
@@ -755,7 +757,7 @@ public class Simulador {
      * Gestiona la compra de comida para una piscifactoría o para el almacén central.
      */
     private void addFood() {
-        if (almacenCentral != null) {
+        if (almacenCentral.isDisponible()) {
             int tipoComida = menuTipoComida();
 
             if (tipoComida != 0) {
@@ -1638,7 +1640,7 @@ public class Simulador {
      */
     private void comprarEdificio() {
         System.out.println("========== Comprar edificio ==========");
-        if (almacenCentral != null) {
+        if (almacenCentral.isDisponible()) {
 
             String[] opciones = { "Cancelar", "Comprar piscifactoría" };
             int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
@@ -1659,7 +1661,7 @@ public class Simulador {
                 case 2:
                     if (sistemaMonedas.getMonedas() >= 2000) {
                         sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - 2000);
-                        almacenCentral = new AlmacenCentral();
+                        almacenCentral.setDisponible(true);
                         System.out.println("Almacén central comprado.");
 
                         try{
@@ -1774,7 +1776,7 @@ public class Simulador {
      */
     private void mejorarEdificio() {
         System.out.println("========== Mejorar edificio ==========");
-        if (almacenCentral != null) {
+        if (almacenCentral.isDisponible()) {
             String[] opciones = {
                     "Cancelar",
                     "Mejorar una piscifactoría",
