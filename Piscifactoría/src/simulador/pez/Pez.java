@@ -260,6 +260,9 @@ public abstract class Pez {
      */
     private class AdaptadorJSON implements JsonSerializer<Pez>, JsonDeserializer<Pez>{
 
+        /**
+         * Se encarga de la deserialización de un objeto Pez.
+         */
         @Override
         public Pez deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
@@ -378,6 +381,9 @@ public abstract class Pez {
             }
         }
 
+        /**
+         * Se encarga de la serilaización de un objeto Pez.
+         */
         @Override
         public JsonElement serialize(Pez src, Type typeOfSrc, JsonSerializationContext context) {
             int codigoPez;

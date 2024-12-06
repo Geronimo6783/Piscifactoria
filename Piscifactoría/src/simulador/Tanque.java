@@ -723,6 +723,9 @@ public class Tanque {
      */
     private class AdaptadorJSON implements JsonDeserializer<Tanque>, JsonSerializer<Tanque>{
 
+        /**
+         * Se encarga de la deserialización de un objeto Tanque.
+         */
         @Override
         public Tanque deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
@@ -736,6 +739,9 @@ public class Tanque {
             return tanque;
         }
 
+        /**
+         * Se encarga de la serialización de un objeto Tanque.
+         */
         @Override
         public JsonElement serialize(Tanque src, Type typeOfSrc, JsonSerializationContext context) {
             int peces = (src.peces.isEmpty()) ? 0 : src.peces.size();

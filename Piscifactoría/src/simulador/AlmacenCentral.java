@@ -131,6 +131,9 @@ public class AlmacenCentral {
      */
     private class AdaptadorJSONAlmacenCentral implements JsonSerializer<AlmacenCentral>, JsonDeserializer<AlmacenCentral>{
 
+        /**
+         * Se encarga de la deserialización de un objeto AlmacenCentral.
+         */
         @Override
         public AlmacenCentral deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
@@ -144,6 +147,9 @@ public class AlmacenCentral {
             return almacenCentral; 
         }
 
+        /**
+         * Se encarga de la serialización de un objeto AlmacenCentral.
+         */
         @Override
         public JsonElement serialize(AlmacenCentral src, Type typeOfSrc, JsonSerializationContext context) {
             String json = "{ \"almacen\" : { \"disponible\" : \"" + src.disponible + "\" , \"capacidad\" : " + src.capacidadComida

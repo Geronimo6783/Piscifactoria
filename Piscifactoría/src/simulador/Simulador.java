@@ -12,7 +12,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
@@ -44,6 +43,9 @@ public class Simulador {
      */
     private class AdaptadorJSONEstadisticas implements JsonSerializer<Estadisticas>, JsonDeserializer<Estadisticas>{
 
+        /**
+         * Se encarga de la deserialización de un objeto Estadisticas.
+         */
         @Override
         public Estadisticas deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             return new Estadisticas(new String[]{ AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), 
@@ -52,6 +54,9 @@ public class Simulador {
                 AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()}, json.getAsString());
         }
 
+        /**
+         * Se encarga de la serialización de un objeto Estadisticas.
+         */
         @Override
         public JsonElement serialize(Estadisticas src, Type typeOfSrc, JsonSerializationContext context) {
             return context.serialize(src.exportarDatos(new String[]{ AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), 
@@ -685,7 +690,7 @@ public class Simulador {
 
         System.out.println(pecesVendidos + " peces vendidos por un total de " + monedasGanadas + " monedas.");
         
-        if(almacenCentral != null){
+        if(almacenCentral.isDisponible()){
             repartirComida();
         }
 
@@ -2119,7 +2124,7 @@ public class Simulador {
 
             }
 
-            if(almacenCentral != null){
+            if(almacenCentral.isDisponible()){
                 repartirComida();
             }
 

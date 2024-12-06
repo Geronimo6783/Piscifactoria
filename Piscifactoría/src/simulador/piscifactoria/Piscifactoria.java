@@ -471,6 +471,9 @@ public abstract class Piscifactoria {
      */
     private class AdaptadorJSON implements JsonDeserializer<Piscifactoria>, JsonSerializer<Piscifactoria>{
 
+        /**
+         * Se encarga de la serialización de un objeto Piscifactoria.
+         */
         @Override
         public JsonElement serialize(Piscifactoria src, Type typeOfSrc, JsonSerializationContext context) {
             String json = "{ \"nombre\" : \"" + src.nombre + "\" , \"tipo\" : \"" + src.tipo + "\" , \"capacidad\" : \"" + src.almacenInicial.capacidadMaximaComida + "\" , \"comida\" : { "
@@ -478,6 +481,9 @@ public abstract class Piscifactoria {
             return JsonParser.parseString(json);
         }
 
+        /**
+         * Se encarga de la deserialización de un objeto Piscifactoria.
+         */
         @Override
         public Piscifactoria deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
