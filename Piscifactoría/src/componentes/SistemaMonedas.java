@@ -76,7 +76,7 @@ public class SistemaMonedas {
         }
 
         /**
-         * Se encarga de la serialización de un objeto SistemaMonedas.
+         * Se encarga de la serialización de un objeto SistemaMonedas. 
          */
         @Override
         public JsonElement serialize(SistemaMonedas src, Type typeOfSrc, JsonSerializationContext context) {
