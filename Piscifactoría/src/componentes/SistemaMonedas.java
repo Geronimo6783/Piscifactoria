@@ -67,11 +67,17 @@ public class SistemaMonedas {
      */
     private class AdaptadorJSON implements JsonSerializer<SistemaMonedas>, JsonDeserializer<SistemaMonedas>{
 
+        /**
+         * Se encarga de la deserialización de un objeto SistemaMonedas.
+         */
         @Override
         public SistemaMonedas deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             return new SistemaMonedas(json.getAsInt());
         }
 
+        /**
+         * Se encarga de la serialización de un objeto SistemaMonedas.
+         */
         @Override
         public JsonElement serialize(SistemaMonedas src, Type typeOfSrc, JsonSerializationContext context) {
             return context.serialize(src.getMonedas());
