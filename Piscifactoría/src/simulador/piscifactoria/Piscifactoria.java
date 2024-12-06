@@ -2,6 +2,7 @@ package simulador.piscifactoria;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -482,6 +483,7 @@ public abstract class Piscifactoria {
                 throws JsonParseException {
 
             JsonObject objetoJson = json.getAsJsonObject();
+            Tanque[] tanques = new Gson().fromJson(objetoJson.get("tanques"), Tanque[].class);
             int tipoPiscifactoria = objetoJson.get("tipo").getAsInt();
 
             Piscifactoria piscifactoria;
@@ -492,11 +494,14 @@ public abstract class Piscifactoria {
                 piscifactoria = new PiscifactoriaMar(objetoJson.get("nombre").getAsString());
             }
 
-            for (Tanque tanque : piscifactoria.getTanques()) {
+            for(int i = 0; i < tanques.length; i++) {
+                tanques[i].setNumeroTanque(i + 1);
                 if (tipoPiscifactoria == 0) { 
-                    tanque.setCapacidadMaximaPeces(25);
+                    tanques[i].setCapacidadMaximaPeces(25);
+                    piscifactoria.tanques.add(tanques[i]);
                 } else { 
-                    tanque.setCapacidadMaximaPeces(50);
+                    tanques[i].setCapacidadMaximaPeces(100);
+                    piscifactoria.tanques.add(tanques[i]);
                 }
             }
 

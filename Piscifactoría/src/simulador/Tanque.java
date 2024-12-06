@@ -32,7 +32,7 @@ public class Tanque {
     /**
      * Número del tanque en la piscifactoría.
      */
-    private final int numeroTanque;
+    private int numeroTanque;
 
     /**
      * Capacidad máxima de peces que puede tener el tanque.
@@ -85,6 +85,14 @@ public class Tanque {
      */
     public int getNumeroTanque() {
         return numeroTanque;
+    }
+
+    /**
+     * Permite establecer el número del tanque.
+     * @param numeroTanque Número del tanque a establecer.
+     */
+    public void setNumeroTanque(int numeroTanque){
+        this.numeroTanque = numeroTanque;
     }
 
     /**
@@ -718,7 +726,14 @@ public class Tanque {
         @Override
         public Tanque deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
-            return new Gson().fromJson(json, Tanque.class);
+            Tanque tanque = new Tanque();
+            tanque.peces = new ArrayList<Pez>();
+            
+            for(Pez pez : new Gson().fromJson(json.getAsJsonObject().get("peces"), Pez[].class)){
+                tanque.peces.add(pez);
+            }
+
+            return tanque;
         }
 
         @Override

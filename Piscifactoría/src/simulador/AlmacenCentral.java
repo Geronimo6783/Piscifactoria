@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
@@ -133,8 +134,14 @@ public class AlmacenCentral {
         @Override
         public AlmacenCentral deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'deserialize'");
+            AlmacenCentral almacenCentral = new AlmacenCentral();
+            JsonObject almacen = json.getAsJsonObject().get("almacen").getAsJsonObject();
+            JsonObject comida = almacen.get("comida").getAsJsonObject();
+            almacenCentral.disponible = almacen.get("disponible").getAsBoolean();
+            almacenCentral.capacidadComida = almacen.get("capacidad").getAsInt();
+            almacenCentral.cantidadComidaAnimal = comida.get("animal").getAsInt();
+            almacenCentral.cantidadComidaVegetal = comida.get("vegetal").getAsInt();
+            return almacenCentral; 
         }
 
         @Override

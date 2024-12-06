@@ -266,7 +266,6 @@ public abstract class Pez {
 
             JsonObject pezDeserializado = json.getAsJsonObject();
             JsonObject extras = pezDeserializado.get("extra").getAsJsonObject();
-            String nombrePez = extras.get("nombre").toString();
             
             switch(extras.get("codigoPez").getAsInt()){
                 case 0 -> {
