@@ -2,7 +2,6 @@ package simulador.piscifactoria;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -561,6 +560,8 @@ public abstract class Piscifactoria {
             }
 
             piscifactoria.nombre = objetoJson.get("nombre").getAsString();
+            JsonObject objetoComida = objetoJson.get("comida").getAsJsonObject();
+            piscifactoria.almacenInicial = new AlmacenComida(objetoJson.get("capacidad").getAsInt(), objetoComida.get("animal").getAsInt(), objetoComida.get("vegetal").getAsInt());
 
             JsonObject comidaJson = objetoJson.getAsJsonObject("comida");
             int capacidad = objetoJson.get("capacidad").getAsInt();
