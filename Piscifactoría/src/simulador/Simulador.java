@@ -339,6 +339,18 @@ public class Simulador {
                     }
                 }
                 }
+
+                try{
+                    LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
+                }
+                catch(IOException e){
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                    }
+                    catch(IOException ex){
+                        
+                    }
+                }
             }
             catch(IOException e){
                 try{
@@ -754,6 +766,18 @@ public class Simulador {
             }
             catch(IOException ex){
 
+            }
+        }
+
+        try{
+            LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+                
             }
         }
     }
@@ -2192,6 +2216,18 @@ public class Simulador {
 
             pecesRio = 0;
             pecesMar = 0;
+
+            try{
+                LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
+            }
+            catch(IOException e){
+                try{
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                }
+                catch(IOException ex){
+                    
+                }
+            }
         }
 
         System.out.println("En estos " + dias + " días se han vendido " + pecesVendidos
