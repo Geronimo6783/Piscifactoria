@@ -8,6 +8,14 @@ import simulador.Tanque;
 public class PiscifactoriaMar extends Piscifactoria {
 
     /**
+     * Constructor sin parámetros de objetos PiscifactoriaMar;
+     */
+    public PiscifactoriaMar(){
+        super("", 1);
+    }
+
+
+    /**
      * Constructor de piscifactorías de mar.
      * @param nombre Nombre de la piscifactoría de mar.
      */

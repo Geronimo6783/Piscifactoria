@@ -494,11 +494,13 @@ public abstract class Piscifactoria {
 
             Piscifactoria piscifactoria;
             if(tipoPiscifactoria == 0){
-                piscifactoria = new PiscifactoriaRio(objetoJson.get("nombre").getAsString());
+                piscifactoria = new PiscifactoriaRio();
             }
             else{
-                piscifactoria = new PiscifactoriaMar(objetoJson.get("nombre").getAsString());
+                piscifactoria = new PiscifactoriaMar();
             }
+
+            piscifactoria.nombre = objetoJson.get("nombre").getAsString();
 
             for(int i = 0; i < tanques.length; i++) {
                 tanques[i].setNumeroTanque(i + 1);
