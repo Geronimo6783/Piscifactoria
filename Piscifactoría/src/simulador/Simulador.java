@@ -84,7 +84,7 @@ public class Simulador {
      * Indica el número de días que han pasado en la simulación.
      */
     @SerializedName("dia")
-    private int diasPasados = 0;
+    private int diasPasados;
 
     /**
      * Sistema de monedas de la simulación.
@@ -202,6 +202,7 @@ public class Simulador {
         }
 
         if(opcion == 0 || opcion == 2){
+            simulador.diasPasados = 0;
             simulador = new Simulador();
             System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
             simulador.nombre = SistemaEntrada.entradaTexto();
@@ -2216,23 +2217,23 @@ public class Simulador {
 
             pecesRio = 0;
             pecesMar = 0;
-
-            try{
-                LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                }
-                catch(IOException ex){
-                    
-                }
-            }
         }
 
         System.out.println("En estos " + dias + " días se han vendido " + pecesVendidos
                 + " peces y se han ganado " + monedasGanadas + " monedas.");
         showGeneralStatus();
+
+        try{
+            LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+                
+            }
+        }
     }
 
     /**
