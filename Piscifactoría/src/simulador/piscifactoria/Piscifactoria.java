@@ -26,7 +26,7 @@ public abstract class Piscifactoria {
     /**
      * Clase que representa al almacén de comida de una piscifactoría.
      */
-    public static class AlmacenComida{
+    public static class AlmacenComida {
 
         /**
          * Capacidad máxima de comida de cada tipo del almacén.
@@ -45,8 +45,9 @@ public abstract class Piscifactoria {
 
         /**
          * Constructor de almacenes de comida.
+         * 
          * @param capacidadMaximaComida Capacidad máxima de comida de cada tipo.
-         * @param cantidadComidaAnimal Cantidad de comida animal del almacén.
+         * @param cantidadComidaAnimal  Cantidad de comida animal del almacén.
          * @param cantidadComidaVegetal Cantidad de comida animal del alamacén.
          */
         public AlmacenComida(int capacidadMaximaComida, int cantidadComidaAnimal, int cantidadComidaVegetal) {
@@ -65,7 +66,9 @@ public abstract class Piscifactoria {
 
         /**
          * Permite establecer la capacidad máxima de comida de cada tipo del almacén.
-         * @param capacidadMaximaComida Capacidad máxima de comida de cada tipo del almacén.
+         * 
+         * @param capacidadMaximaComida Capacidad máxima de comida de cada tipo del
+         *                              almacén.
          */
         public void setCapacidadMaximaComida(int capacidadMaximaComida) {
             this.capacidadMaximaComida = capacidadMaximaComida;
@@ -81,7 +84,9 @@ public abstract class Piscifactoria {
 
         /**
          * Permite establecer la cantidad de comida animal del almacén.
-         * @param cantidadComidaAnimal Cantidad de comida animal del almacén a establecer.
+         * 
+         * @param cantidadComidaAnimal Cantidad de comida animal del almacén a
+         *                             establecer.
          */
         public void setCantidadComidaAnimal(int cantidadComidaAnimal) {
             this.cantidadComidaAnimal = cantidadComidaAnimal;
@@ -97,7 +102,9 @@ public abstract class Piscifactoria {
 
         /**
          * Permite establecer la cantidad de comida vegetal del almacén.
-         * @param cantidadComidaVegetal Cantidad de comida vegetal del almacén a establecer.
+         * 
+         * @param cantidadComidaVegetal Cantidad de comida vegetal del almacén a
+         *                              establecer.
          */
         public void setCantidadComidaVegetal(int cantidadComidaVegetal) {
             this.cantidadComidaVegetal = cantidadComidaVegetal;
@@ -105,19 +112,23 @@ public abstract class Piscifactoria {
 
         /**
          * Mejora el almacen aumentando la capacidad máxima de comida de cada tipo.
-         * @param capacidadAAumentar Unidades a aumentar la capacidad máxima de comida de cada tipo.
+         * 
+         * @param capacidadAAumentar Unidades a aumentar la capacidad máxima de comida
+         *                           de cada tipo.
          */
-        public void mejorar(int capacidadAAumentar){
+        public void mejorar(int capacidadAAumentar) {
             capacidadMaximaComida += capacidadAAumentar;
         }
 
         /**
          * Devuelve un string con información relevante del almacén de comida.
+         * 
          * @return String con información relevante del alamcén de comida.
          */
-        public String toString(){
-            return "Capacidad máxima de comida por cada tipo: " + capacidadMaximaComida + "\nCantidad comida animal disponible: " + cantidadComidaAnimal
-                    + "\nCantidad comida vegetal disponible: " +cantidadComidaVegetal;
+        public String toString() {
+            return "Capacidad máxima de comida por cada tipo: " + capacidadMaximaComida
+                    + "\nCantidad comida animal disponible: " + cantidadComidaAnimal
+                    + "\nCantidad comida vegetal disponible: " + cantidadComidaVegetal;
         }
 
     }
@@ -128,7 +139,8 @@ public abstract class Piscifactoria {
     protected String nombre = "";
 
     /**
-     * Indica si la piscifactoría es de mar o de río. Si es 0 es de río y si es 1 es de mar.
+     * Indica si la piscifactoría es de mar o de río. Si es 0 es de río y si es 1 es
+     * de mar.
      */
     protected int tipo;
 
@@ -140,7 +152,7 @@ public abstract class Piscifactoria {
      * Tanques de los que dispone la piscifactoría.
      */
     protected ArrayList<Tanque> tanques;
-    
+
     /**
      * Tanque con el que empieza obligatoriamente la piscifactoría.
      */
@@ -153,6 +165,7 @@ public abstract class Piscifactoria {
 
     /**
      * Constructor de Ppiscifactorías.
+     * 
      * @param nombre Nombre de la piscifactoría.
      */
     protected Piscifactoria(String nombre, int tipo) {
@@ -163,6 +176,7 @@ public abstract class Piscifactoria {
 
     /**
      * Devuelve los tanques de la piscifactoria.
+     * 
      * @return Tanques de la piscifactoría.
      */
     public ArrayList<Tanque> getTanques() {
@@ -171,6 +185,7 @@ public abstract class Piscifactoria {
 
     /**
      * Establece el ArrayList de tanques de la piscifactoria.
+     * 
      * @param tanques ArrayList de tanques a establecer.
      */
     public void setTanques(ArrayList<Tanque> tanques) {
@@ -179,6 +194,7 @@ public abstract class Piscifactoria {
 
     /**
      * Devuelve el tanque inicial de la piscifactoria.
+     * 
      * @return Tanque inicial de la piscifactoría.
      */
     public Tanque getTanqueInicial() {
@@ -187,6 +203,7 @@ public abstract class Piscifactoria {
 
     /**
      * Establece el tanque inicial de la piscifactoria.
+     * 
      * @param tanqueInicial Tanque inicial de la piscifactoría a establecer.
      */
     public void setTanqueInicial(Tanque tanqueInicial) {
@@ -195,6 +212,7 @@ public abstract class Piscifactoria {
 
     /**
      * Devuelve el nombre de la piscifactoria.
+     * 
      * @return Nombre de la piscifactoría.
      */
     public String getNombre() {
@@ -203,6 +221,7 @@ public abstract class Piscifactoria {
 
     /**
      * Devuelve el almacén inicial de la piscifactoría.
+     * 
      * @return Almacén inicial de la piscifactoría.
      */
     public AlmacenComida getAlmacenInicial() {
@@ -211,6 +230,7 @@ public abstract class Piscifactoria {
 
     /**
      * Establece el almacén inicial de la piscifactoría
+     * 
      * @param almacenInicial Almacén inicial de la piscifactoría a establecer.
      */
     public void setAlmacenInicial(AlmacenComida almacenInicial) {
@@ -219,6 +239,7 @@ public abstract class Piscifactoria {
 
     /**
      * Establece el nombre de la piscifactoria
+     * 
      * @param nombre Nombre de la piscifactoría a establecer.
      */
     public void setNombre(String nombre) {
@@ -234,7 +255,8 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Método auxiliar de showStatus que realiza los calculos de cantidades y porcentajes para devolver como string al resto del mensaje.
+     * Método auxiliar de showStatus que realiza los calculos de cantidades y
+     * porcentajes para devolver como string al resto del mensaje.
      */
     private String datosTanques() {
         int peces = 0;
@@ -255,52 +277,72 @@ public abstract class Piscifactoria {
             hembras += tanques.get(i).pecesHembra();
             machos += tanques.get(i).pecesMacho();
             fertiles += tanques.get(i).pecesFertiles();
-            }
-        
-        if(peces != 0){
+        }
 
-            if(vivos != 0){
-                return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + String.format("%.2f", (((float)peces / (float)capacidad) * 100))+ "%)" +
-                        "\nPeces vivos: " + vivos + "/" + peces + "(" + String.format("%.2f", (((float)vivos / (float)peces) * 100)) + "%)" +
-                        "\nPeces alimentados: " + alimentados + "/" + vivos + "(" + String.format("%.2f",(((float)alimentados / (float)vivos) * 100)) + "%)" +
-                        "\nPeces adultos: " + adultos + "/" + vivos + "(" + String.format("%.2f", (((float)adultos / (float)vivos) * 100)) + "%)" +
+        if (peces != 0) {
+
+            if (vivos != 0) {
+                return "\nOcupación: " + peces + "/" + capacidad + " " + "("
+                        + String.format("%.2f", (((float) peces / (float) capacidad) * 100)) + "%)" +
+                        "\nPeces vivos: " + vivos + "/" + peces + "("
+                        + String.format("%.2f", (((float) vivos / (float) peces) * 100)) + "%)" +
+                        "\nPeces alimentados: " + alimentados + "/" + vivos + "("
+                        + String.format("%.2f", (((float) alimentados / (float) vivos) * 100)) + "%)" +
+                        "\nPeces adultos: " + adultos + "/" + vivos + "("
+                        + String.format("%.2f", (((float) adultos / (float) vivos) * 100)) + "%)" +
                         "\nHembras / Machos: " + hembras + "/" + machos +
-                        "\nFértiles: " + fertiles + "/" + vivos + "(" + String.format("%.2f", (((float)fertiles / (float)vivos) * 100))+ "%)" +
+                        "\nFértiles: " + fertiles + "/" + vivos + "("
+                        + String.format("%.2f", (((float) fertiles / (float) vivos) * 100)) + "%)" +
                         "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
                         + almacenInicial.capacidadMaximaComida + "("
-                        + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
+                        + String.format("%.2f",
+                                ((float) almacenInicial.cantidadComidaAnimal
+                                        / (float) almacenInicial.capacidadMaximaComida) * 100)
+                        + "%)"
                         + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
                         + almacenInicial.capacidadMaximaComida + "("
-                        + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
+                        + String.format("%.2f", ((float) almacenInicial.cantidadComidaVegetal
+                                / (float) almacenInicial.capacidadMaximaComida) * 100)
+                        + "%)";
+            } else {
+                return "\nOcupación: " + peces + "/" + capacidad + " " + "("
+                        + String.format("%.2f", (((float) peces / (float) capacidad) * 100)) + "%)" +
+                        "\nPeces vivos: " + vivos + "/" + peces + "("
+                        + String.format("%.2f", (((float) vivos / (float) peces) * 100)) + "%)" +
+                        "\nPeces alimentados: " + 0 + "/" + 0 + "(" + 100 + "%)" +
+                        "\nPeces adultos: " + 0 + "/" + 0 + "(" + 100 + "%)" +
+                        "\nHembras / Machos: " + hembras + "/" + machos +
+                        "\nFértiles: " + 0 + "/" + 0 + "(" + 100 + "%)" +
+                        "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
+                        + almacenInicial.capacidadMaximaComida + "("
+                        + String.format("%.2f",
+                                ((float) almacenInicial.cantidadComidaAnimal
+                                        / (float) almacenInicial.capacidadMaximaComida) * 100)
+                        + "%)"
+                        + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
+                        + almacenInicial.capacidadMaximaComida + "("
+                        + String.format("%.2f", ((float) almacenInicial.cantidadComidaVegetal
+                                / (float) almacenInicial.capacidadMaximaComida) * 100)
+                        + "%)";
             }
-            else{
-                return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + String.format("%.2f", (((float)peces / (float)capacidad) * 100))+ "%)" +
-                    "\nPeces vivos: " + vivos + "/" + peces + "(" + String.format("%.2f", (((float)vivos / (float)peces) * 100)) + "%)" +
-                    "\nPeces alimentados: " + 0 + "/" + 0 + "(" + 100 + "%)" +
-                    "\nPeces adultos: " + 0 + "/" + 0 + "(" + 100 + "%)" +
+        } else {
+            return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
+                    "\nPeces vivos: " + vivos + "/" + peces + "(100%)" +
+                    "\nPeces alimentados: " + alimentados + "/" + vivos + "(100%)" +
+                    "\nPeces adultos: " + adultos + "/" + vivos + "(100%)" +
                     "\nHembras / Machos: " + hembras + "/" + machos +
-                    "\nFértiles: " + 0 + "/" + 0 + "(" + 100 + "%)" +
+                    "\nFértiles: " + fertiles + "/" + vivos + "(100%)" +
                     "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
-                    + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
+                    + String.format("%.2f",
+                            ((float) almacenInicial.cantidadComidaAnimal / (float) almacenInicial.capacidadMaximaComida)
+                                    * 100)
+                    + "%)"
                     + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
-                    + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
-            }
-        }
-        else{
-            return "\nOcupación: " + peces + "/" + capacidad + " " + "(" + (peces / capacidad) * 100 + "%)" +
-            "\nPeces vivos: " + vivos + "/" + peces + "(100%)" +
-            "\nPeces alimentados: " + alimentados + "/" + vivos + "(100%)" +
-            "\nPeces adultos: " + adultos + "/" + vivos + "(100%)" +
-            "\nHembras / Machos: " + hembras + "/" + machos +
-            "\nFértiles: " + fertiles + "/" + vivos + "(100%)" +
-            "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
-            + almacenInicial.capacidadMaximaComida + "("
-            + String.format("%.2f", ((float)almacenInicial.cantidadComidaAnimal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
-            + "\n\t-comida vegetal: " + almacenInicial.cantidadComidaVegetal + "/"
-            + almacenInicial.capacidadMaximaComida + "("
-            + String.format("%.2f", ((float)almacenInicial.cantidadComidaVegetal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)";
+                    + String.format("%.2f", ((float) almacenInicial.cantidadComidaVegetal
+                            / (float) almacenInicial.capacidadMaximaComida) * 100)
+                    + "%)";
         }
     }
 
@@ -337,22 +379,30 @@ public abstract class Piscifactoria {
     public void showFood() {
         System.out.println("============== Almacén ================\nComida animal: "
                 + almacenInicial.getCantidadComidaAnimal() + "/" + almacenInicial.getCapacidadMaximaComida() +
-                "(" + String.format("%.2f", (((float)almacenInicial.getCantidadComidaAnimal() / (float)almacenInicial.getCapacidadMaximaComida()) * 100))
+                "("
+                + String.format("%.2f",
+                        (((float) almacenInicial.getCantidadComidaAnimal()
+                                / (float) almacenInicial.getCapacidadMaximaComida()) * 100))
                 + "%)" +
                 "\nComida vegetal: " + almacenInicial.getCantidadComidaVegetal() + "/"
                 + almacenInicial.getCapacidadMaximaComida() +
-                "(" + String.format("%.2f", (((float)almacenInicial.getCantidadComidaVegetal() / (float)almacenInicial.getCapacidadMaximaComida()) * 100))
+                "("
+                + String.format("%.2f",
+                        (((float) almacenInicial.getCantidadComidaVegetal()
+                                / (float) almacenInicial.getCapacidadMaximaComida()) * 100))
                 + "%)");
     }
 
     /**
-     * Realiza la lógica de que se pasa un día cuando no se dispone de almacén central.
+     * Realiza la lógica de que se pasa un día cuando no se dispone de almacén
+     * central.
+     * 
      * @return Número de peces vendidos en la piscifactoría cuando pasa el día.
      */
     public int nextDay() {
         int pecesVendidos = 0;
-        for(Tanque tanque : tanques){
-            if(!tanque.getPeces().isEmpty()){
+        for (Tanque tanque : tanques) {
+            if (!tanque.getPeces().isEmpty()) {
                 tanque.alimentar(almacenInicial);
             }
             pecesVendidos += tanque.nextDay();
@@ -369,7 +419,7 @@ public abstract class Piscifactoria {
             tanque.venderPeces();
         }
     }
-    
+
     /**
      * Método que mejora el almacen.
      */
@@ -379,9 +429,9 @@ public abstract class Piscifactoria {
      * 
      * @return Número de peces vivos en la piscifactoría.
      */
-    public int getPecesVivos(){
+    public int getPecesVivos() {
         int pecesVivos = 0;
-        for(Tanque tanque : tanques){
+        for (Tanque tanque : tanques) {
             pecesVivos += tanque.pecesVivos();
         }
 
@@ -392,9 +442,9 @@ public abstract class Piscifactoria {
      * 
      * @return Número de peces totales en la piscifactoría.
      */
-    public int getPecesTotales(){
+    public int getPecesTotales() {
         int peces = 0;
-        for(Tanque tanque : tanques){
+        for (Tanque tanque : tanques) {
             peces += tanque.getPeces().size();
         }
 
@@ -405,9 +455,9 @@ public abstract class Piscifactoria {
      * 
      * @return Espacio total para peces en la piscifactoría.
      */
-    public int getEspacioPeces(){
+    public int getEspacioPeces() {
         int espacioPeces = 0;
-        for(Tanque tanque : tanques){
+        for (Tanque tanque : tanques) {
             espacioPeces += tanque.getCapacidadMaximaPeces();
         }
 
@@ -416,11 +466,13 @@ public abstract class Piscifactoria {
 
     /**
      * Permite obtener el índice de un tanque vacio de la piscifactoría.
-     * @return Índice de un tanque vación de la piscifactoría o -1 si no hay un tanque vacio en la piscifactoría.
+     * 
+     * @return Índice de un tanque vación de la piscifactoría o -1 si no hay un
+     *         tanque vacio en la piscifactoría.
      */
-    public int getIndiceTanqueVacio(){
-        for(Tanque tanque : tanques){
-            if(tanque.getPeces().isEmpty()){
+    public int getIndiceTanqueVacio() {
+        for (Tanque tanque : tanques) {
+            if (tanque.getPeces().isEmpty()) {
                 return tanques.indexOf(tanque);
             }
         }
@@ -429,14 +481,16 @@ public abstract class Piscifactoria {
     }
 
     /**
-     * Permite obtener el índice de un tanque que tiene un espacio para un pez en concreto.
+     * Permite obtener el índice de un tanque que tiene un espacio para un pez en
+     * concreto.
+     * 
      * @param nombrePez Nombre del pez.
-     * @return Índice de un tanque que tiene un espacio para un pez en concreto o -1 
-     * si no hay un tanque con un espacio para un pez en concreto.
+     * @return Índice de un tanque que tiene un espacio para un pez en concreto o -1
+     *         si no hay un tanque con un espacio para un pez en concreto.
      */
-    public int getIndiceTanqueConEspacioParaPez(String nombrePez){
-        for(Tanque tanque : tanques){
-            if(!tanque.getPeces().isEmpty() && tanque.getPeces().get(0).getNombre().equals(nombrePez)){
+    public int getIndiceTanqueConEspacioParaPez(String nombrePez) {
+        for (Tanque tanque : tanques) {
+            if (!tanque.getPeces().isEmpty() && tanque.getPeces().get(0).getNombre().equals(nombrePez)) {
                 return tanques.indexOf(tanque);
             }
         }
@@ -446,11 +500,12 @@ public abstract class Piscifactoria {
 
     /**
      * Indica si todos los tanques de la piscifactoría están llenos.
+     * 
      * @return True si todos los tanques de la piscifactoría están llenos.
      */
-    public boolean isTodosLosTanqueLlenos(){
-        for(Tanque tanque : tanques){
-            if(tanque.getPeces().size() < tanque.getCapacidadMaximaPeces()){
+    public boolean isTodosLosTanqueLlenos() {
+        for (Tanque tanque : tanques) {
+            if (tanque.getPeces().size() < tanque.getCapacidadMaximaPeces()) {
                 return false;
             }
         }
@@ -460,24 +515,30 @@ public abstract class Piscifactoria {
 
     /**
      * Devuelve un string con información de la piscifactoría.
+     * 
      * @return String con información de la piscifactoría.
      */
-    public String toString(){
-        return "Nombre piscifactoría: " + nombre + "\nNúmero de tanques: " + tanques.size() + "\nAlmacén comida:\n\t" + almacenInicial;
+    public String toString() {
+        return "Nombre piscifactoría: " + nombre + "\nNúmero de tanques: " + tanques.size() + "\nAlmacén comida:\n\t"
+                + almacenInicial;
     }
 
     /**
-     * Clase que se encarga de adaptar un objeto Piscifactoria para que pueda ser serializado y deserializado como JSON.
+     * Clase que se encarga de adaptar un objeto Piscifactoria para que pueda ser
+     * serializado y deserializado como JSON.
      */
-    private class AdaptadorJSON implements JsonDeserializer<Piscifactoria>, JsonSerializer<Piscifactoria>{
+    private class AdaptadorJSON implements JsonDeserializer<Piscifactoria>, JsonSerializer<Piscifactoria> {
 
         /**
          * Se encarga de la serialización de un objeto Piscifactoria.
          */
         @Override
         public JsonElement serialize(Piscifactoria src, Type typeOfSrc, JsonSerializationContext context) {
-            String json = "{ \"nombre\" : \"" + src.nombre + "\" , \"tipo\" : \"" + src.tipo + "\" , \"capacidad\" : \"" + src.almacenInicial.capacidadMaximaComida + "\" , \"comida\" : { "
-            + "\"vegetal\" : \"" + src.almacenInicial.cantidadComidaVegetal + "\" , \"animal\" : \"" + src.almacenInicial.cantidadComidaAnimal + "\" }, \"tanques\" : " + new Gson().toJson(src.tanques) + "}";
+            String json = "{ \"nombre\" : \"" + src.nombre + "\" , \"tipo\" : \"" + src.tipo + "\" , \"capacidad\" : \""
+                    + src.almacenInicial.capacidadMaximaComida + "\" , \"comida\" : { "
+                    + "\"vegetal\" : \"" + src.almacenInicial.cantidadComidaVegetal + "\" , \"animal\" : \""
+                    + src.almacenInicial.cantidadComidaAnimal + "\" }, \"tanques\" : " + new Gson().toJson(src.tanques)
+                    + "}";
             return JsonParser.parseString(json);
         }
 
@@ -493,21 +554,26 @@ public abstract class Piscifactoria {
             int tipoPiscifactoria = objetoJson.get("tipo").getAsInt();
 
             Piscifactoria piscifactoria;
-            if(tipoPiscifactoria == 0){
+            if (tipoPiscifactoria == 0) {
                 piscifactoria = new PiscifactoriaRio();
-            }
-            else{
+            } else {
                 piscifactoria = new PiscifactoriaMar();
             }
 
             piscifactoria.nombre = objetoJson.get("nombre").getAsString();
 
-            for(int i = 0; i < tanques.length; i++) {
+            JsonObject comidaJson = objetoJson.getAsJsonObject("comida");
+            int capacidad = objetoJson.get("capacidad").getAsInt();
+            int comidaVegetal = comidaJson.get("vegetal").getAsInt();
+            int comidaAnimal = comidaJson.get("animal").getAsInt();
+            piscifactoria.almacenInicial = new AlmacenComida(capacidad, comidaAnimal, comidaVegetal);
+
+            for (int i = 0; i < tanques.length; i++) {
                 tanques[i].setNumeroTanque(i + 1);
-                if (tipoPiscifactoria == 0) { 
+                if (tipoPiscifactoria == 0) {
                     tanques[i].setCapacidadMaximaPeces(25);
                     piscifactoria.tanques.add(tanques[i]);
-                } else { 
+                } else {
                     tanques[i].setCapacidadMaximaPeces(100);
                     piscifactoria.tanques.add(tanques[i]);
                 }
