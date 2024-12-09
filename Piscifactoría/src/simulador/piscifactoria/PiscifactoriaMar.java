@@ -8,11 +8,19 @@ import simulador.Tanque;
 public class PiscifactoriaMar extends Piscifactoria {
 
     /**
+     * Constructor sin parámetros de objetos PiscifactoriaMar;
+     */
+    public PiscifactoriaMar(){
+        super("", 1);
+    }
+
+
+    /**
      * Constructor de piscifactorías de mar.
      * @param nombre Nombre de la piscifactoría de mar.
      */
     public PiscifactoriaMar(String nombre){
-        super(nombre);
+        super(nombre, 1);
         tanqueInicial = new Tanque(1, 100);
         almacenInicial = new AlmacenComida(100, 0, 0);
         this.tanques.add(tanqueInicial);

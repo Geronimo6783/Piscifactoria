@@ -1,11 +1,24 @@
 package simulador;
 
 import simulador.pez.*;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import simulador.pez.carnivoro.*;
 import simulador.pez.filtrador.*;
 import simulador.piscifactoria.Piscifactoria;
 import java.util.Random;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+
 import java.util.Iterator;
 import propiedades.AlmacenPropiedades;
 
@@ -13,17 +26,18 @@ import propiedades.AlmacenPropiedades;
  * Clase que representa a un tanque de una piscifactoría que contiene un número
  * de peces.
  */
+@JsonAdapter(Tanque.AdaptadorJSON.class)
 public class Tanque {
 
     /**
      * Número del tanque en la piscifactoría.
      */
-    private final int numeroTanque;
+    private int numeroTanque;
 
     /**
      * Capacidad máxima de peces que puede tener el tanque.
      */
-    private int capacidadMaximaPeces;
+    private transient int capacidadMaximaPeces;
 
     /**
      * Peces del tanque.
@@ -74,6 +88,14 @@ public class Tanque {
     }
 
     /**
+     * Permite establecer el número del tanque.
+     * @param numeroTanque Número del tanque a establecer.
+     */
+    public void setNumeroTanque(int numeroTanque){
+        this.numeroTanque = numeroTanque;
+    }
+
+    /**
      * Constructor de tanques.
      * 
      * @param numeroTanque Número del tanque.
@@ -83,6 +105,11 @@ public class Tanque {
         this.numeroTanque = numeroTanque;
         peces = new ArrayList<>();
         this.capacidadMaximaPeces = capacidadMaximaPeces;
+    }
+
+    public Tanque(){
+        numeroTanque = 0;
+        capacidadMaximaPeces = 25;
     }
 
     /**
@@ -256,7 +283,7 @@ public class Tanque {
         int comidaAnimal = almacenComida.getCantidadComidaAnimal();
         int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
-        if (Simulador.almacenCentral == null) {
+        if (Simulador.simulador.almacenCentral == null) {
             for (Pez pez : peces) {
                 if (pez.isVivo() && !pez.isAlimentado()) {
                     cantidadDeComidaNecesariaPorPez.add(pez.comer());
@@ -331,8 +358,8 @@ public class Tanque {
                 }
             }
         } else {
-            int comidaAnimalAlmacen = Simulador.almacenCentral.getCantidadComidaAnimal();
-            int comidaVegetalAlmacen = Simulador.almacenCentral.getCantidadComidaVegetal();
+            int comidaAnimalAlmacen = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+            int comidaVegetalAlmacen = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
 
             for (Pez pez : peces) {
                 if (pez.isVivo() && !pez.isAlimentado()) {
@@ -350,7 +377,7 @@ public class Tanque {
                 if ((comidaAnimal + comidaAnimalAlmacen) >= comidaNecesaria) {
                     comidaAnimal -= comidaNecesaria;
                     if (comidaAnimal < 0) {
-                        Simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen + comidaAnimal);
+                        Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen + comidaAnimal);
                         comidaAnimal = 0;
                     }
                     for (Pez pez : peces) {
@@ -369,7 +396,7 @@ public class Tanque {
                     if ((comidaVegetal + comidaVegetalAlmacen) >= comidaNecesaria) {
                         comidaVegetal -= comidaNecesaria;
                         if (comidaVegetal < 0) {
-                            Simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
+                            Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
                             comidaVegetal = 0;
                         }
                         for (Pez pez : peces) {
@@ -411,25 +438,25 @@ public class Tanque {
 
                             if (comidaVegetalAlmacen > comidaAnimalAlmacen) {
                                 if (comidaVegetalAlmacen >= comidaNecesaria) {
-                                    Simulador.almacenCentral
+                                    Simulador.simulador.almacenCentral
                                             .setCantidadComidaVegetal(comidaVegetalAlmacen - comidaNecesaria);
                                 } else {
                                     comidaVegetalAlmacen -= comidaNecesaria;
                                     comidaAnimalAlmacen += comidaVegetal;
                                     comidaVegetal = 0;
-                                    Simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
-                                    Simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
+                                    Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
+                                    Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
                                 }
                             } else {
                                 if (comidaAnimalAlmacen >= comidaNecesaria) {
-                                    Simulador.almacenCentral
+                                    Simulador.simulador.almacenCentral
                                             .setCantidadComidaAnimal(comidaAnimalAlmacen - comidaNecesaria);
                                 } else {
                                     comidaAnimalAlmacen -= comidaNecesaria;
                                     comidaVegetalAlmacen += comidaAnimal;
                                     comidaAnimalAlmacen = 0;
-                                    Simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
-                                    Simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
+                                    Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
+                                    Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
                                 }
                             }
                         }
@@ -483,7 +510,7 @@ public class Tanque {
             }
         }
 
-        if (Simulador.almacenCentral == null) {
+        if (Simulador.simulador.almacenCentral == null) {
             if (peces.get(0) instanceof Carnivoro) {
                 comidaAnimal = comidaDisponible;
 
@@ -506,27 +533,27 @@ public class Tanque {
             if (peces.get(0) instanceof Carnivoro) {
                 almacenComida.setCantidadComidaAnimal(0);
                 ;
-                Simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
+                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
             } else {
                 if (peces.get(0) instanceof Filtrador) {
                     almacenComida.setCantidadComidaVegetal(0);
                     ;
-                    Simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
+                    Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
 
                 } else {
-                    if (Simulador.almacenCentral.getCantidadComidaAnimal() > Simulador.almacenCentral
+                    if (Simulador.simulador.almacenCentral.getCantidadComidaAnimal() > Simulador.simulador.almacenCentral
                             .getCantidadComidaVegetal()) {
                         almacenComida.setCantidadComidaAnimal(0);
                         ;
                         almacenComida.setCantidadComidaVegetal(0);
                         ;
-                        Simulador.almacenCentral.setCantidadComidaAnimal(0);
-                        Simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
+                        Simulador.simulador.almacenCentral.setCantidadComidaAnimal(0);
+                        Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
                     } else {
                         almacenComida.setCantidadComidaAnimal(0);
                         almacenComida.setCantidadComidaVegetal(0);
-                        Simulador.almacenCentral.setCantidadComidaVegetal(0);
-                        Simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
+                        Simulador.simulador.almacenCentral.setCantidadComidaVegetal(0);
+                        Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
                     }
 
                 }
@@ -602,12 +629,12 @@ public class Tanque {
 
                 if (pez.isEdadOptima()) {
                     pecesAVender++;
-                    Simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
+                    Simulador.simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
                     iterador.remove();
                 }
             }
 
-            Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas()
+            Simulador.simulador.sistemaMonedas.setMonedas(Simulador.simulador.sistemaMonedas.getMonedas()
                     + (pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas()));
             
             return pecesAVender;
@@ -631,12 +658,12 @@ public class Tanque {
 
                 if(pez.isMaduro() && !pez.isEdadOptima()){
                     monedasAObtener += monedasPez;
-                    Simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
+                    Simulador.simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
                     iterador.remove();
                 }
             }
 
-            Simulador.sistemaMonedas.setMonedas(Simulador.sistemaMonedas.getMonedas() + monedasAObtener);
+            Simulador.simulador.sistemaMonedas.setMonedas(Simulador.simulador.sistemaMonedas.getMonedas() + monedasAObtener);
         }
     }
 
@@ -689,5 +716,57 @@ public class Tanque {
         int numeroPeces = peces.size();
         return "Número tanque: " + numeroTanque + "\nCapacidad máxima peces: " + capacidadMaximaPeces + "\nNúmero de peces: " + numeroPeces
             + ((numeroPeces != 0) ? "\nPez: " + peces.get(0).getNombre() : "");
+    }
+
+    /**
+     * Clase que se encarga de adaptar la serialización y la deserialización de objetos de la clase Tanque.
+     */
+    private class AdaptadorJSON implements JsonDeserializer<Tanque>, JsonSerializer<Tanque>{
+
+        /**
+         * Se encarga de la deserialización de un objeto Tanque.
+         */
+        @Override
+        public Tanque deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            Tanque tanque = new Tanque();
+            tanque.peces = new ArrayList<Pez>();
+            
+            for(Pez pez : new Gson().fromJson(json.getAsJsonObject().get("peces"), Pez[].class)){
+                tanque.peces.add(pez);
+            }
+
+            return tanque;
+        }
+
+        /**
+         * Se encarga de la serialización de un objeto Tanque.
+         */
+        @Override
+        public JsonElement serialize(Tanque src, Type typeOfSrc, JsonSerializationContext context) {
+            int peces = (src.peces.isEmpty()) ? 0 : src.peces.size();
+            Gson gson = new Gson();
+            String pecesJson;
+
+            if(peces != 0){
+                pecesJson = " [";
+
+                for(Pez pez : src.peces){
+                    pecesJson += gson.toJson(pez,  Pez.class) + ",";
+                }
+
+                pecesJson = pecesJson.substring(0, pecesJson.length() - 1);
+                pecesJson += " ]";
+            }
+            else{
+                pecesJson = " [] ";
+            }
+
+            String json = "{ \"pez\" : \"" + ((peces != 0) ? src.peces.get(0).getNombre() + "\"" : "\"") + " , \"num\" : " + peces + " , \"datos\" : {"
+            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " }" + ", \"peces\" : "
+            + pecesJson + "}";
+            return JsonParser.parseString(json);
+        }
+
     }
 }

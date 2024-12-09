@@ -85,7 +85,7 @@ public class Abadejo extends Omnivoro implements Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new Abadejo(false);
     }
 
@@ -95,7 +95,7 @@ public class Abadejo extends Omnivoro implements Mar{
      */
     @Override
     public Pez obtenerPezHija(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new Abadejo(true);
     }
 }

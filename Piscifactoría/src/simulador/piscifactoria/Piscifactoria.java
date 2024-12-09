@@ -1,11 +1,25 @@
 package simulador.piscifactoria;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+
 import simulador.Tanque;
 
 /**
  * Clase que representa a una piscifactoría con múltiples tanques.
  */
+@JsonAdapter(Piscifactoria.AdaptadorJSON.class)
 public abstract class Piscifactoria {
 
     /**
@@ -108,6 +122,20 @@ public abstract class Piscifactoria {
     }
 
     /**
+     * Nombre de la piscifactoría.
+     */
+    protected String nombre = "";
+
+    /**
+     * Indica si la piscifactoría es de mar o de río. Si es 0 es de río y si es 1 es de mar.
+     */
+    protected int tipo;
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    /**
      * Tanques de los que dispone la piscifactoría.
      */
     protected ArrayList<Tanque> tanques;
@@ -123,17 +151,13 @@ public abstract class Piscifactoria {
     protected AlmacenComida almacenInicial;
 
     /**
-     * Nombre de la piscifactoría.
-     */
-    protected String nombre = "";
-
-    /**
      * Constructor de Ppiscifactorías.
      * @param nombre Nombre de la piscifactoría.
      */
-    protected Piscifactoria(String nombre) {
+    protected Piscifactoria(String nombre, int tipo) {
         tanques = new ArrayList<>();
         this.nombre = nombre;
+        this.tipo = tipo;
     }
 
     /**
@@ -439,5 +463,59 @@ public abstract class Piscifactoria {
      */
     public String toString(){
         return "Nombre piscifactoría: " + nombre + "\nNúmero de tanques: " + tanques.size() + "\nAlmacén comida:\n\t" + almacenInicial;
+    }
+
+    /**
+     * Clase que se encarga de adaptar un objeto Piscifactoria para que pueda ser serializado y deserializado como JSON.
+     */
+    private class AdaptadorJSON implements JsonDeserializer<Piscifactoria>, JsonSerializer<Piscifactoria>{
+
+        /**
+         * Se encarga de la serialización de un objeto Piscifactoria.
+         */
+        @Override
+        public JsonElement serialize(Piscifactoria src, Type typeOfSrc, JsonSerializationContext context) {
+            String json = "{ \"nombre\" : \"" + src.nombre + "\" , \"tipo\" : \"" + src.tipo + "\" , \"capacidad\" : \"" + src.almacenInicial.capacidadMaximaComida + "\" , \"comida\" : { "
+            + "\"vegetal\" : \"" + src.almacenInicial.cantidadComidaVegetal + "\" , \"animal\" : \"" + src.almacenInicial.cantidadComidaAnimal + "\" }, \"tanques\" : " + new Gson().toJson(src.tanques) + "}";
+            return JsonParser.parseString(json);
+        }
+
+        /**
+         * Se encarga de la deserialización de un objeto Piscifactoria.
+         */
+        @Override
+        public Piscifactoria deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+
+            JsonObject objetoJson = json.getAsJsonObject();
+            Tanque[] tanques = new Gson().fromJson(objetoJson.get("tanques"), Tanque[].class);
+            int tipoPiscifactoria = objetoJson.get("tipo").getAsInt();
+
+            Piscifactoria piscifactoria;
+            if(tipoPiscifactoria == 0){
+                piscifactoria = new PiscifactoriaRio();
+            }
+            else{
+                piscifactoria = new PiscifactoriaMar();
+            }
+
+            piscifactoria.nombre = objetoJson.get("nombre").getAsString();
+            JsonObject objetoComida = objetoJson.get("comida").getAsJsonObject();
+            piscifactoria.almacenInicial = new AlmacenComida(objetoJson.get("capacidad").getAsInt(), objetoComida.get("animal").getAsInt(), objetoComida.get("vegetal").getAsInt());
+
+            for(int i = 0; i < tanques.length; i++) {
+                tanques[i].setNumeroTanque(i + 1);
+                if (tipoPiscifactoria == 0) { 
+                    tanques[i].setCapacidadMaximaPeces(25);
+                    piscifactoria.tanques.add(tanques[i]);
+                } else { 
+                    tanques[i].setCapacidadMaximaPeces(100);
+                    piscifactoria.tanques.add(tanques[i]);
+                }
+            }
+
+            return piscifactoria;
+        }
+
     }
 }

@@ -85,7 +85,7 @@ public class Dorada extends Omnivoro implements Rio, Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new Dorada(false);
     }
 
@@ -95,7 +95,7 @@ public class Dorada extends Omnivoro implements Rio, Mar{
      */
     @Override
     public Pez obtenerPezHija(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new Dorada(true);
     }
 }
