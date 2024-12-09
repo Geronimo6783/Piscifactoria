@@ -139,7 +139,8 @@ public class Simulador {
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init() {
-        int opcion = 0;
+        int opcionCarga = 0;
+        int opcionSeleccionPartida = 0;
         String nombrePiscifactoria = "";
 
         try{
@@ -160,9 +161,9 @@ public class Simulador {
             File[] archivosGuardado = new File("saves").listFiles();
 
             if(archivosGuardado.length != 0){
-                opcion = GeneradorMenus.generarMenuOperativo(new String[]{"¿Desea cargar una partida guardada?"}, new String[]{"Sí", "No"}, 1, 2);
+                opcionCarga = GeneradorMenus.generarMenuOperativo(new String[]{"¿Desea cargar una partida guardada?"}, new String[]{"Sí", "No"}, 1, 2);
                 
-                if (opcion == 1) {
+                if (opcionCarga == 1) {
                     String[] partidasGuardadas = new String[archivosGuardado.length];
                 
                     for (int i = 0; i < archivosGuardado.length; i++) {
@@ -174,7 +175,7 @@ public class Simulador {
                         }
                     }
                 
-                    opcion = GeneradorMenus.generarMenuOperativo(
+                    opcionSeleccionPartida = GeneradorMenus.generarMenuOperativo(
                         new String[]{"Escoja la partida que desea cargar:"},
                         partidasGuardadas,
                         1,
@@ -183,10 +184,10 @@ public class Simulador {
                 
                     
                     try {
-                        File archivoSeleccionado = archivosGuardado[opcion - 1]; 
+                        File archivoSeleccionado = archivosGuardado[opcionSeleccionPartida - 1]; 
                         simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivoSeleccionado);
                         archivoGuardadoPartida = archivoSeleccionado; 
-                        System.out.println("Partida " + partidasGuardadas[opcion - 1] + " cargada correctamente.");
+                        System.out.println("Partida " + partidasGuardadas[opcionSeleccionPartida - 1] + " cargada correctamente.");
                     } catch (IOException e) {
                         System.err.println("Error al cargar la partida seleccionada: " + e.getMessage());
                         try {
@@ -214,7 +215,7 @@ public class Simulador {
             }
         }
 
-        if(opcion == 0 || opcion == 2){
+        if(opcionCarga == 0 || opcionCarga == 2){
             simulador = new Simulador();
             simulador.diasPasados = 0;         
             System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
@@ -321,7 +322,7 @@ public class Simulador {
             }
         }
 
-        if(opcion == 0 || opcion == 2){
+        if(opcionCarga == 0 || opcionCarga == 2){
             try{
                 if(SistemaFicheros.isDirectorioVacio("saves")){
                     SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
