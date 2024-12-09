@@ -563,12 +563,6 @@ public abstract class Piscifactoria {
             JsonObject objetoComida = objetoJson.get("comida").getAsJsonObject();
             piscifactoria.almacenInicial = new AlmacenComida(objetoJson.get("capacidad").getAsInt(), objetoComida.get("animal").getAsInt(), objetoComida.get("vegetal").getAsInt());
 
-            JsonObject comidaJson = objetoJson.getAsJsonObject("comida");
-            int capacidad = objetoJson.get("capacidad").getAsInt();
-            int comidaVegetal = comidaJson.get("vegetal").getAsInt();
-            int comidaAnimal = comidaJson.get("animal").getAsInt();
-            piscifactoria.almacenInicial = new AlmacenComida(capacidad, comidaAnimal, comidaVegetal);
-
             for (int i = 0; i < tanques.length; i++) {
                 tanques[i].setNumeroTanque(i + 1);
                 if (tipoPiscifactoria == 0) {

@@ -162,34 +162,47 @@ public class Simulador {
             if(archivosGuardado.length != 0){
                 opcion = GeneradorMenus.generarMenuOperativo(new String[]{"¿Desea cargar una partida guardada?"}, new String[]{"Sí", "No"}, 1, 2);
                 
-                if(opcion  == 1){
+                if (opcion == 1) {
                     String[] partidasGuardadas = new String[archivosGuardado.length];
-                    String[] tokensNombreArchivoGuardado;
-
-                    for(int i = 0; i < archivosGuardado.length; i++){
-                        tokensNombreArchivoGuardado = archivosGuardado[i].getName().split(".save");
-                        partidasGuardadas[i] = tokensNombreArchivoGuardado[(tokensNombreArchivoGuardado.length != 1) ? tokensNombreArchivoGuardado.length - 2 : tokensNombreArchivoGuardado.length - 1];
+                
+                    for (int i = 0; i < archivosGuardado.length; i++) {
+                        String nombreArchivo = archivosGuardado[i].getName();
+                        if (nombreArchivo.endsWith(".save")) {
+                            partidasGuardadas[i] = nombreArchivo.replace(".save", "");
+                        } else {
+                            partidasGuardadas[i] = nombreArchivo; // Para manejar nombres inesperados
+                        }
                     }
-
-                    opcion = GeneradorMenus.generarMenuOperativo(new String[]{"Escoja la partida que desea cargar:"}, partidasGuardadas, 1, partidasGuardadas.length);
-
-                    /*
-                     * Implementar la lógica de carga del archivo de guardado seleccionado.
-                     */
-
-                     try{
-                        simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivosGuardado[opcion - 1]);
-                        
-                     }
-                     catch(IOException e){
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                
+                    opcion = GeneradorMenus.generarMenuOperativo(
+                        new String[]{"Escoja la partida que desea cargar:"},
+                        partidasGuardadas,
+                        1,
+                        partidasGuardadas.length
+                    );
+                
+                    
+                    try {
+                        File archivoSeleccionado = archivosGuardado[opcion - 1]; 
+                        simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivoSeleccionado);
+                        archivoGuardadoPartida = archivoSeleccionado; 
+                        System.out.println("Partida " + partidasGuardadas[opcion - 1] + " cargada correctamente.");
+                    } catch (IOException e) {
+                        System.err.println("Error al cargar la partida seleccionada: " + e.getMessage());
+                        try {
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(
+                                archivoLogsGeneral,
+                                FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(),
+                                "UTF-8"
+                            );
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
                         }
-                        catch(IOException ex){
-            
-                        }
-                     }
+                    } catch (ArrayIndexOutOfBoundsException ex) {
+                        System.err.println("Opción seleccionada no válida.");
+                    }
                 }
+                
             }
         }
         catch(Exception e){
@@ -202,8 +215,8 @@ public class Simulador {
         }
 
         if(opcion == 0 || opcion == 2){
-            simulador.diasPasados = 0;
             simulador = new Simulador();
+            simulador.diasPasados = 0;         
             System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
             simulador.nombre = SistemaEntrada.entradaTexto();
             System.out.print("Introduzca el nombre de la primera piscifactoría: ");
