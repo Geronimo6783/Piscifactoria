@@ -24,6 +24,7 @@ import componentes.LecturaEscrituraJSON;
 import componentes.SistemaEntrada;
 import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
+import componentes.SistemaRecompensa;
 import estadisticas.Estadisticas;
 import propiedades.AlmacenPropiedades;
 import propiedades.PecesDatos;
@@ -98,6 +99,11 @@ public class Simulador {
     @SerializedName("orca")
     @JsonAdapter(AdaptadorJSONEstadisticas.class)
     public Estadisticas estadisticas;
+
+    /**
+     * Sistema de recompensas de la simulación.
+     */
+    public static SistemaRecompensa sistemaRecompensa;
 
     /**
      * Almacén central de comida usado en la simulación.
@@ -2725,6 +2731,9 @@ public class Simulador {
         return "Nombre empresa, entidad o partida: " + nombre + "\nDías pasado en la simulación: " + diasPasados + "\nNúmero piscifactoría simulación: " + piscifactorias.size();
     }
 
+
+    
+
     /**
      * Método principal del programa que gestiona el uso del programa por parte del
      * usuario.
@@ -2811,4 +2820,30 @@ public class Simulador {
         }
     }
 
+
+    /**
+     * Metodo que añade una recompensa
+     */
+    public static void añadirRecompensa(){
+        sistemaRecompensa.addRandomReward();
+    }
+    /**
+     * Metodo que lista las recompensas que se añadieron
+     */
+    public static void listarRecompensas(){
+        sistemaRecompensa.listarRecompensas();
+    }
+    /**
+     * Metodo que lista las recompensas disponibles a reclamar
+     */
+    public static void listarRecompensasDisponibles(){
+        sistemaRecompensa.listarRecompensasDisponibles();
+    }
+
+    /**
+     * Metodo que reclamará las recompensas disponibles y borrará los archivos al terminar
+     */
+    public static void reclamarRecompensa(){
+        
+    }
 }
