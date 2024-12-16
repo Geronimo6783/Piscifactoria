@@ -177,7 +177,7 @@ public class Transcripciones {
     }
 
     /**
-     * Resgistra la compra de una cantidad de comida para  el almacén central.
+     * Resgistra la compra de una cantidad de comida para el almacén central.
      * @param cantidadComida Cantidad de comida comprada.
      * @param tipoComida Tipo de comida comprada.
      * @param monedas Monedas por las que se compró la comida.
@@ -241,7 +241,7 @@ public class Transcripciones {
     }
 
     /**
-     * Registra una venta de peces en archivo de transcripciones.
+     * Registra una venta de peces en el archivo de transcripciones.
      * @param pecesVendidos Número de peces vendidos.
      * @param piscifactoria Piscifactoría de la que se venden los peces.
      * @param monedas Monedas obtenidas con la venta.
@@ -423,7 +423,7 @@ public class Transcripciones {
      * Registra la mejora de una piscifactoría.
      * @param piscifactoria Piscifactoría a la que se le realiza la mejora.
      * @param nuevaCapacidad Nueva capacidad de comida de la piscifactoría.
-     * @param monedas Monedas que costo la realización de la mejora.
+     * @param monedas Monedas que costó la realización de la mejora.
      */
     public void registrarMejoraPiscifactoria(String piscifactoria, int nuevaCapacidad, int monedas){
         BufferedWriter buferEscritura = null;
@@ -452,7 +452,7 @@ public class Transcripciones {
     
 
     /**
-     * Registrar la la mejora del almacén central.
+     * Registrar la mejora del almacén central.
      * @param nuevaCapacidad Nueva capacidad de comida del almacén central.
      * @param monedas Monedas por las que se realizó la mejora.
      */
