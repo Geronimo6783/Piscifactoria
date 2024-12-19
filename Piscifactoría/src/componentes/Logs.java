@@ -58,43 +58,6 @@ public class Logs {
     }
 
     /**
-     * Permite obtener los logs almacenados 
-     * @return
-     */
-    private String leerLogs(){
-        BufferedReader buferLectura = null;
-
-        try{
-            buferLectura = new BufferedReader(new InputStreamReader(new FileInputStream(archivoLogs), "UTF-8"));
-            StringBuilder constructorString = new StringBuilder();
-            String linea = buferLectura.readLine();
-
-            while(linea != null){
-                if(!constructorString.isEmpty()){
-                    constructorString.append("\n" + linea);
-                }
-                else{
-                    constructorString.append(linea);
-                }
-                linea = buferLectura.readLine();
-            }
-        }
-        catch(IOException e){
-            System.out.println("Hubo un problema a la hora de leer los logs del archivo.");
-        }
-        finally{
-            if(buferLectura != null){
-                try{
-                    buferLectura.close();
-                }
-                catch(IOException e){
-
-                }
-            }
-        }
-    }
-
-    /**
      * Permite obtener la fecha y hora del sistema en formato [aaaa-mm-dd hh:mm:ss].
      * @return Fecha y hora del sistema en formato [aaaa-mm-dd hh:mm:ss].
      */
