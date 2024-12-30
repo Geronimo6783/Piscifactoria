@@ -37,7 +37,7 @@ public class Logs {
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs), "UTF-8"));
             buferEscritura.write(Logs.obtenerFechaHora() + " Inicio de la simulación " + partida + ".");
             buferEscritura.flush();
-            buferEscritura.write(Logs.obtenerFechaHora() + " Piscifactoría inicial: " + piscifactoria + ".");
+            buferEscritura.write("\n" + Logs.obtenerFechaHora() + " Piscifactoría inicial: " + piscifactoria + ".");
         }
         catch(IOException e){
             System.out.println("Hubo un problema a la hora de iniciar el log de la partida.");
@@ -65,7 +65,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " " + cantidad + " de comida de tipo " + tipo + " comprada. Se almacena en la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " " + cantidad + " de comida de tipo " + tipo + " comprada. Se almacena en la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -93,7 +93,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " " + cantidad + " de comida de tipo " + tipo + " comprada. Se almacena en el almacén central.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " " + cantidad + " de comida de tipo " + tipo + " comprada. Se almacena en el almacén central.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -123,7 +123,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " " + pez + " " + ((sexo) ? "H" : "M") + " comprado. Añadido al tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " " + pez + " " + ((sexo) ? "H" : "M") + " comprado. Añadido al tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -151,7 +151,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Vendidos " + pecesVendidos + " de la piscifactoría " + piscifactoria + " de forma manual.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Vendidos " + pecesVendidos + " de la piscifactoría " + piscifactoria + " de forma manual.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -179,7 +179,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Limpiado el tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Limpiado el tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -207,7 +207,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Vaciado el tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Vaciado el tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -235,7 +235,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Comprada la piscifactoría" + ((tipo == 0) ? "río " : "mar ") + piscifactoria + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Comprada la piscifactoría" + ((tipo == 0) ? "río " : "mar ") + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -262,7 +262,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Comprado un tanque para la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Comprado un tanque para la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -288,7 +288,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Comprado el almacén central.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Comprado el almacén central.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -315,7 +315,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Mejorada la piscifactoría " + piscifactoria + " aumentando su capacidad de comida.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Mejorada la piscifactoría " + piscifactoria + " aumentando su capacidad de comida.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -341,7 +341,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Mejorada el almacén central aumentando su capacidad de comida.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Mejorada el almacén central aumentando su capacidad de comida.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -368,7 +368,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Fin del día " + dia + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Fin del día " + dia + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -395,7 +395,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + "Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -421,7 +421,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Añadidas monedas mediante la opción oculta.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Añadidas monedas mediante la opción oculta.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -447,7 +447,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Cierre de la partida.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Cierre de la partida.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -473,7 +473,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Recompensa creada.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Recompensa creada.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -500,7 +500,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Recompensa recibida por " + receptor + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Recompensa recibida por " + receptor + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -527,7 +527,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append(Logs.obtenerFechaHora() + " Recompensa " + recompensa + " usada.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Recompensa " + recompensa + " usada.");
             buferEscritura.flush();
         }
         catch(IOException e){

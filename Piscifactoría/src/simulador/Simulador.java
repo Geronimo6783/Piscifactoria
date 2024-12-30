@@ -1586,8 +1586,8 @@ public class Simulador {
                 repartirComida();
             }
 
-            archivoTranscripcionesPartida.registrarPasoDia(dias, pecesRio, pecesMar, monedasGanadas, pecesVendidos);
-            archivoLogPartida.registrarPasoDia(dias);
+            archivoTranscripcionesPartida.registrarPasoDia(diasPasados + 1, pecesRio, pecesMar, monedasGanadas, pecesVendidos);
+            archivoLogPartida.registrarPasoDia(diasPasados + 1);
             diasPasados++;
             pecesRio = 0;
             pecesMar = 0;

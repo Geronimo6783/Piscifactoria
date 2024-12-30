@@ -39,29 +39,33 @@ public class Transcripciones {
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones), "UTF-8"));
             buferEscritura.write("=============== Aranque ===============");
             buferEscritura.flush();
-            buferEscritura.write("Inicio de la simulación " + nombrePartida + ".");
+            buferEscritura.write("\nInicio de la simulación " + nombrePartida + ".");
             buferEscritura.flush();
-            buferEscritura.write("============== Dinero ===============");
+            buferEscritura.write("\n============== Dinero ===============");
             buferEscritura.flush();
-            buferEscritura.write("Dinero: " + dinero + ".");
+            buferEscritura.write("\nDinero: " + dinero + ".");
             buferEscritura.flush();
-            buferEscritura.write("=============== Peces ===============");
+            buferEscritura.write("\n=============== Peces ===============");
             buferEscritura.flush();
-            buferEscritura.write("Río:");
+            buferEscritura.write("\nRío:");
             buferEscritura.flush();
             for(String pez : pecesRio){
-                buferEscritura.write("-" + pez);
+                buferEscritura.write("\n-" + pez);
                 buferEscritura.flush();
             }
-            buferEscritura.write("Mar:");
+            buferEscritura.write("\nMar:");
             buferEscritura.flush();
             for(String pez : pecesMar){
-                buferEscritura.write("-" + pez);
+                buferEscritura.write("\n-" + pez);
                 buferEscritura.flush();
             }
-            buferEscritura.write("----------------------------------------------------------");
+            buferEscritura.write("\n----------------------------------------------------------");
             buferEscritura.flush();
-            buferEscritura.write("Piscifactoría inicial: " + piscifactoriaInicial);
+            buferEscritura.write("\nPiscifactoría inicial: " + piscifactoriaInicial);
+            buferEscritura.flush();
+            buferEscritura.append("\n-------------------------");
+            buferEscritura.flush();
+            buferEscritura.append("\n>>>Inicio del día 1.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -95,35 +99,39 @@ public class Transcripciones {
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones), "UTF-8"));
             buferEscritura.write("=============== Aranque ===============");
             buferEscritura.flush();
-            buferEscritura.write("Inicio de la simulación " + nombrePartida + ".");
+            buferEscritura.write("\nInicio de la simulación " + nombrePartida + ".");
             buferEscritura.flush();
-            buferEscritura.write("============== Dinero ===============");
+            buferEscritura.write("\n============== Dinero ===============");
             buferEscritura.flush();
-            buferEscritura.write("Dinero: " + dinero + ".");
+            buferEscritura.write("\nDinero: " + dinero + ".");
             buferEscritura.flush();
-            buferEscritura.write("=============== Peces ===============");
+            buferEscritura.write("\n=============== Peces ===============");
             buferEscritura.flush();
-            buferEscritura.write("Río:");
+            buferEscritura.write("\nRío:");
             buferEscritura.flush();
             for(String pez : pecesRio){
-                buferEscritura.write("-" + pez);
+                buferEscritura.write("\n-" + pez);
                 buferEscritura.flush();
             }
-            buferEscritura.write("Mar:");
+            buferEscritura.write("\nMar:");
             buferEscritura.flush();
             for(String pez : pecesMar){
-                buferEscritura.write("-" + pez);
+                buferEscritura.write("\n-" + pez);
                 buferEscritura.flush();
             }
-            buferEscritura.write("========= Extras =========");
+            buferEscritura.write("\n========= Extras =========");
             buferEscritura.flush();
             for(String extra : extras){
                 buferEscritura.write(extra);
                 buferEscritura.flush();
             }
-            buferEscritura.write("----------------------------------------------------------");
+            buferEscritura.write("\n----------------------------------------------------------");
             buferEscritura.flush();
-            buferEscritura.write("Piscifactoría inicial: " + piscifactoriaInicial);
+            buferEscritura.write("\nPiscifactoría inicial: " + piscifactoriaInicial);
+            buferEscritura.flush();
+            buferEscritura.append("\n-------------------------");
+            buferEscritura.flush();
+            buferEscritura.append("\n>>>Inicio del día 1.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -153,7 +161,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append(cantidadComida + " de comida de tipo " + tipoComida + "comprada por " + monedas + ". Se almacena en la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + cantidadComida + " de comida de tipo " + tipoComida + "comprada por " + monedas + ". Se almacena en la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -182,7 +190,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append(cantidadComida + " de comida de tipo " + tipoComida + "comprada por " + monedas + ". Se almacena en el almacén central.");
+            buferEscritura.append("\n" + cantidadComida + " de comida de tipo " + tipoComida + "comprada por " + monedas + ". Se almacena en el almacén central.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -213,7 +221,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append(pez + " " + ((sexo) ? "H" : "M") + " comprado por " + monedas + " monedas. Añadido al tanque " + tanque + " de la piscifacotría " + piscifactoria + ".");
+            buferEscritura.append("\n" + pez + " " + ((sexo) ? "H" : "M") + " comprado por " + monedas + " monedas. Añadido al tanque " + tanque + " de la piscifacotría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -242,7 +250,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Vendidos " + pecesVendidos + " peces de la piscifactoría " + piscifactoria + " de forma manual por " + monedas + " monedas.");
+            buferEscritura.append("\n" + "Vendidos " + pecesVendidos + " peces de la piscifactoría " + piscifactoria + " de forma manual por " + monedas + " monedas.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -270,7 +278,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Limpiado el tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + "Limpiado el tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -298,7 +306,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Vaciado el tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + "Vaciado el tanque " + tanque + " de la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -327,7 +335,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Comprada la piscifactoría de " + ((tipo == 0) ? "río " : "mar ") + piscifactoria + "por " + monedas + " monedas.");
+            buferEscritura.append("\n" + "Comprada la piscifactoría de " + ((tipo == 0) ? "río " : "mar ") + piscifactoria + "por " + monedas + " monedas.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -356,7 +364,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Comprado un tanque número " + numeroTanque + " de la piscifactoría " + piscifactoria + " por " + monedas + "monedas.");
+            buferEscritura.append("\n" + "Comprado un tanque número " + numeroTanque + " de la piscifactoría " + piscifactoria + " por " + monedas + "monedas.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -382,7 +390,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Comprado el almacén central por 2000 monedas.");
+            buferEscritura.append("\n" + "Comprado el almacén central por 2000 monedas.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -411,7 +419,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Mejorada la piscifactoría " + piscifactoria + " aumentando su capacidad de comida hasta un total de " + nuevaCapacidad + " por " + monedas + " monedas.");
+            buferEscritura.append("\n" + "Mejorada la piscifactoría " + piscifactoria + " aumentando su capacidad de comida hasta un total de " + nuevaCapacidad + " por " + monedas + " monedas.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -440,7 +448,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Mejorado el almacén central aumentando su capacidad de comida hasta un total de " + nuevaCapacidad + " por " + monedas + " monedas.");
+            buferEscritura.append("\n" + "Mejorado el almacén central aumentando su capacidad de comida hasta un total de " + nuevaCapacidad + " por " + monedas + " monedas.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -471,15 +479,15 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Fin del día " + dia + ".");
+            buferEscritura.append("\n" + "Fin del día " + dia + ".");
             buferEscritura.flush();
-            buferEscritura.append("Peces actuales, " + pecesDeRio + " de río " + pecesDeMar + " de mar.");
+            buferEscritura.append("\n" + "Peces actuales, " + pecesDeRio + " de río " + pecesDeMar + " de mar.");
             buferEscritura.flush();
-            buferEscritura.append(monedas + " monedas ganadas por un total de " + pecesVendidos + ".");
+            buferEscritura.append("\n" + monedas + " monedas ganadas por un total de " + pecesVendidos + ".");
             buferEscritura.flush();
-            buferEscritura.append("-------------------------");
+            buferEscritura.append("\n" + "-------------------------");
             buferEscritura.flush();
-            buferEscritura.append(">>>Inicio del día " + (dia + 1) + ".");
+            buferEscritura.append("\n" + ">>>Inicio del día " + (dia + 1) + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -506,7 +514,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true) , "UTF-8"));
-            buferEscritura.append("Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria + ".");
+            buferEscritura.append("\n" + "Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -533,7 +541,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Recompensa " + recompensa + " creada.");
+            buferEscritura.append("\n" + "Recompensa " + recompensa + " creada.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -560,7 +568,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Recompensa " + recompensa + " creada.");
+            buferEscritura.append("\n" + "Recompensa " + recompensa + " creada.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -587,7 +595,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
-            buferEscritura.append("Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, " + monedasActuales + ".");
+            buferEscritura.append("\n" + "Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, " + monedasActuales + ".");
             buferEscritura.flush();
         }
         catch(IOException e){
