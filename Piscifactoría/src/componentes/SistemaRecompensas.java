@@ -302,7 +302,7 @@ public class SistemaRecompensas {
         switch(nivel){
             case 1 -> {
                 Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general I", origen, "50 unidades de pienso multipropósito para todo tipo de peces.", 0);
-                documentoBase.addElement("food").addAttribute("type", "general").addText("50");
+                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general").addText("50");
 
                 XMLWriter escritorXML = null;
 
@@ -327,7 +327,7 @@ public class SistemaRecompensas {
             }
             case 2 -> {
                 Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general II", origen, "100 unidades de pienso multipropósito para todo tipo de peces.", 1);
-                documentoBase.addElement("food").addAttribute("type", "general").addText("100");
+                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general").addText("100");
 
                 XMLWriter escritorXML = null;
 
@@ -352,7 +352,7 @@ public class SistemaRecompensas {
             }
             case 3 -> {
                 Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general III", origen, "250 unidades de pienso multipropósito para todo tipo de peces.", 2);
-                documentoBase.addElement("food").addAttribute("type", "general").addText("250");
+                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general").addText("250");
 
                 XMLWriter escritorXML = null;
 
@@ -377,7 +377,7 @@ public class SistemaRecompensas {
             }
             case 4 -> {
                 Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general IV", origen, "500 unidades de pienso multipropósito para todo tipo de peces.", 3);
-                documentoBase.addElement("food").addAttribute("type", "general").addText("500");
+                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general").addText("500");
 
                 XMLWriter escritorXML = null;
 
@@ -402,7 +402,7 @@ public class SistemaRecompensas {
             }
             case 5 -> {
                 Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general V", origen, "1000 unidades de pienso multipropósito para todo tipo de peces.", 4);
-                documentoBase.addElement("food").addAttribute("type", "general").addText("1000");
+                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general").addText("1000");
 
                 XMLWriter escritorXML = null;
 
@@ -904,5 +904,11 @@ public class SistemaRecompensas {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) {
+        SistemaRecompensas.generarRecompensaAlmacenCentral('A', "COD");
+        SistemaRecompensas.generarRecompensaPiscifactoriaMar('A', "COD");
+        SistemaRecompensas.generarRecompensaPiscifactoriaRio('A', "COD");
     }
 }

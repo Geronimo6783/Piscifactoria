@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "SistemaRecompensas",
+            "request": "launch",
+            "mainClass": "componentes.SistemaRecompensas",
+            "projectName": "Piscifactoría_58b9a4a8"
+        },
+        {
+            "type": "java",
             "name": "SistemaRecompensa",
             "request": "launch",
             "mainClass": "componentes.SistemaRecompensa",
