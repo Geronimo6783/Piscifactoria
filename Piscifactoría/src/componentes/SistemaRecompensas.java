@@ -905,10 +905,4 @@ public class SistemaRecompensas {
             }
         }
     }
-
-    public static void main(String[] args) {
-        SistemaRecompensas.generarRecompensaAlmacenCentral('A', "COD");
-        SistemaRecompensas.generarRecompensaPiscifactoriaMar('A', "COD");
-        SistemaRecompensas.generarRecompensaPiscifactoriaRio('A', "COD");
-    }
 }
