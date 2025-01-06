@@ -980,10 +980,4 @@ public class SistemaRecompensas {
         return recompensasDisponibles.toArray(recompensasDisponiblesArray);
     }
 
-    public static void main(String[] args) {
-        String[] recompensas = SistemaRecompensas.obtenerRecompensasDisponibles();
-        for(int i = 0; i < recompensas.length; i++){
-            System.out.println(i + " " + recompensas[i]);
-        }
-    }
 }
