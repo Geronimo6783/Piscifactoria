@@ -5,12 +5,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.xml.sax.SAXException;
 
 /**
  * Clase que se encarga de gestionar las recompensas.
@@ -903,6 +908,82 @@ public class SistemaRecompensas {
                             
                 }
             }
+        }
+    }
+
+    /**
+     * Permite obtener las recompensas disponibles para usar.
+     * @return Array con las recompensas disponibles para usar.
+     */
+    public static String[] obtenerRecompensasDisponibles(){
+        File[] archivos = new File("rewards").listFiles();
+        ArrayList<File> recompensas = new ArrayList<>();
+        ArrayList<String> recompensasDisponibles = new ArrayList<>();
+        ArrayList<File> recompensasAlmacenCentral = new ArrayList<>();
+        ArrayList<File> recompensasPiscifactoriaMar = new ArrayList<>();
+        ArrayList<File> recompensasPiscifactoriaRio = new ArrayList<>();
+        
+
+        for(File archivo : archivos){
+            if(archivo.isFile() && archivo.getName().endsWith(".xml")){
+                recompensas.add(archivo);
+            }
+        }
+        
+        try{
+            SAXReader lectorXML = new SAXReader();
+            Document xml;
+            String nombreRecompensa;
+            for(File recompensa : recompensas){
+                xml = lectorXML.read(recompensa);
+                nombreRecompensa = xml.getRootElement().element("name").getText();
+                
+                if(nombreRecompensa.equals("Almacén central [A]") || nombreRecompensa.equals("Almacén central [B]") 
+                || nombreRecompensa.equals("Almacén central [C]") || nombreRecompensa.equals("Almacén central [D]")){
+                    recompensasAlmacenCentral.add(recompensa);
+                } 
+                else{
+                    if(nombreRecompensa.equals("Piscifactoría de mar [A]") || nombreRecompensa.equals("Piscifactoría de mar [B]")){
+                        recompensasPiscifactoriaMar.add(recompensa);
+                    }
+                    else{
+                        if(nombreRecompensa.equals("Piscifactoría de río [A]") || nombreRecompensa.equals("Piscifactoría de río [B]")){
+                            recompensasPiscifactoriaRio.add(recompensa);
+                        }
+                        else{
+                            recompensasDisponibles.add(nombreRecompensa);
+                        }
+                    }
+                }
+            }
+        }
+        catch(DocumentException e){
+            System.out.println("No se ha podido leer el archivo XML.");
+        }
+
+        if(recompensasAlmacenCentral.size() == 4){
+            recompensasDisponibles.add("Almacén central");
+        }
+
+        if(recompensasPiscifactoriaMar.size() == 2){
+            recompensasDisponibles.add("Piscifactoría de mar");
+        }
+
+        if(recompensasPiscifactoriaRio.size() == 2){
+            recompensasDisponibles.add("Piscifactoría de río");
+        }
+
+        Collections.sort(recompensasDisponibles);
+
+        String[] recompensasDisponiblesArray = new String[recompensasDisponibles.size()];
+
+        return recompensasDisponibles.toArray(recompensasDisponiblesArray);
+    }
+
+    public static void main(String[] args) {
+        String[] recompensas = SistemaRecompensas.obtenerRecompensasDisponibles();
+        for(int i = 0; i < recompensas.length; i++){
+            System.out.println(i + " " + recompensas[i]);
         }
     }
 }
