@@ -980,4 +980,70 @@ public class SistemaRecompensas {
         return recompensasDisponibles.toArray(recompensasDisponiblesArray);
     }
 
+    public static void reclamarRecompensa(){
+        File[] archivos = new File("rewards").listFiles();
+        ArrayList<File> recompensas = new ArrayList<>();
+        ArrayList<String> recompensasDisponibles = new ArrayList<>();
+        ArrayList<File> recompensasAlmacenCentral = new ArrayList<>();
+        ArrayList<File> recompensasPiscifactoriaMar = new ArrayList<>();
+        ArrayList<File> recompensasPiscifactoriaRio = new ArrayList<>();
+        
+
+        for(File archivo : archivos){
+            if(archivo.isFile() && archivo.getName().endsWith(".xml")){
+                recompensas.add(archivo);
+            }
+        }
+        
+        try{
+            SAXReader lectorXML = new SAXReader();
+            Document xml;
+            String nombreRecompensa;
+            for(File recompensa : recompensas){
+                xml = lectorXML.read(recompensa);
+                nombreRecompensa = xml.getRootElement().element("name").getText();
+                
+                if(nombreRecompensa.equals("Almacén central [A]") || nombreRecompensa.equals("Almacén central [B]") 
+                || nombreRecompensa.equals("Almacén central [C]") || nombreRecompensa.equals("Almacén central [D]")){
+                    recompensasAlmacenCentral.add(recompensa);
+                } 
+                else{
+                    if(nombreRecompensa.equals("Piscifactoría de mar [A]") || nombreRecompensa.equals("Piscifactoría de mar [B]")){
+                        recompensasPiscifactoriaMar.add(recompensa);
+                    }
+                    else{
+                        if(nombreRecompensa.equals("Piscifactoría de río [A]") || nombreRecompensa.equals("Piscifactoría de río [B]")){
+                            recompensasPiscifactoriaRio.add(recompensa);
+                        }
+                        else{
+                            recompensasDisponibles.add(nombreRecompensa);
+                        }
+                    }
+                }
+            }
+        }
+        catch(DocumentException e){
+            System.out.println("No se ha podido leer el archivo XML.");
+        }
+
+        if(recompensasAlmacenCentral.size() == 4){
+            recompensasDisponibles.add("Almacén central");
+        }
+
+        if(recompensasPiscifactoriaMar.size() == 2){
+            recompensasDisponibles.add("Piscifactoría de mar");
+        }
+
+        if(recompensasPiscifactoriaRio.size() == 2){
+            recompensasDisponibles.add("Piscifactoría de río");
+        }
+
+        Collections.sort(recompensasDisponibles);
+
+        String[] recompensasDisponiblesArray = new String[recompensasDisponibles.size()];
+
+        int opcion = GeneradorMenus.generarMenuOperativo(recompensasDisponibles.toArray(recompensasDisponiblesArray), 1, recompensasDisponibles.size());
+
+        
+    }
 }
