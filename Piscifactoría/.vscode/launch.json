@@ -9,6 +9,13 @@
             "name": "GeneradorBD",
             "request": "launch",
             "mainClass": "simulador.sql.GeneradorBD",
+            "projectName": "Piscifactoría_ddf4bace"
+        },
+        {
+            "type": "java",
+            "name": "GeneradorBD",
+            "request": "launch",
+            "mainClass": "simulador.sql.GeneradorBD",
             "projectName": "Piscifactoría_58b9a4a8"
         },
         {
