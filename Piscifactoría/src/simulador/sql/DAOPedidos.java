@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import simulador.sql.dto.DTOCliente;
 import simulador.sql.dto.DTOPedido;
@@ -23,29 +24,39 @@ public class DAOPedidos {
     /**
      * Consulta que obtiene todos los clientes de la base de datos.
      */
-    PreparedStatement consultaClientes;
+    private PreparedStatement consultaClientes;
 
     /**
      * Consulta que obtiene todos los peces de la base de datos.
      */
-    PreparedStatement consultaPeces;
+    private PreparedStatement consultaPeces;
 
     /**
      * Consulta que obtiene todos los pedidos de la base de datos.
      */
-    PreparedStatement consultaPedidos;
-
-    /**
-     * Sentencia que elimina todos los pedidos en la tabla Pedidos.
-     */
-    PreparedStatement borradoPedidos;
+    private PreparedStatement consultaPedidos;
 
     /**
      * Consulta que recupera los pedidos que no han sido realizados al 100% con el nombre
      * del cliente, el nombre del pedido, el porcentaje de completado del pedido y el número de
      * referencia del pedido.
      */
-    PreparedStatement consultaPedidosNoRealizados;
+    private PreparedStatement consultaPedidosNoRealizados;
+
+    /**
+     * Sentencia para la inserción de un cliente.
+     */
+    private PreparedStatement insercionCliente;
+
+    /**
+     * Sentencia para la inserción de un pedido.
+     */
+    private PreparedStatement insercionPedido;
+
+    /**
+     * Setencia para la inserción de un pez.
+     */
+    private PreparedStatement insercionPez;
 
     /**
      * Constructor parametrizado.
@@ -57,11 +68,13 @@ public class DAOPedidos {
             consultaClientes = conexion.prepareStatement("SELECT * FROM Cliente;");
             consultaPeces = conexion.prepareStatement("SELECT * FROM Pez;");
             consultaPedidos = conexion.prepareStatement("SELECT * FROM Pedido;");
-            borradoPedidos = conexion.prepareStatement("TRUNCATE Pedido;");
             consultaPedidosNoRealizados = conexion.prepareStatement("SELECT Pedido.Numero_referencia, " + 
             "Cliente.Nombre, Pez.Nombre, (peces_enviados/peces_solicitados) * 100 FROM Pedido INNER JOIN Cliente" + 
             " ON Pedido.fk_id_cliente = Cliente.id INNER JOIN Pez ON Pedido.fk_id_pez = Pez.id WHERE " + 
             "((peces_envidos/peces_solicitados) * 100) != 100 ORDER BY Pez.Nombre ASC;");
+            insercionCliente = conexion.prepareStatement("INSERT INTO Cliente (nombre,nif,telefono) VALUES (?,?,?);");
+            insercionPedido = conexion.prepareStatement("INSERT INTO Pedido (fk_id_cliente,fk_id_pez,peces_solicitados,peces_enviados) VALUES (?,?,?,?);");
+            insercionPez = conexion.prepareStatement("INSERT INTO Pez (nombre,nombre_cientifico) VALUES (?,?);");
         }
         catch(SQLException e){
             System.out.println("No se han podido generar las consultar a la base de datos.");
@@ -168,11 +181,24 @@ public class DAOPedidos {
      * Elimina todos los pedidos almacenados en la tabla pedidos.
      */
     public void borrarPedidos(){
+        Statement borradoPedidos = null;
+
         try{
-            borradoPedidos.execute();
+            borradoPedidos = conexion.createStatement();
+            borradoPedidos.execute("TRUNCATE Pedido;");
         }
         catch(SQLException e){
             System.out.println("No se han podido eliminar los pedidos de la tabla pedidos.");
+        }
+        finally{
+            if(borradoPedidos != null){
+                try{
+                    borradoPedidos.close();
+                }
+                catch(SQLException e){
+
+                }
+            }
         }
     }
 
@@ -211,6 +237,54 @@ public class DAOPedidos {
     }
 
     /**
+     * Permite la inserción de un nuevo cliente en la base de datos.
+     * @param cliente Cliente nuevo a insertar.
+     */
+    public void insertarCliente(DTOCliente cliente){
+        try{
+            insercionCliente.setString(1, cliente.getNombre());
+            insercionCliente.setString(2, cliente.getNif());
+            insercionCliente.setString(3, cliente.getTelefono());
+            insercionCliente.executeUpdate();
+        }
+        catch(SQLException e){
+            System.out.println("No se ha podido insertar el cliente.");
+        }
+    }
+
+    /**
+     * Permite la inserción de un nuevo pedido en la base de datos.
+     * @param pedido Pedido nuevo a insertar.
+     */
+    public void insertarPedido(DTOPedido pedido){
+        try{
+            insercionPedido.setInt(1, pedido.getIdCliente());
+            insercionPedido.setInt(2, pedido.getIdPez());
+            insercionPedido.setInt(3, pedido.getPecesSolicitados());
+            insercionPedido.setInt(4, pedido.getPecesEnviados());
+            insercionPedido.executeUpdate();
+        }
+        catch(SQLException e){
+            System.out.println("No se ha podido insertar el pedido.");
+        }
+    }
+
+    /**
+     * Permite la inserción de un nuevo pez en la base de datos.
+     * @param pez Pez nuevo a insertar.
+     */
+    public void insertarPez(DTOPez pez){
+        try{
+            insercionPez.setString(1, pez.getNombre());
+            insercionPez.setString(2, pez.getNombreCientifico());
+            insercionPez.executeUpdate();
+        }
+        catch(SQLException e){
+            System.out.println("No se ha podido insertar el pez.");
+        }
+    }
+
+    /**
      * Cierra la conexión a la base de datos y las consultas preparadas.
      */
     public void close(){
@@ -233,13 +307,6 @@ public class DAOPedidos {
         }
         catch(SQLException e){
             
-        }
-
-        try{
-            borradoPedidos.close();
-        }
-        catch(SQLException e){
-
         }
 
         try{

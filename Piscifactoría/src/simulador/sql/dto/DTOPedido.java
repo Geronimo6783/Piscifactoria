@@ -48,6 +48,21 @@ public class DTOPedido {
     }
 
     /**
+     * Constructor de pedidos sin número de referencia.
+     * @param idCliente Id del cliente que realizó el pedido.
+     * @param idPez Id del pez del que se ha realizado el pedido.
+     * @param pecesSolicitados Número de peces solicitados en el pedido.
+     * @param pecesEnviados Número de peces enviados.
+     */
+    public DTOPedido(int idCliente, int idPez, int pecesSolicitados, int pecesEnviados) {
+        this.numeroReferencia = 0;
+        this.idCliente = idCliente;
+        this.idPez = idPez;
+        this.pecesSolicitados = pecesSolicitados;
+        this.pecesEnviados = pecesEnviados;
+    }
+
+    /**
      * Permite obtener el número de referencia del pedido.
      * @return Número de referencia del pedido.
      */

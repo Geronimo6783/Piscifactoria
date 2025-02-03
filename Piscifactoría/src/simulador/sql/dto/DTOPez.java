@@ -33,6 +33,17 @@ public class DTOPez {
     }
 
     /**
+     * Constructor de peces sin id.
+     * @param nombre Nombre del pez.
+     * @param nombreCientifico Nombre científico del pez.
+     */
+    public DTOPez(String nombre, String nombreCientifico) {
+        this.id = 0;
+        this.nombre = nombre;
+        this.nombreCientifico = nombreCientifico;
+    }
+
+    /**
      * Permite obtener el id del pez.
      * @return Id del pez.
      */
