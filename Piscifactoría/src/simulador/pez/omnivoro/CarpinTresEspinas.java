@@ -93,7 +93,7 @@ public class CarpinTresEspinas extends Omnivoro implements Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new CarpinTresEspinas(false);
     }
 
@@ -103,7 +103,7 @@ public class CarpinTresEspinas extends Omnivoro implements Rio{
      */
     @Override
     public Pez obtenerPezHija(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new CarpinTresEspinas(true);
     }
 }

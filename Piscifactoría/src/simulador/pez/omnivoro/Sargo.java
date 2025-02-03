@@ -85,7 +85,7 @@ public class Sargo extends Omnivoro implements Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new Sargo(false);
     }
 
@@ -95,7 +95,7 @@ public class Sargo extends Omnivoro implements Mar{
      */
     @Override
     public Pez obtenerPezHija(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new Sargo(true);
     }
 }

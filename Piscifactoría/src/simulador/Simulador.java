@@ -1,19 +1,44 @@
 package simulador;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+
 import componentes.FechaTiempoLocal;
 import componentes.GeneradorMenus;
 import componentes.LecturaEscrituraFicherosPlanos;
+import componentes.LecturaEscrituraJSON;
+import componentes.Logs;
 import componentes.SistemaEntrada;
 import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
 import componentes.SistemaRecompensa;
+import componentes.Transcripciones;
 import estadisticas.Estadisticas;
 import propiedades.AlmacenPropiedades;
 import propiedades.PecesDatos;
@@ -29,39 +54,76 @@ import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 public class Simulador {
 
     /**
-     * Indica el número de días que han pasado en la simulación.
+     * Clase que se encarga de adaptar la clase Estadisticas al formato JSON.
      */
-    private static int diasPasados = 0;
+    private class AdaptadorJSONEstadisticas implements JsonSerializer<Estadisticas>, JsonDeserializer<Estadisticas>{
+
+        /**
+         * Se encarga de la deserialización de un objeto Estadisticas.
+         */
+        @Override
+        public Estadisticas deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return new Estadisticas(new String[]{ AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), 
+                AlmacenPropiedades.CABALLA.getNombre(),AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                AlmacenPropiedades.PEJERREY.getNombre(),AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()}, json.getAsString());
+        }
+
+        /**
+         * Se encarga de la serialización de un objeto Estadisticas.
+         */
+        @Override
+        public JsonElement serialize(Estadisticas src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src.exportarDatos(new String[]{ AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), 
+                AlmacenPropiedades.CABALLA.getNombre(),AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                AlmacenPropiedades.PEJERREY.getNombre(),AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()}));
+        }
+
+        
+    }
 
     /**
-     * Piscifactorías de la simulación.
+     * Peces implimentados en la simulación.
      */
-    public static ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
+    @SerializedName("implementados")
+    public String[] pecesImplementados;
 
     /**
      * Nombre de la entidad, empresa o partida de la simulación.
      */
-    private static String nombre;
+    @SerializedName("empresa")
+    private String nombre;
+
+    /**
+     * Indica el número de días que han pasado en la simulación.
+     */
+    @SerializedName("dia")
+    private int diasPasados;
 
     /**
      * Sistema de monedas de la simulación.
      */
-    public static SistemaMonedas sistemaMonedas;
+    @SerializedName("monedas")
+    public SistemaMonedas sistemaMonedas;
 
-    /**
-     * Sistema de recompensas de la simulación.
+     /**
+     * Estadísticas de los peces de la simualción.
      */
-    public static SistemaRecompensa sistemaRecompensa;
+    @SerializedName("orca")
+    @JsonAdapter(AdaptadorJSONEstadisticas.class)
+    public Estadisticas estadisticas;
 
     /**
      * Almacén central de comida usado en la simulación.
      */
-    public static AlmacenCentral almacenCentral = null;
+    @SerializedName("edificios")
+    public AlmacenCentral almacenCentral = new AlmacenCentral();
 
     /**
-     * Estadísticas de los peces de la simualción.
+     * Piscifactorías de la simulación.
      */
-    public static Estadisticas estadisticas;
+    public ArrayList<Piscifactoria> piscifactorias = new ArrayList<>();
 
     /**
      * Archivo compartido entre todas las partidas donde se registran los errores.
@@ -71,12 +133,12 @@ public class Simulador {
     /**
      * Archivo de log de la partida.
      */
-    public static File archivoLogPartida;
+    public static Logs archivoLogPartida;
 
     /**
      * Archivo de transcripciones de la partida.
      */
-    public static File archivoTranscripcionesPartida;
+    public static Transcripciones archivoTranscripcionesPartida;
 
     /**
      * Archivo de guardado de la partida.
@@ -84,24 +146,97 @@ public class Simulador {
     public static File archivoGuardadoPartida;
 
     /**
+     * Directorio donde se guardan las rescompensas.
+     */
+    public static File directorioRecompensas = new File("rewards");
+
+    /**
+     * Simulador que se ejecuta en la partida.
+     */
+    public static Simulador simulador;
+
+    /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init() {
-        System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
-        nombre = SistemaEntrada.entradaTexto();
-        System.out.print("Introduzca el nombre de la primera piscifactoría: ");
-        String nombrePiscifactoria = SistemaEntrada.entradaTexto();
-        sistemaMonedas = new SistemaMonedas(100);
-        piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
-        String[] pecesDisponibles = { AlmacenPropiedades.ABADEJO.getNombre(),
+        int opcion = 0;
+        String nombrePiscifactoria = "";
+
+        try{
+            if(!SistemaFicheros.existeDirectorio("saves")){
+                SistemaFicheros.crearCarpeta("saves");
+            }
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        try{
+            File[] archivosGuardado = new File("saves").listFiles();
+
+            if(archivosGuardado.length != 0){
+                opcion = GeneradorMenus.generarMenuOperativo(new String[]{"¿Desea cargar una partida guardada?"}, new String[]{"Sí", "No"}, 1, 2);
+                
+                if(opcion  == 1){
+                    String[] partidasGuardadas = new String[archivosGuardado.length];
+                    String[] tokensNombreArchivoGuardado;
+
+                    for(int i = 0; i < archivosGuardado.length; i++){
+                        tokensNombreArchivoGuardado = archivosGuardado[i].getName().split(".save");
+                        partidasGuardadas[i] = tokensNombreArchivoGuardado[(tokensNombreArchivoGuardado.length != 1) ? tokensNombreArchivoGuardado.length - 2 : tokensNombreArchivoGuardado.length - 1];
+                    }
+
+                    opcion = GeneradorMenus.generarMenuOperativo(new String[]{"Escoja la partida que desea cargar:"}, partidasGuardadas, 1, partidasGuardadas.length);
+
+                     try{
+                        simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivosGuardado[opcion - 1]);
+                        
+                     }
+                     catch(IOException e){
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                        }
+                        catch(IOException ex){
+            
+                        }
+                     }
+                }
+            }
+        }
+        catch(Exception e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+
+            }
+        }
+
+        if(opcion == 0 || opcion == 2){
+            simulador = new Simulador();
+            simulador.diasPasados = 0;
+            System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
+            simulador.nombre = SistemaEntrada.entradaTexto();
+            System.out.print("Introduzca el nombre de la primera piscifactoría: ");
+            nombrePiscifactoria = SistemaEntrada.entradaTexto();
+            simulador.sistemaMonedas = new SistemaMonedas(100);
+            simulador.piscifactorias = new ArrayList<Piscifactoria>();
+            simulador.piscifactorias.add(new PiscifactoriaRio(nombrePiscifactoria));
+            simulador.pecesImplementados = new String[]{ AlmacenPropiedades.ABADEJO.getNombre(),
                 AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(),
                 AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
                 AlmacenPropiedades.PEJERREY.getNombre(),
                 AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(),
                 AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
                 AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
-                AlmacenPropiedades.TILAPIA_NILO.getNombre() };
-        estadisticas = new Estadisticas(pecesDisponibles);
+                AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+            simulador.estadisticas = new Estadisticas(simulador.pecesImplementados);
+        }
 
         try{
             if(!SistemaFicheros.existeDirectorio("logs")){
@@ -146,9 +281,9 @@ public class Simulador {
         }
 
         try{
-            if(!SistemaFicheros.existeArhivo("transcripciones/" + nombre + ".tr")){
-                SistemaFicheros.crearArchivo("transcripciones/" + nombre + ".tr");
-                archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
+            if(!SistemaFicheros.existeArhivo("transcripciones/" + simulador.nombre + ".tr")){
+                SistemaFicheros.crearArchivo("transcripciones/" + simulador.nombre + ".tr");
+                archivoTranscripcionesPartida = new Transcripciones(new File("transcripciones/" + simulador.nombre + ".tr"));
             }
         }
         catch(IOException e){
@@ -161,9 +296,9 @@ public class Simulador {
         }
 
         try{
-            if(!SistemaFicheros.existeArhivo("logs/" + nombre + ".log")){
-                SistemaFicheros.crearArchivo("logs/" + nombre + ".log");
-                archivoLogPartida = new File("logs/" + nombre + ".log");
+            if(!SistemaFicheros.existeArhivo("logs/" + simulador.nombre + ".log")){
+                SistemaFicheros.crearArchivo("logs/" + simulador.nombre + ".log");
+                archivoLogPartida = new Logs(new File("logs/" + simulador.nombre + ".log"));
             }
         }
         catch(IOException e){
@@ -189,219 +324,73 @@ public class Simulador {
             }
         }
 
-        try{
-            if(!SistemaFicheros.existeDirectorio("saves")){
-                SistemaFicheros.crearCarpeta("saves");
-            }
-        }
-        catch(IOException e){
+        if(opcion == 0 || opcion == 2){
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
-        }
-
-        try{
-            if(SistemaFicheros.isDirectorioVacio("saves")){
-                SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
-                archivoGuardadoPartida = new File("saves/" + nombre + ".save");
-            }
-            else{
-                try{
-                    if(SistemaFicheros.existeArhivo("saves/" + nombre + ".save")){
-                        String[] cabecera = {"¿Desea cargar la partida guardada?"};
-                        String[] opciones = {"Sí", "No"};
-                        int opcion = GeneradorMenus.generarMenuOperativo(cabecera, opciones, 1, 2);
-                        if(opcion == 1){
-                            //Cargar archivo de guardado.
+                if(SistemaFicheros.isDirectorioVacio("saves")){
+                    SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
+                    archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
+                }
+                else{
+                    try{
+                        if(!SistemaFicheros.existeArhivo("saves/" + simulador.nombre + ".save")){
+                            try{
+                                SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
+                                archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
+                            }catch(IOException e){
+                                try{
+                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                                }
+                                catch(IOException ex){
+                    
+                                }
+                            }
+                            
                         }
                         else{
-                            try{
-                                SistemaFicheros.borrarArchivo("saves/" + nombre + ".save");
-                            }
-                            catch(IOException e){
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                                }
-                                catch(IOException ex){
-                    
-                                }
-                            }
-
-                            try{
-                                SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
-                            }
-                            catch(IOException e){
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                                }
-                                catch(IOException ex){
-                    
-                                }
-                            }
+                            archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
                         }
                     }
-                    else{
-                        try{
-                            SistemaFicheros.crearArchivo("saves/" + nombre + ".save");
-                        }catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                            }
-                            catch(IOException ex){
-                
-                            }
-                        }
+                catch(IOException e){
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                    }
+                    catch(IOException ex){
+            
+                    }
+                }
+                }
+
+                try{
+                    LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
+                }
+                catch(IOException e){
+                    try{
+                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+                    }
+                    catch(IOException ex){
                         
                     }
                 }
+            }
             catch(IOException e){
                 try{
                     LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
                 }
                 catch(IOException ex){
-        
+
                 }
-            }
             }
         }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
 
-            }
-        }
+        archivoTranscripcionesPartida = new Transcripciones(new File("transcripciones/" + simulador.nombre + ".tr"));
+        archivoLogPartida = new Logs(new File("logs/" + simulador.nombre + ".log"));
         
-        archivoTranscripcionesPartida = new File("transcripciones/" + nombre + ".tr");
-        archivoLogPartida = new File("logs/" + nombre + ".log");
-        
+        archivoTranscripcionesPartida.iniciarTranscripciones(simulador.nombre, simulador.sistemaMonedas.getMonedas(), new String[]{AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+        AlmacenPropiedades.PEJERREY.getNombre(), AlmacenPropiedades.PERCA_EUROPEA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(), AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre()}, 
+        new String[]{AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(), AlmacenPropiedades.CABALLA.getNombre(), AlmacenPropiedades.DORADA.getNombre(), AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(), 
+            AlmacenPropiedades.SARGO.getNombre()}, nombrePiscifactoria);
 
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "========== Arranque ==========", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Inicio de la simulación " + nombre + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "=========== Dinero ===========", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Dinero: " + sistemaMonedas.getMonedas() + " monedas.", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "========== Peces Implementados ==========", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Río:\n-" + AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre() + "\n-" + AlmacenPropiedades.DORADA.getNombre() + "\n-" 
-                + AlmacenPropiedades.PEJERREY.getNombre() + "\n-" + AlmacenPropiedades.PERCA_EUROPEA.getNombre() + "\n-" + AlmacenPropiedades.ROBALO.getNombre() + "\n-" + AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + "\n-"
-                + AlmacenPropiedades.SALMON_CHINOOK.getNombre() + "\n-" + AlmacenPropiedades.TILAPIA_NILO.getNombre() + "\nMar:\n-" + AlmacenPropiedades.ABADEJO.getNombre() + "\n-" + AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre() + "\n-" 
-                + AlmacenPropiedades.CABALLA.getNombre() + "\n-" + AlmacenPropiedades.DORADA.getNombre() + "\n-" + AlmacenPropiedades.ROBALO.getNombre() + "\n-" + AlmacenPropiedades.SALMON_ATLANTICO.getNombre() + "\n-" 
-                + AlmacenPropiedades.SARGO.getNombre(), "UTF-8");
-            }catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Piscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Inicio de la simulación " + nombre + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-        
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Piscifactoría inicial: " + nombrePiscifactoria + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
+        archivoLogPartida.inicioLog(simulador.nombre, nombrePiscifactoria);
     }
     
 
@@ -419,7 +408,7 @@ public class Simulador {
     /**
      * Imprime un menú para seleccionar una piscifactoría de la simulación.
      */
-    private static void menuPisc() {
+    private void menuPisc() {
         String[] cabeceraMenuPiscifactoria = { "Seleccione una opción:",
                 "--------------------------- Piscifactorías ---------------------------",
                 "[Peces vivos/ Peces totales/ Espacio total]" };
@@ -440,7 +429,7 @@ public class Simulador {
      * 
      * @return Opción seleccionada.
      */
-    private static int selectPisc() {
+    private int selectPisc() {
         menuPisc();
 
         return SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
@@ -472,13 +461,13 @@ public class Simulador {
     /**
      * Muestra el estado general de la simulación.
      */
-    private static void showGeneralStatus() {
+    private void showGeneralStatus() {
         for (Piscifactoria piscifactoria : piscifactorias) {
             piscifactoria.showStatus();
         }
         System.out.println("Día actual: " + (diasPasados + 1));
         System.out.println("Monedas: " + sistemaMonedas.getMonedas());
-        if (almacenCentral != null) {
+        if (almacenCentral.isDisponible()) {
             int cantidadComidaAnimalAlmacen = almacenCentral.getCantidadComidaAnimal();
             int cantidadComidaVegetalAlmacen = almacenCentral.getCantidadComidaVegetal();
             int capacidadComidaAlmacen = almacenCentral.getCapacidadComida();
@@ -495,7 +484,7 @@ public class Simulador {
      * Muestra por pantalla el estado de todos los tanque de una piscifactoría
      * seleccionada por el usuario.
      */
-    private static void showSpecificStatus() {
+    private void showSpecificStatus() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -527,7 +516,7 @@ public class Simulador {
     /**
      * Muestra un desglose de las estadísticas por cada tipo de pez.
      */
-    private static void showStats() {
+    private void showStats() {
         System.out.println("======================================== Estadísticas ========================================");
         estadisticas.mostrar();
     }
@@ -578,7 +567,7 @@ public class Simulador {
      * Avanza un día en todas las piscifactorías y muestra el número de peces
      * vendidos y las monedas ganadas con ello.
      */
-    private static void nextDay() {
+    private void nextDay() {
         int dineroAntesDePasarDia;
         int pecesVendidoPiscifactoria = 0;
         int pecesVendidos = 0;
@@ -604,70 +593,25 @@ public class Simulador {
 
         System.out.println(pecesVendidos + " peces vendidos por un total de " + monedasGanadas + " monedas.");
         
-        if(almacenCentral != null){
+        if(almacenCentral.isDisponible()){
             repartirComida();
         }
 
-        try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Fin del día " + (diasPasados + 1) + ".", "UTF-8");
-        }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
-        }
-
-        try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Peces actuales, " + pecesRio + " de río " + pecesMar + " de mar.", "UTF-8");
-        }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
-        }
-
-        try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, monedasGanadas + " monedas ganadas por un total de " + pecesVendidos + ".", "UTF-8");
-        }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
-        }
-        
-        try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Fin del día " + (diasPasados + 1) + ".", "UTF-8");
-        }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
-        }
-
+        archivoTranscripcionesPartida.registrarPasoDia(diasPasados + 1, pecesRio, pecesMar, monedasGanadas, pecesVendidos);
+        archivoLogPartida.registrarPasoDia(diasPasados + 1);
+    
         diasPasados++;
         showGeneralStatus();
 
         try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
+            LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
         }
         catch(IOException e){
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
             }
             catch(IOException ex){
-
+                
             }
         }
     }
@@ -675,8 +619,8 @@ public class Simulador {
     /**
      * Gestiona la compra de comida para una piscifactoría o para el almacén central.
      */
-    private static void addFood() {
-        if (almacenCentral != null) {
+    private void addFood() {
+        if (almacenCentral.isDisponible()) {
             int tipoComida = menuTipoComida();
 
             if (tipoComida != 0) {
@@ -706,29 +650,8 @@ public class Simulador {
                                                     almacenCentral.getCapacidadComida() * 100)
                                     + "%.");
                             
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoAnimal + " monedas. Se almacena en el almacén central." , "UTF-8");
-                            }
-                            catch(IOException e){
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                                }
-                                catch(IOException ex){
-                
-                                }
-                            }
-
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo animal comprada. Se almacena en el almacén central.", "UTF-8");
-                            }
-                            catch(IOException e){
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                                }
-                                catch(IOException ex){
-                
-                                }
-                            }
+                            archivoTranscripcionesPartida.registrarCompraComida(cantidadAAgregar, " animal ", costoAnimal);
+                            archivoLogPartida.registrarCompraComida(cantidadAAgregar, " animal ");
                         } else {
                             System.out.println("No hay suficientes monedas para comprar la comida animal, faltan " + (costoAnimal - sistemaMonedas.getMonedas()) + " monedas.");
                         }
@@ -759,29 +682,8 @@ public class Simulador {
                                                     almacenCentral.getCapacidadComida() * 100)
                                     + "%.");
                             
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo vegetal comprada por " + costoVegetal + " monedas. Se almacena en el almacén central." , "UTF-8");
-                            }
-                            catch(IOException e){
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                                }
-                                catch(IOException ex){
-                
-                                }
-                            }
-
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo vegetal comprada. Se almacena en el almacén central.", "UTF-8");
-                            }
-                            catch(IOException e){
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                                }
-                                catch(IOException ex){
-                
-                                }
-                            }
+                            archivoTranscripcionesPartida.registrarCompraComida(cantidadAAgregar, " vegetal ", costoVegetal);
+                            archivoLogPartida.registrarCompraComida(cantidadAAgregar, " vegetal ");
                         } else {
                             System.out.println("No hay suficientes monedas para comprar la comida vegetal, faltan " + (costoVegetal - sistemaMonedas.getMonedas()) + " monedas.");
                         }
@@ -840,29 +742,8 @@ public class Simulador {
                                                         * 100)
                                         + "%.");
                                 
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoAnimal + " monedas. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                                }
-                                catch(IOException e){
-                                    try{
-                                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                                    }
-                                    catch(IOException ex){
-                    
-                                    }
-                                }
-
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo animal comprada. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                                }
-                                catch(IOException e){
-                                    try{
-                                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                                    }
-                                    catch(IOException ex){
-                    
-                                    }
-                                }
+                                archivoTranscripcionesPartida.registrarCompraComida(cantidadAAgregar, " animal ", costoAnimal, piscifactoria.getNombre());
+                                archivoLogPartida.registrarCompraComida(cantidadAAgregar, " animal ", piscifactoria.getNombre());
                             } else {
                                 System.out.println("No hay suficientes monedas para comprar la comida animal, faltan " + (costoAnimal - sistemaMonedas.getMonedas()) + " monedas.");
                             }
@@ -904,35 +785,13 @@ public class Simulador {
                                                         * 100)
                                         + "%.");
 
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, cantidadAAgregar + " de comida de tipo animal comprada por " + costoVegetal + " monedas. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                                }
-                                catch(IOException e){
-                                    try{
-                                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                                    }
-                                    catch(IOException ex){
-                    
-                                    }
-                                }
-
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + cantidadAAgregar + " de comida de tipo vegetal comprada. Se almacena en la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                                }
-                                catch(IOException e){
-                                    try{
-                                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                                    }
-                                    catch(IOException ex){
-                    
-                                    }
-                                }
+                                archivoTranscripcionesPartida.registrarCompraComida(cantidadAAgregar, " vegetal ", costoVegetal, piscifactoria.getNombre());
+                                archivoLogPartida.registrarCompraComida(cantidadAAgregar, " vegetal ", piscifactoria.getNombre());
                             } else {
                                 System.out.println("No hay suficientes monedas para comprar la comida vegetal, faltan " + (costoVegetal - sistemaMonedas.getMonedas()) + " monedas.");
                             }
                         } else {
-                            System.out.println(
-                                    "No se puede añadir comida vegetal, la capacidad de la piscifactoría está llena.");
+                            System.out.println("No se puede añadir comida vegetal, la capacidad de la piscifactoría está llena.");
                         }
                     }
                 }
@@ -986,7 +845,7 @@ public class Simulador {
     /**
     * Añade un pez a una piscifactoría seleccionada por el usuario.
     */
-    private static void addFish() {
+    private void addFish() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if(piscifactoriaSeleccionada != 0){
@@ -1005,7 +864,7 @@ public class Simulador {
     * Gestiona la lógica de añadir un pez a una piscifactoría de mar.
     * @param piscifactoria Piscifactoría donde se va a añadir el pez.
     */
-    private static void addFishMar(Piscifactoria piscifactoria){
+    private void addFishMar(Piscifactoria piscifactoria){
         String[] pecesDisponiblesMar = {
             "Cancelar",
             AlmacenPropiedades.ABADEJO.getNombre() + " - " + AlmacenPropiedades.ABADEJO.getCoste() + " monedas",
@@ -1037,57 +896,15 @@ public class Simulador {
                         tanque.getPeces().add(crearPezMar(opcion, true));
                         tanque.showCapacity(piscifactoria.getNombre());
 
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + coste + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
-
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
+                        archivoTranscripcionesPartida.registrarCompraPeces(nombrePez, true, coste, tanque.getNumeroTanque(), piscifactoria.getNombre());
+                        archivoLogPartida.registrarCompraPez(nombrePez, true, tanque.getNumeroTanque(), piscifactoria.getNombre());
                     }
                     else{
                         tanque.getPeces().add(crearPezMar(opcion, false));
                         tanque.showCapacity(piscifactoria.getNombre());
 
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " M comprado por " + coste + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
-
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() +  " " + nombrePez + " M comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
+                        archivoTranscripcionesPartida.registrarCompraPeces(nombrePez, false, coste, tanque.getNumeroTanque(), piscifactoria.getNombre());
+                        archivoLogPartida.registrarCompraPez(nombrePez, false, tanque.getNumeroTanque(), piscifactoria.getNombre());
                     }
                 }
                 else{
@@ -1105,29 +922,8 @@ public class Simulador {
                         sistemaMonedas.setMonedas(monedas - coste);
                         tanque.showCapacity(piscifactoria.getNombre());
 
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + coste + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
-
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
+                        archivoTranscripcionesPartida.registrarCompraPeces(nombrePez, true, coste, tanque.getNumeroTanque(), piscifactoria.getNombre());
+                        archivoLogPartida.registrarCompraPez(nombrePez, true, tanque.getNumeroTanque(), piscifactoria.getNombre());
                     }
                     else{
                         System.out.println("No se disponen de las suficientes monedas para comprar el pez, faltan " + (coste - monedas) + " monedas.");
@@ -1144,7 +940,7 @@ public class Simulador {
     * Gestiona la lógica de añadir un pez a una piscifactoría de río.
     * @param piscifactoria Piscifactoría donde se va a añadir el pez.
     */
-    private static void addFishRio(Piscifactoria piscifactoria){
+    private void addFishRio(Piscifactoria piscifactoria){
         String[] pecesDisponiblesRio = {
             "Cancelar",
             AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre() + " - " + AlmacenPropiedades.CARPIN_TRES_ESPINAS.getCoste() + " monedas",
@@ -1178,57 +974,15 @@ public class Simulador {
                         tanque.getPeces().add(crearPezRio(opcion, true));
                         tanque.showCapacity(piscifactoria.getNombre());
 
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + coste + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
-                        
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
+                        archivoTranscripcionesPartida.registrarCompraPeces(nombrePez, true, coste, tanque.getNumeroTanque(), piscifactoria.getNombre());
+                        archivoLogPartida.registrarCompraPez(nombrePez, true, tanque.getNumeroTanque(), piscifactoria.getNombre());
                     }
                     else{
                         tanque.getPeces().add(crearPezRio(opcion, false));
                         tanque.showCapacity(piscifactoria.getNombre());
 
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " M comprado por " + coste + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
-                        
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + nombrePez + " M comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
+                        archivoTranscripcionesPartida.registrarCompraPeces(nombrePez, false, coste, tanque.getNumeroTanque(), piscifactoria.getNombre());
+                        archivoLogPartida.registrarCompraPez(nombrePez, false, tanque.getNumeroTanque(), piscifactoria.getNombre());
                     }
                 }
                 else{
@@ -1247,29 +1001,8 @@ public class Simulador {
                         sistemaMonedas.setMonedas(monedas - coste);
                         tanque.showCapacity(piscifactoria.getNombre());
 
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, nombrePez + " H comprado por " + coste + ". Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
-
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + nombrePez + " H comprado. Añadido al tanque " + tanque.getNumeroTanque() + " de la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
+                        archivoTranscripcionesPartida.registrarCompraPeces(nombrePez, true, coste, tanque.getNumeroTanque(), piscifactoria.getNombre());
+                        archivoLogPartida.registrarCompraPez(nombrePez, true, tanque.getNumeroTanque(), piscifactoria.getNombre());
                     }
                     else{
                         System.out.println("No se disponen de las suficientes monedas para comprar el pez, faltan " + (coste - monedas) + " monedas.");
@@ -1384,9 +1117,9 @@ public class Simulador {
         }
 
         switch(alimentacionPez){
-            case PecesProps.CARNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal");}
-            case PecesProps.FILTRADOR -> {System.out.println("\nTipo de comida que consume: Comida vegetal");}
-            case PecesProps.OMNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal y vegetal");}
+            case CARNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal");}
+            case FILTRADOR -> {System.out.println("\nTipo de comida que consume: Comida vegetal");}
+            case OMNIVORO -> {System.out.println("\nTipo de comida que consume: Comida animal y vegetal");}
             default -> {throw new Exception("Tipo de alimentación del pez no válida");}
         }
 
@@ -1398,7 +1131,7 @@ public class Simulador {
      * Método que vende todos los peces adultos que estén vivos en una piscifactoría
      * seleccionada.
      */
-    private static void sell() {
+    private void sell() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -1413,29 +1146,9 @@ public class Simulador {
 
             int pecesVendidos = pecesAntes - piscifactoria.getPecesTotales();
 
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Vendidos " + pecesVendidos+ " peces de la piscifactoría " + piscifactoria.getNombre() + " de forma manual por " + (sistemaMonedas.getMonedas() + monedasAntes) + " monedas.", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-            
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Vendidos " + pecesVendidos + " peces de la piscifactoría " + piscifactoria.getNombre() + " de forma manual.", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
+            String nombrePiscifactoria = piscifactoria.getNombre();
+            archivoTranscripcionesPartida.registrarVentaPeces(pecesVendidos, nombrePiscifactoria, sistemaMonedas.getMonedas());
+            archivoLogPartida.registrarVentaPeces(pecesVendidos, nombrePiscifactoria);
         }   
 
     }
@@ -1443,7 +1156,7 @@ public class Simulador {
     /**
      * Elimina los peces muertos de la piscifactoría escogida.
      */
-    private static void cleanTank() {
+    private void cleanTank() {
 
         int piscifactoriaSeleccionada = selectPisc();
 
@@ -1455,29 +1168,11 @@ public class Simulador {
             for (Tanque tanque : tanques) {
                 tanque.eliminarPecesMuertos();
                 
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Limpiado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                }
-                catch(IOException e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                    }
-                    catch(IOException ex){
-    
-                    }
-                }
+                int numeroTanque = tanque.getNumeroTanque();
+                String nombrePiscifactoria = piscifactoria.getNombre();
 
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Limpiado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                }
-                catch(IOException e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                    }
-                    catch(IOException ex){
-    
-                    }
-                }
+                archivoTranscripcionesPartida.registrarLimpiezaTanque(numeroTanque, nombrePiscifactoria);
+                archivoLogPartida.registrarLimpiezaTanque(numeroTanque, nombrePiscifactoria);
             }
 
             System.out.println("Se han eliminado todos los peces muertos de los tanque de la piscifactoría "
@@ -1488,7 +1183,7 @@ public class Simulador {
     /**
      * Elimina todos los peces de un tanque, estén vivos o muertos.
      */
-    private static void emptyTank() {
+    private void emptyTank() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -1504,29 +1199,11 @@ public class Simulador {
                 System.out.println("El tanque " + tanqueSeleccionado + " de la piscifactoría "
                         + piscifactoria.getNombre() + " ha sido vaciado.");
 
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Vaciado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                }
-                catch(IOException e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                    }
-                    catch(IOException ex){
-    
-                    }
-                }
-                
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Vaciado el tanque " + tanque.getNumeroTanque() + " de la piscifatoría " + piscifactoria.getNombre() + ".", "UTF-8");
-                }
-                catch(IOException e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                    }
-                    catch(IOException ex){
-    
-                    }
-                }
+                int numeroTanque = tanque.getNumeroTanque();
+                String piscifactoriaNombre = piscifactoria.getNombre();
+
+                archivoTranscripcionesPartida.registrarVaciadoTanque(numeroTanque, piscifactoriaNombre);
+                archivoLogPartida.registrarVaciadoTanque(numeroTanque, piscifactoriaNombre);
             }
         }
     }
@@ -1534,7 +1211,7 @@ public class Simulador {
     /**
      * Muestra un menú para hacer mejoras como comprar o mejorar edificios.
      */
-    private static void upgrade() {
+    private void upgrade() {
         System.out.println("========== Mejorar ==========");
         String[] opciones = {
                 "Cancelar",
@@ -1557,9 +1234,9 @@ public class Simulador {
     /**
      * Muestra un menú para comprar edificios.
      */
-    private static void comprarEdificio() {
+    private void comprarEdificio() {
         System.out.println("========== Comprar edificio ==========");
-        if (almacenCentral != null) {
+        if (almacenCentral.isDisponible()) {
 
             String[] opciones = { "Cancelar", "Comprar piscifactoría" };
             int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
@@ -1580,32 +1257,11 @@ public class Simulador {
                 case 2:
                     if (sistemaMonedas.getMonedas() >= 2000) {
                         sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - 2000);
-                        almacenCentral = new AlmacenCentral();
+                        almacenCentral.setDisponible(true);
                         System.out.println("Almacén central comprado.");
 
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado el almacén central.", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
-
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprado el almacén central.", "UTF-8");
-                        }
-                        catch(IOException e){
-                            try{
-                                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                            }
-                            catch(IOException ex){
-            
-                            }
-                        }
+                        archivoTranscripcionesPartida.registrarCompraAlmacenCentral();
+                        archivoLogPartida.registrarCompraAlmacenCentral();
                     } else {
                         System.out.println("No tiene suficientes monedas para comprar el almacén central, faltan " + (2000 - sistemaMonedas.getMonedas()) + " monedas.");
                     }
@@ -1617,7 +1273,7 @@ public class Simulador {
     /**
      * Permite al usuario comprar una nueva piscifactoría.
      */
-    private static void comprarPiscifactoria() {
+    private void comprarPiscifactoria() {
         int tipoPiscifactoría = seleccionarTipoPiscifactoría();
         if (tipoPiscifactoría != 0) {
             System.out.println("Escriba el nombre de la piscifactoría: ");
@@ -1631,58 +1287,16 @@ public class Simulador {
                 if (tipoPiscifactoría == 1) {
                     nuevaPiscifactoria = new PiscifactoriaRio(nombrePiscifactoría);
 
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprada la piscifactoría de río " + nuevaPiscifactoria.getNombre() + " por " + costoPiscifactoría + " monedas.", "UTF-8");
-                    }
-                    catch(IOException e){
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                        }
-                        catch(IOException ex){
-        
-                        }
-                    }
-
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprada la piscifactoría de río " + nuevaPiscifactoria.getNombre() + ".", "UTF-8");
-                    }
-                    catch(IOException e){
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                        }
-                        catch(IOException ex){
-        
-                        }
-                    }
+                    archivoTranscripcionesPartida.resgistrarCompraPiscifactoria(0, nombrePiscifactoría, costoPiscifactoría);
+                    archivoLogPartida.registrarCompraPiscifactoria(0, nombrePiscifactoría);
                 } else {
                     nuevaPiscifactoria = new PiscifactoriaMar(nombrePiscifactoría);
 
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprada la piscifactoría de mar " + nuevaPiscifactoria.getNombre() + " por " + costoPiscifactoría + " monedas.", "UTF-8");
-                    }
-                    catch(IOException e){
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                        }
-                        catch(IOException ex){
-        
-                        }
-                    }
-
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprada la piscifactoría de mar " + nuevaPiscifactoria.getNombre() + ".", "UTF-8");
-                    }
-                    catch(IOException e){
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                        }
-                        catch(IOException ex){
-        
-                        }
-                    }
+                    archivoTranscripcionesPartida.resgistrarCompraPiscifactoria(1, nombrePiscifactoría, costoPiscifactoría);
+                    archivoLogPartida.registrarCompraPiscifactoria(1, nombrePiscifactoría);
                 } 
 
-                Simulador.piscifactorias.add(nuevaPiscifactoria);
+                piscifactorias.add(nuevaPiscifactoria);
                 System.out.println("Piscifactoría " + nombrePiscifactoría + " comprada.");
             } else {
                 System.out.println("No tienes suficientes monedas para comprar esta piscifactoría, faltan " + (costoPiscifactoría - sistemaMonedas.getMonedas()) + " monedas.");
@@ -1693,9 +1307,9 @@ public class Simulador {
     /**
      * Muestra un menú para mejorar edificios existentes.
      */
-    private static void mejorarEdificio() {
+    private void mejorarEdificio() {
         System.out.println("========== Mejorar edificio ==========");
-        if (almacenCentral != null) {
+        if (almacenCentral.isDisponible()) {
             String[] opciones = {
                     "Cancelar",
                     "Mejorar una piscifactoría",
@@ -1726,7 +1340,7 @@ public class Simulador {
     /**
      * Permite al usuario mejorar una piscifactoría seleccionada.
      */
-    private static void mejorarPiscifactoria() {
+    private void mejorarPiscifactoria() {
         menuPisc();
         int piscifactoriaSeleccionada = SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
 
@@ -1756,7 +1370,7 @@ public class Simulador {
      * Gestiona la lógica de mejora del almacén de comida de una piscifactoría.
      * @param piscifactoria Piscifactoría de la que se desea mejorar el almacén de comida.
      */
-    private static void mejorarAlmacenComidaPiscifactoria(Piscifactoria piscifactoria){
+    private void mejorarAlmacenComidaPiscifactoria(Piscifactoria piscifactoria){
         int monedasDisponibles = sistemaMonedas.getMonedas();
 
         if(piscifactoria instanceof PiscifactoriaRio){
@@ -1765,17 +1379,7 @@ public class Simulador {
                     sistemaMonedas.setMonedas(monedasDisponibles - 50);
                     piscifactoria.upgradeFood();
 
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Mejorada la piscifactoría " + piscifactoria.getNombre() + " aumentando su capacidad de comida hasta un total de " + piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() + " por 50 monedas.", "UTF-8");
-                    }
-                    catch(IOException e){
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                        }
-                        catch(IOException ex){
-        
-                        }
-                    }
+                    archivoTranscripcionesPartida.registrarMejoraPiscifactoria(piscifactoria.getNombre(), piscifactoria.getAlmacenInicial().getCapacidadMaximaComida(), 50);
                 }
                 else{
                     System.out.println("No se puede aumentar más la capacidad de comida del almacén de comida de la piscifactoría.");
@@ -1791,17 +1395,7 @@ public class Simulador {
                     sistemaMonedas.setMonedas(monedasDisponibles - 200);
                     piscifactoria.upgradeFood();
 
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Mejorada la piscifactoría " + piscifactoria.getNombre() + " aumentando su capacidad de comida hasta un total de " + piscifactoria.getAlmacenInicial().getCapacidadMaximaComida() + " por 200 monedas.", "UTF-8");
-                    }
-                    catch(IOException e){
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                        }
-                        catch(IOException ex){
-        
-                        }
-                    }
+                    archivoTranscripcionesPartida.registrarMejoraPiscifactoria(piscifactoria.getNombre(), piscifactoria.getAlmacenInicial().getCapacidadMaximaComida(), 200);
                 }
                 else{
                     System.out.println("No se puede aumentar más la capacidad de comida del almacén de comida de la piscifactoría.");
@@ -1812,17 +1406,7 @@ public class Simulador {
             }
         }
 
-        try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Mejorada la piscifactoría " + piscifactoria.getNombre() + " aumentando su capacidad de comida.", "UTF-8");
-        }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
-        }
+        archivoLogPartida.registrarMejoraPiscifactoria(piscifactoria.getNombre());
     }
 
     /**
@@ -1830,7 +1414,7 @@ public class Simulador {
      * 
      * @param piscifactoria La piscifactoría en la que se comprará el tanque.
      */
-    private static void comprarTanque(Piscifactoria piscifactoria) {
+    private void comprarTanque(Piscifactoria piscifactoria) {
         int monedasDisponibles = sistemaMonedas.getMonedas();
 
         if (piscifactoria instanceof PiscifactoriaRio) {
@@ -1845,17 +1429,7 @@ public class Simulador {
                 System.out.println("Tanque añadido a la piscifactoría " + piscifactoriaRio.getNombre()
                         + ". Total de tanques: " + piscifactoriaRio.getTanques().size());
 
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado un tanque número " + nuevoTanque.getCapacidadMaximaPeces() + " de la piscifactoría " + piscifactoriaRio.getNombre() + ".", "UTF-8");
-                }
-                catch(IOException e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                    }
-                    catch(IOException ex){
-    
-                    }
-                }
+                archivoTranscripcionesPartida.registrarCompraTanque(nuevoTanque.getNumeroTanque(), piscifactoriaRio.getNombre(), costoTanque);
             } else {
                 System.out.println("No tienes suficientes monedas para comprar un tanque, faltan " + (costoTanque - monedasDisponibles) + " monedas.");
             }
@@ -1871,39 +1445,19 @@ public class Simulador {
                 System.out.println("Tanque añadido a la piscifactoría " + piscifactoriaMar.getNombre()
                         + ". Total de tanques: " + piscifactoriaMar.getTanques().size());
 
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Comprado un tanque número " + nuevoTanque.getCapacidadMaximaPeces() + " de la piscifactoría " + piscifactoriaMar.getNombre() + ".", "UTF-8");
-                }
-                catch(IOException e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                    }
-                    catch(IOException ex){
-    
-                    }
-                }
+                archivoTranscripcionesPartida.registrarCompraTanque(nuevoTanque.getNumeroTanque(), piscifactoriaMar.getNombre(), costoTanque);
             } else {
                 System.out.println("No tienes suficientes monedas para comprar un tanque, faltan " + (costoTanque - monedasDisponibles) + " monedas.");
             }
         }
 
-        try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Comprado un tanque para la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-        }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
-        }
+        archivoLogPartida.registrarCompraTanque(piscifactoria.getNombre());
     }
 
     /**
      * Aumenta la capacidad del almacén central.
      */
-    private static void aumentarCapacidadAlmacenCentral() {
+    private void aumentarCapacidadAlmacenCentral() {
         int costoAumento = 200;
         int monedasDisponibles = sistemaMonedas.getMonedas();
 
@@ -1912,17 +1466,7 @@ public class Simulador {
             almacenCentral.mejorar();
             System.out.println("Capacidad del almacén central aumentada en 50 unidades.");
 
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Mejorado el almacén central aumentando su capacidad de comida hasta un total de " + almacenCentral.getCapacidadComida() + " por 200 monedas.", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
+            archivoTranscripcionesPartida.registrarMejoraAlmacenCentral(almacenCentral.getCapacidadComida(), costoAumento);
         } else {
             System.out.println("No tienes suficientes monedas para aumentar la capacidad del almacén central, faltan " + (costoAumento - monedasDisponibles) + " monedas.");
         }
@@ -1950,7 +1494,7 @@ public class Simulador {
      * @param tipo El tipo de piscifactoría.
      * @return El costo de la piscifactoría.
      */
-    private static int calcularCostoPiscifactoría(int tipo) {
+    private int calcularCostoPiscifactoría(int tipo) {
         int cantidadPiscifactoria;
 
         if (tipo == 1) {
@@ -1966,7 +1510,7 @@ public class Simulador {
      * 
      * @return Número de piscifactorías de río de la simulación.
      */
-    private static int numeroPiscifactoriasRio(){
+    private int numeroPiscifactoriasRio(){
         int numeroPiscifactoriasRio = 0;
 
         for(Piscifactoria piscifactoria : piscifactorias){
@@ -1982,7 +1526,7 @@ public class Simulador {
      * 
      * @return Número de piscifactorías de mar de la simulación.
      */
-    private static int numeroPiscifactoriasMar(){
+    private int numeroPiscifactoriasMar(){
         int numeroPiscifactoriasMar = 0;
 
         for(Piscifactoria piscifactoria : piscifactorias){
@@ -1998,7 +1542,7 @@ public class Simulador {
      * Gestiona la lógica para mostrar el estado de un tanque de una piscifactoría
      * seleccionada.
      */
-    private static void mostrarEstadoTanque() {
+    private void mostrarEstadoTanque() {
         int piscifactoriaSeleccionada = selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -2009,7 +1553,7 @@ public class Simulador {
     /**
      * Método para pasar varios días en la simulación. 
      */
-    private static void pasarDias() {
+    private void pasarDias() {
         int pecesVendidos = 0;
         int dineroAntes;
         int monedasGanadas = 0;
@@ -2038,72 +1582,13 @@ public class Simulador {
 
             }
 
-            if(almacenCentral != null){
+            if(almacenCentral.isDisponible()){
                 repartirComida();
             }
 
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Fin del día " + (diasPasados + 1) + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Peces actuales, " + pecesRio + " de río " + pecesMar + " de mar.", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, monedasGanadas + " monedas ganadas por un total de " + pecesVendidos + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-           
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Fin del día " + (diasPasados + 1) + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
+            archivoTranscripcionesPartida.registrarPasoDia(diasPasados + 1, pecesRio, pecesMar, monedasGanadas, pecesVendidos);
+            archivoLogPartida.registrarPasoDia(diasPasados + 1);
             diasPasados++;
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "--------------------\n>>>Inicio del día " + (diasPasados + 1) + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
             pecesRio = 0;
             pecesMar = 0;
         }
@@ -2111,12 +1596,24 @@ public class Simulador {
         System.out.println("En estos " + dias + " días se han vendido " + pecesVendidos
                 + " peces y se han ganado " + monedasGanadas + " monedas.");
         showGeneralStatus();
+
+        try{
+            LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
+        }
+        catch(IOException e){
+            try{
+                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
+            }
+            catch(IOException ex){
+                
+            }
+        }
     }
 
     /**
      * Añade 4 peces aleatorios a una piscifactoría seleccionada por el usuario.
      */
-    private static void anadirPezAleatorio(){
+    private void anadirPezAleatorio(){
         int piscifactoriaSeleccionada = selectPisc();
 
         if(piscifactoriaSeleccionada != 0){
@@ -2233,36 +1730,16 @@ public class Simulador {
                 }
             }
 
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
-
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Añadidos peces mediante la opción oculta a la piscifactoría " + piscifactoria.getNombre() + ".", "UTF-8");
-            }
-            catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
-            }
+            String nombrePiscifactoria = piscifactoria.getNombre();
+            archivoTranscripcionesPartida.registrarAnadirPecesOculto(nombrePiscifactoria);
+            archivoLogPartida.registrarAnadirPecesOculto(nombrePiscifactoria);
         }
     }
     
     /**
      * Reparte la comida del almacén central equitativamente entre las piscafactorías.
      */
-    private static void repartirComida(){
+    private void repartirComida(){
         repartirComidaAnimal();
         repartirComidaVegetal();
     }
@@ -2272,7 +1749,7 @@ public class Simulador {
      * @param mediaCantidadComidaAnimal Media de la cantidad de comida animal.
      * @return True si todas las piscifactorías que no están llenas están en la media en cuanto a cantidad de comida animal.
      */
-    private static boolean todasLasPiscifactoriasEnLaMediaComidaAnimal(int mediaCantidadComidaAnimal){
+    private boolean todasLasPiscifactoriasEnLaMediaComidaAnimal(int mediaCantidadComidaAnimal){
         Piscifactoria.AlmacenComida almacenComida;
         int cantidadComidaAnimalPiscifactoria;
 
@@ -2291,7 +1768,7 @@ public class Simulador {
      * Indica si todas las piscifactorías están llenas de comida animal.
      * @return True si todas las piscifactorías están llenas de comida animal.
      */
-    private static boolean todasLasPiscifactoriasLlenasDeComidaAnimal(){
+    private boolean todasLasPiscifactoriasLlenasDeComidaAnimal(){
         Piscifactoria.AlmacenComida almacenComida;
 
         for(Piscifactoria piscifactoria : piscifactorias){
@@ -2308,7 +1785,7 @@ public class Simulador {
      * Devuelve la media de comida animal de las piscifactorías que no están llenas.
      * @return Media de comida animal de las piscifactorías que no están llenas.
      */
-    private static int mediaComidaAnimal(){
+    private int mediaComidaAnimal(){
         int cantidadComidaAnimal = 0;
         int piscifactoriasNoLlenas = 0;
         Piscifactoria.AlmacenComida almacenComidaPiscifactoria;
@@ -2329,7 +1806,7 @@ public class Simulador {
      * Gestiona la lógica de distribución equitativa de la comida animal del almacén central a las piscifactorías.
      * @param mediaCantidadComidaAnimal Cantidad de comida animal media por piscifactoría.
      */
-    private static void repartirComidaAnimal(){
+    private void repartirComidaAnimal(){
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaAnimal = new ArrayList<>(piscifactorias);
 
         AlmacenComida almacenComidaPiscifactoria;
@@ -2420,7 +1897,7 @@ public class Simulador {
      * @param mediaCantidadComidaVegetal Media de la cantidad de comida vegetal.
      * @return True si todas las piscifactorías que no están llenas están en la media en cuanto a cantidad de comida vegetal.
      */
-    private static boolean todasLasPiscifactoriasEnLaMediaComidaVegetal(int mediaCantidadComidaVegetal){
+    private boolean todasLasPiscifactoriasEnLaMediaComidaVegetal(int mediaCantidadComidaVegetal){
         Piscifactoria.AlmacenComida almacenComida;
         int cantidadComidaVegetalPiscifactoria;
 
@@ -2440,7 +1917,7 @@ public class Simulador {
      * Indica si todas las piscifactorías están llenas de comida vegetal.
      * @return True si todas las piscifactorías están llenas de comida vegetal.
      */
-    private static boolean todasLasPiscifactoriasLlenasDeComidaVegetal(){
+    private boolean todasLasPiscifactoriasLlenasDeComidaVegetal(){
         Piscifactoria.AlmacenComida almacenComida;
 
         for(Piscifactoria piscifactoria : piscifactorias){
@@ -2457,7 +1934,7 @@ public class Simulador {
      * Devuelve la media de comida vegetal de las piscifactorías que no están llenas.
      * @return Media de comida vegetal de las piscifactorías que no están llenas.
      */
-    private static int mediaComidaVegetal(){
+    private int mediaComidaVegetal(){
         int cantidadComidaVegetal = 0;
         int piscifactoriasNoLlenas = 0;
         Piscifactoria.AlmacenComida almacenComidaPiscifactoria;
@@ -2478,7 +1955,7 @@ public class Simulador {
      * Gestiona la lógica de distribución equitativa de la comida vegetal del almacén central a las piscifactorías.
      * @param mediaCantidadComidaVegetal Cantidad de comida vegetal media por piscifactoría.
      */
-    private static void repartirComidaVegetal(){
+    private void repartirComidaVegetal(){
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaVegetal = new ArrayList<>(piscifactorias);
 
         AlmacenComida almacenComidaPiscifactoria;
@@ -2566,32 +2043,11 @@ public class Simulador {
     /**
      * Añade 1000 monedas al sistema de monedas de la simulación.
      */
-    private static void anadirMonedasOculto(){
+    private void anadirMonedasOculto(){
         sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() + 1000);
 
-        try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoTranscripcionesPartida, "Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, " + sistemaMonedas.getMonedas() + ".", "UTF-8");
-        }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoTranscripcionesPartida.getName() + ".", "UTF-8");
-            }
-            catch(IOException ex){
-                
-            }
-        }
-
-        try{
-            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Añadidas monedas mediante la opción oculta.", "UTF-8");
-        }
-        catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
-            }
-            catch(IOException ex){
-                
-            }
-        }
+        archivoTranscripcionesPartida.registrarAnadirMonedasOculta(sistemaMonedas.getMonedas());
+        archivoLogPartida.registrarAnadirMonedasOculto();
     }
 
     /**
@@ -2616,33 +2072,35 @@ public class Simulador {
             init();
 
             int opcion = 0;
-            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 98, 99 };
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 96, 97, 98, 99 };
 
             while (opcion != 14) {
 
                 try{
-                    System.out.println("Día actual: " + (diasPasados + 1));
+                    System.out.println("Día actual: " + (simulador.diasPasados + 1));
                     menu();
 
                     opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
 
                     switch(opcion){
-                        case 1 -> {showGeneralStatus();}
-                        case 2 -> {showSpecificStatus();}
-                        case 3 -> {mostrarEstadoTanque();}
-                        case 4 -> {showStats();}
-                        case 5 -> {showIctio();}
-                        case 6 -> {nextDay();}
-                        case 7 -> {addFood();}
-                        case 8 -> {addFish();}
-                        case 9 -> {sell();}
-                        case 10 -> {cleanTank();}
-                        case 11 -> {emptyTank();}
-                        case 12 -> {upgrade();}
-                        case 13 -> {pasarDias();}
+                        case 1 -> {simulador.showGeneralStatus();}
+                        case 2 -> {simulador.showSpecificStatus();}
+                        case 3 -> {simulador.mostrarEstadoTanque();}
+                        case 4 -> {simulador.showStats();}
+                        case 5 -> {Simulador.showIctio();}
+                        case 6 -> {simulador.nextDay();}
+                        case 7 -> {simulador.addFood();}
+                        case 8 -> {simulador.addFish();}
+                        case 9 -> {simulador.sell();}
+                        case 10 -> {simulador.cleanTank();}
+                        case 11 -> {simulador.emptyTank();}
+                        case 12 -> {simulador.upgrade();}
+                        case 13 -> {simulador.pasarDias();}
                         case 14 -> {System.out.println("Cerrando...");}
-                        case 98 -> {anadirPezAleatorio();}
-                        case 99 -> {anadirMonedasOculto();}
+                        case 96 -> {Simulador.anadirRecompensa();}
+                        case 97 -> {Simulador.reclamarRecompensas();}
+                        case 98 -> {simulador.anadirPezAleatorio();}
+                        case 99 -> {simulador.anadirMonedasOculto();}
                     }
                 }
                 catch(Exception e){
@@ -2657,12 +2115,14 @@ public class Simulador {
 
             SistemaEntrada.close();
 
+            archivoLogPartida.registrarSalidaPartida();
+
             try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogPartida, FechaTiempoLocal.obtenerFechaTiempoActual() + " Cierre de la partida.", "UTF-8");
+                LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
             }
             catch(IOException e){
                 try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " Error de escritura del fichero " + archivoLogPartida.getName() + ".", "UTF-8");
+                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
                 }
                 catch(IOException ex){
                     
@@ -2679,30 +2139,1718 @@ public class Simulador {
         }
     }
 
-
+    
     /**
      * Metodo que añade una recompensa
      */
-    public static void añadirRecompensa(){
-        sistemaRecompensa.addRandomReward();
+    public static void anadirRecompensa() throws IOException{
+        SistemaRecompensa.addRandomReward();
     }
+
     /**
      * Metodo que lista las recompensas que se añadieron
      */
     public static void listarRecompensas(){
-        sistemaRecompensa.listarRecompensas();
+        SistemaRecompensa.listarRecompensas();
     }
+
     /**
      * Metodo que lista las recompensas disponibles a reclamar
      */
     public static void listarRecompensasDisponibles(){
-        sistemaRecompensa.listarRecompensasDisponibles();
+        SistemaRecompensa.listarRecompensasDisponibles();
     }
 
     /**
-     * Metodo que reclamará las recompensas disponibles y borrará los archivos al terminar
+     * Metodo que reclamará las recompensas disponibles y borrará los archivos al terminar.
      */
-    public static void reclamarRecompensa(){
+    public static void reclamarRecompensas() throws DocumentException, IOException{
+        File[] recompensas = directorioRecompensas.listFiles();
+        Document xmlRecompensa;
+        SAXReader lectorXML = new SAXReader();
+        ArrayList<File> partesAlmacenCentral = new ArrayList<>();
+        ArrayList<File> partesPiscifactoriaRio = new ArrayList<>();
+        ArrayList<File> partesPiscifactoriaMar = new ArrayList<>();
         
+        for(File recompensa : recompensas){
+            if(recompensa.isFile()){
+                xmlRecompensa = lectorXML.read(recompensa);
+
+                switch(xmlRecompensa.getRootElement().element("name").getText()){
+                    case "Algas I" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 100){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 100);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int capsulas = 100;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int cantidadMaximaVegetal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaximaVegetal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaximaVegetal - comidaVegetalPiscifactoria;
+                                if(espacioComidaVegetal < capsulas){
+                                    capsulas -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaximaVegetal);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += capsulas;
+                                    capsulas = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Algas II" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 200){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 200);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int capsulas = 200;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int cantidadMaximaVegetal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaximaVegetal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaximaVegetal - comidaVegetalPiscifactoria;
+                                if(espacioComidaVegetal < capsulas){
+                                    capsulas -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaximaVegetal);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += capsulas;
+                                    capsulas = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Algas III" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 500){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 500);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int capsulas = 500;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int cantidadMaximaVegetal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaximaVegetal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaximaVegetal - comidaVegetalPiscifactoria;
+                                if(espacioComidaVegetal < capsulas){
+                                    capsulas -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaximaVegetal);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += capsulas;
+                                    capsulas = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Algas IV" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 1000){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 1000);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int capsulas = 1000;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int cantidadMaximaVegetal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaximaVegetal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaximaVegetal - comidaVegetalPiscifactoria;
+                                if(espacioComidaVegetal < capsulas){
+                                    capsulas -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaximaVegetal);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += capsulas;
+                                    capsulas = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Algas V" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 2000){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 2000);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int capsulas = 2000;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int cantidadMaximaVegetal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaximaVegetal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaximaVegetal - comidaVegetalPiscifactoria;
+                                if(espacioComidaVegetal < capsulas){
+                                    capsulas -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaximaVegetal);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += capsulas;
+                                    capsulas = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Monedas I" -> {
+                        int monedas = Simulador.simulador.sistemaMonedas.getMonedas();
+                        Simulador.simulador.sistemaMonedas.setMonedas(monedas + 100);
+                        
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Monedas II" -> {
+                        int monedas = Simulador.simulador.sistemaMonedas.getMonedas();
+                        Simulador.simulador.sistemaMonedas.setMonedas(monedas + 300);
+                        
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Monedas III" -> {
+                        int monedas = Simulador.simulador.sistemaMonedas.getMonedas();
+                        Simulador.simulador.sistemaMonedas.setMonedas(monedas + 500);
+                        
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Monedas IV" -> {
+                        int monedas = Simulador.simulador.sistemaMonedas.getMonedas();
+                        Simulador.simulador.sistemaMonedas.setMonedas(monedas + 750);
+                        
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Monedas V" -> {
+                        int monedas = Simulador.simulador.sistemaMonedas.getMonedas();
+                        Simulador.simulador.sistemaMonedas.setMonedas(monedas + 1000);
+                        
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Comida general I" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 50){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 50);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 50){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 50);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int comidaVegetal = 50;
+                            int comidaAnimal = 50;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaxima;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaxima = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaxima - comidaVegetalPiscifactoria;
+                                espacioComidaAnimal = cantidadMaxima - comidaAnimalPiscifactoria;
+                                if(espacioComidaVegetal < comidaVegetal){
+                                    comidaVegetal -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += comidaVegetal;
+                                    comidaVegetal = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                                if(espacioComidaAnimal < comidaAnimal){
+                                    comidaAnimal -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria += comidaAnimal;
+                                    comidaAnimal = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Comida general II" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 100){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 100);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 100){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 100);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int comidaVegetal = 100;
+                            int comidaAnimal = 100;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaxima;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaxima = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaxima - comidaVegetalPiscifactoria;
+                                espacioComidaAnimal = cantidadMaxima - comidaAnimalPiscifactoria;
+                                if(espacioComidaVegetal < comidaVegetal){
+                                    comidaVegetal -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += comidaVegetal;
+                                    comidaVegetal = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                                if(espacioComidaAnimal < comidaAnimal){
+                                    comidaAnimal -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria += comidaAnimal;
+                                    comidaAnimal = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Comida general III" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 250){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 250);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 250){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 250);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int comidaVegetal = 250;
+                            int comidaAnimal = 250;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaxima;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaxima = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaxima - comidaVegetalPiscifactoria;
+                                espacioComidaAnimal = cantidadMaxima - comidaAnimalPiscifactoria;
+                                if(espacioComidaVegetal < comidaVegetal){
+                                    comidaVegetal -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += comidaVegetal;
+                                    comidaVegetal = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                                if(espacioComidaAnimal < comidaAnimal){
+                                    comidaAnimal -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria += comidaAnimal;
+                                    comidaAnimal = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Comida general IV" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 500){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 500);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 500){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 500);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int comidaVegetal = 500;
+                            int comidaAnimal = 500;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaxima;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaxima = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaxima - comidaVegetalPiscifactoria;
+                                espacioComidaAnimal = cantidadMaxima - comidaAnimalPiscifactoria;
+                                if(espacioComidaVegetal < comidaVegetal){
+                                    comidaVegetal -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += comidaVegetal;
+                                    comidaVegetal = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                                if(espacioComidaAnimal < comidaAnimal){
+                                    comidaAnimal -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria += comidaAnimal;
+                                    comidaAnimal = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Comida general V" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 1000){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 1000);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaVegetal > 1000){
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + 1000);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int comidaVegetal = 1000;
+                            int comidaAnimal = 1000;
+                            int comidaVegetalPiscifactoria;
+                            int espacioComidaVegetal;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaxima;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                                cantidadMaxima = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaVegetal = cantidadMaxima - comidaVegetalPiscifactoria;
+                                espacioComidaAnimal = cantidadMaxima - comidaAnimalPiscifactoria;
+                                if(espacioComidaVegetal < comidaVegetal){
+                                    comidaVegetal -= espacioComidaVegetal;
+                                    almacenComida.setCantidadComidaVegetal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaVegetalPiscifactoria += comidaVegetal;
+                                    comidaVegetal = 0;
+                                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                                }
+                                if(espacioComidaAnimal < comidaAnimal){
+                                    comidaAnimal -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaxima);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria += comidaAnimal;
+                                    comidaAnimal = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Pienso de peces I" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+                            
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 100){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 100);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int pienso = 100;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaximaAnimal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                cantidadMaximaAnimal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaAnimal = cantidadMaximaAnimal - comidaAnimalPiscifactoria;
+                                if(espacioComidaAnimal < pienso){
+                                    pienso -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaximaAnimal);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria +=  pienso;
+                                    pienso = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Pienso de peces II" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 200){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 200);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int pienso = 200;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaximaAnimal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                cantidadMaximaAnimal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaAnimal = cantidadMaximaAnimal - comidaAnimalPiscifactoria;
+                                if(espacioComidaAnimal < pienso){
+                                    pienso -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaximaAnimal);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria +=  pienso;
+                                    pienso = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Pienso de peces III" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 500){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 500);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int pienso = 500;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaximaAnimal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                cantidadMaximaAnimal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaAnimal = cantidadMaximaAnimal - comidaAnimalPiscifactoria;
+                                if(espacioComidaAnimal < pienso){
+                                    pienso -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaximaAnimal);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria +=  pienso;
+                                    pienso = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Pienso de peces IV" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 1000){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 1000);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int pienso = 1000;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaximaAnimal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                cantidadMaximaAnimal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaAnimal = cantidadMaximaAnimal - comidaAnimalPiscifactoria;
+                                if(espacioComidaAnimal < pienso){
+                                    pienso -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaximaAnimal);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria +=  pienso;
+                                    pienso = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Pienso de peces V" -> {
+                        if(Simulador.simulador.almacenCentral.isDisponible()){
+                            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
+                            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+                            if(cantidadMaximaComida - cantidadComidaAnimal > 2000){
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + 2000);
+                            }
+                            else{
+                                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                            }
+
+                            Simulador.simulador.repartirComida();
+                        }
+                        else{
+                            int pienso = 2000;
+                            int comidaAnimalPiscifactoria;
+                            int espacioComidaAnimal;
+                            int cantidadMaximaAnimal;
+                            AlmacenComida almacenComida;
+
+                            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                                almacenComida = piscifactoria.getAlmacenInicial();
+                                comidaAnimalPiscifactoria = almacenComida.getCantidadComidaAnimal();
+                                cantidadMaximaAnimal = almacenComida.getCapacidadMaximaComida();
+                                espacioComidaAnimal = cantidadMaximaAnimal - comidaAnimalPiscifactoria;
+                                if(espacioComidaAnimal < pienso){
+                                    pienso -= espacioComidaAnimal;
+                                    almacenComida.setCantidadComidaAnimal(cantidadMaximaAnimal);
+                                }
+                                else{
+                                    comidaAnimalPiscifactoria +=  pienso;
+                                    pienso = 0;
+                                    almacenComida.setCantidadComidaAnimal(comidaAnimalPiscifactoria);
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Tanque de mar" -> {
+                        int piscifactoriaSeleccionada = Simulador.simulador.selectPisc();
+                        
+                        if(piscifactoriaSeleccionada != 0){
+                            Piscifactoria piscifactoria = Simulador.simulador.piscifactorias.get(piscifactoriaSeleccionada - 1);
+                            if(piscifactoria instanceof PiscifactoriaMar){
+                                int numeroTanques = piscifactoria.getTanques().size();
+                                if(numeroTanques < 25){
+                                    piscifactoria.getTanques().add(new Tanque(numeroTanques + 1, 100));
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }   
+                    case "Tanque de río" -> {
+                        int piscifactoriaSeleccionada = Simulador.simulador.selectPisc();
+                        
+                        if(piscifactoriaSeleccionada != 0){
+                            Piscifactoria piscifactoria = Simulador.simulador.piscifactorias.get(piscifactoriaSeleccionada - 1);
+                            if(piscifactoria instanceof PiscifactoriaRio){
+                                int numeroTanques = piscifactoria.getTanques().size();
+                                if(numeroTanques < 25){
+                                    piscifactoria.getTanques().add(new Tanque(numeroTanques + 1, 25));
+                                }
+                            }
+                        }
+
+                        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+                        
+                        if(cantidadRecompensa == 1){
+                            recompensa.delete();
+                        }
+                        else{
+                            cantidadRecompensa--;
+                            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                            XMLWriter escritorXML = null;
+                            
+                            try{
+                                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                escritorXML.write(xmlRecompensa);
+                                escritorXML.flush();
+                            }
+                            catch(IOException e){
+                                throw e;
+                            }
+                            finally{
+                                if(escritorXML != null){    
+                                    escritorXML.close();
+                                }
+                            }
+                        }
+                    }
+                    case "Almacén central [A]" ->{
+                        Document xmlParte;
+                        if(partesAlmacenCentral.size() < 4){
+                            boolean existe = false;
+                            for(File parte: partesAlmacenCentral){
+                                xmlParte = lectorXML.read(parte);
+                                if(xmlParte.getRootElement().element("name").getText().equals("Almacén central [A]")){
+                                    existe = true;
+                                }
+                            }
+                            if(!existe){
+                                partesAlmacenCentral.add(recompensa);
+                            }
+                        }
+
+                        if(partesAlmacenCentral.size() == 4){
+                            Simulador.simulador.almacenCentral.setDisponible(true);
+
+                            for(File parte : partesAlmacenCentral){
+                                xmlParte = lectorXML.read(parte);
+                                int cantidadRecompensa = Integer.parseInt(xmlParte.getRootElement().element("quantity").getText());
+                        
+                                if(cantidadRecompensa == 1){
+                                    parte.delete();
+                                }
+                                else{
+                                    cantidadRecompensa--;
+                                    xmlParte.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                                    XMLWriter escritorXML = null;
+                                    
+                                    try{
+                                        escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                        escritorXML.write(xmlParte);
+                                        escritorXML.flush();
+                                    }
+                                    catch(IOException e){
+                                        throw e;
+                                    }
+                                    finally{
+                                        if(escritorXML != null){    
+                                            escritorXML.close();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case "Almacén central [B]" ->{
+                        Document xmlParte;
+                        if(partesAlmacenCentral.size() < 4){
+                            boolean existe = false;
+                            for(File parte: partesAlmacenCentral){
+                                xmlParte = lectorXML.read(parte);
+                                if(xmlParte.getRootElement().element("name").getText().equals("Almacén central [B]")){
+                                    existe = true;
+                                }
+                            }
+                            if(!existe){
+                                partesAlmacenCentral.add(recompensa);
+                            }
+                        }
+
+                        if(partesAlmacenCentral.size() == 4){
+                            Simulador.simulador.almacenCentral.setDisponible(true);
+                            
+                            for(File parte : partesAlmacenCentral){
+                                xmlParte = lectorXML.read(parte);
+                                int cantidadRecompensa = Integer.parseInt(xmlParte.getRootElement().element("quantity").getText());
+                        
+                                if(cantidadRecompensa == 1){
+                                    parte.delete();
+                                }
+                                else{
+                                    cantidadRecompensa--;
+                                    xmlParte.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                                    XMLWriter escritorXML = null;
+                                    
+                                    try{
+                                        escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                        escritorXML.write(xmlParte);
+                                        escritorXML.flush();
+                                    }
+                                    catch(IOException e){
+                                        throw e;
+                                    }
+                                    finally{
+                                        if(escritorXML != null){    
+                                            escritorXML.close();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case "Almacén central [C]" ->{
+                        Document xmlParte;
+                        if(partesAlmacenCentral.size() < 4){
+                            boolean existe = false;
+                            for(File parte: partesAlmacenCentral){
+                                xmlParte = lectorXML.read(parte);
+                                if(xmlParte.getRootElement().element("name").getText().equals("Almacén central [C]")){
+                                    existe = true;
+                                }
+                            }
+                            if(!existe){
+                                partesAlmacenCentral.add(recompensa);
+                            }
+                        }
+
+                        if(partesAlmacenCentral.size() == 4){
+                            Simulador.simulador.almacenCentral.setDisponible(true);
+                            
+                            for(File parte : partesAlmacenCentral){
+                                xmlParte = lectorXML.read(parte);
+                                int cantidadRecompensa = Integer.parseInt(xmlParte.getRootElement().element("quantity").getText());
+                        
+                                if(cantidadRecompensa == 1){
+                                    parte.delete();
+                                }
+                                else{
+                                    cantidadRecompensa--;
+                                    xmlParte.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                                    XMLWriter escritorXML = null;
+                                    
+                                    try{
+                                        escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                        escritorXML.write(xmlParte);
+                                        escritorXML.flush();
+                                    }
+                                    catch(IOException e){
+                                        throw e;
+                                    }
+                                    finally{
+                                        if(escritorXML != null){    
+                                            escritorXML.close();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case "Almacén central [D]" ->{
+                        Document xmlParte;
+                        if(partesAlmacenCentral.size() < 4){
+                            boolean existe = false;
+                            for(File parte: partesAlmacenCentral){
+                                xmlParte = lectorXML.read(parte);
+                                if(xmlParte.getRootElement().element("name").getText().equals("Almacén central [D]")){
+                                    existe = true;
+                                }
+                            }
+                            if(!existe){
+                                partesAlmacenCentral.add(recompensa);
+                            }
+                        }
+
+                        if(partesAlmacenCentral.size() == 4){
+                            Simulador.simulador.almacenCentral.setDisponible(true);
+                            
+                            for(File parte : partesAlmacenCentral){
+                                xmlParte = lectorXML.read(parte);
+                                int cantidadRecompensa = Integer.parseInt(xmlParte.getRootElement().element("quantity").getText());
+                        
+                                if(cantidadRecompensa == 1){
+                                    parte.delete();
+                                }
+                                else{
+                                    cantidadRecompensa--;
+                                    xmlParte.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                                    XMLWriter escritorXML = null;
+                                    
+                                    try{
+                                        escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                        escritorXML.write(xmlParte);
+                                        escritorXML.flush();
+                                    }
+                                    catch(IOException e){
+                                        throw e;
+                                    }
+                                    finally{
+                                        if(escritorXML != null){    
+                                            escritorXML.close();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case "Piscifactoría de mar [A]" -> {
+                        Document xmlParte;
+                        if(partesPiscifactoriaMar.size() < 2){
+                            boolean existe = false;
+                            for(File parte: partesPiscifactoriaMar){
+                                xmlParte = lectorXML.read(parte);
+                                if(xmlParte.getRootElement().element("name").getText().equals("Piscifactoría de mar [A]")){
+                                    existe = true;
+                                }
+                            }
+                            if(!existe){
+                                partesPiscifactoriaMar.add(recompensa);
+                            }
+                        }
+
+                        if(partesPiscifactoriaMar.size() == 2){
+                            System.out.println("Introduzca el nombre de la piscifactoría: ");
+                            Simulador.simulador.piscifactorias.add(new PiscifactoriaMar(SistemaEntrada.entradaTexto()));
+
+                            for(File parte : partesPiscifactoriaMar){
+                                xmlParte = lectorXML.read(parte);
+                                int cantidadRecompensa = Integer.parseInt(xmlParte.getRootElement().element("quantity").getText());
+                        
+                                if(cantidadRecompensa == 1){
+                                    parte.delete();
+                                }
+                                else{
+                                    cantidadRecompensa--;
+                                    xmlParte.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                                    XMLWriter escritorXML = null;
+                                    
+                                    try{
+                                        escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                        escritorXML.write(xmlParte);
+                                        escritorXML.flush();
+                                    }
+                                    catch(IOException e){
+                                        throw e;
+                                    }
+                                    finally{
+                                        if(escritorXML != null){    
+                                            escritorXML.close();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case "Piscifactoría de mar [B]" -> {
+                        Document xmlParte;
+                        if(partesPiscifactoriaMar.size() < 2){
+                            boolean existe = false;
+                            for(File parte: partesPiscifactoriaMar){
+                                xmlParte = lectorXML.read(parte);
+                                if(xmlParte.getRootElement().element("name").getText().equals("Piscifactoría de mar [B]")){
+                                    existe = true;
+                                }
+                            }
+                            if(!existe){
+                                partesPiscifactoriaMar.add(recompensa);
+                            }
+                        }
+
+                        if(partesPiscifactoriaMar.size() == 2){
+                            System.out.println("Introduzca el nombre de la piscifactoría: ");
+                            Simulador.simulador.piscifactorias.add(new PiscifactoriaMar(SistemaEntrada.entradaTexto()));
+
+                            for(File parte : partesPiscifactoriaMar){
+                                xmlParte = lectorXML.read(parte);
+                                int cantidadRecompensa = Integer.parseInt(xmlParte.getRootElement().element("quantity").getText());
+                        
+                                if(cantidadRecompensa == 1){
+                                    parte.delete();
+                                }
+                                else{
+                                    cantidadRecompensa--;
+                                    xmlParte.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                                    XMLWriter escritorXML = null;
+                                    
+                                    try{
+                                        escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                        escritorXML.write(xmlParte);
+                                        escritorXML.flush();
+                                    }
+                                    catch(IOException e){
+                                        throw e;
+                                    }
+                                    finally{
+                                        if(escritorXML != null){    
+                                            escritorXML.close();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case "Piscifactoría de río [A]" -> {
+                        Document xmlParte;
+                        if(partesPiscifactoriaRio.size() < 2){
+                            boolean existe = false;
+                            for(File parte: partesPiscifactoriaRio){
+                                xmlParte = lectorXML.read(parte);
+                                if(xmlParte.getRootElement().element("name").getText().equals("Piscifactoría de río [A]")){
+                                    existe = true;
+                                }
+                            }
+                            if(!existe){
+                                partesPiscifactoriaRio.add(recompensa);
+                            }
+                        }
+
+                        if(partesPiscifactoriaRio.size() == 2){
+                            System.out.println("Introduzca el nombre de la piscifactoría: ");
+                            Simulador.simulador.piscifactorias.add(new PiscifactoriaRio(SistemaEntrada.entradaTexto()));
+
+                            for(File parte : partesPiscifactoriaRio){
+                                xmlParte = lectorXML.read(parte);
+                                int cantidadRecompensa = Integer.parseInt(xmlParte.getRootElement().element("quantity").getText());
+                        
+                                if(cantidadRecompensa == 1){
+                                    parte.delete();
+                                }
+                                else{
+                                    cantidadRecompensa--;
+                                    xmlParte.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                                    XMLWriter escritorXML = null;
+                                    
+                                    try{
+                                        escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                        escritorXML.write(xmlParte);
+                                        escritorXML.flush();
+                                    }
+                                    catch(IOException e){
+                                        throw e;
+                                    }
+                                    finally{
+                                        if(escritorXML != null){    
+                                            escritorXML.close();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    case "Piscifactoría de río [B]" -> {
+                        Document xmlParte;
+                        if(partesPiscifactoriaRio.size() < 2){
+                            boolean existe = false;
+                            for(File parte: partesPiscifactoriaRio){
+                                xmlParte = lectorXML.read(parte);
+                                if(xmlParte.getRootElement().element("name").getText().equals("Piscifactoría de río [B]")){
+                                    existe = true;
+                                }
+                            }
+                            if(!existe){
+                                partesPiscifactoriaRio.add(recompensa);
+                            }
+                        }
+
+                        if(partesPiscifactoriaRio.size() == 2){
+                            System.out.println("Introduzca el nombre de la piscifactoría: ");
+                            Simulador.simulador.piscifactorias.add(new PiscifactoriaRio(SistemaEntrada.entradaTexto()));
+
+                            for(File parte : partesPiscifactoriaRio){
+                                xmlParte = lectorXML.read(parte);
+                                int cantidadRecompensa = Integer.parseInt(xmlParte.getRootElement().element("quantity").getText());
+                        
+                                if(cantidadRecompensa == 1){
+                                    parte.delete();
+                                }
+                                else{
+                                    cantidadRecompensa--;
+                                    xmlParte.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+                                    XMLWriter escritorXML = null;
+                                    
+                                    try{
+                                        escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                                        escritorXML.write(xmlParte);
+                                        escritorXML.flush();
+                                    }
+                                    catch(IOException e){
+                                        throw e;
+                                    }
+                                    finally{
+                                        if(escritorXML != null){    
+                                            escritorXML.close();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }     
+            }
+        }
     }
 }

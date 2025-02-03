@@ -85,7 +85,7 @@ public class SalmonAtlantico extends Carnivoro implements Rio, Mar{
      */
     @Override
     public Pez obtenerPezHijo(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new SalmonAtlantico(false);
     }
 
@@ -95,7 +95,7 @@ public class SalmonAtlantico extends Carnivoro implements Rio, Mar{
      */
     @Override
     public Pez obtenerPezHija(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new SalmonAtlantico(true);
     }
 }

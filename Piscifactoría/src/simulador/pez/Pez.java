@@ -1,8 +1,34 @@
 package simulador.pez;
 
+import java.lang.reflect.Type;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
+import propiedades.AlmacenPropiedades;
+import simulador.pez.carnivoro.Caballa;
+import simulador.pez.carnivoro.Pejerrey;
+import simulador.pez.carnivoro.PercaEuropea;
+import simulador.pez.carnivoro.Robalo;
+import simulador.pez.carnivoro.SalmonAtlantico;
+import simulador.pez.carnivoro.SalmonChinook;
+import simulador.pez.filtrador.ArenqueDelAtlantico;
+import simulador.pez.filtrador.TilapiaDelNilo;
+import simulador.pez.omnivoro.Abadejo;
+import simulador.pez.omnivoro.CarpinTresEspinas;
+import simulador.pez.omnivoro.Dorada;
+import simulador.pez.omnivoro.Sargo;
+
 /**
  * Clase abstracta que representa a un pez.
  */
+@JsonAdapter(Pez.AdaptadorJSON.class)
 public abstract class Pez {
 
     /**
@@ -225,5 +251,182 @@ public abstract class Pez {
         return "Nombre común: " + nombre + "\nNombre científico: " + nombreCientifico + "\nEdad: " + edad 
             + ((sexo) ? "\nSexo: Hembra" : "\nSexo: Macho") + ((fertil) ? "\nFértil: Sí" : "\nFértil: No" + ((vivo) ? "\nVivo: Sí" : "\nVivo: No")
             + ((alimentado) ? "\nAlimentado: Sí" : "\nAlimentado: No") + "\nDías sin reproducirse: " + diasSinReproducirse);
+    }
+
+    /**
+     * Clase que se encarga de adaptar la serialización y deserialización de un pez a JSON.
+     */
+    private class AdaptadorJSON implements JsonSerializer<Pez>, JsonDeserializer<Pez>{
+
+        /**
+         * Se encarga de la deserialización de un objeto Pez.
+         */
+        @Override
+        public Pez deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+
+            JsonObject pezDeserializado = json.getAsJsonObject();
+            JsonObject extras = pezDeserializado.get("extra").getAsJsonObject();
+            
+            switch(extras.get("codigoPez").getAsInt()){
+                case 0 -> {
+                    Abadejo pez = new Abadejo(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+                
+                case 1 -> {
+                    ArenqueDelAtlantico pez = new ArenqueDelAtlantico(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 2 -> {
+                    Caballa pez = new Caballa(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 3 -> {
+                    CarpinTresEspinas pez = new CarpinTresEspinas(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 4 ->{
+                    Dorada pez = new Dorada(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 5 -> {
+                    Pejerrey pez = new Pejerrey(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 6 -> {
+                    PercaEuropea pez = new PercaEuropea(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 7 -> {
+                    Robalo pez = new Robalo(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 8 -> {
+                    SalmonAtlantico pez = new SalmonAtlantico(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 9 -> {
+                    SalmonChinook pez = new SalmonChinook(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                case 10 -> {
+                    Sargo pez = new Sargo(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+
+                default -> {
+                    TilapiaDelNilo pez = new TilapiaDelNilo(pezDeserializado.get("sexo").getAsBoolean());
+                    pez.alimentado = pezDeserializado.get("alimentado").getAsBoolean();
+                    pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
+                    pez.edad = pezDeserializado.get("edad").getAsInt();
+                    pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    return (Pez) pez;
+                }
+            }
+        }
+
+        /**
+         * Se encarga de la serilaización de un objeto Pez.
+         */
+        @Override
+        public JsonElement serialize(Pez src, Type typeOfSrc, JsonSerializationContext context) {
+            int codigoPez;
+
+            if(src instanceof Abadejo){
+                codigoPez = 0;
+            }
+            else if(src instanceof ArenqueDelAtlantico){
+                codigoPez = 1;
+            }
+            else if(src instanceof Caballa){
+                codigoPez = 2;
+            }
+            else if(src instanceof CarpinTresEspinas){
+                codigoPez = 3;
+            }
+            else if(src instanceof Dorada){
+                codigoPez = 4;
+            }
+            else if(src instanceof Pejerrey){
+                codigoPez = 5;
+            }
+            else if(src instanceof PercaEuropea){
+                codigoPez = 6;
+            }
+            else if(src instanceof Robalo){
+                codigoPez = 7;
+            }
+            else if(src instanceof SalmonAtlantico){
+                codigoPez = 8;
+            }
+            else if(src instanceof SalmonChinook){
+                codigoPez = 9;
+            }
+            else if(src instanceof Sargo){
+                codigoPez = 11;
+            }
+            else{
+                codigoPez = 12;
+            }
+            String json = "{\"edad\": " + " \"" + src.edad + "\"" + ", \"sexo\": " + " \"" + src.sexo + "\"" + ", \"vivo\": " + " \"" + src.vivo + "\"" + ", \"maduro\": " + " \"" + (src.edad > AlmacenPropiedades.getPropByName(src.nombre).getMadurez()) + "\"" + 
+            ", \"fertil\": " + " \"" + src.fertil + "\"" + ", \"ciclo\": " + " \"" + ((src.sexo && src.edad > AlmacenPropiedades.getPropByName(src.nombre).getMadurez()) ? (AlmacenPropiedades.getPropByName(src.nombre).getCiclo() - src.diasSinReproducirse) : 0) + "\"" + ", \"alimentado\": "
+            + " \"" + src.alimentado + "\"" + ", \"extra\": {" +"\"codigoPez\" : \"" + codigoPez + "\"" +  " , \"diasSinReproducirse\": " + " \"" + src.diasSinReproducirse + "\"" + "}}";
+            return JsonParser.parseString(json);
+        }
+        
     }
 }

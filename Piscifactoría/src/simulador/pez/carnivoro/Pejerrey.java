@@ -85,7 +85,7 @@ public class Pejerrey extends Carnivoro implements Rio{
      */
     @Override
     public Pez obtenerPezHijo(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new Pejerrey(false);
     }
 
@@ -95,7 +95,7 @@ public class Pejerrey extends Carnivoro implements Rio{
      */
     @Override
     public Pez obtenerPezHija(){
-        Simulador.estadisticas.registrarNacimiento(nombre);
+        Simulador.simulador.estadisticas.registrarNacimiento(nombre);
         return new Pejerrey(true);
     }
 }
