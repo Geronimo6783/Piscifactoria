@@ -5,9 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import simulador.sql.dto.DTOCliente;
 import simulador.sql.dto.DTOPedido;
+import simulador.sql.dto.DTOPedidoUsuarioPez;
 import simulador.sql.dto.DTOPez;
 
 /**
@@ -36,6 +36,18 @@ public class DAOPedidos {
     PreparedStatement consultaPedidos;
 
     /**
+     * Sentencia que elimina todos los pedidos en la tabla Pedidos.
+     */
+    PreparedStatement borradoPedidos;
+
+    /**
+     * Consulta que recupera los pedidos que no han sido realizados al 100% con el nombre
+     * del cliente, el nombre del pedido, el porcentaje de completado del pedido y el número de
+     * referencia del pedido.
+     */
+    PreparedStatement consultaPedidosNoRealizados;
+
+    /**
      * Constructor parametrizado.
      * @param conexion Conexión con la base de datos.
      */
@@ -45,6 +57,11 @@ public class DAOPedidos {
             consultaClientes = conexion.prepareStatement("SELECT * FROM Cliente;");
             consultaPeces = conexion.prepareStatement("SELECT * FROM Pez;");
             consultaPedidos = conexion.prepareStatement("SELECT * FROM Pedido;");
+            borradoPedidos = conexion.prepareStatement("TRUNCATE Pedido;");
+            consultaPedidosNoRealizados = conexion.prepareStatement("SELECT Pedido.Numero_referencia, " + 
+            "Cliente.Nombre, Pez.Nombre, (peces_enviados/peces_solicitados) * 100 FROM Pedido INNER JOIN Cliente" + 
+            " ON Pedido.fk_id_cliente = Cliente.id INNER JOIN Pez ON Pedido.fk_id_pez = Pez.id WHERE " + 
+            "((peces_envidos/peces_solicitados) * 100) != 100 ORDER BY Pez.Nombre ASC;");
         }
         catch(SQLException e){
             System.out.println("No se han podido generar las consultar a la base de datos.");
@@ -127,7 +144,7 @@ public class DAOPedidos {
             resultadoConsulta = consultaPedidos.executeQuery();
 
             while(resultadoConsulta.next()){
-                pedidos.add(new DTOPedido(resultadoConsulta.getInt(1),resultadoConsulta.getInt(2), resultadoConsulta.getInt(3), resultadoConsulta.getInt(4)));
+                pedidos.add(new DTOPedido(resultadoConsulta.getInt(1),resultadoConsulta.getInt(2), resultadoConsulta.getInt(3), resultadoConsulta.getInt(4), resultadoConsulta.getInt(5)));
             }
         }
         catch(SQLException e){
@@ -145,6 +162,52 @@ public class DAOPedidos {
         }
         
         return pedidos;
+    }
+
+    /**
+     * Elimina todos los pedidos almacenados en la tabla pedidos.
+     */
+    public void borrarPedidos(){
+        try{
+            borradoPedidos.execute();
+        }
+        catch(SQLException e){
+            System.out.println("No se han podido eliminar los pedidos de la tabla pedidos.");
+        }
+    }
+
+    /**
+     * Obtiene el número de referencia, el nombre del cliente, el nombre del pez y el porcentaje de completado
+     * de los pedido que no han sido finalizados.
+     * @return Número de referencia, nombre del cliente, nombre del pez y porcentaje de completado de los pedidos que no han 
+     * sido finalizados.
+     */
+    public ArrayList<DTOPedidoUsuarioPez> obtenerPedidoNoFinalizados(){
+        ResultSet resultadosConsulta = null;
+        ArrayList<DTOPedidoUsuarioPez> datos = new ArrayList<>();
+
+        try{
+            resultadosConsulta = consultaPedidosNoRealizados.executeQuery();
+
+            while(resultadosConsulta.next()){
+                datos.add(new DTOPedidoUsuarioPez(resultadosConsulta.getInt(1), resultadosConsulta.getString(2), resultadosConsulta.getString(3), resultadosConsulta.getInt(4)));
+            }
+        }
+        catch(SQLException e){
+            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+        }
+        finally{
+            if(resultadosConsulta != null){
+                try{
+                    resultadosConsulta.close();
+                }
+                catch(SQLException e){
+
+                }
+            }
+        }
+
+        return datos;
     }
 
     /**
@@ -173,10 +236,38 @@ public class DAOPedidos {
         }
 
         try{
+            borradoPedidos.close();
+        }
+        catch(SQLException e){
+
+        }
+
+        try{
             conexion.close();
         }
         catch(SQLException e){
 
         }
+    }
+
+    public static void main(String[] args) {
+        DAOPedidos dao = new DAOPedidos(Conexion.getConexion());
+        ArrayList<DTOCliente> clientes = dao.obtenerClientes();
+        System.out.println("========== Clientes ==========");
+        for(DTOCliente cliente : clientes){
+            System.out.println("Id: " + cliente.getId() + " Nif: " + cliente.getNif() + " Teléfono: " + cliente.getTelefono() + " Nombre: " + cliente.getNombre());
+        }
+        System.out.println("========== Peces ==========");
+        ArrayList<DTOPez> peces = dao.obtenerPeces();
+        for(DTOPez pez : peces){
+            System.out.println(" Id: " + pez.getId() + " Nombre: " + pez.getNombre() + " Nombre científico: " + pez.getNombreCientifico());
+        }
+        System.out.println("========= Pedidos ==========");
+        ArrayList<DTOPedido> pedidos = dao.obtenerPedidos();
+        for(DTOPedido pedido : pedidos){
+            System.out.println("Número refenrencia: " + pedido.getNumeroReferencia() + "Id cliente: " + pedido.getIdCliente() + " Id pez: " + pedido.getIdPez() + " Peces enviados: " + pedido.getPecesEnviados() + " Peces solicitados: " + pedido.getPecesSolicitados());
+        }
+        dao.borrarPedidos();
+        dao.close();
     }
 }

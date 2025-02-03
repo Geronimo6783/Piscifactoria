@@ -5,6 +5,11 @@ package simulador.sql.dto;
  * tabla pedido.
  */
 public class DTOPedido {
+
+    /**
+     * Número de referencia del pedido.
+     */
+    private int numeroReferencia;
     
     /**
      * Id del cliente que realizó el pedido.
@@ -28,16 +33,34 @@ public class DTOPedido {
 
     /**
      * Constructor parametrizado.
+     * @param numeroReferencia Número de referencia del pedido.
      * @param idCliente Id del cliente que realizó el pedido.
      * @param idPez Id del pez del que se ha realizado el pedido.
      * @param pecesSolicitados Número de peces solicitados en el pedido.
      * @param pecesEnviados Número de peces enviados.
      */
-    public DTOPedido(int idCliente, int idPez, int pecesSolicitados, int pecesEnviados) {
+    public DTOPedido(int numeroReferencia, int idCliente, int idPez, int pecesSolicitados, int pecesEnviados) {
+        this.numeroReferencia = numeroReferencia;
         this.idCliente = idCliente;
         this.idPez = idPez;
         this.pecesSolicitados = pecesSolicitados;
         this.pecesEnviados = pecesEnviados;
+    }
+
+    /**
+     * Permite obtener el número de referencia del pedido.
+     * @return Número de referencia del pedido.
+     */
+    public int getNumeroReferencia() {
+        return numeroReferencia;
+    }
+
+    /**
+     * Permite establecer el número de referencia del pedido.
+     * @param numeroReferencia Número de referencia del pedido a establecer.
+     */
+    public void setNumeroReferencia(int numeroReferencia) {
+        this.numeroReferencia = numeroReferencia;
     }
 
     /**

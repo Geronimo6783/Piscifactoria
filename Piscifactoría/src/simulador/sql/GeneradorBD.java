@@ -27,10 +27,10 @@ public class GeneradorBD {
             sentencia = conexion.createStatement();
             sentencia.execute("CREATE TABLE IF NOT EXISTS Cliente(id INT PRIMARY KEY AUTO_INCREMENT, nombre VARCHAR(255), nif CHAR(9), telefono CHAR(12));");
             sentencia.execute("CREATE TABLE IF NOT EXISTS Pez(id INT PRIMARY KEY AUTO_INCREMENT, nombre VARCHAR(255), nombre_cientifico VARCHAR(255))");
-            sentencia.execute("CREATE TABLE IF NOT EXISTS Pedido(fk_id_cliente INT, fk_id_pez INT, peces_solicitadoS BINT, peces_enviados INT, FOREIGN KEY (fk_id_cliente) REFERENCES Cliente(id), FOREIGN KEY (fk_id_pez) REFERENCES Pez(id));");
+            sentencia.execute("CREATE TABLE IF NOT EXISTS Pedido(Numero_referencia INT PRIMARY KEY AUTO_INCREMENT, fk_id_cliente INT, fk_id_pez INT, peces_solicitados INT, peces_enviados INT, FOREIGN KEY (fk_id_cliente) REFERENCES Cliente(id), FOREIGN KEY (fk_id_pez) REFERENCES Pez(id));");
         }
         catch(SQLException e){
-
+            System.out.println("Hubo un problema al generar las tablas.");
         }
         finally{
             if(sentencia != null){
@@ -133,6 +133,7 @@ public class GeneradorBD {
     }
 
     public static void main(String[] args) {
+        GeneradorBD.crearTablas();
         GeneradorBD.insertarClientes();
         GeneradorBD.insertarPeces();
         GeneradorBD.close();
