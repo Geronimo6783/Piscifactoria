@@ -208,7 +208,7 @@ public class DAOPedidos {
      * @return Número de referencia, nombre del cliente, nombre del pez y porcentaje de completado de los pedidos que no han 
      * sido finalizados.
      */
-    public ArrayList<DTOPedidoUsuarioPez> obtenerPedidoNoFinalizados(){
+    public ArrayList<DTOPedidoUsuarioPez> obtenerPedidosNoFinalizados(){
         ResultSet resultadosConsulta = null;
         ArrayList<DTOPedidoUsuarioPez> datos = new ArrayList<>();
 

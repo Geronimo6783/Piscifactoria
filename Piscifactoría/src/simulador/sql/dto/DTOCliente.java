@@ -95,7 +95,7 @@ public class DTOCliente {
 
     /**
      * Permite establecer el nif del cliente.
-     * @param nif Nif del cliente.
+     * @param nif Nif del cliente a establecer.
      */
     public void setNif(String nif) {
         this.nif = nif;
