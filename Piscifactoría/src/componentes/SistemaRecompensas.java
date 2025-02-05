@@ -17,6 +17,10 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.xml.sax.SAXException;
 
+import simulador.Simulador;
+import simulador.piscifactoria.Piscifactoria;
+import simulador.piscifactoria.Piscifactoria.AlmacenComida;
+
 /**
  * Clase que se encarga de gestionar las recompensas.
  */
@@ -1045,5 +1049,85 @@ public class SistemaRecompensas {
         int opcion = GeneradorMenus.generarMenuOperativo(recompensasDisponibles.toArray(recompensasDisponiblesArray), 1, recompensasDisponibles.size());
 
         
+    }
+
+    /**
+     * Reduce la cantidad de una recompensa.
+     * @param xmlRecompensa XML de la recompensa cargado en memoria.
+     * @param recompensa Archivo de la recompensa.
+     */
+    private void reducirRecompensa(Document xmlRecompensa, File recompensa){
+        int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
+
+        if(cantidadRecompensa == 1){
+            recompensa.delete();
+        }
+        else{
+            cantidadRecompensa--;
+            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+            XMLWriter escritorXML = null;
+            
+            try{
+                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa), "UTF-8")), OutputFormat.createPrettyPrint());
+                escritorXML.write(xmlRecompensa);
+                escritorXML.flush();
+            }
+            catch(IOException e){
+                System.out.println("No se ha podido reducir la cantidad de la recompensa.");
+            }
+            finally{
+                if(escritorXML != null){  
+                    try{  
+                        escritorXML.close();
+                    }
+                    catch(IOException e){
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Reclama la recompensa de algas.
+     * @param capsulaAlgas Cantidad de cápsulas de algas a reclamar.
+     */
+    private void reclamarRecompensaAlgas(int capsulasAlgas){
+        if(Simulador.simulador.almacenCentral.isDisponible()){
+            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+
+            if(cantidadMaximaComida - cantidadComidaVegetal > capsulasAlgas){
+                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + capsulasAlgas);
+            }
+            else{
+                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+            }
+
+            Simulador.simulador.repartirComida();
+        }
+        else{
+            int capsulas = capsulasAlgas;
+            int comidaVegetalPiscifactoria;
+            int espacioComidaVegetal;
+            int cantidadMaximaVegetal;
+            AlmacenComida almacenComida;
+
+            for(Piscifactoria piscifactoria : Simulador.simulador.piscifactorias){
+                almacenComida = piscifactoria.getAlmacenInicial();
+                comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
+                cantidadMaximaVegetal = almacenComida.getCapacidadMaximaComida();
+                espacioComidaVegetal = cantidadMaximaVegetal - comidaVegetalPiscifactoria;
+                if(espacioComidaVegetal < capsulas){
+                    capsulas -= espacioComidaVegetal;
+                    almacenComida.setCantidadComidaVegetal(cantidadMaximaVegetal);
+                }
+                else{
+                    comidaVegetalPiscifactoria += capsulas;
+                    capsulas = 0;
+                    almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                }
+            }
+        }
     }
 }

@@ -1739,7 +1739,7 @@ public class Simulador {
     /**
      * Reparte la comida del almacén central equitativamente entre las piscafactorías.
      */
-    private void repartirComida(){
+    public void repartirComida(){
         repartirComidaAnimal();
         repartirComidaVegetal();
     }
