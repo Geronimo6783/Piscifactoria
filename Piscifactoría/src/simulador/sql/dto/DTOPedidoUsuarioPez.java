@@ -30,7 +30,7 @@ public class DTOPedidoUsuarioPez {
 
     /**
      * Constructor parametrizado.
-     * @param numeroReferencia Númerode referencia del pedido.
+     * @param numeroReferencia Número de referencia del pedido.
      * @param nombreCliente Nombre del cliente que realiza el pedido.
      * @param nombrePez Nombre del pez del que se realiza el pedido.
      * @param porcentajeCompletado Porcentaje de completado del pedido.
