@@ -1063,8 +1063,7 @@ public class SistemaRecompensas {
             recompensa.delete();
         }
         else{
-            cantidadRecompensa--;
-            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(cantidadRecompensa));
+            xmlRecompensa.getRootElement().element("quantity").setText(Integer.toString(--cantidadRecompensa));
             XMLWriter escritorXML = null;
             
             try{
@@ -1107,7 +1106,6 @@ public class SistemaRecompensas {
             Simulador.simulador.repartirComida();
         }
         else{
-            int capsulas = capsulasAlgas;
             int comidaVegetalPiscifactoria;
             int espacioComidaVegetal;
             int cantidadMaximaVegetal;
@@ -1118,14 +1116,14 @@ public class SistemaRecompensas {
                 comidaVegetalPiscifactoria = almacenComida.getCantidadComidaVegetal();
                 cantidadMaximaVegetal = almacenComida.getCapacidadMaximaComida();
                 espacioComidaVegetal = cantidadMaximaVegetal - comidaVegetalPiscifactoria;
-                if(espacioComidaVegetal < capsulas){
-                    capsulas -= espacioComidaVegetal;
+                if(espacioComidaVegetal < capsulasAlgas){
+                    capsulasAlgas -= espacioComidaVegetal;
                     almacenComida.setCantidadComidaVegetal(cantidadMaximaVegetal);
                 }
                 else{
-                    comidaVegetalPiscifactoria += capsulas;
-                    capsulas = 0;
+                    comidaVegetalPiscifactoria += capsulasAlgas;
                     almacenComida.setCantidadComidaVegetal(comidaVegetalPiscifactoria);
+                    break;
                 }
             }
         }
