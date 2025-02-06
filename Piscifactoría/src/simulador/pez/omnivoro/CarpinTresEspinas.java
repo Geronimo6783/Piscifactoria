@@ -55,6 +55,9 @@ public class CarpinTresEspinas extends Omnivoro implements Rio{
                     fertil = true;
                 }
             }
+            else{
+                fertil = false;
+            }
         }
         alimentado = false;
     }

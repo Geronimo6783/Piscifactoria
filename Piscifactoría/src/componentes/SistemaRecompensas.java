@@ -1127,23 +1127,18 @@ public class SistemaRecompensas {
         switch(nivel){
             case 1 -> {
                 capsulasAlgas = 100;
-                reducirRecompensa(new File("rewards/algas_1.xml"));
             }
             case 2 -> {
                 capsulasAlgas = 200;
-                reducirRecompensa(new File("rewards/algas_2.xml"));
             }
             case 3 -> {
                 capsulasAlgas = 500;
-                reducirRecompensa(new File("rewards/algas_3.xml"));
             }
             case 4 -> {
                 capsulasAlgas = 1000;
-                reducirRecompensa(new File("rewards/algas_4.xml"));
             }
             case 5 -> {
                 capsulasAlgas = 2000;
-                reducirRecompensa(new File("rewards/algas_5.xml"));
             }
         }
 
@@ -1182,5 +1177,7 @@ public class SistemaRecompensas {
                 }
             }
         }
+
+        reducirRecompensa(new File("rewards/algas_" + nivel + ".xml"));
     }
 }
