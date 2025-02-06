@@ -6,6 +6,41 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DAOPedidos",
+            "request": "launch",
+            "mainClass": "simulador.sql.DAOPedidos",
+            "projectName": "Piscifactoría_ddf4bace"
+        },
+        {
+            "type": "java",
+            "name": "GeneradorBD",
+            "request": "launch",
+            "mainClass": "simulador.sql.GeneradorBD",
+            "projectName": "Piscifactoría_ddf4bace"
+        },
+        {
+            "type": "java",
+            "name": "GeneradorBD",
+            "request": "launch",
+            "mainClass": "simulador.sql.GeneradorBD",
+            "projectName": "Piscifactoría_58b9a4a8"
+        },
+        {
+            "type": "java",
+            "name": "SistemaRecompensas",
+            "request": "launch",
+            "mainClass": "componentes.SistemaRecompensas",
+            "projectName": "Piscifactoría_58b9a4a8"
+        },
+        {
+            "type": "java",
+            "name": "SistemaRecompensa",
+            "request": "launch",
+            "mainClass": "componentes.SistemaRecompensa",
+            "projectName": "Piscifactoría_cc0869e0"
+        },
+        {
+            "type": "java",
             "name": "Simulador",
             "request": "launch",
             "mainClass": "simulador.Simulador",
