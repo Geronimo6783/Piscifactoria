@@ -984,6 +984,9 @@ public class SistemaRecompensas {
         return recompensasDisponibles.toArray(recompensasDisponiblesArray);
     }
 
+    /**
+     * Permite al usuario reclamar un recompensa seleccionada por el desde un menú.
+     */
     public static void reclamarRecompensa(){
         File[] archivos = new File("rewards").listFiles();
         ArrayList<File> recompensas = new ArrayList<>();
@@ -1048,15 +1051,42 @@ public class SistemaRecompensas {
 
         int opcion = GeneradorMenus.generarMenuOperativo(recompensasDisponibles.toArray(recompensasDisponiblesArray), 1, recompensasDisponibles.size());
 
-        
+        String recompensaSeleccionada = recompensasDisponibles.get(opcion - 1);
+
+        switch(recompensaSeleccionada){
+            case "Algas I" -> {
+                reclamarRecompensaAlgas(1);
+            }
+            case "Algas II" -> {
+                reclamarRecompensaAlgas(2);
+            }
+            case "Algas III" -> {
+                reclamarRecompensaAlgas(3);
+            }
+            case "Algas IV" -> {
+                reclamarRecompensaAlgas(4);
+            }
+            case "Algas V" -> {
+                reclamarRecompensaAlgas(5);
+            }
+        }
     }
 
     /**
      * Reduce la cantidad de una recompensa.
-     * @param xmlRecompensa XML de la recompensa cargado en memoria.
      * @param recompensa Archivo de la recompensa.
      */
-    private void reducirRecompensa(Document xmlRecompensa, File recompensa){
+    private static void reducirRecompensa(File recompensa){
+        Document xmlRecompensa = null;
+
+        try{
+            SAXReader lectorXML = new SAXReader();
+            xmlRecompensa = lectorXML.read(recompensa);
+        }
+        catch(DocumentException e){
+            System.out.println("No se ha podido cargar el documento XML.");
+        }
+
         int cantidadRecompensa = Integer.parseInt(xmlRecompensa.getRootElement().element("quantity").getText());
 
         if(cantidadRecompensa == 1){
@@ -1091,7 +1121,32 @@ public class SistemaRecompensas {
      * Reclama la recompensa de algas.
      * @param capsulaAlgas Cantidad de cápsulas de algas a reclamar.
      */
-    private void reclamarRecompensaAlgas(int capsulasAlgas){
+    private static void reclamarRecompensaAlgas(int nivel){
+        int capsulasAlgas = 0;
+
+        switch(nivel){
+            case 1 -> {
+                capsulasAlgas = 100;
+                reducirRecompensa(new File("rewards/algas_1.xml"));
+            }
+            case 2 -> {
+                capsulasAlgas = 200;
+                reducirRecompensa(new File("rewards/algas_2.xml"));
+            }
+            case 3 -> {
+                capsulasAlgas = 500;
+                reducirRecompensa(new File("rewards/algas_3.xml"));
+            }
+            case 4 -> {
+                capsulasAlgas = 1000;
+                reducirRecompensa(new File("rewards/algas_4.xml"));
+            }
+            case 5 -> {
+                capsulasAlgas = 2000;
+                reducirRecompensa(new File("rewards/algas_5.xml"));
+            }
+        }
+
         if(Simulador.simulador.almacenCentral.isDisponible()){
             int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
             int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
