@@ -57,6 +57,9 @@ public class SalmonAtlantico extends Carnivoro implements Rio, Mar{
                     fertil = true;
                 }
             }
+            else{
+                fertil = false;
+            }
         }
         alimentado = false;
     }

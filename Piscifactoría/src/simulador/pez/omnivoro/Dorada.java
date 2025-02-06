@@ -57,6 +57,9 @@ public class Dorada extends Omnivoro implements Rio, Mar{
                     fertil = true;
                 }
             }
+            else{
+                fertil = false;
+            }
         }
         alimentado = false;
     }

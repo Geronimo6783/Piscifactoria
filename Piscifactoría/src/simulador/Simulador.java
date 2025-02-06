@@ -38,6 +38,7 @@ import componentes.SistemaEntrada;
 import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
 import componentes.SistemaRecompensa;
+import componentes.SistemaRecompensas;
 import componentes.Transcripciones;
 import estadisticas.Estadisticas;
 import propiedades.AlmacenPropiedades;
@@ -50,6 +51,7 @@ import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
 import simulador.piscifactoria.*;
 import simulador.piscifactoria.Piscifactoria.AlmacenComida;
+import simulador.sql.GeneradorBD;
 
 public class Simulador {
 
@@ -2116,7 +2118,7 @@ public class Simulador {
                         case 13 -> {simulador.pasarDias();}
                         case 14 -> {System.out.println("Cerrando...");}
                         case 96 -> {Simulador.anadirRecompensa();}
-                        case 97 -> {Simulador.reclamarRecompensas();}
+                        case 97 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 98 -> {simulador.anadirPezAleatorio();}
                         case 99 -> {simulador.anadirMonedasOculto();}
                     }
