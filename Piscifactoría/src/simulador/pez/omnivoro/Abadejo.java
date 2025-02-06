@@ -57,6 +57,9 @@ public class Abadejo extends Omnivoro implements Mar{
                     fertil = true;
                 }
             }
+            else{
+                fertil = false;
+            }
         }
         alimentado = false;
     }

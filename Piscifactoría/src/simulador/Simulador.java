@@ -38,6 +38,7 @@ import componentes.SistemaEntrada;
 import componentes.SistemaFicheros;
 import componentes.SistemaMonedas;
 import componentes.SistemaRecompensa;
+import componentes.SistemaRecompensas;
 import componentes.Transcripciones;
 import estadisticas.Estadisticas;
 import propiedades.AlmacenPropiedades;
@@ -50,6 +51,7 @@ import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
 import simulador.piscifactoria.*;
 import simulador.piscifactoria.Piscifactoria.AlmacenComida;
+import simulador.sql.GeneradorBD;
 
 public class Simulador {
 
@@ -159,8 +161,11 @@ public class Simulador {
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init() {
-        int opcionCarga = 0;
-        int opcionSeleccionPartida = 0;
+        GeneradorBD.crearTablas();
+        GeneradorBD.insertarClientes();
+        GeneradorBD.insertarPeces();
+        GeneradorBD.close();
+        int opcion = 0;
         String nombrePiscifactoria = "";
 
         try{
@@ -181,9 +186,9 @@ public class Simulador {
             File[] archivosGuardado = new File("saves").listFiles();
 
             if(archivosGuardado.length != 0){
-                opcionCarga = GeneradorMenus.generarMenuOperativo(new String[]{"¿Desea cargar una partida guardada?"}, new String[]{"Sí", "No"}, 1, 2);
+                opcion = GeneradorMenus.generarMenuOperativo(new String[]{"¿Desea cargar una partida guardada?"}, new String[]{"Sí", "No"}, 1, 2);
                 
-                if (opcionCarga == 1) {
+                if (opcion == 1) {
                     String[] partidasGuardadas = new String[archivosGuardado.length];
                 
                     for (int i = 0; i < archivosGuardado.length; i++) {
@@ -194,33 +199,20 @@ public class Simulador {
                             partidasGuardadas[i] = nombreArchivo; // Para manejar nombres inesperados
                         }
                     }
-                
-                    opcionSeleccionPartida = GeneradorMenus.generarMenuOperativo(
-                        new String[]{"Escoja la partida que desea cargar:"},
-                        partidasGuardadas,
-                        1,
-                        partidasGuardadas.length
-                    );
-                
-                    
-                    try {
-                        File archivoSeleccionado = archivosGuardado[opcionSeleccionPartida - 1]; 
-                        simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivoSeleccionado);
-                        archivoGuardadoPartida = archivoSeleccionado; 
-                        System.out.println("Partida " + partidasGuardadas[opcionSeleccionPartida - 1] + " cargada correctamente.");
-                    } catch (IOException e) {
-                        System.err.println("Error al cargar la partida seleccionada: " + e.getMessage());
-                        try {
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(
-                                archivoLogsGeneral,
-                                FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(),
-                                "UTF-8"
-                            );
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
+
+                    opcion = GeneradorMenus.generarMenuOperativo(new String[]{"Escoja la partida que desea cargar:"}, partidasGuardadas, 1, partidasGuardadas.length);
+
+                     try{
+                        simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivosGuardado[opcion - 1]);
+                        opcion = -1;         
+                     }
+                     catch(IOException e){
+                        try{
+                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
                         }
-                    } catch (ArrayIndexOutOfBoundsException ex) {
-                        System.err.println("Opción seleccionada no válida.");
+                     catch (IOException ex) {
+
+                     }
                     }
                 }
                 
@@ -235,7 +227,7 @@ public class Simulador {
             }
         }
 
-        if(opcionCarga == 0 || opcionCarga == 2){
+        if(opcion == 0 || opcion == 2){
             simulador = new Simulador();
             simulador.diasPasados = 0;         
             System.out.print("Introduzca el nombre de la entidad, empresa o partida de la simulación: ");
@@ -342,7 +334,7 @@ public class Simulador {
             }
         }
 
-        if(opcionCarga == 0 || opcionCarga == 2){
+        if(opcion == 0 || opcion == 2){
             try{
                 if(SistemaFicheros.isDirectorioVacio("saves")){
                     SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
@@ -2116,7 +2108,7 @@ public class Simulador {
                         case 13 -> {simulador.pasarDias();}
                         case 14 -> {System.out.println("Cerrando...");}
                         case 96 -> {Simulador.anadirRecompensa();}
-                        case 97 -> {Simulador.reclamarRecompensas();}
+                        case 97 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 98 -> {simulador.anadirPezAleatorio();}
                         case 99 -> {simulador.anadirMonedasOculto();}
                     }

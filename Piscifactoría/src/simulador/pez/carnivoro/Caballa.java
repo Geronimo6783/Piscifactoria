@@ -57,6 +57,9 @@ public class Caballa extends Carnivoro implements Mar{
                     fertil = true;
                 }
             }
+            else{
+                fertil = false;
+            }
         }
         alimentado = false;
     }

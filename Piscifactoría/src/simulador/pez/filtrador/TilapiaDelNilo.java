@@ -57,6 +57,9 @@ public class TilapiaDelNilo extends Filtrador implements Rio{
                     fertil = true;
                 }
             }
+            else{
+                fertil = false;
+            }
         }
         alimentado = false;
     }
