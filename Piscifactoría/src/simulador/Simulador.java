@@ -429,7 +429,7 @@ public class Simulador {
      * 
      * @return Opción seleccionada.
      */
-    private int selectPisc() {
+    public int selectPisc() {
         menuPisc();
 
         return SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
@@ -1737,9 +1737,9 @@ public class Simulador {
     }
     
     /**
-     * Reparte la comida del almacén central equitativamente entre las piscafactorías.
+     * Reparte la comida del almacén central equitativamente entre las piscifactorías.
      */
-    private void repartirComida(){
+    public void repartirComida(){
         repartirComidaAnimal();
         repartirComidaVegetal();
     }
