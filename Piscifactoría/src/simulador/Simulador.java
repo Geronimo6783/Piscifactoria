@@ -161,11 +161,8 @@ public class Simulador {
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init() {
-        GeneradorBD.crearTablas();
-        GeneradorBD.insertarClientes();
-        GeneradorBD.insertarPeces();
-        GeneradorBD.close();
-        int opcion = 0;
+        int opcionCarga = 0;
+        int opcionSeleccionPartida = 0;
         String nombrePiscifactoria = "";
 
         try{
