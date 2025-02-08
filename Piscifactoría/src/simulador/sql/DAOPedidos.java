@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import componentes.Logs;
 import simulador.sql.dto.DTOCliente;
 import simulador.sql.dto.DTOPedido;
 import simulador.sql.dto.DTOPedidoUsuarioPez;
@@ -77,7 +79,7 @@ public class DAOPedidos {
             insercionPez = conexion.prepareStatement("INSERT INTO Pez (nombre,nombre_cientifico) VALUES (?,?);");
         }
         catch(SQLException e){
-            System.out.println("No se han podido generar las consultar a la base de datos.");
+            Logs.escribirError("No se han podido generar las consultar a la base de datos.");
         }
     }
 
@@ -97,7 +99,7 @@ public class DAOPedidos {
             }
         }
         catch(SQLException e){
-            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         }
         finally{
             if(resultadoConsulta != null){
@@ -129,7 +131,7 @@ public class DAOPedidos {
             }
         }
         catch(SQLException e){
-            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         }
         finally{
             if(resultadoConsulta != null){
@@ -161,7 +163,7 @@ public class DAOPedidos {
             }
         }
         catch(SQLException e){
-            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         }
         finally{
             if(resultadoConsulta != null){
@@ -188,7 +190,7 @@ public class DAOPedidos {
             borradoPedidos.execute("TRUNCATE Pedido;");
         }
         catch(SQLException e){
-            System.out.println("No se han podido eliminar los pedidos de la tabla pedidos.");
+            Logs.escribirError("No se han podido eliminar los pedidos de la tabla pedidos.");
         }
         finally{
             if(borradoPedidos != null){
@@ -220,7 +222,7 @@ public class DAOPedidos {
             }
         }
         catch(SQLException e){
-            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         }
         finally{
             if(resultadosConsulta != null){
@@ -248,7 +250,7 @@ public class DAOPedidos {
             insercionCliente.executeUpdate();
         }
         catch(SQLException e){
-            System.out.println("No se ha podido insertar el cliente.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         }
     }
 
@@ -265,7 +267,7 @@ public class DAOPedidos {
             insercionPedido.executeUpdate();
         }
         catch(SQLException e){
-            System.out.println("No se ha podido insertar el pedido.");
+            Logs.escribirError("No se ha podido insertar el pedido.");
         }
     }
 
@@ -280,7 +282,7 @@ public class DAOPedidos {
             insercionPez.executeUpdate();
         }
         catch(SQLException e){
-            System.out.println("No se ha podido insertar el pez.");
+            Logs.escribirError("No se ha podido insertar el pez.");
         }
     }
 
