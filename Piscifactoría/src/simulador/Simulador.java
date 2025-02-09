@@ -174,12 +174,7 @@ public class Simulador {
             }
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("No se ha podido crear la carpeta 'saves'." + e.toString());
         }
 
         try{
@@ -204,23 +199,13 @@ public class Simulador {
                         opcion = -1;         
                      }
                      catch(IOException e){
-                        try{
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                        }
-                        catch(IOException ex){
-            
-                        }
+                        Logs.escribirError("No se ha podido cargar la partida.");
                      }
                 }
             }
         }
         catch(Exception e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("Hubo un problema durante el proceso de carga de la partida. " + e.toString());
         }
 
         if(opcion == 0 || opcion == 2){
@@ -250,12 +235,7 @@ public class Simulador {
             }
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("No se ha podido crear la carpeta 'logs'. " + e .toString());
         }
 
         try{
@@ -264,12 +244,7 @@ public class Simulador {
             }
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("No se ha podido crear el fichero '0_errors.log'. " + e.toString());
         }
             
         try{
@@ -278,12 +253,7 @@ public class Simulador {
             }
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("No se ha podido crear la carpeta 'transcripciones'." + e.toString());
         }
 
         try{
@@ -293,12 +263,7 @@ public class Simulador {
             }
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("No se ha podido crear el fichero de transcripciones de la partida. " + e.toString());
         }
 
         try{
@@ -308,12 +273,7 @@ public class Simulador {
             }
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("No se ha crear el fichero de logs de la partida. " + e.toString());
         }
 
         try{
@@ -322,12 +282,7 @@ public class Simulador {
             }
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("No se ha podido crear la carpeta 'rewards'. " + e.toString());
         }
 
         if(opcion == 0 || opcion == 2){
@@ -343,12 +298,7 @@ public class Simulador {
                                 SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
                                 archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
                             }catch(IOException e){
-                                try{
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                                }
-                                catch(IOException ex){
-                    
-                                }
+                                Logs.escribirError("No se ha podido crear el archivo de guardado de la partida. " + e.toString());
                             }
                             
                         }
@@ -357,12 +307,7 @@ public class Simulador {
                         }
                     }
                 catch(IOException e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                    }
-                    catch(IOException ex){
-            
-                    }
+                    Logs.escribirError("No se ha podido comprobar la existencia del archivo de guardado de la partida. " + e.toString());
                 }
                 }
 
@@ -370,21 +315,11 @@ public class Simulador {
                     LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
                 }
                 catch(IOException e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                    }
-                    catch(IOException ex){
-                        
-                    }
+                    Logs.escribirError("No se ha podido guardar la partida. " + e.toString());
                 }
             }
             catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                }
-                catch(IOException ex){
-
-                }
+                Logs.escribirError("No se ha podido crear o comprobar la existencia de 'saves'. " + e.toString());
             }
         }
 
