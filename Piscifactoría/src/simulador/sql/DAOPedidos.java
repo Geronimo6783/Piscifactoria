@@ -79,10 +79,9 @@ public class DAOPedidos {
             consultaPeces = conexion.prepareStatement("SELECT * FROM Pez;");
             consultaPedidos = conexion.prepareStatement("SELECT * FROM Pedido;");
             consultaPedidosNoRealizados = conexion.prepareStatement("SELECT Pedido.Numero_referencia, " +
-                    "Cliente.Nombre, Pez.Nombre, (peces_enviados/peces_solicitados) * 100 FROM Pedido INNER JOIN Cliente"
-                    +
-                    " ON Pedido.fk_id_cliente = Cliente.id INNER JOIN Pez ON Pedido.fk_id_pez = Pez.id WHERE " +
-                    "((peces_envidos/peces_solicitados) * 100) != 100 ORDER BY Pez.Nombre ASC;");
+                    "Cliente.Nombre, Pez.Nombre, peces_enviados, peces_solicitados, (peces_enviados/peces_solicitados) * 100 FROM Pedido INNER JOIN Cliente"
+                    + " ON Pedido.fk_id_cliente = Cliente.id INNER JOIN Pez ON Pedido.fk_id_pez = Pez.id WHERE " +
+                    "((peces_enviados/peces_solicitados) * 100) != 100 ORDER BY Pez.Nombre ASC;");
             insercionCliente = conexion.prepareStatement("INSERT INTO Cliente (nombre,nif,telefono) VALUES (?,?,?);");
             insercionPedido = conexion.prepareStatement(
                     "INSERT INTO Pedido (fk_id_cliente,fk_id_pez,peces_solicitados,peces_enviados) VALUES (?,?,?,?);");
@@ -234,6 +233,7 @@ public class DAOPedidos {
                         resultadosConsulta.getInt(6)));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         } finally {
             if (resultadosConsulta != null) {
@@ -335,6 +335,13 @@ public class DAOPedidos {
         try {
             consultaPedidos.close();
         } catch (SQLException e) {
+
+        }
+
+        try{
+            consultaPedidosNoRealizados.close();
+        }
+        catch(SQLException e){
 
         }
 
