@@ -175,7 +175,6 @@ public class Simulador {
         GeneradorBD.crearTablas();
         GeneradorBD.insertarClientes();
         GeneradorBD.insertarPeces();
-        GeneradorBD.close();
         int opcion = 0;
         String nombrePiscifactoria = "";
 
@@ -360,7 +359,7 @@ public class Simulador {
         String[] opcionesMenuPrincipal = { "Estado general", "Estado piscifactoría", "Estado tanques", "Informes",
                 "Ictiopedia", "Pasar día",
                 "Comprar comida", "Comprar peces", "Vender peces", "Limpiar tanques", "Vaciar tanque", "Mejorar",
-                "Pasar varios días", "Reclamar recompensa", "Salir" };
+                "Pasar varios días", "Reclamar recompensa", "Gestionar pedidos no finalizados", "Salir" };
         GeneradorMenus.generarMenu(opcionesMenuPrincipal, 1);
     }
 
@@ -2133,8 +2132,8 @@ public class Simulador {
 
     /**
      * Gestiona los pedidos no finalizados, permitiendo seleccionar un pedido,
-     * asignar peces maduros de un tanque y
-     * actualizar la base de datos con los peces enviados y el pago.
+     * asignar peces maduros de un tanque y actualizar la base de datos con los 
+     * peces enviados y el pago.
      */
     public void gestionarPedidosNoFinalizados() {
         DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
@@ -2279,9 +2278,9 @@ public class Simulador {
             init();
 
             int opcion = 0;
-            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 96, 97, 98, 99 };
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 96, 97, 98, 99 };
 
-            while (opcion != 15) {
+            while (opcion != 16) {
 
                 try {
                     System.out.println("Día actual: " + (simulador.diasPasados + 1));
@@ -2304,7 +2303,8 @@ public class Simulador {
                         case 12 -> {simulador.upgrade();}
                         case 13 -> {simulador.pasarDias();}
                         case 14 -> {SistemaRecompensas.reclamarRecompensa();}
-                        case 15 -> {System.out.println("Cerrando...");}
+                        case 15 -> {simulador.gestionarPedidosNoFinalizados();}
+                        case 16 -> {System.out.println("Cerrando...");}
                         case 96 -> {Simulador.anadirRecompensa();}
                         case 97 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 98 -> {simulador.anadirPezAleatorio();}
@@ -2326,6 +2326,8 @@ public class Simulador {
             catch(IOException e){
                 Logs.escribirError("Hubo un error al guardar la partida. " + e.toString());
             }
+
+            Conexion.close();
         }
         catch(Exception e){
             Logs.escribirError("Hubo un error durante la ejecución del programa. " + e.toString());
@@ -2743,7 +2745,7 @@ public class Simulador {
                             } catch (IOException e) {
                                 throw e;
                             } finally {
-                                if (escritorXML != null) {
+                                if (escritorXML != null) {                           
                                     escritorXML.close();
                                 }
                             }
