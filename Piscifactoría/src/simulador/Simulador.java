@@ -2290,7 +2290,6 @@ public class Simulador {
 
                     opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
 
-<<<<<<< HEAD
                     switch (opcion) {
                         case 1 -> {
                             simulador.showGeneralStatus();
@@ -2349,28 +2348,6 @@ public class Simulador {
                         case 99 -> {
                             simulador.anadirMonedasOculto();
                         }
-=======
-                    switch(opcion){
-                        case 1 -> {simulador.showGeneralStatus();}
-                        case 2 -> {simulador.showSpecificStatus();}
-                        case 3 -> {simulador.mostrarEstadoTanque();}
-                        case 4 -> {simulador.showStats();}
-                        case 5 -> {Simulador.showIctio();}
-                        case 6 -> {simulador.nextDay();}
-                        case 7 -> {simulador.addFood();}
-                        case 8 -> {simulador.addFish();}
-                        case 9 -> {simulador.sell();}
-                        case 10 -> {simulador.cleanTank();}
-                        case 11 -> {simulador.emptyTank();}
-                        case 12 -> {simulador.upgrade();}
-                        case 13 -> {simulador.pasarDias();}
-                        case 14 -> {SistemaRecompensas.reclamarRecompensa();}
-                        case 15 -> {System.out.println("Cerrando...");}
-                        case 96 -> {Simulador.anadirRecompensa();}
-                        case 97 -> {SistemaRecompensas.reclamarRecompensa();}
-                        case 98 -> {simulador.anadirPezAleatorio();}
-                        case 99 -> {simulador.anadirMonedasOculto();}
->>>>>>> 5f4630a2f8c860e049dd1b1d786a9ddac6b3be7f
                     }
                 }
                 catch(Exception e){
