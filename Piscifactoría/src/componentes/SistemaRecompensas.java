@@ -1250,7 +1250,7 @@ public class SistemaRecompensas {
     /**
      * Reclama la recompensa de algas.
      * 
-     * @param capsulaAlgas Cantidad de cápsulas de algas a reclamar.
+     * @param nivel Nivel de la recompensa a reclamar
      */
     private static void reclamarRecompensaAlgas(int nivel) {
         int capsulasAlgas = 0;
@@ -1310,7 +1310,7 @@ public class SistemaRecompensas {
     /**
      * Reclama la recompensa de pienso.
      * 
-     * @param capsulaPienso Cantidad de cápsulas de pienso a reclamar.
+     * @param nivel Nivel de la recompensa a reclamar
      */
     private static void reclamarRecompensaPienso(int nivel) {
         int capsulasPienso = 0;
@@ -1370,7 +1370,7 @@ public class SistemaRecompensas {
     /**
      * Reclama la recompensa de comida general.
      * 
-     * @param capsulaComida Cantidad de cápsulas de comida general a reclamar.
+     * @param nivel Nivel de la recompensa a reclamar
      */
     private static void reclamarRecompensaComida(int nivel) {
         int capsulasComida = 0;
@@ -1448,7 +1448,7 @@ public class SistemaRecompensas {
     /**
      * Reclama la recompensa de monedas.
      * 
-     * @param capsulaMonedas Cantidad de cápsulas de monedas a reclamar.
+     * @param nivel Nivel de la recompensa a reclamar
      */
     private static void reclamarRecompensaMonedas(int nivel) {
         int capsulasMonedas = 0;
