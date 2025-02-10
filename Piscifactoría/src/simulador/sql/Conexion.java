@@ -52,7 +52,7 @@ public class Conexion {
             propiedadesConexion.put("user", USER);
             propiedadesConexion.put("password", PASSWORD);
             try{
-                conexion = DriverManager.getConnection("jdbc:mysql://" + SERVER + ":" + PORT + "/" + BD, propiedadesConexion);
+                conexion = DriverManager.getConnection("jdbc:mysql://" + SERVER + ":" + PORT + "/" + BD + "?rewriteBatchedStatements=true", propiedadesConexion);
             }
             catch(SQLException e){
                 Logs.escribirError("No se pudo establecer la conexión con la base de datos.");

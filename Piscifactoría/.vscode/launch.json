@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Simulador",
+            "request": "launch",
+            "mainClass": "simulador.Simulador",
+            "projectName": "Piscifactoría_2392e8ad"
+        },
+        {
+            "type": "java",
             "name": "DAOPedidos",
             "request": "launch",
             "mainClass": "simulador.sql.DAOPedidos",

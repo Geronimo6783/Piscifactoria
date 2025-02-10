@@ -242,6 +242,7 @@ public class Simulador {
                     AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                     AlmacenPropiedades.TILAPIA_NILO.getNombre() };
             simulador.estadisticas = new Estadisticas(simulador.pecesImplementados);
+            //simulador.generarPedidosAutomaticamente(0);
         }
 
         try {
@@ -2330,6 +2331,9 @@ public class Simulador {
                         case 13 -> {
                             simulador.pasarDias();
                         }
+                       // case 14 -> {
+                        //    simulador.gestionarPedidosNoFinalizados();
+                        //}
                         case 14 -> {
                             System.out.println("Cerrando...");
                         }
