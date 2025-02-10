@@ -26,6 +26,33 @@ public class Logs {
     }
 
     /**
+     * Permite la escritura de un error en el fichero de errores generales.
+     * @param error Error a escribir.
+     */
+    public static void escribirError(String error){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("logs/0_errors.log"), true)));
+            buferEscritura.append(obtenerFechaHora() + " " + error);
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("No se ha podido escribir en el fichero de errores.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    /**
      * Inicia el log de una partida del sistema.
      * @param partida Nombre de la partida.
      * @param piscifactoria Piscifactoría inicial de la partida.

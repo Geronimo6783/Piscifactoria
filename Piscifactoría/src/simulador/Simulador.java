@@ -1,13 +1,10 @@
 package simulador;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,9 +28,7 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import componentes.FechaTiempoLocal;
 import componentes.GeneradorMenus;
-import componentes.LecturaEscrituraFicherosPlanos;
 import componentes.LecturaEscrituraJSON;
 import componentes.Logs;
 import componentes.SistemaEntrada;
@@ -188,13 +183,9 @@ public class Simulador {
             if (!SistemaFicheros.existeDirectorio("saves")) {
                 SistemaFicheros.crearCarpeta("saves");
             }
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("No se ha podido crear la carpeta 'saves'." + e.toString());
         }
 
         try {
@@ -220,25 +211,16 @@ public class Simulador {
 
                     try {
                         simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivosGuardado[opcion - 1]);
-                        opcion = -1;
-                    } catch (IOException e) {
-                        try {
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(
-                                    archivoLogsGeneral,
-                                    FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                        } catch (IOException ex) {
-
-                        }
-                    }
+                        opcion = -1;         
+                     }
+                     catch(IOException e){
+                        Logs.escribirError("No se ha podido cargar la partida.");
+                     }
                 }
             }
-        } catch (Exception e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(Exception e){
+            Logs.escribirError("Hubo un problema durante el proceso de carga de la partida. " + e.toString());
         }
 
         if (opcion == 0 || opcion == 2) {
@@ -266,39 +248,27 @@ public class Simulador {
             if (!SistemaFicheros.existeDirectorio("logs")) {
                 SistemaFicheros.crearCarpeta("logs");
             }
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("No se ha podido crear la carpeta 'logs'. " + e .toString());
         }
 
         try {
             if (!SistemaFicheros.existeArhivo("logs/0_errors.log")) {
                 SistemaFicheros.crearArchivo("logs/0_errors.log");
             }
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("No se ha podido crear el fichero '0_errors.log'. " + e.toString());
         }
 
         try {
             if (!SistemaFicheros.existeDirectorio("transcripciones")) {
                 SistemaFicheros.crearCarpeta("transcripciones");
             }
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("No se ha podido crear la carpeta 'transcripciones'." + e.toString());
         }
 
         try {
@@ -307,13 +277,9 @@ public class Simulador {
                 archivoTranscripcionesPartida = new Transcripciones(
                         new File("transcripciones/" + simulador.nombre + ".tr"));
             }
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("No se ha podido crear el fichero de transcripciones de la partida. " + e.toString());
         }
 
         try {
@@ -321,26 +287,18 @@ public class Simulador {
                 SistemaFicheros.crearArchivo("logs/" + simulador.nombre + ".log");
                 archivoLogPartida = new Logs(new File("logs/" + simulador.nombre + ".log"));
             }
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("No se ha crear el fichero de logs de la partida. " + e.toString());
         }
 
         try {
             if (!SistemaFicheros.existeDirectorio("rewards")) {
                 SistemaFicheros.crearCarpeta("rewards");
             }
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("No se ha podido crear la carpeta 'rewards'. " + e.toString());
         }
 
         if (opcion == 0 || opcion == 2) {
@@ -354,48 +312,27 @@ public class Simulador {
                             try {
                                 SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
                                 archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
-                            } catch (IOException e) {
-                                try {
-                                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(
-                                            archivoLogsGeneral,
-                                            FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(),
-                                            "UTF-8");
-                                } catch (IOException ex) {
-
-                                }
+                            }catch(IOException e){
+                                Logs.escribirError("No se ha podido crear el archivo de guardado de la partida. " + e.toString());
                             }
 
                         } else {
                             archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
                         }
-                    } catch (IOException e) {
-                        try {
-                            LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(
-                                    archivoLogsGeneral,
-                                    FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                        } catch (IOException ex) {
-
-                        }
-                    }
+                    }  catch(IOException e){
+                    Logs.escribirError("No se ha podido comprobar la existencia del archivo de guardado de la partida. " + e.toString());
+                }
                 }
 
                 try {
                     LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-                } catch (IOException e) {
-                    try {
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                                FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                    } catch (IOException ex) {
-
-                    }
                 }
-            } catch (IOException e) {
-                try {
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                            FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                } catch (IOException ex) {
-
+                catch(IOException e){
+                    Logs.escribirError("No se ha podido guardar la partida. " + e.toString());
                 }
+            }
+            catch(IOException e){
+                Logs.escribirError("No se ha podido crear o comprobar la existencia de 'saves'. " + e.toString());
             }
         }
 
@@ -583,13 +520,9 @@ public class Simulador {
                 case 11 -> mostrarInformacionPez(AlmacenPropiedades.SARGO);
                 case 12 -> mostrarInformacionPez(AlmacenPropiedades.TILAPIA_NILO);
             }
-        } catch (Exception e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(Exception e){
+            Logs.escribirError("Hubo un problema a la hora de mostrar la información de un pez. " + e.toString());
         }
     }
 
@@ -635,13 +568,9 @@ public class Simulador {
 
         try {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("Hubo un problema al guardar la partida. " + e.toString());
         }
     }
 
@@ -1240,7 +1169,6 @@ public class Simulador {
         if (piscifactoriaSeleccionada != 0) {
             Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
             int pecesAntes = piscifactoria.getPecesTotales();
-            int monedasAntes = sistemaMonedas.getMonedas();
 
             piscifactoria.sellFish();
 
@@ -1718,13 +1646,9 @@ public class Simulador {
 
         try {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-        } catch (IOException e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
-            }
+        }
+        catch(IOException e){
+            Logs.escribirError("Hubo un error al guardar la partida. " + e.toString());
         }
     }
 
@@ -2422,13 +2346,9 @@ public class Simulador {
                             simulador.anadirMonedasOculto();
                         }
                     }
-                } catch (Exception e) {
-                    try {
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                                FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                    } catch (IOException ex) {
-
-                    }
+                }
+                catch(Exception e){
+                    Logs.escribirError("Hubo un error en el menú principal. " + e.toString());
                 }
             }
 
@@ -2438,21 +2358,13 @@ public class Simulador {
 
             try {
                 LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-            } catch (IOException e) {
-                try {
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                            FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                } catch (IOException ex) {
-
-                }
             }
-        } catch (Exception e) {
-            try {
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral,
-                        FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            } catch (IOException ex) {
-
+            catch(IOException e){
+                Logs.escribirError("Hubo un error al guardar la partida. " + e.toString());
             }
+        }
+        catch(Exception e){
+            Logs.escribirError("Hubo un error durante la ejecución del programa. " + e.toString());
         }
     }
 

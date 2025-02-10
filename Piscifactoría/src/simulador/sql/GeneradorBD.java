@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import componentes.Logs;
 import simulador.sql.dto.DTOCliente;
 import simulador.sql.dto.DTOPez;
 
@@ -33,7 +35,7 @@ public class GeneradorBD {
             sentencia.execute("CREATE TABLE IF NOT EXISTS Pedido(Numero_referencia INT PRIMARY KEY AUTO_INCREMENT, fk_id_cliente INT, fk_id_pez INT, peces_solicitados INT, peces_enviados INT, FOREIGN KEY (fk_id_cliente) REFERENCES Cliente(id), FOREIGN KEY (fk_id_pez) REFERENCES Pez(id));");
         }
         catch(SQLException e){
-            System.out.println("Hubo un problema al generar las tablas.");
+            Logs.escribirError("Hubo un problema al generar las tablas.");
         }
         finally{
             if(sentencia != null){
@@ -90,7 +92,7 @@ public class GeneradorBD {
             sentencia.executeBatch();
         }
         catch(SQLException e){
-            System.out.println("Hubo un problema al insertar los datos en la base de datos.");
+            Logs.escribirError("Hubo un problema al insertar los datos en la base de datos.");
         }
         finally{
             if(sentencia != null){
@@ -150,7 +152,7 @@ public class GeneradorBD {
             sentencia.executeBatch();
         }
         catch(SQLException e){
-            System.out.println("Hubo un problema al insertar los datos en la base de datos.");
+            Logs.escribirError("Hubo un problema al insertar los datos en la base de datos.");
         }
         finally{
             if(sentencia != null){

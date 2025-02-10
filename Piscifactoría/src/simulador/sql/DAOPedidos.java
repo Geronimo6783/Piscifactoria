@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import componentes.Logs;
 import simulador.sql.dto.DTOCliente;
 import simulador.sql.dto.DTOPedido;
 import simulador.sql.dto.DTOPedidoUsuarioPez;
@@ -88,7 +90,7 @@ public class DAOPedidos {
             actualizarPedido = conexion.prepareStatement(
                     "UPDATE Pedido SET peces_enviados = ? WHERE Numero_referencia = ?;");
         } catch (SQLException e) {
-            System.out.println("No se han podido generar las consultar a la base de datos.");
+            Logs.escribirError("No se han podido generar las consultar a la base de datos.");
         }
     }
 
@@ -110,7 +112,7 @@ public class DAOPedidos {
                         resultadoConsulta.getString(3), resultadoConsulta.getString(4)));
             }
         } catch (SQLException e) {
-            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         } finally {
             if (resultadoConsulta != null) {
                 try {
@@ -142,7 +144,7 @@ public class DAOPedidos {
                         resultadoConsulta.getString(3)));
             }
         } catch (SQLException e) {
-            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         } finally {
             if (resultadoConsulta != null) {
                 try {
@@ -174,7 +176,7 @@ public class DAOPedidos {
                         resultadoConsulta.getInt(3), resultadoConsulta.getInt(4), resultadoConsulta.getInt(5)));
             }
         } catch (SQLException e) {
-            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         } finally {
             if (resultadoConsulta != null) {
                 try {
@@ -198,7 +200,7 @@ public class DAOPedidos {
             borradoPedidos = conexion.createStatement();
             borradoPedidos.execute("TRUNCATE Pedido;");
         } catch (SQLException e) {
-            System.out.println("No se han podido eliminar los pedidos de la tabla pedidos.");
+            Logs.escribirError("No se han podido eliminar los pedidos de la tabla pedidos.");
         } finally {
             if (borradoPedidos != null) {
                 try {
@@ -232,7 +234,7 @@ public class DAOPedidos {
                         resultadosConsulta.getInt(6)));
             }
         } catch (SQLException e) {
-            System.out.println("No se ha podido realizar la consulta a la base de datos.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         } finally {
             if (resultadosConsulta != null) {
                 try {
@@ -262,7 +264,7 @@ public class DAOPedidos {
                 System.out.println("No se encontró el pedido con número de referencia: " + numeroReferencia);
             }
         } catch (SQLException e) {
-            System.out.println("Error al actualizar los peces enviados en el pedido: " + e.getMessage());
+            Logs.escribirError("No se ha podido realizar actualizar el pedido.");
         }
     }
 
@@ -278,7 +280,7 @@ public class DAOPedidos {
             insercionCliente.setString(3, cliente.getTelefono());
             insercionCliente.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("No se ha podido insertar el cliente.");
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         }
     }
 
@@ -295,7 +297,7 @@ public class DAOPedidos {
             insercionPedido.setInt(4, pedido.getPecesEnviados());
             insercionPedido.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("No se ha podido insertar el pedido.");
+            Logs.escribirError("No se ha podido insertar el pedido.");
         }
     }
 
@@ -310,7 +312,7 @@ public class DAOPedidos {
             insercionPez.setString(2, pez.getNombreCientifico());
             insercionPez.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("No se ha podido insertar el pez.");
+            Logs.escribirError("No se ha podido insertar el pez.");
         }
     }
 
