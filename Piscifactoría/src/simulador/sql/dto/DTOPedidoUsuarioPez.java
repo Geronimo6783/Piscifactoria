@@ -24,27 +24,42 @@ public class DTOPedidoUsuarioPez {
     private String nombrePez;
 
     /**
+     * Número de peces enviados.
+     */
+    private int pecesEnviados;
+
+    /**
+     * Número de peces solicitados
+     */
+    private int pecesSolicitados;
+
+    /**
      * Porcentaje de completado del pedido.
      */
     private double porcentajeCompletado;
 
     /**
      * Constructor parametrizado.
-     * @param numeroReferencia Número de referencia del pedido.
-     * @param nombreCliente Nombre del cliente que realiza el pedido.
-     * @param nombrePez Nombre del pez del que se realiza el pedido.
+     * 
+     * @param numeroReferencia     Número de referencia del pedido.
+     * @param nombreCliente        Nombre del cliente que realiza el pedido.
+     * @param nombrePez            Nombre del pez del que se realiza el pedido.
      * @param porcentajeCompletado Porcentaje de completado del pedido.
      */
-    public DTOPedidoUsuarioPez(int numeroReferencia, String nombreCliente, String nombrePez,
+    public DTOPedidoUsuarioPez(int numeroReferencia, String nombreCliente, String nombrePez, int pecesEnviados,
+            int pecesSolicitados,
             double porcentajeCompletado) {
         this.numeroReferencia = numeroReferencia;
         this.nombreCliente = nombreCliente;
         this.nombrePez = nombrePez;
+        this.pecesEnviados = pecesEnviados;
+        this.pecesSolicitados = pecesSolicitados;
         this.porcentajeCompletado = porcentajeCompletado;
     }
 
     /**
      * Permite obtener el número de referencia del pedido.
+     * 
      * @return Número de referencia del pedido.
      */
     public int getNumeroReferencia() {
@@ -53,6 +68,7 @@ public class DTOPedidoUsuarioPez {
 
     /**
      * Permite establecer el número de referencia del pedido.
+     * 
      * @param numeroReferencia Número de referencia del pedido a establecer.
      */
     public void setNumeroReferencia(int numeroReferencia) {
@@ -61,6 +77,7 @@ public class DTOPedidoUsuarioPez {
 
     /**
      * Permite obtener el nombre del cliente que realiza el pedido.
+     * 
      * @return Nombre del cliente que realiza el pedido.
      */
     public String getNombreCliente() {
@@ -69,6 +86,7 @@ public class DTOPedidoUsuarioPez {
 
     /**
      * Permite establecer el nombre del cliente que realiza el pedido.
+     * 
      * @param nombreCliente Nombre del cliente que realiza el pedido a establecer.
      */
     public void setNombreCliente(String nombreCliente) {
@@ -77,6 +95,7 @@ public class DTOPedidoUsuarioPez {
 
     /**
      * Permite obtener el nombre del pez del que se realiza el pedido.
+     * 
      * @return Nombre del pez del que se realiza el pedido.
      */
     public String getNombrePez() {
@@ -85,6 +104,7 @@ public class DTOPedidoUsuarioPez {
 
     /**
      * Permite establecer el nombre del pez del que se realiza el pedido.
+     * 
      * @param nombrePez Nombre del pez del que se realiza el pedido a establecer.
      */
     public void setNombrePez(String nombrePez) {
@@ -92,7 +112,44 @@ public class DTOPedidoUsuarioPez {
     }
 
     /**
+     * Obtiene la cantidad de peces enviados en el pedido.
+     * 
+     * @return el número de peces enviados.
+     */
+    public int getPecesEnviados() {
+        return pecesEnviados;
+    }
+
+    /**
+     * Establece la cantidad de peces enviados en el pedido.
+     * 
+     * @param pecesEnviados el número de peces enviados a asignar.
+     */
+    public void setPecesEnviados(int pecesEnviados) {
+        this.pecesEnviados = pecesEnviados;
+    }
+
+    /**
+     * Obtiene la cantidad de peces solicitados en el pedido.
+     * 
+     * @return el número de peces solicitados.
+     */
+    public int getPecesSolicitados() {
+        return pecesSolicitados;
+    }
+
+    /**
+     * Establece la cantidad de peces solicitados en el pedido.
+     * 
+     * @param pecesSolicitados el número de peces solicitados a asignar.
+     */
+    public void setPecesSolicitados(int pecesSolicitados) {
+        this.pecesSolicitados = pecesSolicitados;
+    }
+
+    /**
      * Permite obtener el porcentaje de completado del pedido.
+     * 
      * @return Porcentaje de completado del pedido.
      */
     public double getPorcentajeCompletado() {
@@ -101,6 +158,7 @@ public class DTOPedidoUsuarioPez {
 
     /**
      * Permite establecer el porcentaje de completado del pedido.
+     * 
      * @param porcentajeCompletado Porcentaje de completado del pedido a establecer.
      */
     public void setPorcentajeCompletado(double porcentajeCompletado) {
