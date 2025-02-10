@@ -22,6 +22,7 @@ import simulador.Tanque;
 import simulador.piscifactoria.Piscifactoria;
 import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 import simulador.piscifactoria.PiscifactoriaMar;
+import simulador.piscifactoria.PiscifactoriaRio;
 
 /**
  * Clase que se encarga de gestionar las recompensas.
@@ -1102,15 +1103,15 @@ public class SistemaRecompensas {
         }
 
         if (recompensasAlmacenCentral.size() == 4) {
-            recompensasDisponibles.add("Almacén central");
+            recompensasDisponibles.add("Almacen central");
         }
 
         if (recompensasPiscifactoriaMar.size() == 2) {
-            recompensasDisponibles.add("Piscifactoría de mar");
+            recompensasDisponibles.add("Piscifactoria de mar");
         }
 
         if (recompensasPiscifactoriaRio.size() == 2) {
-            recompensasDisponibles.add("Piscifactoría de río");
+            recompensasDisponibles.add("Piscifactoria de rio");
         }
 
         Collections.sort(recompensasDisponibles);
@@ -1137,6 +1138,66 @@ public class SistemaRecompensas {
             }
             case "Algas V" -> {
                 reclamarRecompensaAlgas(5);
+            }
+            case "Monedas I" -> {
+                reclamarRecompensaMonedas(1);
+            }
+            case "Monedas II" -> {
+                reclamarRecompensaMonedas(2);
+            }
+            case "Monedas III" -> {
+                reclamarRecompensaMonedas(3);
+            }
+            case "Monedas IV" -> {
+                reclamarRecompensaMonedas(4);
+            }
+            case "Monedas V" -> {
+                reclamarRecompensaMonedas(5);
+            }
+            case "Comida I" -> {
+                reclamarRecompensaComida(1);
+            }
+            case "Comida II" -> {
+                reclamarRecompensaComida(2);
+            }
+            case "Comida III" -> {
+                reclamarRecompensaComida(3);
+            }
+            case "Comida IV" -> {
+                reclamarRecompensaComida(4);
+            }
+            case "Comida V" -> {
+                reclamarRecompensaComida(5);
+            }
+            case "Pienso I" -> {
+                reclamarRecompensaPienso(1);
+            }
+            case "Pienso II" -> {
+                reclamarRecompensaPienso(2);
+            }
+            case "Pienso III" -> {
+                reclamarRecompensaPienso(3);
+            }
+            case "Pienso IV" -> {
+                reclamarRecompensaPienso(4);
+            }
+            case "Pienso V" -> {
+                reclamarRecompensaPienso(5);
+            }
+            case "Tanque de rio" -> {
+                reclamarRecompensaTanqueRio();
+            }
+            case "Tanque de mar" -> {
+                reclamarRecompensaTanqueMar();
+            }
+            case "Piscifactoria de rio" -> {
+                reclamarRecompensaPiscifactoriaRio();
+            }
+            case "Piscifactoria de mar" -> {
+                reclamarRecompensaPiscifactoriaMar();
+            }
+            case "Almacen central" -> {
+                reclamarRecompensaAlmacenCentral();
             }
         }
     }
@@ -1197,23 +1258,18 @@ public class SistemaRecompensas {
         switch (nivel) {
             case 1 -> {
                 capsulasAlgas = 100;
-                reducirRecompensa(new File("rewards/algas_1.xml"));
             }
             case 2 -> {
                 capsulasAlgas = 200;
-                reducirRecompensa(new File("rewards/algas_2.xml"));
             }
             case 3 -> {
                 capsulasAlgas = 500;
-                reducirRecompensa(new File("rewards/algas_3.xml"));
             }
             case 4 -> {
                 capsulasAlgas = 1000;
-                reducirRecompensa(new File("rewards/algas_4.xml"));
             }
             case 5 -> {
                 capsulasAlgas = 2000;
-                reducirRecompensa(new File("rewards/algas_5.xml"));
             }
         }
         if (Simulador.simulador.almacenCentral.isDisponible()) {
@@ -1248,6 +1304,7 @@ public class SistemaRecompensas {
                 }
             }
         }
+        reducirRecompensa(new File("rewards/algas_" + nivel + ".xml"));
     }
 
     /**
@@ -1255,29 +1312,24 @@ public class SistemaRecompensas {
      * 
      * @param capsulaPienso Cantidad de cápsulas de pienso a reclamar.
      */
-    private void reclamarRecompensaPienso(int nivel) {
+    private static void reclamarRecompensaPienso(int nivel) {
         int capsulasPienso = 0;
 
         switch (nivel) {
             case 1 -> {
                 capsulasPienso = 100;
-                reducirRecompensa(new File("rewards/pienso_1.xml"));
             }
             case 2 -> {
                 capsulasPienso = 200;
-                reducirRecompensa(new File("rewards/pienso_2.xml"));
             }
             case 3 -> {
                 capsulasPienso = 500;
-                reducirRecompensa(new File("rewards/pienso_3.xml"));
             }
             case 4 -> {
                 capsulasPienso = 1000;
-                reducirRecompensa(new File("rewards/pienso_4.xml"));
             }
             case 5 -> {
                 capsulasPienso = 2000;
-                reducirRecompensa(new File("rewards/pienso_5.xml"));
             }
         }
         if (Simulador.simulador.almacenCentral.isDisponible()) {
@@ -1312,6 +1364,7 @@ public class SistemaRecompensas {
                 }
             }
         }
+        reducirRecompensa(new File("rewards/pienso_" + nivel + ".xml"));
     }
 
     /**
@@ -1319,29 +1372,24 @@ public class SistemaRecompensas {
      * 
      * @param capsulaComida Cantidad de cápsulas de comida general a reclamar.
      */
-    private void reclamarRecompensaComida(int nivel) {
+    private static void reclamarRecompensaComida(int nivel) {
         int capsulasComida = 0;
 
         switch (nivel) {
             case 1 -> {
                 capsulasComida = 50;
-                reducirRecompensa(new File("rewards/comida_1.xml"));
             }
             case 2 -> {
                 capsulasComida = 100;
-                reducirRecompensa(new File("rewards/comida_2.xml"));
             }
             case 3 -> {
                 capsulasComida = 250;
-                reducirRecompensa(new File("rewards/comida_3.xml"));
             }
             case 4 -> {
                 capsulasComida = 500;
-                reducirRecompensa(new File("rewards/comida_4.xml"));
             }
             case 5 -> {
                 capsulasComida = 1000;
-                reducirRecompensa(new File("rewards/comida_5.xml"));
             }
         }
         if (Simulador.simulador.almacenCentral.isDisponible()) {
@@ -1394,6 +1442,7 @@ public class SistemaRecompensas {
                 }
             }
         }
+        reducirRecompensa(new File("rewards/comida_" + nivel + ".xml"));
     }
 
     /**
@@ -1401,41 +1450,36 @@ public class SistemaRecompensas {
      * 
      * @param capsulaMonedas Cantidad de cápsulas de monedas a reclamar.
      */
-    private void reclamarRecompensaMonedas(int nivel){
+    private static void reclamarRecompensaMonedas(int nivel) {
         int capsulasMonedas = 0;
 
-        switch(nivel){
+        switch (nivel) {
             case 1 -> {
                 capsulasMonedas = 100;
-                reducirRecompensa(new File("rewards/monedas_1.xml"));
             }
             case 2 -> {
                 capsulasMonedas = 300;
-                reducirRecompensa(new File("rewards/monedas_2.xml"));
             }
             case 3 -> {
                 capsulasMonedas = 500;
-                reducirRecompensa(new File("rewards/monedas_3.xml"));
             }
             case 4 -> {
                 capsulasMonedas = 750;
-                reducirRecompensa(new File("rewards/monedas_4.xml"));
             }
             case 5 -> {
                 capsulasMonedas = 1000;
-                reducirRecompensa(new File("rewards/monedas_5.xml"));
             }
         }
         int monedas = Simulador.simulador.sistemaMonedas.getMonedas();
         Simulador.simulador.sistemaMonedas.setMonedas(monedas + capsulasMonedas);
+
+        reducirRecompensa(new File("rewards/monedas_" + nivel + ".xml"));
     }
 
     /**
-     * Reclama la recompensa de monedas.
-     * 
-     * @param capsulaMonedas Cantidad de cápsulas de monedas a reclamar.
+     * Reclama la recompensa de tanque de mar.
      */
-    private void reclamarRecompensaTanqueDeMar(int capsulaTM) {
+    private static void reclamarRecompensaTanqueMar() {
         int piscifactoriaSeleccionada = Simulador.simulador.selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
@@ -1447,5 +1491,66 @@ public class SistemaRecompensas {
                 }
             }
         }
+        reducirRecompensa(new File("rewards/tanque_m.xml"));
+    }
+
+    /**
+     * Reclama la recompensa de tanque de rio.
+     */
+    private static void reclamarRecompensaTanqueRio() {
+        int piscifactoriaSeleccionada = Simulador.simulador.selectPisc();
+
+        if (piscifactoriaSeleccionada != 0) {
+            Piscifactoria piscifactoria = Simulador.simulador.piscifactorias.get(piscifactoriaSeleccionada - 1);
+            if (piscifactoria instanceof PiscifactoriaRio) {
+                int numeroTanques = piscifactoria.getTanques().size();
+                if (numeroTanques < 25) {
+                    piscifactoria.getTanques().add(new Tanque(numeroTanques + 1, 25));
+                }
+            }
+        }
+        reducirRecompensa(new File("rewards/tanque_r.xml"));
+    }
+
+    /**
+     * Reclama la recompensa de Piscifactoria de rio.
+     */
+    private static void reclamarRecompensaPiscifactoriaRio() {
+        System.out.println("Introduzca el nombre de la piscifactoría: ");
+        Simulador.simulador.piscifactorias.add(new PiscifactoriaRio(SistemaEntrada.entradaTexto()));
+
+        reducirRecompensa(new File("rewards/pisci_r_a.xml"));
+        reducirRecompensa(new File("rewards/pisci_r_b.xml"));
+        reducirRecompensa(new File("rewards/pisci_r_c.xml"));
+        reducirRecompensa(new File("rewards/pisci_r_d.xml"));
+    }
+
+    /**
+     * Reclama la recompensa de Piscifactoria de mar.
+     */
+    private static void reclamarRecompensaPiscifactoriaMar() {
+        System.out.println("Introduzca el nombre de la piscifactoría: ");
+        Simulador.simulador.piscifactorias.add(new PiscifactoriaMar(SistemaEntrada.entradaTexto()));
+
+        reducirRecompensa(new File("rewards/pisci_m_a.xml"));
+        reducirRecompensa(new File("rewards/pisci_m_b.xml"));
+        reducirRecompensa(new File("rewards/pisci_m_c.xml"));
+        reducirRecompensa(new File("rewards/pisci_m_d.xml"));
+    }
+
+    /**
+     * Reclama la recompensa de almacen central.
+     */
+    private static void reclamarRecompensaAlmacenCentral() {
+        boolean disp = Simulador.simulador.almacenCentral.isDisponible();
+        if (disp == true) {
+            Simulador.simulador.almacenCentral.mejorar();
+        } else {
+            Simulador.simulador.almacenCentral.setDisponible(true);
+        }
+        reducirRecompensa(new File("rewards/almacen_a.xml"));
+        reducirRecompensa(new File("rewards/almacen_b.xml"));
+        reducirRecompensa(new File("rewards/almacen_c.xml"));
+        reducirRecompensa(new File("rewards/almacen_d.xml"));
     }
 }
