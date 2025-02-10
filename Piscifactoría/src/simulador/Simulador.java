@@ -1,13 +1,10 @@
 package simulador;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,9 +26,7 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import componentes.FechaTiempoLocal;
 import componentes.GeneradorMenus;
-import componentes.LecturaEscrituraFicherosPlanos;
 import componentes.LecturaEscrituraJSON;
 import componentes.Logs;
 import componentes.SistemaEntrada;
@@ -495,12 +490,7 @@ public class Simulador {
             }
         }
         catch(Exception e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-
-            }
+            Logs.escribirError("Hubo un problema a la hora de mostrar la información de un pez. " + e.toString());
         }
     }
 
@@ -548,12 +538,7 @@ public class Simulador {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-                
-            }
+            Logs.escribirError("Hubo un problema al guardar la partida. " + e.toString());
         }
     }
 
@@ -1078,7 +1063,6 @@ public class Simulador {
         if (piscifactoriaSeleccionada != 0) {
             Piscifactoria piscifactoria = piscifactorias.get(piscifactoriaSeleccionada - 1);
             int pecesAntes = piscifactoria.getPecesTotales();
-            int monedasAntes = sistemaMonedas.getMonedas();
 
             piscifactoria.sellFish();
 
@@ -1542,12 +1526,7 @@ public class Simulador {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
         }
         catch(IOException e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-                
-            }
+            Logs.escribirError("Hubo un error al guardar la partida. " + e.toString());
         }
     }
 
@@ -2045,12 +2024,7 @@ public class Simulador {
                     }
                 }
                 catch(Exception e){
-                    try{
-                        LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                    }
-                    catch(IOException ex){
-                        
-                    }
+                    Logs.escribirError("Hubo un error en el menú principal. " + e.toString());
                 }
             }
 
@@ -2062,21 +2036,11 @@ public class Simulador {
                 LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
             }
             catch(IOException e){
-                try{
-                    LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-                }
-                catch(IOException ex){
-                    
-                }
+                Logs.escribirError("Hubo un error al guardar la partida. " + e.toString());
             }
         }
         catch(Exception e){
-            try{
-                LecturaEscrituraFicherosPlanos.escrituraFicheroTextoPlanoSinSobreescritura(archivoLogsGeneral, FechaTiempoLocal.obtenerFechaTiempoActual() + " " + e.getMessage(), "UTF-8");
-            }
-            catch(IOException ex){
-                
-            }
+            Logs.escribirError("Hubo un error durante la ejecución del programa. " + e.toString());
         }
     }
 
