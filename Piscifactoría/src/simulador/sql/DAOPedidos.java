@@ -61,6 +61,11 @@ public class DAOPedidos {
     private PreparedStatement insercionPez;
 
     /**
+     * Sentencia para actualizar un pedido.
+     */
+    private PreparedStatement actualizarPedido;
+
+    /**
      * Constructor parametrizado.
      * 
      * @param conexion Conexión con la base de datos.
@@ -80,6 +85,8 @@ public class DAOPedidos {
             insercionPedido = conexion.prepareStatement(
                     "INSERT INTO Pedido (fk_id_cliente,fk_id_pez,peces_solicitados,peces_enviados) VALUES (?,?,?,?);");
             insercionPez = conexion.prepareStatement("INSERT INTO Pez (nombre,nombre_cientifico) VALUES (?,?);");
+            actualizarPedido = conexion.prepareStatement(
+                    "UPDATE Pedido SET peces_enviados = ? WHERE Numero_referencia = ?;");
         } catch (SQLException e) {
             System.out.println("No se han podido generar las consultar a la base de datos.");
         }
@@ -246,24 +253,16 @@ public class DAOPedidos {
      * @param cantidad         Nueva cantidad de peces enviados.
      */
     public void actualizarPecesEnviados(int numeroReferencia, int cantidad) {
-        PreparedStatement actualizarPedido = null;
-
         try {
-            actualizarPedido = conexion.prepareStatement(
-                    "UPDATE Pedido SET peces_enviados = ? WHERE Numero_referencia = ?;");
             actualizarPedido.setInt(1, cantidad);
             actualizarPedido.setInt(2, numeroReferencia);
-            actualizarPedido.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("No se ha podido actualizar el pedido.");
-        } finally {
-            if (actualizarPedido != null) {
-                try {
-                    actualizarPedido.close();
-                } catch (SQLException e) {
-                    
-                }
+            int filasAfectadas = actualizarPedido.executeUpdate();
+
+            if (filasAfectadas == 0) {
+                System.out.println("No se encontró el pedido con número de referencia: " + numeroReferencia);
             }
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar los peces enviados en el pedido: " + e.getMessage());
         }
     }
 
