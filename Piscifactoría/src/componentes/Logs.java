@@ -34,7 +34,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("logs/0_errors.log"), true)));
-            buferEscritura.append(obtenerFechaHora() + " " + error);
+            buferEscritura.append("\n" + obtenerFechaHora() + " " + error);
             buferEscritura.flush();
         }
         catch(IOException e){

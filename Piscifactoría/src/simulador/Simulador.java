@@ -280,42 +280,39 @@ public class Simulador {
             Logs.escribirError("No se ha podido crear la carpeta 'rewards'. " + e.toString());
         }
 
-        if(opcion == 0 || opcion == 2){
-            try{
-                if(SistemaFicheros.isDirectorioVacio("saves")){
-                    SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
-                    archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
-                }
-                else{
-                    try{
-                        if(!SistemaFicheros.existeArhivo("saves/" + simulador.nombre + ".save")){
-                            try{
-                                SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
-                                archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
-                            }catch(IOException e){
-                                Logs.escribirError("No se ha podido crear el archivo de guardado de la partida. " + e.toString());
-                            }
-                            
-                        }
-                        else{
+        try{
+            if(SistemaFicheros.isDirectorioVacio("saves")){
+                SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
+                archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
+            }
+            else{
+                try{
+                    if(!SistemaFicheros.existeArhivo("saves/" + simulador.nombre + ".save")){
+                        try{
+                            SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
                             archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
-                        }
+                        }catch(IOException e){
+                            Logs.escribirError("No se ha podido crear el archivo de guardado de la partida. " + e.toString());
+                        }          
                     }
+                    else{
+                        archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
+                    }
+                }
                 catch(IOException e){
                     Logs.escribirError("No se ha podido comprobar la existencia del archivo de guardado de la partida. " + e.toString());
                 }
-                }
+            }
 
-                try{
-                    LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-                }
-                catch(IOException e){
-                    Logs.escribirError("No se ha podido guardar la partida. " + e.toString());
-                }
+            try{
+                LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
             }
             catch(IOException e){
-                Logs.escribirError("No se ha podido crear o comprobar la existencia de 'saves'. " + e.toString());
+                Logs.escribirError("No se ha podido guardar la partida. " + e.toString());
             }
+        }
+        catch(IOException e){
+            Logs.escribirError("No se ha podido crear o comprobar la existencia de 'saves'. " + e.toString());
         }
 
         archivoTranscripcionesPartida = new Transcripciones(new File("transcripciones/" + simulador.nombre + ".tr"));
@@ -337,7 +334,7 @@ public class Simulador {
         String[] opcionesMenuPrincipal = { "Estado general", "Estado piscifactoría", "Estado tanques", "Informes",
                 "Ictiopedia", "Pasar día",
                 "Comprar comida", "Comprar peces", "Vender peces", "Limpiar tanques", "Vaciar tanque", "Mejorar",
-                "Pasar varios días", "Salir" };
+                "Pasar varios días", "Reclamar recompensa", "Salir" };
         GeneradorMenus.generarMenu(opcionesMenuPrincipal, 1);
     }
 
@@ -1992,9 +1989,9 @@ public class Simulador {
             init();
 
             int opcion = 0;
-            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 96, 97, 98, 99 };
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 96, 97, 98, 99 };
 
-            while (opcion != 14) {
+            while (opcion != 15) {
 
                 try{
                     System.out.println("Día actual: " + (simulador.diasPasados + 1));
@@ -2016,7 +2013,8 @@ public class Simulador {
                         case 11 -> {simulador.emptyTank();}
                         case 12 -> {simulador.upgrade();}
                         case 13 -> {simulador.pasarDias();}
-                        case 14 -> {System.out.println("Cerrando...");}
+                        case 14 -> {SistemaRecompensas.reclamarRecompensa();}
+                        case 15 -> {System.out.println("Cerrando...");}
                         case 96 -> {Simulador.anadirRecompensa();}
                         case 97 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 98 -> {simulador.anadirPezAleatorio();}
@@ -2041,6 +2039,8 @@ public class Simulador {
         }
         catch(Exception e){
             Logs.escribirError("Hubo un error durante la ejecución del programa. " + e.toString());
+            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
