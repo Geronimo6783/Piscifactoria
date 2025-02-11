@@ -1,9 +1,13 @@
 package componentes;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,10 +24,7 @@ import simulador.Simulador;
 import simulador.piscifactoria.Piscifactoria;
 import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
-import simulador.Simulador;
 import simulador.Tanque;
-import simulador.piscifactoria.Piscifactoria;
-import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 import simulador.piscifactoria.PiscifactoriaMar;
 import simulador.piscifactoria.PiscifactoriaRio;
 
@@ -31,6 +32,50 @@ import simulador.piscifactoria.PiscifactoriaRio;
  * Clase que se encarga de gestionar las recompensas.
  */
 public class SistemaRecompensas {
+
+    /**
+     * Aumenta la cantidad de una recompensa ya existe.
+     * @param recompensa Recompensa de la cantidad a ampliar.
+     */
+    private static void aumentarRecomensa(File recompensa){
+        SAXReader lectorXML = new SAXReader();
+        Document documentoXML = null;
+
+        try{
+            documentoXML = lectorXML.read(new BufferedReader(new InputStreamReader(new FileInputStream(recompensa))));
+        }
+        catch(DocumentException | FileNotFoundException e){
+            Logs.escribirError("No se ha podido cargar el archivo XML " + recompensa.getName() + "." + e.toString());
+        }
+
+        if(documentoXML != null){
+            Element elementoCantidad = documentoXML.getRootElement().element("quantity");
+            int cantidad = Integer.parseInt(elementoCantidad.getText());
+            cantidad++;
+            elementoCantidad.setText(Integer.toString(cantidad));
+
+            XMLWriter escritorXML = null;
+
+            try{
+                escritorXML = new XMLWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(recompensa))), OutputFormat.createPrettyPrint());
+                escritorXML.write(documentoXML);
+                escritorXML.flush();
+            }
+            catch(IOException e){
+                Logs.escribirError("Hubo un problema a la hora de escribir el XML " + recompensa.getName() + " con la cantidad de recompensa ampliada. " + e.toString());
+            }
+            finally{
+                if(escritorXML != null){
+                    try{
+                        escritorXML.close();
+                    }
+                    catch(IOException e){
+
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Genera la base de un XML de una recompensa.
@@ -63,30 +108,36 @@ public class SistemaRecompensas {
     public static void generarRecompensaAlgas(int nivel, String origen) {
         switch (nivel) {
             case 1 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas I", origen,
-                        "100 cápsulas de algas para alimentar peces filtradores y omnívoros.", 0);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
-                        .addText("100");
+                File archivoRecompensa = new File("rewards/algas_1.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas I", origen,
+                            "100 cápsulas de algas para alimentar peces filtradores y omnívoros.", 0);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
+                            .addText("100");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/algas_1.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
             case 2 -> {
