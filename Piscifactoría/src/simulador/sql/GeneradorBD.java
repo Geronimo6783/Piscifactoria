@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import componentes.Logs;
+import simulador.sql.dto.DTOCliente;
+import simulador.sql.dto.DTOPez;
 
 import propiedades.AlmacenPropiedades;
 
@@ -30,7 +35,7 @@ public class GeneradorBD {
             sentencia.execute("CREATE TABLE IF NOT EXISTS Pedido(Numero_referencia INT PRIMARY KEY AUTO_INCREMENT, fk_id_cliente INT, fk_id_pez INT, peces_solicitados INT, peces_enviados INT, FOREIGN KEY (fk_id_cliente) REFERENCES Cliente(id), FOREIGN KEY (fk_id_pez) REFERENCES Pez(id));");
         }
         catch(SQLException e){
-            System.out.println("Hubo un problema al generar las tablas.");
+            Logs.escribirError("Hubo un problema al generar las tablas.");
         }
         finally{
             if(sentencia != null){
@@ -42,6 +47,25 @@ public class GeneradorBD {
                 }
             }
         }
+    }
+
+    /**
+     * Permite saber si un cliente existe con anterioridad en la base de datos.
+     * @param nombre Nombre del cliente.
+     * @param nif Nif del cliente.
+     * @param telefono Teléfono del cliente.
+     * @return Si el cliente existe o no en la base de datos.
+     */
+    private static boolean existeCliente(String nombre, String nif, String telefono){
+        ArrayList<DTOCliente> clientesBaseDeDatos = new DAOPedidos(conexion).obtenerClientes();
+
+        for(DTOCliente cliente : clientesBaseDeDatos){
+            if(cliente.getNombre().equals(nombre) && cliente.getNif().equals(nif) && cliente.getTelefono().equals(telefono)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -57,16 +81,18 @@ public class GeneradorBD {
             String[] telefonos = {"+34689345893", "+34905896567", "+34567890879", "+34967847534", "+34124567890", "+34789045045", "+34567098789", "+34678456098", "+34234567098", "+34789678345"};
 
             for(int i = 0; i < nombres.length; i++){
-                sentencia.setString(1, nombres[i]);
-                sentencia.setString(2, nifs[i]);
-                sentencia.setString(3, telefonos[i]);
-                sentencia.addBatch();
+                if(!existeCliente(nombres[i], nifs[i], telefonos[i])){
+                    sentencia.setString(1, nombres[i]);
+                    sentencia.setString(2, nifs[i]);
+                    sentencia.setString(3, telefonos[i]);
+                    sentencia.addBatch();
+                }
             }
 
             sentencia.executeBatch();
         }
         catch(SQLException e){
-            System.out.println("Hubo un problema al insertar los datos en la base de datos.");
+            Logs.escribirError("Hubo un problema al insertar los datos en la base de datos.");
         }
         finally{
             if(sentencia != null){
@@ -78,6 +104,24 @@ public class GeneradorBD {
                 }
             }
         }
+    }
+
+    /**
+     * Permite saber si un pez existe con anterioridad en la base de datos.
+     * @param nombre Nombre del pez.
+     * @param nombreCientifico Nombre científico del pez.
+     * @return Si el pez existe o no en la base de datos.
+     */
+    private static boolean existePez(String nombre, String nombreCientifico){
+        ArrayList<DTOPez> pecesBaseDeDatos = new DAOPedidos(conexion).obtenerPeces();
+
+        for(DTOPez pez : pecesBaseDeDatos){
+            if(pez.getNombre().equals(nombre) && pez.getNombreCientifico().equals(nombreCientifico)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -98,15 +142,17 @@ public class GeneradorBD {
             AlmacenPropiedades.SALMON_CHINOOK.getCientifico(), AlmacenPropiedades.SARGO.getCientifico(), AlmacenPropiedades.TILAPIA_NILO.getCientifico()};
 
             for(int i = 0; i < nombres.length; i++){
-                sentencia.setString(1, nombres[i]);
-                sentencia.setString(2, nombresCientificos[i]);
-                sentencia.addBatch();
+                if(!existePez(nombres[i], nombresCientificos[i])){
+                    sentencia.setString(1, nombres[i]);
+                    sentencia.setString(2, nombresCientificos[i]);
+                    sentencia.addBatch();
+                }
             }
 
             sentencia.executeBatch();
         }
         catch(SQLException e){
-            System.out.println("Hubo un problema al insertar los datos en la base de datos.");
+            Logs.escribirError("Hubo un problema al insertar los datos en la base de datos.");
         }
         finally{
             if(sentencia != null){

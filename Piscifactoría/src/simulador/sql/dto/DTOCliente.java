@@ -41,6 +41,19 @@ public class DTOCliente {
     }
 
     /**
+     * Constructor de DTOCliente sin el id.
+     * @param nombre Nombre del cliente.
+     * @param nif Nif del cliente
+     * @param telefono Telefono del cliente.
+     */
+    public DTOCliente(String nombre, String nif, String telefono) {
+        this.id = 0;
+        this.nombre = nombre;
+        this.nif = nif;
+        this.telefono = telefono;
+    }
+
+    /**
      * Permite obtener el id del cliente.
      * @return Id del cliente.
      */
@@ -82,7 +95,7 @@ public class DTOCliente {
 
     /**
      * Permite establecer el nif del cliente.
-     * @param nif Nif del cliente.
+     * @param nif Nif del cliente a establecer.
      */
     public void setNif(String nif) {
         this.nif = nif;

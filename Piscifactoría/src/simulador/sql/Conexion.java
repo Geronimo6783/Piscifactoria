@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import componentes.Logs;
+
 /**
  * Clase que se encarga de abrir y cerrar la conexión con la base de datos.
  */
@@ -50,10 +52,10 @@ public class Conexion {
             propiedadesConexion.put("user", USER);
             propiedadesConexion.put("password", PASSWORD);
             try{
-                conexion = DriverManager.getConnection("jdbc:mysql://" + SERVER + ":" + PORT + "/" + BD, propiedadesConexion);
+                conexion = DriverManager.getConnection("jdbc:mysql://" + SERVER + ":" + PORT + "/" + BD + "?rewriteBatchedStatements=true", propiedadesConexion);
             }
             catch(SQLException e){
-                System.out.println("No se pudo establecer la conexión con la base de datos.");
+                Logs.escribirError("No se pudo establecer la conexión con la base de datos.");
             }
         }
         
@@ -69,7 +71,7 @@ public class Conexion {
                 conexion.close();
             }
             catch(SQLException e){
-                System.out.println("Hubo un problema al intentar cerrar la conexión a la base de datos.");
+                Logs.escribirError("Hubo un problema al intentar cerrar la conexión a la base de datos.");
             }
         }
     }

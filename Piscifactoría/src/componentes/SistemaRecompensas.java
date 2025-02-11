@@ -15,7 +15,10 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.xml.sax.SAXException;
+
+import simulador.Simulador;
+import simulador.piscifactoria.Piscifactoria;
+import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
 import simulador.Simulador;
 import simulador.Tanque;
@@ -1058,7 +1061,10 @@ public class SistemaRecompensas {
         return recompensasDisponibles.toArray(recompensasDisponiblesArray);
     }
 
-    public static void reclamarRecompensa() {
+    /**
+     * Permite al usuario reclamar un recompensa seleccionada por el desde un menú.
+     */
+    public static void reclamarRecompensa(){
         File[] archivos = new File("rewards").listFiles();
         ArrayList<File> recompensas = new ArrayList<>();
         ArrayList<String> recompensasDisponibles = new ArrayList<>();
