@@ -338,6 +338,7 @@ public class Simulador {
         archivoTranscripcionesPartida = new Transcripciones(new File("transcripciones/" + simulador.nombre + ".tr"));
         archivoLogPartida = new Logs(new File("logs/" + simulador.nombre + ".log"));
 
+        if(opcion!=-1){
         archivoTranscripcionesPartida.iniciarTranscripciones(simulador.nombre, simulador.sistemaMonedas.getMonedas(),
                 new String[] { AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(),
                         AlmacenPropiedades.DORADA.getNombre(),
@@ -351,6 +352,7 @@ public class Simulador {
                 nombrePiscifactoria);
 
         archivoLogPartida.inicioLog(simulador.nombre, nombrePiscifactoria);
+                }
         
     }
 
