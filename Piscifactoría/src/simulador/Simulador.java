@@ -181,8 +181,7 @@ public class Simulador {
             if (!SistemaFicheros.existeDirectorio("saves")) {
                 SistemaFicheros.crearCarpeta("saves");
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("No se ha podido crear la carpeta 'saves'." + e.toString());
         }
 
@@ -209,15 +208,13 @@ public class Simulador {
 
                     try {
                         simulador = LecturaEscrituraJSON.<Simulador>cargarJSON(archivosGuardado[opcion - 1]);
-                        opcion = -1;         
-                     }
-                     catch(IOException e){
+                        opcion = -1;
+                    } catch (IOException e) {
                         Logs.escribirError("No se ha podido cargar la partida.");
-                     }
+                    }
                 }
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logs.escribirError("Hubo un problema durante el proceso de carga de la partida. " + e.toString());
         }
 
@@ -240,24 +237,22 @@ public class Simulador {
                     AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                     AlmacenPropiedades.TILAPIA_NILO.getNombre() };
             simulador.estadisticas = new Estadisticas(simulador.pecesImplementados);
-            
+
         }
 
         try {
             if (!SistemaFicheros.existeDirectorio("logs")) {
                 SistemaFicheros.crearCarpeta("logs");
             }
-        }
-        catch(IOException e){
-            Logs.escribirError("No se ha podido crear la carpeta 'logs'. " + e .toString());
+        } catch (IOException e) {
+            Logs.escribirError("No se ha podido crear la carpeta 'logs'. " + e.toString());
         }
 
         try {
             if (!SistemaFicheros.existeArhivo("logs/0_errors.log")) {
                 SistemaFicheros.crearArchivo("logs/0_errors.log");
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("No se ha podido crear el fichero '0_errors.log'. " + e.toString());
         }
 
@@ -265,8 +260,7 @@ public class Simulador {
             if (!SistemaFicheros.existeDirectorio("transcripciones")) {
                 SistemaFicheros.crearCarpeta("transcripciones");
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("No se ha podido crear la carpeta 'transcripciones'." + e.toString());
         }
 
@@ -276,8 +270,7 @@ public class Simulador {
                 archivoTranscripcionesPartida = new Transcripciones(
                         new File("transcripciones/" + simulador.nombre + ".tr"));
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("No se ha podido crear el fichero de transcripciones de la partida. " + e.toString());
         }
 
@@ -286,8 +279,7 @@ public class Simulador {
                 SistemaFicheros.crearArchivo("logs/" + simulador.nombre + ".log");
                 archivoLogPartida = new Logs(new File("logs/" + simulador.nombre + ".log"));
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("No se ha crear el fichero de logs de la partida. " + e.toString());
         }
 
@@ -295,42 +287,38 @@ public class Simulador {
             if (!SistemaFicheros.existeDirectorio("rewards")) {
                 SistemaFicheros.crearCarpeta("rewards");
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("No se ha podido crear la carpeta 'rewards'. " + e.toString());
         }
-        try{
-            if(SistemaFicheros.isDirectorioVacio("saves")){
+        try {
+            if (SistemaFicheros.isDirectorioVacio("saves")) {
                 SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
                 archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
-            }
-            else{
-                try{
-                    if(!SistemaFicheros.existeArhivo("saves/" + simulador.nombre + ".save")){
-                        try{
+            } else {
+                try {
+                    if (!SistemaFicheros.existeArhivo("saves/" + simulador.nombre + ".save")) {
+                        try {
                             SistemaFicheros.crearArchivo("saves/" + simulador.nombre + ".save");
                             archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
-                        }catch(IOException e){
-                            Logs.escribirError("No se ha podido crear el archivo de guardado de la partida. " + e.toString());
-                        }          
-                    }
-                    else{
+                        } catch (IOException e) {
+                            Logs.escribirError(
+                                    "No se ha podido crear el archivo de guardado de la partida. " + e.toString());
+                        }
+                    } else {
                         archivoGuardadoPartida = new File("saves/" + simulador.nombre + ".save");
                     }
-                }
-                catch(IOException e){
-                    Logs.escribirError("No se ha podido comprobar la existencia del archivo de guardado de la partida. " + e.toString());
+                } catch (IOException e) {
+                    Logs.escribirError("No se ha podido comprobar la existencia del archivo de guardado de la partida. "
+                            + e.toString());
                 }
             }
 
-            try{
+            try {
                 LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 Logs.escribirError("No se ha podido guardar la partida. " + e.toString());
             }
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("No se ha podido crear o comprobar la existencia de 'saves'. " + e.toString());
         }
 
@@ -519,8 +507,7 @@ public class Simulador {
                 case 11 -> mostrarInformacionPez(AlmacenPropiedades.SARGO);
                 case 12 -> mostrarInformacionPez(AlmacenPropiedades.TILAPIA_NILO);
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logs.escribirError("Hubo un problema a la hora de mostrar la información de un pez. " + e.toString());
         }
     }
@@ -567,8 +554,7 @@ public class Simulador {
 
         try {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("Hubo un problema al guardar la partida. " + e.toString());
         }
     }
@@ -1645,8 +1631,7 @@ public class Simulador {
 
         try {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             Logs.escribirError("Hubo un error al guardar la partida. " + e.toString());
         }
     }
@@ -2133,7 +2118,7 @@ public class Simulador {
 
     /**
      * Gestiona los pedidos no finalizados, permitiendo seleccionar un pedido,
-     * asignar peces maduros de un tanque y actualizar la base de datos con los 
+     * asignar peces maduros de un tanque y actualizar la base de datos con los
      * peces enviados y el pago.
      */
     public void gestionarPedidosNoFinalizados() {
@@ -2196,11 +2181,15 @@ public class Simulador {
                                     " para el pedido " + pedidoSeleccionado.getNumeroReferencia() +
                                     ". Se han recibido " + totalPago + " monedas.");
 
-                            archivoTranscripcionesPartida.registrarEnvioPeces(pedidoSeleccionado.getNumeroReferencia(), nombrePezPedido, enviados);
-                            
-                            if (pedidoSeleccionado.getPecesEnviados() + enviados >= pedidoSeleccionado.getPecesSolicitados()) {
+                            archivoTranscripcionesPartida.registrarEnvioPeces(pedidoSeleccionado.getNumeroReferencia(),
+                                    nombrePezPedido, enviados);
+
+                            if (pedidoSeleccionado.getPecesEnviados() + enviados >= pedidoSeleccionado
+                                    .getPecesSolicitados()) {
                                 archivoTranscripcionesPartida.registrarPedidoCompletado(opcionPedido, nombrePezPedido);
                                 archivoLogPartida.registrarPedidoCompletado(opcionPedido, nombrePezPedido);
+
+                                generarRecompensasPedidosCompletados();
                             }
                         } else {
                             System.out.println("No hay peces maduros suficientes en este tanque.");
@@ -2211,63 +2200,120 @@ public class Simulador {
         }
     }
 
+    /*
+     * Metodo auxiliar que genera las recompensas tras completar un pedido.
+     */
+    public void generarRecompensasPedidosCompletados() {
+        Random r = new Random();
+        int nRandomTipoRecomp = r.nextInt(10) + 1;
+        String origen = "Pedido completado";
+        if (nRandomTipoRecomp == 1|| nRandomTipoRecomp == 2|| nRandomTipoRecomp == 3|| nRandomTipoRecomp == 4 || nRandomTipoRecomp == 5) {
+            int tipoComida = r.nextInt(3) + 1;
+            int nivelComida = r.nextInt(10)+1;
+            if (tipoComida == 1) {
+                if (nivelComida == 1 || nivelComida == 2 || nivelComida == 3 || nivelComida == 4|| nivelComida == 5|| nivelComida == 6)  {
+                    SistemaRecompensas.generarRecompensaAlgas(1, origen);
+                } else if (nivelComida == 7|| nivelComida == 8|| nivelComida == 9) {
+                    SistemaRecompensas.generarRecompensaAlgas(2, origen);
+                } else if (nivelComida == 10) {
+                    SistemaRecompensas.generarRecompensaAlgas(3, origen);
+                }
+            } else if (tipoComida == 2) {
+                if (nivelComida == 1 || nivelComida == 2 || nivelComida == 3 || nivelComida == 4|| nivelComida == 5|| nivelComida == 6)  {
+                    SistemaRecompensas.generarRecompensaPienso(1, origen);
+                } else if (nivelComida == 7|| nivelComida == 8|| nivelComida == 9) {
+                    SistemaRecompensas.generarRecompensaPienso(2, origen);
+                } else if (nivelComida == 10) {
+                    SistemaRecompensas.generarRecompensaPienso(3, origen);
+                }
+            } else {
+                if (nivelComida == 1 || nivelComida == 2 || nivelComida == 3 || nivelComida == 4|| nivelComida == 5|| nivelComida == 6)  {
+                    SistemaRecompensas.generarRecompensaComida(1, origen);
+                } else if (nivelComida == 7|| nivelComida == 8|| nivelComida == 9) {
+                    SistemaRecompensas.generarRecompensaComida(2, origen);
+                } else if (nivelComida == 10) {
+                    SistemaRecompensas.generarRecompensaComida(3, origen);
+                }
+            }
+        } else if (nRandomTipoRecomp == 6 || nRandomTipoRecomp == 7 || nRandomTipoRecomp == 8 || nRandomTipoRecomp == 9) {
+            int nivelMonedas = r.nextInt(10)+1;
+            if (nivelMonedas == 1 || nivelMonedas == 2 || nivelMonedas == 3 || nivelMonedas == 4|| nivelMonedas == 5|| nivelMonedas == 6)  {
+                SistemaRecompensas.generarRecompensaMonedas(1, origen);
+            } else if (nivelMonedas == 7|| nivelMonedas == 8|| nivelMonedas == 9) {
+                SistemaRecompensas.generarRecompensaMonedas(2, origen);
+            } else if (nivelMonedas == 10) {
+                SistemaRecompensas.generarRecompensaMonedas(3, origen);
+            }
+        } else {
+            int tipoTanque = r.nextInt(10)+1;
+            if (tipoTanque == 1 || tipoTanque == 2 || tipoTanque == 3 || tipoTanque == 4|| tipoTanque == 5|| tipoTanque == 6)  {
+                SistemaRecompensas.generarRecompensaTanqueMar(origen);
+            }else{
+                SistemaRecompensas.generarRecompensaTanqueRio(origen);
+            }
+        }
+    }
+
     /**
      * Genera un nuevo pedido automáticamente cada 10 días.
      *
      * @param diasPasados Número de días transcurridos en la simulación.
      *                    Se generará un pedido solo si es un múltiplo de 10.
      */
-   /*  public void generarPedidosAutomaticamente(int diasPasados) {
-        if (diasPasados % 10 == 0) {
-            DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
-            Random random = new Random();
-
-            List<DTOCliente> clientes = daoPedidos.obtenerClientes();
-            List<DTOPez> peces = daoPedidos.obtenerPeces();
-
-            if (!clientes.isEmpty() && !peces.isEmpty()) {
-                int idCliente = clientes.get(random.nextInt(clientes.size())).getId();
-                int idPez = peces.get(random.nextInt(peces.size())).getId();
-                int cantidadPeces = 10 + random.nextInt(41);
-
-                DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
-                daoPedidos.insertarPedido(nuevoPedido);
-
-                
-
-                //System.out.println("Se ha generado automáticamente un nuevo pedido.");
-            } else {
-                System.out.println("No hay clientes o peces disponibles para generar pedidos.");
-            }
-        }
-    }*/
+    /*
+     * public void generarPedidosAutomaticamente(int diasPasados) {
+     * if (diasPasados % 10 == 0) {
+     * DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
+     * Random random = new Random();
+     * 
+     * List<DTOCliente> clientes = daoPedidos.obtenerClientes();
+     * List<DTOPez> peces = daoPedidos.obtenerPeces();
+     * 
+     * if (!clientes.isEmpty() && !peces.isEmpty()) {
+     * int idCliente = clientes.get(random.nextInt(clientes.size())).getId();
+     * int idPez = peces.get(random.nextInt(peces.size())).getId();
+     * int cantidadPeces = 10 + random.nextInt(41);
+     * 
+     * DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
+     * daoPedidos.insertarPedido(nuevoPedido);
+     * 
+     * 
+     * 
+     * //System.out.println("Se ha generado automáticamente un nuevo pedido.");
+     * } else {
+     * System.out.
+     * println("No hay clientes o peces disponibles para generar pedidos.");
+     * }
+     * }
+     * }
+     */
 
     public void generarPedidosAutomaticamente(int diasPasados) {
         if (diasPasados % 10 == 0) {
             DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
             Random random = new Random();
-    
+
             List<DTOCliente> clientes = daoPedidos.obtenerClientes();
             List<DTOPez> peces = daoPedidos.obtenerPeces();
-    
+
             if (!clientes.isEmpty() && !peces.isEmpty()) {
                 int idCliente = clientes.get(random.nextInt(clientes.size())).getId();
                 int idPez = peces.get(random.nextInt(peces.size())).getId();
                 int cantidadPeces = 10 + random.nextInt(41);
-    
+
                 DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
                 daoPedidos.insertarPedido(nuevoPedido);
-    
+
                 // Recuperar el ID del último pedido insertado
                 List<DTOPedido> pedidos = daoPedidos.obtenerPedidos();
                 if (!pedidos.isEmpty()) {
                     DTOPedido ultimoPedido = pedidos.get(pedidos.size() - 1);
                     int idPedido = ultimoPedido.getNumeroReferencia();
-                    
+
                     // Registrar en archivo
-                    archivoTranscripcionesPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));                   
+                    archivoTranscripcionesPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));
                     archivoLogPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));
-                    
+
                 }
             } else {
                 System.out.println("No hay clientes o peces disponibles para generar pedidos.");
@@ -2283,8 +2329,6 @@ public class Simulador {
         }
         return "Desconocido";
     }
-    
-    
 
     /**
      * Método para borrar todos los pedidos de la base de datos.
@@ -2342,29 +2386,66 @@ public class Simulador {
 
                     opcion = SistemaEntrada.entradaOpcionNumerica(opcionesNumericas);
 
-                    switch(opcion){
-                        case 1 -> {simulador.showGeneralStatus();}
-                        case 2 -> {simulador.showSpecificStatus();}
-                        case 3 -> {simulador.mostrarEstadoTanque();}
-                        case 4 -> {simulador.showStats();}
-                        case 5 -> {Simulador.showIctio();}
-                        case 6 -> {simulador.nextDay();}
-                        case 7 -> {simulador.addFood();}
-                        case 8 -> {simulador.addFish();}
-                        case 9 -> {simulador.sell();}
-                        case 10 -> {simulador.cleanTank();}
-                        case 11 -> {simulador.emptyTank();}
-                        case 12 -> {simulador.upgrade();}
-                        case 13 -> {simulador.pasarDias();}
-                        case 14 -> {SistemaRecompensas.reclamarRecompensa();}
-                        case 15 -> {simulador.gestionarPedidosNoFinalizados();}
-                        case 16 -> {System.out.println("Cerrando...");}
-                        case 97 -> {SistemaRecompensas.reclamarRecompensa();}
-                        case 98 -> {simulador.anadirPezAleatorio();}
-                        case 99 -> {simulador.anadirMonedasOculto();}
+                    switch (opcion) {
+                        case 1 -> {
+                            simulador.showGeneralStatus();
+                        }
+                        case 2 -> {
+                            simulador.showSpecificStatus();
+                        }
+                        case 3 -> {
+                            simulador.mostrarEstadoTanque();
+                        }
+                        case 4 -> {
+                            simulador.showStats();
+                        }
+                        case 5 -> {
+                            Simulador.showIctio();
+                        }
+                        case 6 -> {
+                            simulador.nextDay();
+                        }
+                        case 7 -> {
+                            simulador.addFood();
+                        }
+                        case 8 -> {
+                            simulador.addFish();
+                        }
+                        case 9 -> {
+                            simulador.sell();
+                        }
+                        case 10 -> {
+                            simulador.cleanTank();
+                        }
+                        case 11 -> {
+                            simulador.emptyTank();
+                        }
+                        case 12 -> {
+                            simulador.upgrade();
+                        }
+                        case 13 -> {
+                            simulador.pasarDias();
+                        }
+                        case 14 -> {
+                            SistemaRecompensas.reclamarRecompensa();
+                        }
+                        case 15 -> {
+                            simulador.gestionarPedidosNoFinalizados();
+                        }
+                        case 16 -> {
+                            System.out.println("Cerrando...");
+                        }
+                        case 97 -> {
+                            SistemaRecompensas.reclamarRecompensa();
+                        }
+                        case 98 -> {
+                            simulador.anadirPezAleatorio();
+                        }
+                        case 99 -> {
+                            simulador.anadirMonedasOculto();
+                        }
                     }
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     Logs.escribirError("Hubo un error en el menú principal. " + e.toString());
                 }
             }
@@ -2375,14 +2456,12 @@ public class Simulador {
 
             try {
                 LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 Logs.escribirError("Hubo un error al guardar la partida. " + e.toString());
             }
 
             Conexion.close();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logs.escribirError("Hubo un error durante la ejecución del programa. " + e.toString());
             System.err.println(e);
             e.printStackTrace();
