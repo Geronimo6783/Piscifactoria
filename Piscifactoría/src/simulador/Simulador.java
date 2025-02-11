@@ -2171,7 +2171,7 @@ public class Simulador {
                 DTOPedidoUsuarioPez pedido = pedidos.get(i);
                 opcionesPedidos[i + 1] = "[" + pedido.getNumeroReferencia() + "] " + pedido.getNombreCliente() + ": "
                         + pedido.getNombrePez() + " " + pedido.getPecesEnviados() + "/" + pedido.getPecesSolicitados()
-                        + " (" + pedido.getPorcentajeCompletado() + ")";
+                        + " (" + pedido.getPorcentajeCompletado() + "%)";
             }
 
             int opcionPedido = GeneradorMenus.generarMenuOperativo(opcionesPedidos, 0, pedidos.size());
