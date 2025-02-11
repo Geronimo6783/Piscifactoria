@@ -2298,18 +2298,15 @@ public class Simulador {
      */
     public void mostrarPedidosCompletados() {
         DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
-        ArrayList<DTOPedido> pedidos = daoPedidos.obtenerPedidos();
+        ArrayList<DTOPedidoUsuarioPez> pedidos = daoPedidos.obtenerPedidosCompletados();
         boolean hayPedidosCompletados = false;
 
         System.out.println("===== Pedidos Completados =====");
-        for (DTOPedido pedido : pedidos) {
+        for (DTOPedidoUsuarioPez pedido : pedidos) {
             if (pedido.getPecesEnviados() == pedido.getPecesSolicitados()) {
-                System.out.println("Número de referencia: " + pedido.getNumeroReferencia());
-                System.out.println("ID Cliente: " + pedido.getIdCliente());
-                System.out.println("ID Pez: " + pedido.getIdPez());
-                System.out.println("Peces enviados: " + pedido.getPecesEnviados());
-                System.out.println("Peces solicitados: " + pedido.getPecesSolicitados());
-                System.out.println("------------------------------");
+                System.out.println("[" + pedido.getNumeroReferencia() + "] " + pedido.getNombreCliente() + ": "
+                        + pedido.getNombrePez() + " " + pedido.getPecesEnviados() + "/" + pedido.getPecesSolicitados()
+                        + " (" + pedido.getPorcentajeCompletado() + "%)");
                 hayPedidosCompletados = true;
             }
         }

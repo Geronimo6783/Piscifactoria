@@ -641,7 +641,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
-            buferEscritura.append("\n" + " Pedido de " + nombrePez + " con referencia " + idPedido + "enviado.");
+            buferEscritura.append("\n" + " Pedido de " + nombrePez + " con referencia " + idPedido + " enviado.");
             buferEscritura.flush();
         }
         catch(IOException e){

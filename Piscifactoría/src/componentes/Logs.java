@@ -600,7 +600,7 @@ public class Logs {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Pedido de " + nombrePez + " con referencia " + idPedido + "enviado.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Pedido de " + nombrePez + " con referencia " + idPedido + " enviado.");
             buferEscritura.flush();
         }
         catch(IOException e){
