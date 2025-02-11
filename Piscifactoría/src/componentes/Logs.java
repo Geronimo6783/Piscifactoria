@@ -572,6 +572,52 @@ public class Logs {
         }
     }
 
+    public void registrarGeneracionPedido(int idPedido, String nombrePez){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Generado el pedido de " + nombrePez +" con referencia " + idPedido + ".");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar el nuevo pedido.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    public void registrarPedidoCompletado(int idPedido, String nombrePez){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Pedido de " + nombrePez + " con referencia " + idPedido + "enviado.");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar el pedido completado.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
     /**
      * Permite obtener la fecha y hora del sistema en formato [aaaa-mm-dd hh:mm:ss].
      * @return Fecha y hora del sistema en formato [aaaa-mm-dd hh:mm:ss].

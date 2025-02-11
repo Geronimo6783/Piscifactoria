@@ -233,7 +233,6 @@ public class DAOPedidos {
                         resultadosConsulta.getInt(6)));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
         } finally {
             if (resultadosConsulta != null) {
@@ -350,30 +349,5 @@ public class DAOPedidos {
         } catch (SQLException e) {
 
         }
-    }
-
-    public static void main(String[] args) {
-        DAOPedidos dao = new DAOPedidos(Conexion.getConexion());
-        ArrayList<DTOCliente> clientes = dao.obtenerClientes();
-        System.out.println("========== Clientes ==========");
-        for (DTOCliente cliente : clientes) {
-            System.out.println("Id: " + cliente.getId() + " Nif: " + cliente.getNif() + " Teléfono: "
-                    + cliente.getTelefono() + " Nombre: " + cliente.getNombre());
-        }
-        System.out.println("========== Peces ==========");
-        ArrayList<DTOPez> peces = dao.obtenerPeces();
-        for (DTOPez pez : peces) {
-            System.out.println(" Id: " + pez.getId() + " Nombre: " + pez.getNombre() + " Nombre científico: "
-                    + pez.getNombreCientifico());
-        }
-        System.out.println("========= Pedidos ==========");
-        ArrayList<DTOPedido> pedidos = dao.obtenerPedidos();
-        for (DTOPedido pedido : pedidos) {
-            System.out.println("Número refenrencia: " + pedido.getNumeroReferencia() + "Id cliente: "
-                    + pedido.getIdCliente() + " Id pez: " + pedido.getIdPez() + " Peces enviados: "
-                    + pedido.getPecesEnviados() + " Peces solicitados: " + pedido.getPecesSolicitados());
-        }
-        dao.borrarPedidos();
-        dao.close();
     }
 }
