@@ -37,7 +37,7 @@ public class SistemaRecompensas {
      * Aumenta la cantidad de una recompensa ya existe.
      * @param recompensa Recompensa de la cantidad a ampliar.
      */
-    private static void aumentarRecomensa(File recompensa){
+    private static void aumentarRecompensa(File recompensa){
         SAXReader lectorXML = new SAXReader();
         Document documentoXML = null;
 
@@ -137,7 +137,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 2 -> {
@@ -170,7 +170,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 3 -> {
@@ -203,7 +203,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 4 -> {
@@ -236,7 +236,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 5 -> {
@@ -269,7 +269,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
         }
@@ -316,7 +316,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 'B' -> {
@@ -352,7 +352,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 'C' -> {
@@ -388,7 +388,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 'D' -> {
@@ -424,7 +424,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
         }
@@ -468,7 +468,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 2 -> {
@@ -501,7 +501,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 3 -> {
@@ -534,7 +534,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 4 -> {
@@ -567,7 +567,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
             case 5 -> {
@@ -600,7 +600,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
         }
@@ -644,7 +644,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -677,7 +677,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -710,7 +710,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -743,7 +743,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -776,7 +776,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
         }
@@ -822,7 +822,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -857,7 +857,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -892,7 +892,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -927,7 +927,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -962,7 +962,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
         }
@@ -1009,7 +1009,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -1090,7 +1090,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
 
@@ -1127,7 +1127,7 @@ public class SistemaRecompensas {
                     }
                 }
                 else{
-                    aumentarRecomensa(archivoRecompensa);
+                    aumentarRecompensa(archivoRecompensa);
                 }
             }
         }
@@ -1138,7 +1138,7 @@ public class SistemaRecompensas {
      * 
      * @param origen Origen de la recompensa representado por el código del usuario.
      */
-    public void generarRecompensaTanqueMar(String origen) {
+    public static void generarRecompensaTanqueMar(String origen) {
         File archivoRecompensa = new File("rewards/tanque_m.xml");
         if(!archivoRecompensa.exists()){
             Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Tanque de mar", origen,
@@ -1170,7 +1170,7 @@ public class SistemaRecompensas {
             }
         }
         else{
-            aumentarRecomensa(archivoRecompensa);
+            aumentarRecompensa(archivoRecompensa);
         }
     }
 
@@ -1179,7 +1179,7 @@ public class SistemaRecompensas {
      * 
      * @param origen Origen de la recompensa representado por el código del usuario.
      */
-    public void generarRecompensaTanqueRio(String origen) {
+    public static void generarRecompensaTanqueRio(String origen) {
         File archivoRecompensa = new File("rewards/tanque_r.xml");
         if(!archivoRecompensa.exists()){
             Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Tanque de río", origen,
@@ -1211,7 +1211,7 @@ public class SistemaRecompensas {
             }
         }
         else{
-            aumentarRecomensa(archivoRecompensa);
+            aumentarRecompensa(archivoRecompensa);
         }
     }
 
