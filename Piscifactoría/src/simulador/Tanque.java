@@ -107,6 +107,9 @@ public class Tanque {
         this.capacidadMaximaPeces = capacidadMaximaPeces;
     }
 
+    /**
+     * Constructor sin parámetros.
+     */
     public Tanque(){
         numeroTanque = 0;
         capacidadMaximaPeces = 25;

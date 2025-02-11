@@ -131,10 +131,6 @@ public abstract class Piscifactoria {
      */
     protected int tipo;
 
-    public int getTipo() {
-        return tipo;
-    }
-
     /**
      * Tanques de los que dispone la piscifactoría.
      */
@@ -158,6 +154,14 @@ public abstract class Piscifactoria {
         tanques = new ArrayList<>();
         this.nombre = nombre;
         this.tipo = tipo;
+    }
+
+    /**
+     * Permite obtener el tipo de la piscifactoría.
+     * @return Tipo de la piscifactoría.
+     */
+    public int getTipo() {
+        return tipo;
     }
 
     /**
