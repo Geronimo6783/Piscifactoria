@@ -24,6 +24,8 @@ import simulador.Simulador;
 import simulador.piscifactoria.Piscifactoria;
 import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
+import componentes.Logs;
+
 import simulador.Tanque;
 import simulador.piscifactoria.PiscifactoriaMar;
 import simulador.piscifactoria.PiscifactoriaRio;
@@ -139,6 +141,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 2 -> {
                 File archivoRecompensa = new File("rewards/algas_2.xml");
@@ -172,6 +175,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 3 -> {
                 File archivoRecompensa = new File("rewards/algas_3.xml");
@@ -205,6 +209,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 4 -> {
                 File archivoRecompensa = new File("rewards/algas_4.xml");
@@ -238,6 +243,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 5 -> {
                 File archivoRecompensa = new File("rewards/algas_5.xml");
@@ -271,6 +277,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
         }
     }
@@ -318,6 +325,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 'B' -> {
                 File archivoRecompensa = new File("rewards/almacen_b.xml");
@@ -354,6 +362,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 'C' -> {
                 File archivoRecompensa = new File("rewards/almacen_c.xml");
@@ -390,6 +399,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 'D' -> {
                 File archivoRecompensa = new File("rewards/almacen_d.xml");
@@ -426,6 +436,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
         }
     }
@@ -470,6 +481,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 2 -> {
                 File archivoRecompensa = new File("rewards/comida_2.xml");
@@ -503,6 +515,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 3 -> {
                 File archivoRecompensa = new File("rewards/comida_3.xml");
@@ -536,6 +549,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 4 -> {
                 File archivoRecompensa = new File("rewards/comida_4.xml");
@@ -569,6 +583,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
             case 5 -> {
                 File archivoRecompensa = new File("rewards/comida_5.xml");
@@ -602,6 +617,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
         }
     }
@@ -646,6 +662,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 2 -> {
@@ -679,6 +696,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 3 -> {
@@ -712,6 +730,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 4 -> {
@@ -745,6 +764,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 5 -> {
@@ -778,6 +798,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
         }
     }
@@ -824,6 +845,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 2 -> {
@@ -859,6 +881,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 3 -> {
@@ -894,6 +917,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 4 -> {
@@ -929,6 +953,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 5 -> {
@@ -964,6 +989,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
         }
     }
@@ -1011,6 +1037,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 'B' -> {
@@ -1044,7 +1071,10 @@ public class SistemaRecompensas {
                             }
                         }
                     }
+                }else{
+                    aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
         }
     }
@@ -1092,6 +1122,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
 
             case 'B' -> {
@@ -1129,6 +1160,7 @@ public class SistemaRecompensas {
                 else{
                     aumentarRecompensa(archivoRecompensa);
                 }
+                componentes.Logs.registrarCreacionRecompensa();
             }
         }
     }
@@ -1172,6 +1204,7 @@ public class SistemaRecompensas {
         else{
             aumentarRecompensa(archivoRecompensa);
         }
+        componentes.Logs.registrarCreacionRecompensa();
     }
 
     /**
@@ -1213,6 +1246,7 @@ public class SistemaRecompensas {
         else{
             aumentarRecompensa(archivoRecompensa);
         }
+        componentes.Logs.registrarCreacionRecompensa();
     }
 
     /**
@@ -1354,78 +1388,103 @@ public class SistemaRecompensas {
         switch (recompensaSeleccionada) {
             case "Algas I" -> {
                 reclamarRecompensaAlgas(1);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Algas II" -> {
                 reclamarRecompensaAlgas(2);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Algas III" -> {
                 reclamarRecompensaAlgas(3);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Algas IV" -> {
                 reclamarRecompensaAlgas(4);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Algas V" -> {
                 reclamarRecompensaAlgas(5);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Monedas I" -> {
                 reclamarRecompensaMonedas(1);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Monedas II" -> {
                 reclamarRecompensaMonedas(2);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Monedas III" -> {
                 reclamarRecompensaMonedas(3);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Monedas IV" -> {
                 reclamarRecompensaMonedas(4);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Monedas V" -> {
                 reclamarRecompensaMonedas(5);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Comida I" -> {
                 reclamarRecompensaComida(1);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Comida II" -> {
                 reclamarRecompensaComida(2);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Comida III" -> {
                 reclamarRecompensaComida(3);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Comida IV" -> {
                 reclamarRecompensaComida(4);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Comida V" -> {
                 reclamarRecompensaComida(5);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Pienso I" -> {
                 reclamarRecompensaPienso(1);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Pienso II" -> {
                 reclamarRecompensaPienso(2);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Pienso III" -> {
                 reclamarRecompensaPienso(3);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Pienso IV" -> {
                 reclamarRecompensaPienso(4);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Pienso V" -> {
                 reclamarRecompensaPienso(5);
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Tanque de rio" -> {
                 reclamarRecompensaTanqueRio();
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Tanque de mar" -> {
                 reclamarRecompensaTanqueMar();
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Piscifactoria de rio" -> {
                 reclamarRecompensaPiscifactoriaRio();
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Piscifactoria de mar" -> {
                 reclamarRecompensaPiscifactoriaMar();
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
             case "Almacen central" -> {
                 reclamarRecompensaAlmacenCentral();
+                componentes.Logs.registrarUsoRecompensa(recompensaSeleccionada);
             }
         }
     }
