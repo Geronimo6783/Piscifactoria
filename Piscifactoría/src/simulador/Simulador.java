@@ -2185,7 +2185,8 @@ public class Simulador {
                                 }
                             }
 
-                            daoPedidos.actualizarPecesEnviados(pedidoSeleccionado.getNumeroReferencia(), enviados);
+                            int pecesEnvio = enviados + pedidoSeleccionado.getPecesEnviados();
+                            daoPedidos.actualizarPecesEnviados(pedidoSeleccionado.getNumeroReferencia(), pecesEnvio);
                             Simulador.simulador.sistemaMonedas
                                     .setMonedas(Simulador.simulador.sistemaMonedas.getMonedas() + totalPago);
 
@@ -2288,14 +2289,14 @@ public class Simulador {
                 DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
                 daoPedidos.insertarPedido(nuevoPedido);
     
-                // Recuperar el ID del último pedido insertado
+                
                 List<DTOPedido> pedidos = daoPedidos.obtenerPedidos();
                 if (!pedidos.isEmpty()) {
                     DTOPedido ultimoPedido = pedidos.get(pedidos.size() - 1);
                     int idPedido = ultimoPedido.getNumeroReferencia();
-
-                    // Registrar en archivo
-                    archivoTranscripcionesPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));
+                    
+                    
+                    archivoTranscripcionesPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));                   
                     archivoLogPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));
 
                 }
@@ -2305,6 +2306,14 @@ public class Simulador {
         }
     }
 
+    /**
+     * Obtiene el nombre de un pez a partir de su identificador.
+     *
+     * @param idPez el identificador del pez que se desea buscar.
+     * @param peces la lista de objetos {@code DTOPez} donde se realizará la
+     *              búsqueda.
+     * @return el nombre del pez si se encuentra en la lista.
+     */
     private String obtenerNombrePez(int idPez, List<DTOPez> peces) {
         for (DTOPez pez : peces) {
             if (pez.getId() == idPez) {
@@ -2328,18 +2337,15 @@ public class Simulador {
      */
     public void mostrarPedidosCompletados() {
         DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
-        ArrayList<DTOPedido> pedidos = daoPedidos.obtenerPedidos();
+        ArrayList<DTOPedidoUsuarioPez> pedidos = daoPedidos.obtenerPedidosCompletados();
         boolean hayPedidosCompletados = false;
 
         System.out.println("===== Pedidos Completados =====");
-        for (DTOPedido pedido : pedidos) {
+        for (DTOPedidoUsuarioPez pedido : pedidos) {
             if (pedido.getPecesEnviados() == pedido.getPecesSolicitados()) {
-                System.out.println("Número de referencia: " + pedido.getNumeroReferencia());
-                System.out.println("ID Cliente: " + pedido.getIdCliente());
-                System.out.println("ID Pez: " + pedido.getIdPez());
-                System.out.println("Peces enviados: " + pedido.getPecesEnviados());
-                System.out.println("Peces solicitados: " + pedido.getPecesSolicitados());
-                System.out.println("------------------------------");
+                System.out.println("[" + pedido.getNumeroReferencia() + "] " + pedido.getNombreCliente() + ": "
+                        + pedido.getNombrePez() + " " + pedido.getPecesEnviados() + "/" + pedido.getPecesSolicitados()
+                        + " (" + pedido.getPorcentajeCompletado() + "%)");
                 hayPedidosCompletados = true;
             }
         }
