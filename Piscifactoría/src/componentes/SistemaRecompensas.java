@@ -1342,91 +1342,96 @@ public class SistemaRecompensas {
             recompensasDisponibles.add("Piscifactoria de rio");
         }
 
-        Collections.sort(recompensasDisponibles);
+        if(recompensasDisponibles.size() > 0){
+            Collections.sort(recompensasDisponibles);
 
-        String[] recompensasDisponiblesArray = new String[recompensasDisponibles.size()];
+            String[] recompensasDisponiblesArray = new String[recompensasDisponibles.size()];
 
-        int opcion = GeneradorMenus.generarMenuOperativo(recompensasDisponibles.toArray(recompensasDisponiblesArray), 1,
-                recompensasDisponibles.size());
+            int opcion = GeneradorMenus.generarMenuOperativo(recompensasDisponibles.toArray(recompensasDisponiblesArray), 1,
+                    recompensasDisponibles.size());
 
-        String recompensaSeleccionada = recompensasDisponibles.get(opcion - 1);
+            String recompensaSeleccionada = recompensasDisponibles.get(opcion - 1);
 
-        switch (recompensaSeleccionada) {
-            case "Algas I" -> {
-                reclamarRecompensaAlgas(1);
+            switch (recompensaSeleccionada) {
+                case "Algas I" -> {
+                    reclamarRecompensaAlgas(1);
+                }
+                case "Algas II" -> {
+                    reclamarRecompensaAlgas(2);
+                }
+                case "Algas III" -> {
+                    reclamarRecompensaAlgas(3);
+                }
+                case "Algas IV" -> {
+                    reclamarRecompensaAlgas(4);
+                }
+                case "Algas V" -> {
+                    reclamarRecompensaAlgas(5);
+                }
+                case "Monedas I" -> {
+                    reclamarRecompensaMonedas(1);
+                }
+                case "Monedas II" -> {
+                    reclamarRecompensaMonedas(2);
+                }
+                case "Monedas III" -> {
+                    reclamarRecompensaMonedas(3);
+                }
+                case "Monedas IV" -> {
+                    reclamarRecompensaMonedas(4);
+                }
+                case "Monedas V" -> {
+                    reclamarRecompensaMonedas(5);
+                }
+                case "Comida I" -> {
+                    reclamarRecompensaComida(1);
+                }
+                case "Comida II" -> {
+                    reclamarRecompensaComida(2);
+                }
+                case "Comida III" -> {
+                    reclamarRecompensaComida(3);
+                }
+                case "Comida IV" -> {
+                    reclamarRecompensaComida(4);
+                }
+                case "Comida V" -> {
+                    reclamarRecompensaComida(5);
+                }
+                case "Pienso I" -> {
+                    reclamarRecompensaPienso(1);
+                }
+                case "Pienso II" -> {
+                    reclamarRecompensaPienso(2);
+                }
+                case "Pienso III" -> {
+                    reclamarRecompensaPienso(3);
+                }
+                case "Pienso IV" -> {
+                    reclamarRecompensaPienso(4);
+                }
+                case "Pienso V" -> {
+                    reclamarRecompensaPienso(5);
+                }
+                case "Tanque de rio" -> {
+                    reclamarRecompensaTanqueRio();
+                }
+                case "Tanque de mar" -> {
+                    reclamarRecompensaTanqueMar();
+                }
+                case "Piscifactoria de rio" -> {
+                    reclamarRecompensaPiscifactoriaRio();
+                }
+                case "Piscifactoria de mar" -> {
+                    reclamarRecompensaPiscifactoriaMar();
+                }
+                case "Almacen central" -> {
+                    reclamarRecompensaAlmacenCentral();
+                }
             }
-            case "Algas II" -> {
-                reclamarRecompensaAlgas(2);
-            }
-            case "Algas III" -> {
-                reclamarRecompensaAlgas(3);
-            }
-            case "Algas IV" -> {
-                reclamarRecompensaAlgas(4);
-            }
-            case "Algas V" -> {
-                reclamarRecompensaAlgas(5);
-            }
-            case "Monedas I" -> {
-                reclamarRecompensaMonedas(1);
-            }
-            case "Monedas II" -> {
-                reclamarRecompensaMonedas(2);
-            }
-            case "Monedas III" -> {
-                reclamarRecompensaMonedas(3);
-            }
-            case "Monedas IV" -> {
-                reclamarRecompensaMonedas(4);
-            }
-            case "Monedas V" -> {
-                reclamarRecompensaMonedas(5);
-            }
-            case "Comida I" -> {
-                reclamarRecompensaComida(1);
-            }
-            case "Comida II" -> {
-                reclamarRecompensaComida(2);
-            }
-            case "Comida III" -> {
-                reclamarRecompensaComida(3);
-            }
-            case "Comida IV" -> {
-                reclamarRecompensaComida(4);
-            }
-            case "Comida V" -> {
-                reclamarRecompensaComida(5);
-            }
-            case "Pienso I" -> {
-                reclamarRecompensaPienso(1);
-            }
-            case "Pienso II" -> {
-                reclamarRecompensaPienso(2);
-            }
-            case "Pienso III" -> {
-                reclamarRecompensaPienso(3);
-            }
-            case "Pienso IV" -> {
-                reclamarRecompensaPienso(4);
-            }
-            case "Pienso V" -> {
-                reclamarRecompensaPienso(5);
-            }
-            case "Tanque de rio" -> {
-                reclamarRecompensaTanqueRio();
-            }
-            case "Tanque de mar" -> {
-                reclamarRecompensaTanqueMar();
-            }
-            case "Piscifactoria de rio" -> {
-                reclamarRecompensaPiscifactoriaRio();
-            }
-            case "Piscifactoria de mar" -> {
-                reclamarRecompensaPiscifactoriaMar();
-            }
-            case "Almacen central" -> {
-                reclamarRecompensaAlmacenCentral();
-            }
+        }
+        else{
+            System.out.println("No hay recompensas para reclamar.");
         }
     }
 
