@@ -241,7 +241,7 @@ public class Simulador {
                     AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                     AlmacenPropiedades.TILAPIA_NILO.getNombre() };
             simulador.estadisticas = new Estadisticas(simulador.pecesImplementados);
-            //simulador.generarPedidosAutomaticamente(0);
+            
         }
 
         try {
@@ -351,6 +351,7 @@ public class Simulador {
                 nombrePiscifactoria);
 
         archivoLogPartida.inicioLog(simulador.nombre, nombrePiscifactoria);
+        simulador.generarPedidosAutomaticamente(0);
     }
 
     /**
@@ -2195,6 +2196,13 @@ public class Simulador {
                             System.out.println("Se enviaron " + enviados + " peces de tipo " + nombrePezPedido +
                                     " para el pedido " + pedidoSeleccionado.getNumeroReferencia() +
                                     ". Se han recibido " + totalPago + " monedas.");
+
+                            archivoTranscripcionesPartida.registrarEnvioPeces(pedidoSeleccionado.getNumeroReferencia(), nombrePezPedido, enviados);
+                            
+                            if (pedidoSeleccionado.getPecesEnviados() + enviados >= pedidoSeleccionado.getPecesSolicitados()) {
+                                archivoTranscripcionesPartida.registrarPedidoCompletado(opcionPedido, nombrePezPedido);
+                                archivoLogPartida.registrarPedidoCompletado(opcionPedido, nombrePezPedido);
+                            }
                         } else {
                             System.out.println("No hay peces maduros suficientes en este tanque.");
                         }
@@ -2210,7 +2218,7 @@ public class Simulador {
      * @param diasPasados Número de días transcurridos en la simulación.
      *                    Se generará un pedido solo si es un múltiplo de 10.
      */
-    public void generarPedidosAutomaticamente(int diasPasados) {
+   /*  public void generarPedidosAutomaticamente(int diasPasados) {
         if (diasPasados % 10 == 0) {
             DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
             Random random = new Random();
@@ -2226,12 +2234,58 @@ public class Simulador {
                 DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
                 daoPedidos.insertarPedido(nuevoPedido);
 
-                System.out.println("Se ha generado automáticamente un nuevo pedido.");
+                
+
+                //System.out.println("Se ha generado automáticamente un nuevo pedido.");
+            } else {
+                System.out.println("No hay clientes o peces disponibles para generar pedidos.");
+            }
+        }
+    }*/
+
+    public void generarPedidosAutomaticamente(int diasPasados) {
+        if (diasPasados % 10 == 0) {
+            DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
+            Random random = new Random();
+    
+            List<DTOCliente> clientes = daoPedidos.obtenerClientes();
+            List<DTOPez> peces = daoPedidos.obtenerPeces();
+    
+            if (!clientes.isEmpty() && !peces.isEmpty()) {
+                int idCliente = clientes.get(random.nextInt(clientes.size())).getId();
+                int idPez = peces.get(random.nextInt(peces.size())).getId();
+                int cantidadPeces = 10 + random.nextInt(41);
+    
+                DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
+                daoPedidos.insertarPedido(nuevoPedido);
+    
+                // Recuperar el ID del último pedido insertado
+                List<DTOPedido> pedidos = daoPedidos.obtenerPedidos();
+                if (!pedidos.isEmpty()) {
+                    DTOPedido ultimoPedido = pedidos.get(pedidos.size() - 1);
+                    int idPedido = ultimoPedido.getNumeroReferencia();
+                    
+                    // Registrar en archivo
+                    archivoTranscripcionesPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));                   
+                    archivoLogPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));
+                    
+                }
             } else {
                 System.out.println("No hay clientes o peces disponibles para generar pedidos.");
             }
         }
     }
+
+    private String obtenerNombrePez(int idPez, List<DTOPez> peces) {
+        for (DTOPez pez : peces) {
+            if (pez.getId() == idPez) {
+                return pez.getNombre();
+            }
+        }
+        return "Desconocido";
+    }
+    
+    
 
     /**
      * Método para borrar todos los pedidos de la base de datos.
