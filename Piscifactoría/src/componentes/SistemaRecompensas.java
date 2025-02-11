@@ -141,111 +141,135 @@ public class SistemaRecompensas {
                 }
             }
             case 2 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas II", origen,
-                        "200 cápsulas de algas para alimentar peces filtradores y omnívoros.", 1);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
-                        .addText("200");
+                File archivoRecompensa = new File("rewards/algas_2.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas II", origen,
+                            "200 cápsulas de algas para alimentar peces filtradores y omnívoros.", 1);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
+                            .addText("200");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/algas_2.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
             case 3 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas III", origen,
-                        "500 cápsulas de algas para alimentar peces filtradores y omnívoros.", 2);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
-                        .addText("500");
+                File archivoRecompensa = new File("rewards/algas_3.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas III", origen,
+                            "500 cápsulas de algas para alimentar peces filtradores y omnívoros.", 2);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
+                            .addText("500");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/algas_3.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
             case 4 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas IV", origen,
-                        "1000 cápsulas de algas para alimentar peces filtradores y omnívoros.", 3);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
-                        .addText("1000");
+                File archivoRecompensa = new File("rewards/algas_4.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas IV", origen,
+                            "1000 cápsulas de algas para alimentar peces filtradores y omnívoros.", 3);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
+                            .addText("1000");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/algas_4.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
                 }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
+                }
             }
             case 5 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas V", origen,
-                        "2000 cápsulas de algas para alimentar peces filtradores y omnívoros.", 4);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
-                        .addText("2000");
+                File archivoRecompensa = new File("rewards/algas_5.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Algas V", origen,
+                            "2000 cápsulas de algas para alimentar peces filtradores y omnívoros.", 4);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "algae")
+                            .addText("2000");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/algas_5.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
         }
@@ -260,123 +284,147 @@ public class SistemaRecompensas {
     public static void generarRecompensaAlmacenCentral(char parte, String origen) {
         switch (parte) {
             case 'A' -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Almacén central [A]", origen,
-                        "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
-                        3);
-                Element give = documentoBase.getRootElement().element("give");
-                give.addElement("building").addAttribute("code", "4").addText("Almacén central");
-                give.addElement("part").addText("A");
-                give.addElement("total").addText("ABCD");
+                File archivoRecompensa = new File("rewards/almacen_a.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Almacén central [A]", origen,
+                            "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
+                            3);
+                    Element give = documentoBase.getRootElement().element("give");
+                    give.addElement("building").addAttribute("code", "4").addText("Almacén central");
+                    give.addElement("part").addText("A");
+                    give.addElement("total").addText("ABCD");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/almacen_a.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
             case 'B' -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Almacén central [B]", origen,
-                        "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
-                        3);
-                Element give = documentoBase.getRootElement().element("give");
-                give.addElement("building").addAttribute("code", "4").addText("Almacén central");
-                give.addElement("part").addText("B");
-                give.addElement("total").addText("ABCD");
+                File archivoRecompensa = new File("rewards/almacen_b.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Almacén central [B]", origen,
+                            "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
+                            3);
+                    Element give = documentoBase.getRootElement().element("give");
+                    give.addElement("building").addAttribute("code", "4").addText("Almacén central");
+                    give.addElement("part").addText("B");
+                    give.addElement("total").addText("ABCD");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/almacen_b.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
             case 'C' -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Almacén central [C]", origen,
-                        "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
-                        3);
-                Element give = documentoBase.getRootElement().element("give");
-                give.addElement("building").addAttribute("code", "4").addText("Almacén central");
-                give.addElement("part").addText("C");
-                give.addElement("total").addText("ABCD");
+                File archivoRecompensa = new File("rewards/almacen_c.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Almacén central [C]", origen,
+                            "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
+                            3);
+                    Element give = documentoBase.getRootElement().element("give");
+                    give.addElement("building").addAttribute("code", "4").addText("Almacén central");
+                    give.addElement("part").addText("C");
+                    give.addElement("total").addText("ABCD");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/almacen_c.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
                 }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
+                }
             }
             case 'D' -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Almacén central [D]", origen,
-                        "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
-                        3);
-                Element give = documentoBase.getRootElement().element("give");
-                give.addElement("building").addAttribute("code", "4").addText("Almacén central");
-                give.addElement("part").addText("D");
-                give.addElement("total").addText("ABCD");
+                File archivoRecompensa = new File("rewards/almacen_d.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Almacén central [D]", origen,
+                            "Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.",
+                            3);
+                    Element give = documentoBase.getRootElement().element("give");
+                    give.addElement("building").addAttribute("code", "4").addText("Almacén central");
+                    give.addElement("part").addText("D");
+                    give.addElement("total").addText("ABCD");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/almacen_d.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
         }
@@ -391,138 +439,168 @@ public class SistemaRecompensas {
     public static void generarRecompensaComida(int nivel, String origen) {
         switch (nivel) {
             case 1 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general I", origen,
-                        "50 unidades de pienso multipropósito para todo tipo de peces.", 0);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
-                        .addText("50");
+                File archivoRecompensa = new File("rewards/comida_1.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general I", origen,
+                            "50 unidades de pienso multipropósito para todo tipo de peces.", 0);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
+                            .addText("50");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/comida_1.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
             case 2 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general II", origen,
-                        "100 unidades de pienso multipropósito para todo tipo de peces.", 1);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
-                        .addText("100");
+                File archivoRecompensa = new File("rewards/comida_2.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general II", origen,
+                            "100 unidades de pienso multipropósito para todo tipo de peces.", 1);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
+                            .addText("100");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/comida_2.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
             case 3 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general III", origen,
-                        "250 unidades de pienso multipropósito para todo tipo de peces.", 2);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
-                        .addText("250");
+                File archivoRecompensa = new File("rewards/comida_3.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general III", origen,
+                            "250 unidades de pienso multipropósito para todo tipo de peces.", 2);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
+                            .addText("250");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/comida_3.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
             case 4 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general IV", origen,
-                        "500 unidades de pienso multipropósito para todo tipo de peces.", 3);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
-                        .addText("500");
+                File archivoRecompensa = new File("rewards/comida_4.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general IV", origen,
+                            "500 unidades de pienso multipropósito para todo tipo de peces.", 3);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
+                            .addText("500");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/comida_4.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
                 }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
+                }
             }
             case 5 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general V", origen,
-                        "1000 unidades de pienso multipropósito para todo tipo de peces.", 4);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
-                        .addText("1000");
+                File archivoRecompensa = new File("rewards/comida_5.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Comida general V", origen,
+                            "1000 unidades de pienso multipropósito para todo tipo de peces.", 4);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "general")
+                            .addText("1000");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/comida_5.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
         }
@@ -538,137 +616,167 @@ public class SistemaRecompensas {
     public static void generarRecompensaMonedas(int nivel, String origen) {
         switch (nivel) {
             case 1 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas I", origen, "100 monedas",
-                        0);
-                documentoBase.getRootElement().element("give").addElement("coins").addText("100");
+                File archivoRecompensa = new File("rewards/monedas_1.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas I", origen, "100 monedas",
+                            0);
+                    documentoBase.getRootElement().element("give").addElement("coins").addText("100");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/monedas_1.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 2 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas II", origen, "300 monedas",
-                        1);
-                documentoBase.getRootElement().element("give").addElement("coins").addText("300");
+                File archivoRecompensa = new File("rewards/monedas_2.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas II", origen, "300 monedas",
+                            1);
+                    documentoBase.getRootElement().element("give").addElement("coins").addText("300");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/monedas_2.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 3 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas III", origen, "500 monedas",
-                        2);
-                documentoBase.getRootElement().element("give").addElement("coins").addText("500");
+                File archivoRecompensa = new File("rewards/monedas_3.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas III", origen, "500 monedas",
+                            2);
+                    documentoBase.getRootElement().element("give").addElement("coins").addText("500");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/monedas_3.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 4 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas IV", origen, "750 monedas",
-                        3);
-                documentoBase.getRootElement().element("give").addElement("coins").addText("750");
+                File archivoRecompensa = new File("rewards/monedas_4.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas IV", origen, "750 monedas",
+                            3);
+                    documentoBase.getRootElement().element("give").addElement("coins").addText("750");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/monedas_4.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 5 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas v", origen, "1000 monedas",
-                        4);
-                documentoBase.getRootElement().element("give").addElement("coins").addText("1000");
+                File archivoRecompensa = new File("rewards/monedas_5.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Monedas v", origen, "1000 monedas",
+                            4);
+                    documentoBase.getRootElement().element("give").addElement("coins").addText("1000");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/monedas_5.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
         }
@@ -684,147 +792,177 @@ public class SistemaRecompensas {
     public static void generarRecompensaPienso(int nivel, String origen) {
         switch (nivel) {
             case 1 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces I", origen,
-                        "100 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
-                        0);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
-                        .addText("100");
+                File archivoRecompensa = new File("rewards/pienso_1.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces I", origen,
+                            "100 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
+                            0);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
+                            .addText("100");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pienso_1.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 2 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces II", origen,
-                        "200 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
-                        1);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
-                        .addText("200");
+                File archivoRecompensa = new File("rewards/pienso_2.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces II", origen,
+                            "200 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
+                            1);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
+                            .addText("200");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pienso_2.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 3 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces III", origen,
-                        "500 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
-                        2);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
-                        .addText("500");
+                File archivoRecompensa = new File("rewards/pienso_3.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces III", origen,
+                            "500 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
+                            2);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
+                            .addText("500");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pienso_3.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 4 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces IV", origen,
-                        "1000 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
-                        3);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
-                        .addText("1000");
+                File archivoRecompensa = new File("rewards/pienso_4.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces IV", origen,
+                            "1000 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
+                            3);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
+                            .addText("1000");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pienso_4.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 5 -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces V", origen,
-                        "2000 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
-                        4);
-                documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
-                        .addText("2000");
+                File archivoRecompensa = new File("rewards/pienso_5.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Pienso de peces V", origen,
+                            "2000 unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.",
+                            4);
+                    documentoBase.getRootElement().element("give").addElement("food").addAttribute("type", "animal")
+                            .addText("2000");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pienso_5.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
         }
@@ -839,62 +977,71 @@ public class SistemaRecompensas {
     public static void generarRecompensaPiscifactoriaMar(char parte, String origen) {
         switch (parte) {
             case 'A' -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Piscifactoría de mar [A]", origen,
-                        "Materiales para la construcción de una piscifactoría de mar. Con la parte A y B, puedes obtenerla de forma gratuita.",
-                        4);
-                Element elementoGive = documentoBase.getRootElement().element("give");
-                elementoGive.addElement("building").addAttribute("code", "1").addText("Piscifactoría de mar");
-                elementoGive.addElement("part").addText("A");
-                elementoGive.addElement("total").addText("AB");
+                File archivoRecompensa = new File("rewards/pisci_m_a.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Piscifactoría de mar [A]", origen,
+                            "Materiales para la construcción de una piscifactoría de mar. Con la parte A y B, puedes obtenerla de forma gratuita.",
+                            4);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "1").addText("Piscifactoría de mar");
+                    elementoGive.addElement("part").addText("A");
+                    elementoGive.addElement("total").addText("AB");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pisci_m_a.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 'B' -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Piscifactoría de mar [B]", origen,
-                        "Materiales para la construcción de una piscifactoría de mar. Con la parte A y B, puedes obtenerla de forma gratuita.",
-                        4);
-                Element elementoGive = documentoBase.getRootElement().element("give");
-                elementoGive.addElement("building").addAttribute("code", "1").addText("Piscifactoría de mar");
-                elementoGive.addElement("part").addText("B");
-                elementoGive.addElement("total").addText("AB");
+                File archivoRecompensa = new File("rewards/pisci_m_b.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Piscifactoría de mar [B]", origen,
+                            "Materiales para la construcción de una piscifactoría de mar. Con la parte A y B, puedes obtenerla de forma gratuita.",
+                            4);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "1").addText("Piscifactoría de mar");
+                    elementoGive.addElement("part").addText("B");
+                    elementoGive.addElement("total").addText("AB");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pisci_m_b.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
                 }
@@ -911,64 +1058,76 @@ public class SistemaRecompensas {
     public static void generarRecompensaPiscifactoriaRio(char parte, String origen) {
         switch (parte) {
             case 'A' -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Piscifactoría de río [A]", origen,
-                        "Materiales para la construcción de una piscifactoría de río. Con la parte A y B, puedes obtenerla de forma gratuita.",
-                        3);
-                Element elementoGive = documentoBase.getRootElement().element("give");
-                elementoGive.addElement("building").addAttribute("code", "0").addText("Piscifactoría de río");
-                elementoGive.addElement("part").addText("A");
-                elementoGive.addElement("total").addText("AB");
+                File archivoRecompensa = new File("rewards/pisci_r_a.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Piscifactoría de río [A]", origen,
+                            "Materiales para la construcción de una piscifactoría de río. Con la parte A y B, puedes obtenerla de forma gratuita.",
+                            3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "0").addText("Piscifactoría de río");
+                    elementoGive.addElement("part").addText("A");
+                    elementoGive.addElement("total").addText("AB");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pisci_r_a.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
 
             case 'B' -> {
-                Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Piscifactoría de río [B]", origen,
-                        "Materiales para la construcción de una piscifactoría de río. Con la parte A y B, puedes obtenerla de forma gratuita.",
-                        3);
-                Element elementoGive = documentoBase.getRootElement().element("give");
-                elementoGive.addElement("building").addAttribute("code", "0").addText("Piscifactoría de río");
-                elementoGive.addElement("part").addText("B");
-                elementoGive.addElement("total").addText("AB");
+                File archivoRecompensa = new File("rewards/pisci_r_b.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Piscifactoría de río [B]", origen,
+                            "Materiales para la construcción de una piscifactoría de río. Con la parte A y B, puedes obtenerla de forma gratuita.",
+                            3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "0").addText("Piscifactoría de río");
+                    elementoGive.addElement("part").addText("B");
+                    elementoGive.addElement("total").addText("AB");
 
-                XMLWriter escritorXML = null;
+                    XMLWriter escritorXML = null;
 
-                try {
-                    escritorXML = new XMLWriter(
-                            new BufferedWriter(new OutputStreamWriter(
-                                    new FileOutputStream(new File("rewards/pisci_r_b.xml")), "UTF-8")),
-                            OutputFormat.createPrettyPrint());
-                    escritorXML.write(documentoBase);
-                    escritorXML.flush();
-                } catch (IOException e) {
-                    System.out.println("Hubo un problema a la hora de crear la recompensa.");
-                } finally {
-                    if (escritorXML != null) {
-                        try {
-                            escritorXML.close();
-                        } catch (IOException e) {
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(new OutputStreamWriter(
+                                        new FileOutputStream(new File("rewards/pisci_r_b.xml")), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
 
+                            }
                         }
                     }
+                }
+                else{
+                    aumentarRecomensa(archivoRecompensa);
                 }
             }
         }
@@ -980,32 +1139,38 @@ public class SistemaRecompensas {
      * @param origen Origen de la recompensa representado por el código del usuario.
      */
     public void generarRecompensaTanqueMar(String origen) {
-        Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Tanque de mar", origen,
-                "Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de mar.", 3);
-        Element elementoGive = documentoBase.getRootElement().element("give");
-        elementoGive.addElement("building").addAttribute("code", "3").addText("Tanque de mar");
-        elementoGive.addElement("part").addText("A");
-        elementoGive.addElement("total").addText("A");
+        File archivoRecompensa = new File("rewards/tanque_m.xml");
+        if(!archivoRecompensa.exists()){
+            Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Tanque de mar", origen,
+                    "Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de mar.", 3);
+            Element elementoGive = documentoBase.getRootElement().element("give");
+            elementoGive.addElement("building").addAttribute("code", "3").addText("Tanque de mar");
+            elementoGive.addElement("part").addText("A");
+            elementoGive.addElement("total").addText("A");
 
-        XMLWriter escritorXML = null;
+            XMLWriter escritorXML = null;
 
-        try {
-            escritorXML = new XMLWriter(
-                    new BufferedWriter(
-                            new OutputStreamWriter(new FileOutputStream(new File("rewards/pisci_r_b.xml")), "UTF-8")),
-                    OutputFormat.createPrettyPrint());
-            escritorXML.write(documentoBase);
-            escritorXML.flush();
-        } catch (IOException e) {
-            System.out.println("Hubo un problema a la hora de crear la recompensa.");
-        } finally {
-            if (escritorXML != null) {
-                try {
-                    escritorXML.close();
-                } catch (IOException e) {
+            try {
+                escritorXML = new XMLWriter(
+                        new BufferedWriter(
+                                new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                        OutputFormat.createPrettyPrint());
+                escritorXML.write(documentoBase);
+                escritorXML.flush();
+            } catch (IOException e) {
+                System.out.println("Hubo un problema a la hora de crear la recompensa.");
+            } finally {
+                if (escritorXML != null) {
+                    try {
+                        escritorXML.close();
+                    } catch (IOException e) {
 
+                    }
                 }
             }
+        }
+        else{
+            aumentarRecomensa(archivoRecompensa);
         }
     }
 
@@ -1015,32 +1180,38 @@ public class SistemaRecompensas {
      * @param origen Origen de la recompensa representado por el código del usuario.
      */
     public void generarRecompensaTanqueRio(String origen) {
-        Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Tanque de río", origen,
-                "Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de río.", 2);
-        Element elementoGive = documentoBase.getRootElement().element("give");
-        elementoGive.addElement("building").addAttribute("code", "2").addText("Tanque de río");
-        elementoGive.addElement("part").addText("A");
-        elementoGive.addElement("total").addText("A");
+        File archivoRecompensa = new File("rewards/tanque_r.xml");
+        if(!archivoRecompensa.exists()){
+            Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Tanque de río", origen,
+                    "Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de río.", 2);
+            Element elementoGive = documentoBase.getRootElement().element("give");
+            elementoGive.addElement("building").addAttribute("code", "2").addText("Tanque de río");
+            elementoGive.addElement("part").addText("A");
+            elementoGive.addElement("total").addText("A");
 
-        XMLWriter escritorXML = null;
+            XMLWriter escritorXML = null;
 
-        try {
-            escritorXML = new XMLWriter(
-                    new BufferedWriter(
-                            new OutputStreamWriter(new FileOutputStream(new File("rewards/pisci_r_b.xml")), "UTF-8")),
-                    OutputFormat.createPrettyPrint());
-            escritorXML.write(documentoBase);
-            escritorXML.flush();
-        } catch (IOException e) {
-            System.out.println("Hubo un problema a la hora de crear la recompensa.");
-        } finally {
-            if (escritorXML != null) {
-                try {
-                    escritorXML.close();
-                } catch (IOException e) {
+            try {
+                escritorXML = new XMLWriter(
+                        new BufferedWriter(
+                                new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                        OutputFormat.createPrettyPrint());
+                escritorXML.write(documentoBase);
+                escritorXML.flush();
+            } catch (IOException e) {
+                System.out.println("Hubo un problema a la hora de crear la recompensa.");
+            } finally {
+                if (escritorXML != null) {
+                    try {
+                        escritorXML.close();
+                    } catch (IOException e) {
 
+                    }
                 }
             }
+        }
+        else{
+            aumentarRecomensa(archivoRecompensa);
         }
     }
 
