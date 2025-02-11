@@ -2193,7 +2193,8 @@ public class Simulador {
                                 }
                             }
 
-                            daoPedidos.actualizarPecesEnviados(pedidoSeleccionado.getNumeroReferencia(), enviados);
+                            int pecesEnvio = enviados + pedidoSeleccionado.getPecesEnviados();
+                            daoPedidos.actualizarPecesEnviados(pedidoSeleccionado.getNumeroReferencia(), pecesEnvio);
                             Simulador.simulador.sistemaMonedas
                                     .setMonedas(Simulador.simulador.sistemaMonedas.getMonedas() + totalPago);
 
