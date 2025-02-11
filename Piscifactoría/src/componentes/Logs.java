@@ -572,46 +572,54 @@ public class Logs {
         }
     }
 
-    public void registrarGeneracionPedido(int idPedido, String nombrePez){
+    /**
+     * Registra en el archivo de logs la generación de un nuevo pedido.
+     *
+     * @param idPedido  el identificador del pedido generado.
+     * @param nombrePez el nombre del pez solicitado en el pedido.
+     */
+    public void registrarGeneracionPedido(int idPedido, String nombrePez) {
         BufferedWriter buferEscritura = null;
 
-        try{
+        try {
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Generado el pedido de " + nombrePez +" con referencia " + idPedido + ".");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Generado el pedido de " + nombrePez
+                    + " con referencia " + idPedido + ".");
             buferEscritura.flush();
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Hubo un problema a la hora de registrar el nuevo pedido.");
-        }
-        finally{
-            if(buferEscritura != null){
-                try{
+        } finally {
+            if (buferEscritura != null) {
+                try {
                     buferEscritura.close();
-                }
-                catch(IOException e){
+                } catch (IOException e) {
 
                 }
             }
         }
     }
 
-    public void registrarPedidoCompletado(int idPedido, String nombrePez){
+    /**
+     * Registra en el archivo de logs la finalización y envío de un pedido.
+     *
+     * @param idPedido  el identificador del pedido completado.
+     * @param nombrePez el nombre del pez del pedido enviado.
+     */
+    public void registrarPedidoCompletado(int idPedido, String nombrePez) {
         BufferedWriter buferEscritura = null;
 
-        try{
+        try {
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
-            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Pedido de " + nombrePez + " con referencia " + idPedido + " enviado.");
+            buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Pedido de " + nombrePez + " con referencia "
+                    + idPedido + " enviado.");
             buferEscritura.flush();
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Hubo un problema a la hora de registrar el pedido completado.");
-        }
-        finally{
-            if(buferEscritura != null){
-                try{
+        } finally {
+            if (buferEscritura != null) {
+                try {
                     buferEscritura.close();
-                }
-                catch(IOException e){
+                } catch (IOException e) {
 
                 }
             }

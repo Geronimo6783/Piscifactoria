@@ -2256,13 +2256,13 @@ public class Simulador {
                 DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
                 daoPedidos.insertarPedido(nuevoPedido);
     
-                // Recuperar el ID del último pedido insertado
+                
                 List<DTOPedido> pedidos = daoPedidos.obtenerPedidos();
                 if (!pedidos.isEmpty()) {
                     DTOPedido ultimoPedido = pedidos.get(pedidos.size() - 1);
                     int idPedido = ultimoPedido.getNumeroReferencia();
                     
-                    // Registrar en archivo
+                    
                     archivoTranscripcionesPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));                   
                     archivoLogPartida.registrarGeneracionPedido(idPedido, obtenerNombrePez(idPez, peces));
                     
@@ -2273,6 +2273,14 @@ public class Simulador {
         }
     }
 
+    /**
+     * Obtiene el nombre de un pez a partir de su identificador.
+     *
+     * @param idPez el identificador del pez que se desea buscar.
+     * @param peces la lista de objetos {@code DTOPez} donde se realizará la
+     *              búsqueda.
+     * @return el nombre del pez si se encuentra en la lista.
+     */
     private String obtenerNombrePez(int idPez, List<DTOPez> peces) {
         for (DTOPez pez : peces) {
             if (pez.getId() == idPez) {

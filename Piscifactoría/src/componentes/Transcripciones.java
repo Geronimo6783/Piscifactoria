@@ -613,6 +613,12 @@ public class Transcripciones {
         }
     }
 
+    /**
+     * Registra la generación de un nuevo pedido en el archivo de transcripciones.
+     *
+     * @param idPedido  Identificador único del pedido generado.
+     * @param nombrePez Nombre del pez solicitado en el pedido.
+     */
     public void registrarGeneracionPedido(int idPedido, String nombrePez){
         BufferedWriter buferEscritura = null;
 
@@ -636,6 +642,13 @@ public class Transcripciones {
         }
     }
 
+
+    /**
+     * Registra la finalización de un pedido en el archivo de transcripciones.
+     *
+     * @param idPedido  Identificador único del pedido completado.
+     * @param nombrePez Nombre del pez del pedido completado.
+     */
     public void registrarPedidoCompletado(int idPedido, String nombrePez){
         BufferedWriter buferEscritura = null;
 
@@ -659,6 +672,13 @@ public class Transcripciones {
         }
     }
 
+    /**
+     * Registra el envío parcial de peces en un pedido en el archivo de transcripciones.
+     *
+     * @param idPedido      Identificador único del pedido en el que se enviaron peces.
+     * @param nombrePez     Nombre del pez enviado.
+     * @param pecesEnviados Cantidad de peces enviados en esta transacción.
+     */
     public void registrarEnvioPeces(int idPedido, String nombrePez, int pecesEnviados){
         BufferedWriter buferEscritura = null;
 
