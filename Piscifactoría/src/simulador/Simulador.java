@@ -1,23 +1,14 @@
 package simulador;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -1105,9 +1096,8 @@ public class Simulador {
      * Imprime por pantalla los datos relativos a un pez.
      * 
      * @param datosDelPez Datos relativos a un pez a mostrar.
-     * @throws Exception Cuando el pez no es ni carnívoro, ni filtrador ni omnívoro.
      */
-    private static void mostrarInformacionPez(PecesDatos datosDelPez) throws Exception {
+    private static void mostrarInformacionPez(PecesDatos datosDelPez) {
         PecesProps alimentacionPez = null;
         System.out.println("Nombre: " + datosDelPez.getNombre());
         System.out.println("Nombre científico: " + datosDelPez.getCientifico());
@@ -1139,7 +1129,7 @@ public class Simulador {
                 System.out.println("\nTipo de comida que consume: Comida animal y vegetal");
             }
             default -> {
-                throw new Exception("Tipo de alimentación del pez no válida");
+                Logs.escribirError("Tipo de alimentación del pez no válida");
             }
         }
 

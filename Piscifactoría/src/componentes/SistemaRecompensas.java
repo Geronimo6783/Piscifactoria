@@ -1387,103 +1387,103 @@ public class SistemaRecompensas {
             switch (recompensaSeleccionada) {
                 case "Algas I" -> {
                     reclamarRecompensaAlgas(1);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Algas II" -> {
                     reclamarRecompensaAlgas(2);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Algas III" -> {
                     reclamarRecompensaAlgas(3);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Algas IV" -> {
                     reclamarRecompensaAlgas(4);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Algas V" -> {
                     reclamarRecompensaAlgas(5);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Monedas I" -> {
                     reclamarRecompensaMonedas(1);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Monedas II" -> {
                     reclamarRecompensaMonedas(2);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Monedas III" -> {
                     reclamarRecompensaMonedas(3);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Monedas IV" -> {
                     reclamarRecompensaMonedas(4);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Monedas V" -> {
                     reclamarRecompensaMonedas(5);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Comida general I" -> {
                     reclamarRecompensaComida(1);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Comida general II" -> {
                     reclamarRecompensaComida(2);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Comida general III" -> {
                     reclamarRecompensaComida(3);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Comida general IV" -> {
                     reclamarRecompensaComida(4);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Comida general V" -> {
                     reclamarRecompensaComida(5);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Pienso de peces I" -> {
                     reclamarRecompensaPienso(1);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Pienso de peces II" -> {
                     reclamarRecompensaPienso(2);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Pienso de peces III" -> {
                     reclamarRecompensaPienso(3);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Pienso de peces IV" -> {
                     reclamarRecompensaPienso(4);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Pienso de peces V" -> {
                     reclamarRecompensaPienso(5);
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Tanque de río" -> {
                     reclamarRecompensaTanqueRio();
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Tanque de mar" -> {
                     reclamarRecompensaTanqueMar();
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Piscifactoría de río" -> {
                     reclamarRecompensaPiscifactoriaRio();
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Piscifactoría de mar" -> {
                     reclamarRecompensaPiscifactoriaMar();
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
                 case "Almacén central" -> {
                     reclamarRecompensaAlmacenCentral();
-                    Logs.registrarUsoRecompensa(Simulador.simulador.nombre);
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
             }
         }
