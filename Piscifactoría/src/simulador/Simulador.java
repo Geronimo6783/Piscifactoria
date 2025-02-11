@@ -2147,6 +2147,24 @@ public class Simulador {
         if (pedidos.isEmpty()) {
             System.out.println("No hay pedidos pendientes.");
         } else {
+            Collections.sort(pedidos, new Comparator<DTOPedidoUsuarioPez>() {
+
+                /**
+                 * Compara dos DTOPedidoUsuarioPez indica si el primero es menor o mayor al segundo.
+                 * @param arg0 Primer argumento de la comparación.
+                 * @param arg1 Segundo argumento de la comparación.
+                 */
+                @Override
+                public int compare(DTOPedidoUsuarioPez arg0, DTOPedidoUsuarioPez arg1) {
+                    if(arg0.getNumeroReferencia() < arg1.getNumeroReferencia()){
+                        return -1;
+                    }
+                    else{
+                        return 1;
+                    }
+                }
+                
+            });
             String[] opcionesPedidos = new String[pedidos.size() + 1];
             opcionesPedidos[0] = "Cancelar";
             for (int i = 0; i < pedidos.size(); i++) {
@@ -2221,31 +2239,6 @@ public class Simulador {
      * @param diasPasados Número de días transcurridos en la simulación.
      *                    Se generará un pedido solo si es un múltiplo de 10.
      */
-   /*  public void generarPedidosAutomaticamente(int diasPasados) {
-        if (diasPasados % 10 == 0) {
-            DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
-            Random random = new Random();
-
-            List<DTOCliente> clientes = daoPedidos.obtenerClientes();
-            List<DTOPez> peces = daoPedidos.obtenerPeces();
-
-            if (!clientes.isEmpty() && !peces.isEmpty()) {
-                int idCliente = clientes.get(random.nextInt(clientes.size())).getId();
-                int idPez = peces.get(random.nextInt(peces.size())).getId();
-                int cantidadPeces = 10 + random.nextInt(41);
-
-                DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
-                daoPedidos.insertarPedido(nuevoPedido);
-
-                
-
-                //System.out.println("Se ha generado automáticamente un nuevo pedido.");
-            } else {
-                System.out.println("No hay clientes o peces disponibles para generar pedidos.");
-            }
-        }
-    }*/
-
     public void generarPedidosAutomaticamente(int diasPasados) {
         if (diasPasados % 10 == 0) {
             DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
@@ -2336,7 +2329,7 @@ public class Simulador {
             init();
 
             int opcion = 0;
-            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ,94, 95, 96, 97, 98, 99 };
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 , 95, 96, 97, 98, 99 };
 
             while (opcion != 16) {
 
@@ -2363,9 +2356,8 @@ public class Simulador {
                         case 14 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 15 -> {simulador.gestionarPedidosNoFinalizados();}
                         case 16 -> {System.out.println("Cerrando...");}
-                        case 94 -> {simulador.mostrarPedidosCompletados();}
-                        case 95 -> {simulador.borrarTodosLosPedidos();}
-                        case 96 -> {Simulador.anadirRecompensa();}
+                        case 95 -> {simulador.mostrarPedidosCompletados();}
+                        case 96 -> {simulador.borrarTodosLosPedidos();}
                         case 97 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 98 -> {simulador.anadirPezAleatorio();}
                         case 99 -> {simulador.anadirMonedasOculto();}
