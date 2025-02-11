@@ -1527,8 +1527,6 @@ public class SistemaRecompensas {
 
         reducirRecompensa(new File("rewards/pisci_r_a.xml"));
         reducirRecompensa(new File("rewards/pisci_r_b.xml"));
-        reducirRecompensa(new File("rewards/pisci_r_c.xml"));
-        reducirRecompensa(new File("rewards/pisci_r_d.xml"));
     }
 
     /**
@@ -1540,8 +1538,6 @@ public class SistemaRecompensas {
 
         reducirRecompensa(new File("rewards/pisci_m_a.xml"));
         reducirRecompensa(new File("rewards/pisci_m_b.xml"));
-        reducirRecompensa(new File("rewards/pisci_m_c.xml"));
-        reducirRecompensa(new File("rewards/pisci_m_d.xml"));
     }
 
     /**
