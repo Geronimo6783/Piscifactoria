@@ -105,7 +105,7 @@ public class Simulador {
      * Nombre de la entidad, empresa o partida de la simulación.
      */
     @SerializedName("empresa")
-    private String nombre;
+    public String nombre;
 
     /**
      * Indica el número de días que han pasado en la simulación.
