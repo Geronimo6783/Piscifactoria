@@ -612,4 +612,73 @@ public class Transcripciones {
             }
         }
     }
+
+    public void registrarGeneracionPedido(int idPedido, String nombrePez){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("\n" + " Generado el pedido de " + nombrePez +" con referencia " + idPedido + ".");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar el nuevo pedido.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    public void registrarPedidoCompletado(int idPedido, String nombrePez){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("\n" + " Pedido de " + nombrePez + " con referencia " + idPedido + "enviado.");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar el pedido completado.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    public void registrarEnvioPeces(int idPedido, String nombrePez, int pecesEnviados){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("\n" + " Enviados " + pecesEnviados + " peces al pedido de " + nombrePez + " con referencia " + idPedido + ".");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar el pedido completado.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
 }
