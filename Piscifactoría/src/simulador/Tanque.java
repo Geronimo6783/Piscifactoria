@@ -283,7 +283,7 @@ public class Tanque {
         int comidaAnimal = almacenComida.getCantidadComidaAnimal();
         int comidaVegetal = almacenComida.getCantidadComidaVegetal();
 
-        if (Simulador.simulador.almacenCentral == null) {
+        if (!Simulador.simulador.almacenCentral.isDisponible()) {
             for (Pez pez : peces) {
                 if (pez.isVivo() && !pez.isAlimentado()) {
                     cantidadDeComidaNecesariaPorPez.add(pez.comer());
@@ -532,21 +532,17 @@ public class Tanque {
         } else {
             if (peces.get(0) instanceof Carnivoro) {
                 almacenComida.setCantidadComidaAnimal(0);
-                ;
                 Simulador.simulador.almacenCentral.setCantidadComidaAnimal(comidaDisponible);
             } else {
                 if (peces.get(0) instanceof Filtrador) {
                     almacenComida.setCantidadComidaVegetal(0);
-                    ;
                     Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
 
                 } else {
                     if (Simulador.simulador.almacenCentral.getCantidadComidaAnimal() > Simulador.simulador.almacenCentral
                             .getCantidadComidaVegetal()) {
                         almacenComida.setCantidadComidaAnimal(0);
-                        ;
                         almacenComida.setCantidadComidaVegetal(0);
-                        ;
                         Simulador.simulador.almacenCentral.setCantidadComidaAnimal(0);
                         Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
                     } else {
