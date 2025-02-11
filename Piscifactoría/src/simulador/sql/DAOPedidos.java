@@ -39,13 +39,14 @@ public class DAOPedidos {
     private PreparedStatement consultaPedidos;
 
     /**
-     * Consulta que recupera los pedidos que no han sido realizados al 100% con el
-     * nombre
-     * del cliente, el nombre del pedido, el porcentaje de completado del pedido y
-     * el número de
-     * referencia del pedido.
+     * Consulta que obtiene los pedidos no completados.
      */
     private PreparedStatement consultaPedidosNoRealizados;
+
+    /**
+     *Consulta que obtiene los pedidos completados.
+     */
+    private PreparedStatement consultaPedidosCompletados;
 
     /**
      * Sentencia para la inserción de un cliente.
@@ -82,6 +83,10 @@ public class DAOPedidos {
                     "Cliente.Nombre, Pez.Nombre, peces_enviados, peces_solicitados, (peces_enviados/peces_solicitados) * 100 FROM Pedido INNER JOIN Cliente"
                     + " ON Pedido.fk_id_cliente = Cliente.id INNER JOIN Pez ON Pedido.fk_id_pez = Pez.id WHERE " +
                     "((peces_enviados/peces_solicitados) * 100) != 100 ORDER BY Pez.Nombre ASC;");
+            consultaPedidosCompletados = conexion.prepareStatement("SELECT Pedido.Numero_referencia, " +
+                    "Cliente.Nombre, Pez.Nombre, peces_enviados, peces_solicitados, (peces_enviados/peces_solicitados) * 100 FROM Pedido INNER JOIN Cliente"
+                    + " ON Pedido.fk_id_cliente = Cliente.id INNER JOIN Pez ON Pedido.fk_id_pez = Pez.id WHERE " +
+                    "((peces_enviados/peces_solicitados) * 100) = 100 ORDER BY Pez.Nombre ASC;");
             insercionCliente = conexion.prepareStatement("INSERT INTO Cliente (nombre,nif,telefono) VALUES (?,?,?);");
             insercionPedido = conexion.prepareStatement(
                     "INSERT INTO Pedido (fk_id_cliente,fk_id_pez,peces_solicitados,peces_enviados) VALUES (?,?,?,?);");
@@ -212,9 +217,8 @@ public class DAOPedidos {
     }
 
     /**
-     * Obtiene el número de referencia, el nombre del cliente, el nombre del pez y
-     * el porcentaje de completado
-     * de los pedido que no han sido finalizados.
+     * Realiza una consulta en la que se obtienen todos los pedidos no completados en la base de
+     * datos.
      * 
      * @return Número de referencia, nombre del cliente, nombre del pez y porcentaje
      *         de completado de los pedidos que no han
@@ -226,6 +230,40 @@ public class DAOPedidos {
 
         try {
             resultadosConsulta = consultaPedidosNoRealizados.executeQuery();
+
+            while (resultadosConsulta.next()) {
+                datos.add(new DTOPedidoUsuarioPez(resultadosConsulta.getInt(1), resultadosConsulta.getString(2),
+                        resultadosConsulta.getString(3), resultadosConsulta.getInt(4), resultadosConsulta.getInt(5),
+                        resultadosConsulta.getInt(6)));
+            }
+        } catch (SQLException e) {
+            Logs.escribirError("No se ha podido realizar la consulta a la base de datos.");
+        } finally {
+            if (resultadosConsulta != null) {
+                try {
+                    resultadosConsulta.close();
+                } catch (SQLException e) {
+
+                }
+            }
+        }
+
+        return datos;
+    }
+
+    /**
+     * Realiza una consulta en la que se obtienen todos los pedidos completados en la base de
+     * datos.
+     * 
+     * @return Número de referencia, nombre del cliente, nombre del pez y porcentaje
+     *         de los pedidos completados.
+     */
+    public ArrayList<DTOPedidoUsuarioPez> obtenerPedidosCompletados() {
+        ResultSet resultadosConsulta = null;
+        ArrayList<DTOPedidoUsuarioPez> datos = new ArrayList<>();
+
+        try {
+            resultadosConsulta = consultaPedidosCompletados.executeQuery();
 
             while (resultadosConsulta.next()) {
                 datos.add(new DTOPedidoUsuarioPez(resultadosConsulta.getInt(1), resultadosConsulta.getString(2),
