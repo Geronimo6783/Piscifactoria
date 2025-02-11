@@ -177,11 +177,4 @@ public class GeneradorBD {
 
         }
     }
-
-    public static void main(String[] args) {
-        GeneradorBD.crearTablas();
-        GeneradorBD.insertarClientes();
-        GeneradorBD.insertarPeces();
-        GeneradorBD.close();
-    }
 }
