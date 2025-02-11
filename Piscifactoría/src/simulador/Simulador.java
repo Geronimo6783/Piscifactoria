@@ -351,7 +351,7 @@ public class Simulador {
                 nombrePiscifactoria);
 
         archivoLogPartida.inicioLog(simulador.nombre, nombrePiscifactoria);
-        simulador.generarPedidosAutomaticamente(0);
+        
     }
 
     /**
@@ -565,6 +565,7 @@ public class Simulador {
 
         diasPasados++;
         showGeneralStatus();
+        simulador.generarPedidosAutomaticamente(diasPasados);
 
         try {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
@@ -1643,6 +1644,7 @@ public class Simulador {
         System.out.println("En estos " + dias + " días se han vendido " + pecesVendidos
                 + " peces y se han ganado " + monedasGanadas + " monedas.");
         showGeneralStatus();
+        simulador.generarPedidosAutomaticamente(diasPasados);
 
         try {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
@@ -2333,7 +2335,7 @@ public class Simulador {
             init();
 
             int opcion = 0;
-            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 96, 97, 98, 99 };
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ,94, 95, 96, 97, 98, 99 };
 
             while (opcion != 16) {
 
@@ -2360,6 +2362,8 @@ public class Simulador {
                         case 14 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 15 -> {simulador.gestionarPedidosNoFinalizados();}
                         case 16 -> {System.out.println("Cerrando...");}
+                        case 94 -> {simulador.mostrarPedidosCompletados();}
+                        case 95 -> {simulador.borrarTodosLosPedidos();}
                         case 96 -> {Simulador.anadirRecompensa();}
                         case 97 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 98 -> {simulador.anadirPezAleatorio();}
