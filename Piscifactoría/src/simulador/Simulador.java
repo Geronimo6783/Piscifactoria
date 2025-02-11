@@ -387,7 +387,7 @@ public class Simulador {
      * 
      * @return Opción seleccionada.
      */
-    private int selectPisc() {
+    public int selectPisc() {
         menuPisc();
 
         return SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
