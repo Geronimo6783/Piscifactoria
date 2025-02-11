@@ -57,6 +57,9 @@ public class ArenqueDelAtlantico extends Filtrador implements Mar{
                     fertil = true;
                 }
             }
+            else{
+                fertil = false;
+            }
         }
         alimentado = false;
     }

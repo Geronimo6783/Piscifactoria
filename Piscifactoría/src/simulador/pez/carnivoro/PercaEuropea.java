@@ -57,6 +57,9 @@ public class PercaEuropea extends Carnivoro implements Rio{
                     fertil = true;
                 }
             }
+            else{
+                fertil = false;
+            }
         }
         alimentado = false;
     }
