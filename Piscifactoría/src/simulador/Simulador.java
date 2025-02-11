@@ -2366,7 +2366,7 @@ public class Simulador {
                         case 16 -> {System.out.println("Cerrando...");}
                         case 94 -> {simulador.mostrarPedidosCompletados();}
                         case 95 -> {simulador.borrarTodosLosPedidos();}
-                        case 96 -> {Simulador.anadirRecompensa();}
+                        //case 96 -> {Simulador.anadirRecompensa();}
                         case 97 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 98 -> {simulador.anadirPezAleatorio();}
                         case 99 -> {simulador.anadirMonedasOculto();}
