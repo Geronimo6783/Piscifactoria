@@ -2381,7 +2381,7 @@ public class Simulador {
             init();
 
             int opcion = 0;
-            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 , 95, 96, 97, 98, 99 };
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 96, 97, 98, 99 };
 
             while (opcion != 16) {
 
@@ -2408,9 +2408,8 @@ public class Simulador {
                         case 14 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 15 -> {simulador.gestionarPedidosNoFinalizados();}
                         case 16 -> {System.out.println("Cerrando...");}
-                        case 95 -> {simulador.mostrarPedidosCompletados();}
-                        case 96 -> {simulador.borrarTodosLosPedidos();}
-                        case 97 -> {SistemaRecompensas.reclamarRecompensa();}
+                        case 96 -> {simulador.mostrarPedidosCompletados();}
+                        case 97 -> {simulador.borrarTodosLosPedidos();}
                         case 98 -> {simulador.anadirPezAleatorio();}
                         case 99 -> {simulador.anadirMonedasOculto();}
                     }
