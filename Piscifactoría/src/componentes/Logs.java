@@ -22,7 +22,7 @@ public class Logs {
          * @param archivoLogs Archivo donde se escriben los logs.
          */
         public Logs(File archivoLogs){
-            this.archivoLogs = archivoLogs;
+            Logs.archivoLogs = archivoLogs;
         }
     
         /**
@@ -522,7 +522,7 @@ public class Logs {
      * Registra la recepción de una recompensa.
      * @param receptor Nombre del receptor de la recompensa.
      */
-    public void registrarRecompensaRecibida(String receptor){
+    public static void registrarRecompensaRecibida(String receptor){
         BufferedWriter buferEscritura = null;
 
         try{

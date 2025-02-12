@@ -159,6 +159,11 @@ public class Simulador {
     public static Simulador simulador;
 
     /**
+     * Objeto DAO (Data Access Object) para realizar operaciones en la base de datos.
+     */
+    private static DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
+
+    /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
      */
     private static void init() {
@@ -2116,8 +2121,7 @@ public class Simulador {
      * peces enviados y el pago.
      */
     public void gestionarPedidosNoFinalizados() {
-        DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
-        ArrayList<DTOPedidoUsuarioPez> pedidos = daoPedidos.obtenerPedidosNoFinalizados();
+        ArrayList<DTOPedidoUsuarioPez> pedidos = Simulador.daoPedidos.obtenerPedidosNoFinalizados();
 
         if (pedidos.isEmpty()) {
             System.out.println("No hay pedidos pendientes.");
@@ -2226,43 +2230,57 @@ public class Simulador {
             if (tipoComida == 1) {
                 if (nivelComida == 1 || nivelComida == 2 || nivelComida == 3 || nivelComida == 4|| nivelComida == 5|| nivelComida == 6)  {
                     SistemaRecompensas.generarRecompensaAlgas(1, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 } else if (nivelComida == 7|| nivelComida == 8|| nivelComida == 9) {
                     SistemaRecompensas.generarRecompensaAlgas(2, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 } else if (nivelComida == 10) {
                     SistemaRecompensas.generarRecompensaAlgas(3, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 }
             } else if (tipoComida == 2) {
                 if (nivelComida == 1 || nivelComida == 2 || nivelComida == 3 || nivelComida == 4|| nivelComida == 5|| nivelComida == 6)  {
                     SistemaRecompensas.generarRecompensaPienso(1, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 } else if (nivelComida == 7|| nivelComida == 8|| nivelComida == 9) {
                     SistemaRecompensas.generarRecompensaPienso(2, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 } else if (nivelComida == 10) {
                     SistemaRecompensas.generarRecompensaPienso(3, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 }
             } else {
                 if (nivelComida == 1 || nivelComida == 2 || nivelComida == 3 || nivelComida == 4|| nivelComida == 5|| nivelComida == 6)  {
                     SistemaRecompensas.generarRecompensaComida(1, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 } else if (nivelComida == 7|| nivelComida == 8|| nivelComida == 9) {
                     SistemaRecompensas.generarRecompensaComida(2, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 } else if (nivelComida == 10) {
                     SistemaRecompensas.generarRecompensaComida(3, origen);
+                    Logs.registrarRecompensaRecibida(origen);
                 }
             }
         } else if (nRandomTipoRecomp == 6 || nRandomTipoRecomp == 7 || nRandomTipoRecomp == 8 || nRandomTipoRecomp == 9) {
             int nivelMonedas = r.nextInt(10)+1;
             if (nivelMonedas == 1 || nivelMonedas == 2 || nivelMonedas == 3 || nivelMonedas == 4|| nivelMonedas == 5|| nivelMonedas == 6)  {
                 SistemaRecompensas.generarRecompensaMonedas(1, origen);
+                Logs.registrarRecompensaRecibida(origen);
             } else if (nivelMonedas == 7|| nivelMonedas == 8|| nivelMonedas == 9) {
                 SistemaRecompensas.generarRecompensaMonedas(2, origen);
+                Logs.registrarRecompensaRecibida(origen);
             } else if (nivelMonedas == 10) {
                 SistemaRecompensas.generarRecompensaMonedas(3, origen);
+                Logs.registrarRecompensaRecibida(origen);
             }
         } else {
             int tipoTanque = r.nextInt(10)+1;
             if (tipoTanque == 1 || tipoTanque == 2 || tipoTanque == 3 || tipoTanque == 4|| tipoTanque == 5|| tipoTanque == 6)  {
                 SistemaRecompensas.generarRecompensaTanqueMar(origen);
+                Logs.registrarRecompensaRecibida(origen);
             }else{
                 SistemaRecompensas.generarRecompensaTanqueRio(origen);
+                Logs.registrarRecompensaRecibida(origen);
             }
         }
     }
@@ -2275,11 +2293,10 @@ public class Simulador {
      */
     public void generarPedidosAutomaticamente(int diasPasados) {
         if (diasPasados % 10 == 0) {
-            DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
             Random random = new Random();
     
-            List<DTOCliente> clientes = daoPedidos.obtenerClientes();
-            List<DTOPez> peces = daoPedidos.obtenerPeces();
+            List<DTOCliente> clientes = Simulador.daoPedidos.obtenerClientes();
+            List<DTOPez> peces = Simulador.daoPedidos.obtenerPeces();
     
             if (!clientes.isEmpty() && !peces.isEmpty()) {
                 int idCliente = clientes.get(random.nextInt(clientes.size())).getId();
@@ -2287,7 +2304,7 @@ public class Simulador {
                 int cantidadPeces = 10 + random.nextInt(41);
     
                 DTOPedido nuevoPedido = new DTOPedido(idCliente, idPez, cantidadPeces, 0);
-                daoPedidos.insertarPedido(nuevoPedido);
+                Simulador.daoPedidos.insertarPedido(nuevoPedido);
     
                 
                 List<DTOPedido> pedidos = daoPedidos.obtenerPedidos();
@@ -2327,8 +2344,7 @@ public class Simulador {
      * Método para borrar todos los pedidos de la base de datos.
      */
     public void borrarTodosLosPedidos() {
-        DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
-        daoPedidos.borrarPedidos();
+        Simulador.daoPedidos.borrarPedidos();
         System.out.println("Todos los pedidos han sido eliminados.");
     }
 
@@ -2336,8 +2352,7 @@ public class Simulador {
      * Método para mostrar los pedidos completados al 100%.
      */
     public void mostrarPedidosCompletados() {
-        DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
-        ArrayList<DTOPedidoUsuarioPez> pedidos = daoPedidos.obtenerPedidosCompletados();
+        ArrayList<DTOPedidoUsuarioPez> pedidos = Simulador.daoPedidos.obtenerPedidosCompletados();
         boolean hayPedidosCompletados = false;
 
         System.out.println("===== Pedidos Completados =====");
@@ -2405,6 +2420,8 @@ public class Simulador {
             }
 
             SistemaEntrada.close();
+
+            Simulador.daoPedidos.close();
 
             archivoLogPartida.registrarSalidaPartida();
 
