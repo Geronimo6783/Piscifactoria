@@ -161,7 +161,7 @@ public class Simulador {
     /**
      * Objeto DAO (Data Access Object) para realizar operaciones en la base de datos.
      */
-    private static DAOPedidos daoPedidos;
+    private static DAOPedidos daoPedidos = new DAOPedidos(Conexion.getConexion());
 
     /**
      * Método que inicializa la simulación pidiendo una serie de datos al usuario.
