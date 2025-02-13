@@ -33,6 +33,8 @@ import propiedades.PecesDatos;
 import propiedades.PecesProps;
 import simulador.pez.filtrador.ArenqueDelAtlantico;
 import simulador.pez.filtrador.TilapiaDelNilo;
+import simulador.edificios.AlmacenCentral;
+import simulador.edificios.Fitoplancton;
 import simulador.pez.Pez;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
@@ -122,6 +124,12 @@ public class Simulador {
      */
     @SerializedName("edificios")
     public AlmacenCentral almacenCentral = new AlmacenCentral();
+
+    /**
+     * Granja de fitoplacton de la piscifactoría.
+     */
+    @SerializedName("fitoplancton")
+    public Fitoplancton granjaFitoplancton;
 
     /**
      * Piscifactorías de la simulación.
@@ -233,7 +241,7 @@ public class Simulador {
                     AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                     AlmacenPropiedades.TILAPIA_NILO.getNombre() };
             simulador.estadisticas = new Estadisticas(simulador.pecesImplementados);
-
+            simulador.granjaFitoplancton = new Fitoplancton();
         }
 
         try {
@@ -322,20 +330,20 @@ public class Simulador {
         archivoLogPartida = new Logs(new File("logs/" + simulador.nombre + ".log"));
 
         if(opcion!=-1){
-        archivoTranscripcionesPartida.iniciarTranscripciones(simulador.nombre, simulador.sistemaMonedas.getMonedas(),
-                new String[] { AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(),
-                        AlmacenPropiedades.DORADA.getNombre(),
-                        AlmacenPropiedades.PEJERREY.getNombre(), AlmacenPropiedades.PERCA_EUROPEA.getNombre(),
-                        AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-                        AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre() },
-                new String[] { AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-                        AlmacenPropiedades.CABALLA.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
-                        AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
-                        AlmacenPropiedades.SARGO.getNombre() },
-                nombrePiscifactoria);
+            archivoTranscripcionesPartida.iniciarTranscripciones(simulador.nombre, simulador.sistemaMonedas.getMonedas(),
+                    new String[] { AlmacenPropiedades.CARPIN_TRES_ESPINAS.getNombre(),
+                            AlmacenPropiedades.DORADA.getNombre(),
+                            AlmacenPropiedades.PEJERREY.getNombre(), AlmacenPropiedades.PERCA_EUROPEA.getNombre(),
+                            AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                            AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.TILAPIA_NILO.getNombre() },
+                    new String[] { AlmacenPropiedades.ABADEJO.getNombre(), AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
+                            AlmacenPropiedades.CABALLA.getNombre(), AlmacenPropiedades.DORADA.getNombre(),
+                            AlmacenPropiedades.ROBALO.getNombre(), AlmacenPropiedades.SALMON_ATLANTICO.getNombre(),
+                            AlmacenPropiedades.SARGO.getNombre() },
+                    nombrePiscifactoria);
 
-        archivoLogPartida.inicioLog(simulador.nombre, nombrePiscifactoria);
-                }
+            archivoLogPartida.inicioLog(simulador.nombre, nombrePiscifactoria);
+        }
         
     }
 
@@ -550,6 +558,28 @@ public class Simulador {
         diasPasados++;
         showGeneralStatus();
         simulador.generarPedidosAutomaticamente(diasPasados);
+
+        if(granjaFitoplancton.isDisponible()){
+            int ciclo = granjaFitoplancton.getCiclo();
+            
+            if(ciclo % 5 == 0){
+                ciclo = -1;
+                int comidaGenerada = granjaFitoplancton.getTanques() * 500;
+                int comidaMaximaVegetal = almacenCentral.getCapacidadComida();
+                
+                if(comidaGenerada > comidaMaximaVegetal){
+                    almacenCentral.setCantidadComidaVegetal(comidaMaximaVegetal);
+                }
+                else{
+                    almacenCentral.setCantidadComidaVegetal(comidaGenerada);
+                }
+
+                repartirComida();
+            }
+
+            ciclo++;
+            granjaFitoplancton.setCiclo(ciclo);
+        }
 
         try {
             LecturaEscrituraJSON.<Simulador>guardarJSON(archivoGuardadoPartida, simulador);
@@ -1253,13 +1283,24 @@ public class Simulador {
         System.out.println("========== Comprar edificio ==========");
         if (almacenCentral.isDisponible()) {
 
-            String[] opciones = { "Cancelar", "Comprar piscifactoría" };
-            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
+            if(granjaFitoplancton.isDisponible()){
+                String[] opciones = { "Cancelar", "Comprar piscifactoría" };
+                int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
 
-            if (opcion == 1) {
-                comprarPiscifactoria();
-            } else {
-                System.out.println("Operación cancelada.");
+                if (opcion == 1) {
+                    comprarPiscifactoria();
+                } else {
+                    System.out.println("Operación cancelada.");
+                }
+            }
+            else{
+                String[] opciones = {"Cancelar", "Comprar piscifactoría", "Comprar granja de fitoplancton"};
+                int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
+
+                switch(opcion){
+                    case 1 -> {comprarPiscifactoria();}
+                    case 2 -> {comprarGranjaFitoplancton();}
+                }
             }
         } else {
             String[] opciones = { "Cancelar", "Comprar piscifactoría", "Comprar almacén central - 2000 monedas" };
@@ -1283,6 +1324,23 @@ public class Simulador {
                     }
                     break;
             }
+        }
+    }
+
+    /**
+     * Gestiona la compra de la granja de fitoplancton.
+     */
+    private void comprarGranjaFitoplancton(){
+        int monedas = sistemaMonedas.getMonedas();
+        if(monedas >= 5000){
+            monedas -= 5000;
+            sistemaMonedas.setMonedas(monedas);
+            granjaFitoplancton.setDisponible(true);
+            granjaFitoplancton.setTanques(1);
+            Simulador.archivoTranscripcionesPartida.registrarCompraGranjaFitoplancton();
+        }
+        else{
+            System.out.println("No se disponen de las suficientes monedas para la compra de la granja de fitoplacton, faltan " + (5000 - monedas) + " monedas.");
         }
     }
 
@@ -1329,21 +1387,40 @@ public class Simulador {
     private void mejorarEdificio() {
         System.out.println("========== Mejorar edificio ==========");
         if (almacenCentral.isDisponible()) {
-            String[] opciones = {
+
+            if(!granjaFitoplancton.isDisponible()){
+                String[] opciones = {
+                        "Cancelar",
+                        "Mejorar una piscifactoría",
+                        "Mejorar el almacén central"
+                };
+                int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
+
+                switch (opcion) {
+                    case 1:
+                        mejorarPiscifactoria();
+                        break;
+                    case 2:
+                        aumentarCapacidadAlmacenCentral();
+                        break;
+                }
+            }
+            else{
+                String[] opciones = {
                     "Cancelar",
                     "Mejorar una piscifactoría",
-                    "Mejorar el almacén central"
-            };
-            int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
+                    "Mejorar el almacén central",
+                    "Mejorar la granja de fictoplancton"
+                };
+                int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 3);
 
-            switch (opcion) {
-                case 1:
-                    mejorarPiscifactoria();
-                    break;
-                case 2:
-                    aumentarCapacidadAlmacenCentral();
-                    break;
+                switch(opcion){
+                    case 1 -> {mejorarPiscifactoria();}
+                    case 2 -> {aumentarCapacidadAlmacenCentral();}
+                    case 3 -> {mejorarGranjaFitoplancton();}
+                }
             }
+
         } else {
             String[] opciones = { "Cancelar", "Mejorar una piscifactoría" };
             int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
@@ -1353,6 +1430,22 @@ public class Simulador {
             } else {
                 System.out.println("Operación cancelada.");
             }
+        }
+    }
+
+    /**
+     * Gestiona la mejora de la granja de fitoplancton.
+     */
+    private void mejorarGranjaFitoplancton(){
+        int monedas = sistemaMonedas.getMonedas();
+        if(monedas >= 2500){
+            granjaFitoplancton.mejorar();
+            monedas -= 2500;
+            sistemaMonedas.setMonedas(monedas);
+            Simulador.archivoTranscripcionesPartida.registrarMejoraGranjaFictoplancton(granjaFitoplancton.getTanques());
+        }
+        else{
+            System.out.println("No tiene suficiente monedas para mejorar la granja de fictoplancton, faltan " + (2500 - monedas) + " monedas.");
         }
     }
 
@@ -1615,8 +1708,29 @@ public class Simulador {
                 repartirComida();
             }
 
-            archivoTranscripcionesPartida.registrarPasoDia(diasPasados + 1, pecesRio, pecesMar, monedasGanadas,
-                    pecesVendidos);
+            if(granjaFitoplancton.isDisponible()){
+                int ciclo = granjaFitoplancton.getCiclo();
+                
+                if(ciclo % 5 == 0){
+                    ciclo = -1;
+                    int comidaGenerada = granjaFitoplancton.getTanques() * 500;
+                    int comidaMaximaVegetal = almacenCentral.getCapacidadComida();
+                    
+                    if(comidaGenerada > comidaMaximaVegetal){
+                        almacenCentral.setCantidadComidaVegetal(comidaMaximaVegetal);
+                    }
+                    else{
+                        almacenCentral.setCantidadComidaVegetal(comidaGenerada);
+                    }
+
+                    repartirComida();
+                }
+    
+                ciclo++;
+                granjaFitoplancton.setCiclo(ciclo);
+            }
+
+            archivoTranscripcionesPartida.registrarPasoDia(diasPasados + 1, pecesRio, pecesMar, monedasGanadas, pecesVendidos);
             archivoLogPartida.registrarPasoDia(diasPasados + 1);
             diasPasados++;
             pecesRio = 0;

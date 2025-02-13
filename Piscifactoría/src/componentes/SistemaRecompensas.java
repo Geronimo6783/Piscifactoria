@@ -1248,6 +1248,306 @@ public class SistemaRecompensas {
     }
 
     /**
+     * Generar una recompensa de fitoplancton.
+     * @param parte Parte de la recompensa.
+     * @param origen Origen de la recompensa.
+     */
+    public static void generarRecompensaFitoplancton(char parte, String origen){
+        switch(parte){
+            case 'A' -> {
+                File archivoRecompensa = new File("rewards/fitoplancton_a.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Granja de fitoplancton [A]", origen, "Materiales para la construcción de una granja de fitoplancton. Con la parte A, B, C y D, puedes obtenerla de forma gratuita.", 3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "5").setText("Granja de fitoplancton");
+                    elementoGive.addElement("part").setText("A");
+                    elementoGive.addElement("total").setText("ABCD");
+
+                    XMLWriter escritorXML = null;
+
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(
+                                        new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    }
+                }
+                else{
+                    aumentarRecompensa(archivoRecompensa);
+                }
+                Logs.registrarCreacionRecompensa();
+            }
+            case 'B' -> {
+                File archivoRecompensa = new File("rewards/fitoplancton_b.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Granja de fitoplancton [B]", origen, "Materiales para la construcción de una granja de fitoplancton. Con la parte A, B, C y D, puedes obtenerla de forma gratuita.", 3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "5").setText("Granja de fitoplancton");
+                    elementoGive.addElement("part").setText("B");
+                    elementoGive.addElement("total").setText("ABCD");
+
+                    XMLWriter escritorXML = null;
+
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(
+                                        new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    }
+                }
+                else{
+                    aumentarRecompensa(archivoRecompensa);
+                }
+                Logs.registrarCreacionRecompensa();
+            }
+            case 'C' -> {
+                File archivoRecompensa = new File("rewards/fitoplancton_c.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Granja de fitoplancton [C]", origen, "Materiales para la construcción de una granja de fitoplancton. Con la parte A, B, C y D, puedes obtenerla de forma gratuita.", 3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "5").setText("Granja de fitoplancton");
+                    elementoGive.addElement("part").setText("C");
+                    elementoGive.addElement("total").setText("ABCD");
+
+                    XMLWriter escritorXML = null;
+
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(
+                                        new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    }
+                }
+                else{
+                    aumentarRecompensa(archivoRecompensa);
+                }
+                Logs.registrarCreacionRecompensa();
+            }
+            case 'D' -> {
+                File archivoRecompensa = new File("rewards/fitoplancton_d.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Granja de fitoplancton [D]", origen, "Materiales para la construcción de una granja de fitoplancton. Con la parte A, B, C y D, puedes obtenerla de forma gratuita.", 3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "5").setText("Granja de fitoplancton");
+                    elementoGive.addElement("part").setText("D");
+                    elementoGive.addElement("total").setText("ABCD");
+
+                    XMLWriter escritorXML = null;
+
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(
+                                        new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    }
+                }
+                else{
+                    aumentarRecompensa(archivoRecompensa);
+                }
+                Logs.registrarCreacionRecompensa();
+            }
+        }
+    }
+
+    /**
+     * Genera una recompensa de langostinos.
+     * @param parte Parte de la recompensa de langostinos.
+     * @param origen Origen de la recompensa.
+     */
+    public static void generarRecompensaLangostinos(char parte, String origen){
+        switch(parte){
+            case 'A' -> {
+                File archivoRecompensa = new File("rewards/langostinos_a.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Granja de langostinos [A]", origen, "Materiales para la construcción de una granja de langostinos. Con la parte A, B, C y D, puedes obtenerla de forma gratuita.", 3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "6").setText("Granja de langostinos");
+                    elementoGive.addElement("part").setText("A");
+                    elementoGive.addElement("total").setText("ABCD");
+
+                    XMLWriter escritorXML = null;
+
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(
+                                        new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    }
+                }
+                else{
+                    aumentarRecompensa(archivoRecompensa);
+                }
+                Logs.registrarCreacionRecompensa();
+            }
+            case 'B' -> {
+                File archivoRecompensa = new File("rewards/langostinos_b.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Granja de langostinos [B]", origen, "Materiales para la construcción de una granja de langostinos. Con la parte A, B, C y D, puedes obtenerla de forma gratuita.", 3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "6").setText("Granja de langostinos");
+                    elementoGive.addElement("part").setText("B");
+                    elementoGive.addElement("total").setText("ABCD");
+
+                    XMLWriter escritorXML = null;
+
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(
+                                        new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    }
+                }
+                else{
+                    aumentarRecompensa(archivoRecompensa);
+                }
+                Logs.registrarCreacionRecompensa();
+            }
+            case 'C' -> {
+                File archivoRecompensa = new File("rewards/langostinos_c.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Granja de langostinos [C]", origen, "Materiales para la construcción de una granja de langostinos. Con la parte A, B, C y D, puedes obtenerla de forma gratuita.", 3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "6").setText("Granja de langostinos");
+                    elementoGive.addElement("part").setText("C");
+                    elementoGive.addElement("total").setText("ABCD");
+
+                    XMLWriter escritorXML = null;
+
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(
+                                        new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    }
+                }
+                else{
+                    aumentarRecompensa(archivoRecompensa);
+                }
+                Logs.registrarCreacionRecompensa();
+            }
+            case 'D' -> {
+                File archivoRecompensa = new File("rewards/langostinos_d.xml");
+                if(!archivoRecompensa.exists()){
+                    Document documentoBase = SistemaRecompensas.generarBaseRecompensa("Granja de langostinos [D]", origen, "Materiales para la construcción de una granja de langostinos. Con la parte A, B, C y D, puedes obtenerla de forma gratuita.", 3);
+                    Element elementoGive = documentoBase.getRootElement().element("give");
+                    elementoGive.addElement("building").addAttribute("code", "6").setText("Granja de langostinos");
+                    elementoGive.addElement("part").setText("D");
+                    elementoGive.addElement("total").setText("ABCD");
+
+                    XMLWriter escritorXML = null;
+
+                    try {
+                        escritorXML = new XMLWriter(
+                                new BufferedWriter(
+                                        new OutputStreamWriter(new FileOutputStream(archivoRecompensa), "UTF-8")),
+                                OutputFormat.createPrettyPrint());
+                        escritorXML.write(documentoBase);
+                        escritorXML.flush();
+                    } catch (IOException e) {
+                        System.out.println("Hubo un problema a la hora de crear la recompensa.");
+                    } finally {
+                        if (escritorXML != null) {
+                            try {
+                                escritorXML.close();
+                            } catch (IOException e) {
+
+                            }
+                        }
+                    }
+                }
+                else{
+                    aumentarRecompensa(archivoRecompensa);
+                }
+                Logs.registrarCreacionRecompensa();
+            }
+        }
+    }
+
+    /**
      * Permite obtener las recompensas disponibles para usar.
      * 
      * @return Array con las recompensas disponibles para usar.
@@ -1259,6 +1559,8 @@ public class SistemaRecompensas {
         ArrayList<File> recompensasAlmacenCentral = new ArrayList<>();
         ArrayList<File> recompensasPiscifactoriaMar = new ArrayList<>();
         ArrayList<File> recompensasPiscifactoriaRio = new ArrayList<>();
+        ArrayList<File> recompensasFitoplancton = new ArrayList<>();
+        ArrayList<File> recompensasLangostinos = new ArrayList<>();
 
         for (File archivo : archivos) {
             if (archivo.isFile() && archivo.getName().endsWith(".xml")) {
@@ -1287,7 +1589,19 @@ public class SistemaRecompensas {
                                 || nombreRecompensa.equals("Piscifactoría de río [B]")) {
                             recompensasPiscifactoriaRio.add(recompensa);
                         } else {
-                            recompensasDisponibles.add(nombreRecompensa);
+                            if(nombreRecompensa.equals("Granja de fitoplancton [A]") || nombreRecompensa.equals("Granja de fitoplancton [B]")
+                               || nombreRecompensa.equals("Granja de fitoplancton [C]") || nombreRecompensa.equals("Granja de fitoplancton [D]")){
+                                recompensasFitoplancton.add(recompensa);
+                            }
+                            else{
+                                if(nombreRecompensa.equals("Granja de langostinos [A]") || nombreRecompensa.equals("Granja de langostinos [B]")
+                                   || nombreRecompensa.equals("Granja de langostinos [C]") || nombreRecompensa.equals("Granja de langostinos [D]")){
+                                    recompensasLangostinos.add(recompensa);
+                                }
+                                else{
+                                    recompensasDisponibles.add(nombreRecompensa);
+                                }
+                            }
                         }
                     }
                 }
@@ -1306,6 +1620,14 @@ public class SistemaRecompensas {
 
         if (recompensasPiscifactoriaRio.size() == 2) {
             recompensasDisponibles.add("Piscifactoría de río");
+        }
+
+        if(recompensasFitoplancton.size() == 4){
+            recompensasDisponibles.add("Granja de fitoplancton");
+        }
+
+        if(recompensasLangostinos.size() == 4){
+            recompensasDisponibles.add("Granja de langostinos");
         }
 
         Collections.sort(recompensasDisponibles);
@@ -1319,70 +1641,12 @@ public class SistemaRecompensas {
      * Permite al usuario reclamar un recompensa seleccionada por el desde un menú.
      */
     public static void reclamarRecompensa(){
-        File[] archivos = new File("rewards").listFiles();
-        ArrayList<File> recompensas = new ArrayList<>();
-        ArrayList<String> recompensasDisponibles = new ArrayList<>();
-        ArrayList<File> recompensasAlmacenCentral = new ArrayList<>();
-        ArrayList<File> recompensasPiscifactoriaMar = new ArrayList<>();
-        ArrayList<File> recompensasPiscifactoriaRio = new ArrayList<>();
+        String[] recompensasDisponibles = obtenerRecompensasDisponibles();
 
-        for (File archivo : archivos) {
-            if (archivo.isFile() && archivo.getName().endsWith(".xml")) {
-                recompensas.add(archivo);
-            }
-        }
+        if(recompensasDisponibles.length > 0){
+            int opcion = GeneradorMenus.generarMenuOperativo(recompensasDisponibles, 1, recompensasDisponibles.length);
 
-        try {
-            SAXReader lectorXML = new SAXReader();
-            Document xml;
-            String nombreRecompensa;
-            for (File recompensa : recompensas) {
-                xml = lectorXML.read(recompensa);
-                nombreRecompensa = xml.getRootElement().element("name").getText();
-
-                if (nombreRecompensa.equals("Almacén central [A]") || nombreRecompensa.equals("Almacén central [B]")
-                        || nombreRecompensa.equals("Almacén central [C]")
-                        || nombreRecompensa.equals("Almacén central [D]")) {
-                    recompensasAlmacenCentral.add(recompensa);
-                } else {
-                    if (nombreRecompensa.equals("Piscifactoría de mar [A]")
-                            || nombreRecompensa.equals("Piscifactoría de mar [B]")) {
-                        recompensasPiscifactoriaMar.add(recompensa);
-                    } else {
-                        if (nombreRecompensa.equals("Piscifactoría de río [A]")
-                                || nombreRecompensa.equals("Piscifactoría de río [B]")) {
-                            recompensasPiscifactoriaRio.add(recompensa);
-                        } else {
-                            recompensasDisponibles.add(nombreRecompensa);
-                        }
-                    }
-                }
-            }
-        } catch (DocumentException e) {
-            System.out.println("No se ha podido leer el archivo XML.");
-        }
-
-        if (recompensasAlmacenCentral.size() == 4) {
-            recompensasDisponibles.add("Almacén central");
-        }
-
-        if (recompensasPiscifactoriaMar.size() == 2) {
-            recompensasDisponibles.add("Piscifactoría de mar");
-        }
-
-        if (recompensasPiscifactoriaRio.size() == 2) {
-            recompensasDisponibles.add("Piscifactoría de río");
-        }
-
-        if(recompensasDisponibles.size() > 0){
-            Collections.sort(recompensasDisponibles);
-
-            String[] recompensasDisponiblesArray = new String[recompensasDisponibles.size()];
-
-            int opcion = GeneradorMenus.generarMenuOperativo(recompensasDisponibles.toArray(recompensasDisponiblesArray), 1,
-                    recompensasDisponibles.size());
-
-            String recompensaSeleccionada = recompensasDisponibles.get(opcion - 1);
+            String recompensaSeleccionada = recompensasDisponibles[opcion - 1];
 
             switch (recompensaSeleccionada) {
                 case "Algas I" -> {
@@ -1483,6 +1747,10 @@ public class SistemaRecompensas {
                 }
                 case "Almacén central" -> {
                     reclamarRecompensaAlmacenCentral();
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
+                }
+                case "Granja de fitoplancton" -> {
+                    reclamarRecompensaFitoplancton();
                     Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
             }
@@ -1838,5 +2106,27 @@ public class SistemaRecompensas {
         reducirRecompensa(new File("rewards/almacen_b.xml"));
         reducirRecompensa(new File("rewards/almacen_c.xml"));
         reducirRecompensa(new File("rewards/almacen_d.xml"));
+    }
+
+    /**
+     * Reclama la recompensa del fitoplancton.
+     */
+    private static void reclamarRecompensaFitoplancton(){
+        if(!Simulador.simulador.granjaFitoplancton.isDisponible()){
+            if(Simulador.simulador.almacenCentral.isDisponible()){
+                Simulador.simulador.granjaFitoplancton.setDisponible(true);
+                Simulador.simulador.granjaFitoplancton.setTanques(1);
+                reducirRecompensa(new File("rewards/fitoplancton_a.xml"));
+                reducirRecompensa(new File("rewards/fitoplancton_b.xml"));
+                reducirRecompensa(new File("rewards/fitoplancton_c.xml"));
+                reducirRecompensa(new File("rewards/fitoplancton_d.xml"));
+            }
+            else{
+                System.out.println("No se dispone del almacén central.");
+            }
+        }
+        else{
+            System.out.println("Ya se dispone de una granja de fitoplancton.");
+        }
     }
 }

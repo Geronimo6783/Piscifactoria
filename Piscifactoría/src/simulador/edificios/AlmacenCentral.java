@@ -1,4 +1,4 @@
-package simulador;
+package simulador.edificios;
 
 import java.lang.reflect.Type;
 

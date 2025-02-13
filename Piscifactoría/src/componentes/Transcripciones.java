@@ -701,4 +701,110 @@ public class Transcripciones {
             }
         }
     }
+
+    /**
+     * Registra la compra de la granja de fitoplancton.
+     */
+    public void registrarCompraGranjaFitoplancton(){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("\nComprada la granja de fitoplancton.");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema al registrar la compra de la granja de fitoplancton.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    /**
+     * Registrar una mejora de la granja de fitoplancton.
+     * @param tanques Tanques que tienen la granja de fitoplancton tras la mejora.
+     */
+    public void registrarMejoraGranjaFictoplancton(int tanques){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("\nMejorada la granja de fitoplancton añadiendo por un total de " + tanques + " tanques.");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema al registrar la mejora de la granja de fitoplancton.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    /**
+     * Registra la compra de la granja de langostinos.
+     */
+    public void registrarCompraGranjaLangostinos(){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("Comprada la granja de langostinos");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema al registrar la compra de la granja de langostinos.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    /**
+     * Registra una mejora de la granja de langostinos.
+     * @param tanques Número de tanques de la granja de langostinos tras la mejora.
+     */
+    public void registrarMejoraGranjaLangostinos(int tanques){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("Mejorada la granja de langostinos añadiendo un tanque por un total de " + tanques + " tanques.");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema al registrar la mejora de la granja de langostinos.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
 }

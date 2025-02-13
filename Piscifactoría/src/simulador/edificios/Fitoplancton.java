@@ -37,27 +37,33 @@ public class Fitoplancton {
     }
 
     /**
-     * Permite obtener el número de tanque que tiene la granja de fitoplacton.
-     * @return
+     * Permite obtener el número de tanques que tiene la granja de fitoplacton.
+     * @return Número de tanques que tiene la granja de fitoplacton.
      */
     public int getTanques() {
         return tanques;
     }
 
-
-
+    /**
+     * Permite establecer el número de tanques que tiene la granja de fitoplacton.
+     * @param tanques Número de tanques que tiene la granja de fitoplacton a establecer.
+     */
     public void setTanques(int tanques) {
         this.tanques = tanques;
     }
 
-
-
+    /**
+     * Permite obtener el día del ciclo de reproducción en el que está la granja de fitoplacton.
+     * @return Día del ciclo de reproducción en el que está la granja de fitoplacton.
+     */
     public int getCiclo() {
         return ciclo;
     }
 
-
-
+    /**
+     * Permite establecer el día del ciclo de reproducción en el que está la granja de fitoplacton.
+     * @param ciclo Día del ciclo de reproducción en el que está la granja de fitoplacton a establecer
+     */
     public void setCiclo(int ciclo) {
         this.ciclo = ciclo;
     }
