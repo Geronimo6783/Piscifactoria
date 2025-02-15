@@ -1,5 +1,6 @@
 package simulador;
 
+import simulador.edificios.Langostinos;
 import simulador.pez.*;
 
 import java.lang.reflect.Type;
@@ -689,8 +690,18 @@ public class Tanque {
      */
     public int nextDay() {
         if(!peces.isEmpty()){
-            for (Pez pez : peces) {
+            Iterator<Pez> iterador = peces.iterator();
+            Pez pez;
+            Langostinos granjaLangostinos = Simulador.simulador.granjaLangostinos;
+
+            while(iterador.hasNext()){
+                pez = iterador.next();
                 pez.grow();
+
+                if(granjaLangostinos.isDisponible() && !pez.isVivo()){
+                    granjaLangostinos.setMuertos(granjaLangostinos.getMuertos() + 1);
+                    iterador.remove();                
+                }
             }
             reproducir();
             return venderPecesOptimos();

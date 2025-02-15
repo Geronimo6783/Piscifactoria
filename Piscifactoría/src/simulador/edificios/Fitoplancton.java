@@ -68,8 +68,6 @@ public class Fitoplancton {
         this.ciclo = ciclo;
     }
 
-
-
     /**
      * Mejora la granja de fitoplacton.
      */

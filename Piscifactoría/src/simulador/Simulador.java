@@ -35,6 +35,7 @@ import simulador.pez.filtrador.ArenqueDelAtlantico;
 import simulador.pez.filtrador.TilapiaDelNilo;
 import simulador.edificios.AlmacenCentral;
 import simulador.edificios.Fitoplancton;
+import simulador.edificios.Langostinos;
 import simulador.pez.Pez;
 import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
@@ -130,6 +131,12 @@ public class Simulador {
      */
     @SerializedName("fitoplancton")
     public Fitoplancton granjaFitoplancton;
+
+    /**
+     * Granja de langostinos de la piscifactoría.
+     */
+    @SerializedName("langostinos")
+    public Langostinos granjaLangostinos;
 
     /**
      * Piscifactorías de la simulación.
@@ -242,6 +249,7 @@ public class Simulador {
                     AlmacenPropiedades.TILAPIA_NILO.getNombre() };
             simulador.estadisticas = new Estadisticas(simulador.pecesImplementados);
             simulador.granjaFitoplancton = new Fitoplancton();
+            simulador.granjaLangostinos = new Langostinos();
         }
 
         try {
@@ -566,12 +574,13 @@ public class Simulador {
                 ciclo = -1;
                 int comidaGenerada = granjaFitoplancton.getTanques() * 500;
                 int comidaMaximaVegetal = almacenCentral.getCapacidadComida();
+                int comidaVegetal = almacenCentral.getCantidadComidaVegetal();
                 
-                if(comidaGenerada > comidaMaximaVegetal){
+                if(comidaGenerada > (comidaMaximaVegetal - comidaVegetal)){
                     almacenCentral.setCantidadComidaVegetal(comidaMaximaVegetal);
                 }
                 else{
-                    almacenCentral.setCantidadComidaVegetal(comidaGenerada);
+                    almacenCentral.setCantidadComidaVegetal(comidaGenerada + comidaVegetal);
                 }
 
                 repartirComida();
@@ -579,6 +588,22 @@ public class Simulador {
 
             ciclo++;
             granjaFitoplancton.setCiclo(ciclo);
+        }
+
+        if(granjaLangostinos.isDisponible()){
+            int comidaGenerada = granjaLangostinos.comidaGenerada();
+            int comidaMaximaAnimal = almacenCentral.getCapacidadComida();
+            int comidaAnimal = almacenCentral.getCantidadComidaAnimal();
+
+            if(comidaGenerada >= (comidaMaximaAnimal - comidaAnimal)){
+                almacenCentral.setCantidadComidaAnimal(comidaMaximaAnimal);
+            }
+            else{
+                almacenCentral.setCantidadComidaAnimal(comidaGenerada + comidaAnimal);
+            }
+
+            granjaLangostinos.repartirComidaVegetal();
+            granjaLangostinos.nextDay();
         }
 
         try {
@@ -1284,22 +1309,45 @@ public class Simulador {
         if (almacenCentral.isDisponible()) {
 
             if(granjaFitoplancton.isDisponible()){
-                String[] opciones = { "Cancelar", "Comprar piscifactoría" };
-                int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
+                if(granjaLangostinos.isDisponible()){
+                    String[] opciones = { "Cancelar", "Comprar piscifactoría" };
+                    int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
 
-                if (opcion == 1) {
-                    comprarPiscifactoria();
-                } else {
-                    System.out.println("Operación cancelada.");
+                    if (opcion == 1) {
+                        comprarPiscifactoria();
+                    } else {
+                        System.out.println("Operación cancelada.");
+                    }
+                }
+                else{
+                    String[] opciones = new String[]{"Cancelar", "Comprar piscifactoría", "Comprar granaja de langostinos - 3000 monedas"};
+                    int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
+
+                    switch(opcion){
+                        case 1 -> {comprarPiscifactoria();}
+                        case 2 -> {comprarGranjaLangostinos();}
+                    }
                 }
             }
             else{
-                String[] opciones = {"Cancelar", "Comprar piscifactoría", "Comprar granja de fitoplancton"};
-                int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
+                if(granjaLangostinos.isDisponible()){
+                    String[] opciones = {"Cancelar", "Comprar piscifactoría", "Comprar granja de fitoplancton - 5000 monedas"};
+                    int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
 
-                switch(opcion){
-                    case 1 -> {comprarPiscifactoria();}
-                    case 2 -> {comprarGranjaFitoplancton();}
+                    switch(opcion){
+                        case 1 -> {comprarPiscifactoria();}
+                        case 2 -> {comprarGranjaFitoplancton();}
+                    }
+                }
+                else{
+                    String[] opciones = new String[]{"Cancelar", "Comprar piscifactoría", "Comprar granja de fitoplancton - 5000 monedas" , "Comprar granja de langostinos - 3000 monedas"};
+                    int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 3);
+
+                    switch(opcion){
+                        case 1 -> {comprarPiscifactoria();}
+                        case 2 -> {comprarGranjaFitoplancton();}
+                        case 3 -> {comprarGranjaLangostinos();}
+                    }
                 }
             }
         } else {
@@ -1324,6 +1372,23 @@ public class Simulador {
                     }
                     break;
             }
+        }
+    }
+
+    /**
+     * Gestiona la compra de la granja de langostinos.
+     */
+    private void comprarGranjaLangostinos(){
+        int monedas = sistemaMonedas.getMonedas();
+        if(monedas >= 3000){
+            monedas += 3000;
+            sistemaMonedas.setMonedas(monedas);
+            granjaLangostinos.setDisponible(true);
+            granjaLangostinos.mejorar();
+            Simulador.archivoTranscripcionesPartida.registrarCompraGranjaLangostinos();
+        }
+        else{
+            System.out.println("No se disponen de las suficientes monedas para la compra de la granja de langostinos, faltan " + (3000 - monedas) + " monedas.");
         }
     }
 
@@ -1389,36 +1454,61 @@ public class Simulador {
         if (almacenCentral.isDisponible()) {
 
             if(!granjaFitoplancton.isDisponible()){
-                String[] opciones = {
-                        "Cancelar",
-                        "Mejorar una piscifactoría",
-                        "Mejorar el almacén central"
-                };
-                int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
+                if(granjaLangostinos.isDisponible()){
+                    String[] opciones = {"Cancelar", "Mejorar una piscifactoría", "Mejorar el almacén central", "Mejorar la granja de langostinos"};
+                    int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 3);
 
-                switch (opcion) {
-                    case 1:
-                        mejorarPiscifactoria();
-                        break;
-                    case 2:
-                        aumentarCapacidadAlmacenCentral();
-                        break;
+                    switch(opcion) {
+                        case 1 -> {mejorarPiscifactoria();}
+                        case 2 -> {aumentarCapacidadAlmacenCentral();}
+                        case 3 -> {mejorarGranjaLangostinos();}
+                    }
+                }
+                else{
+                    String[] opciones = {
+                            "Cancelar",
+                            "Mejorar una piscifactoría",
+                            "Mejorar el almacén central"
+                    };
+                    int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
+
+                    switch (opcion) {
+                        case 1:
+                            mejorarPiscifactoria();
+                            break;
+                        case 2:
+                            aumentarCapacidadAlmacenCentral();
+                            break;
+                    }
                 }
             }
             else{
-                String[] opciones = {
-                    "Cancelar",
-                    "Mejorar una piscifactoría",
-                    "Mejorar el almacén central",
-                    "Mejorar la granja de fictoplancton"
-                };
-                int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 3);
+                if(granjaLangostinos.isDisponible()){
+                    String[] opciones = {"Cancelar", "Mejorar una piscifactoría", "Mejorar el almacén central", "Mejorar la granja de fictoplancton", "Mejorar la granja de langostinos"};
+                    int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 4);
 
-                switch(opcion){
-                    case 1 -> {mejorarPiscifactoria();}
-                    case 2 -> {aumentarCapacidadAlmacenCentral();}
-                    case 3 -> {mejorarGranjaFitoplancton();}
+                    switch(opcion){
+                        case 1 -> {mejorarPiscifactoria();}
+                        case 2 -> {aumentarCapacidadAlmacenCentral();}
+                        case 3 -> {mejorarGranjaFitoplancton();}
+                        case 4 -> {mejorarGranjaLangostinos();}
+                    }                    
                 }
+                else{
+                    String[] opciones = {
+                        "Cancelar",
+                        "Mejorar una piscifactoría",
+                        "Mejorar el almacén central",
+                        "Mejorar la granja de fictoplancton"
+                    };
+                    int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 3);
+
+                    switch(opcion){
+                        case 1 -> {mejorarPiscifactoria();}
+                        case 2 -> {aumentarCapacidadAlmacenCentral();}
+                        case 3 -> {mejorarGranjaFitoplancton();}
+                    }
+                } 
             }
 
         } else {
@@ -1430,6 +1520,22 @@ public class Simulador {
             } else {
                 System.out.println("Operación cancelada.");
             }
+        }
+    }
+
+    /**
+     * Gestiona la mejora de la granja de langostinos.
+     */
+    private void mejorarGranjaLangostinos(){
+        int monedas = sistemaMonedas.getMonedas();
+        if(monedas >= 1500){
+            granjaLangostinos.mejorar();
+            monedas -= 1500;
+            sistemaMonedas.setMonedas(monedas);
+            Simulador.archivoTranscripcionesPartida.registrarMejoraGranjaLangostinos(granjaLangostinos.getNumeroTanques());
+        }
+        else{
+            System.out.println("No tiene suficientes monedas para mejorar la granja de langostinos, faltan " + (1500 - monedas) + " monedas.");
         }
     }
 
@@ -1715,19 +1821,36 @@ public class Simulador {
                     ciclo = -1;
                     int comidaGenerada = granjaFitoplancton.getTanques() * 500;
                     int comidaMaximaVegetal = almacenCentral.getCapacidadComida();
+                    int comidaVegetal = almacenCentral.getCantidadComidaVegetal();
                     
-                    if(comidaGenerada > comidaMaximaVegetal){
+                    if(comidaGenerada > (comidaMaximaVegetal - comidaVegetal)){
                         almacenCentral.setCantidadComidaVegetal(comidaMaximaVegetal);
                     }
                     else{
-                        almacenCentral.setCantidadComidaVegetal(comidaGenerada);
+                        almacenCentral.setCantidadComidaVegetal(comidaGenerada + comidaVegetal);
                     }
-
+    
                     repartirComida();
                 }
     
                 ciclo++;
                 granjaFitoplancton.setCiclo(ciclo);
+            }
+    
+            if(granjaLangostinos.isDisponible()){
+                int comidaGenerada = granjaLangostinos.comidaGenerada();
+                int comidaMaximaAnimal = almacenCentral.getCapacidadComida();
+                int comidaAnimal = almacenCentral.getCantidadComidaAnimal();
+    
+                if(comidaGenerada >= (comidaMaximaAnimal - comidaAnimal)){
+                    almacenCentral.setCantidadComidaAnimal(comidaMaximaAnimal);
+                }
+                else{
+                    almacenCentral.setCantidadComidaAnimal(comidaGenerada + comidaAnimal);
+                }
+    
+                granjaLangostinos.repartirComidaVegetal();
+                granjaLangostinos.nextDay();
             }
 
             archivoTranscripcionesPartida.registrarPasoDia(diasPasados + 1, pecesRio, pecesMar, monedasGanadas, pecesVendidos);
