@@ -1251,7 +1251,7 @@ public class SistemaRecompensas {
     }
 
     /**
-     * Generar una recompensa de fitoplancton.
+     * Genera una recompensa de fitoplancton.
      * @param parte Parte de la recompensa.
      * @param origen Origen de la recompensa.
      */
