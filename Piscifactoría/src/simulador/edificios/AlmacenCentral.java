@@ -16,7 +16,7 @@ import com.google.gson.annotations.JsonAdapter;
  * Clase que representa a un almacén central que almacena comida y la distribuye equitativamente entre las piscifactrías.
  */
 @JsonAdapter(AlmacenCentral.AdaptadorJSONAlmacenCentral.class)
-public class AlmacenCentral {
+public class AlmacenCentral implements Edificio{
 
     /**
      * Capacidad máxima del almacén para cada tipo de comida.

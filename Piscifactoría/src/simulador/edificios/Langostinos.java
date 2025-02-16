@@ -9,7 +9,7 @@ import simulador.Simulador;
  * Clase que representa a una granja de langostinos que produce
  * comida animal.
  */
-public class Langostinos {
+public class Langostinos implements Edificio{
 
     /**
      * Indica si la granja de langostinos está disponible.
@@ -70,7 +70,7 @@ public class Langostinos {
      */
     public void repartirComidaVegetal(){
         int comidaTanque;
-        int comidaAlmacenCentral = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
+        int comidaAlmacenCentral = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaVegetal();
 
         if(comidaAlmacenCentral >= 50 && !isTodosLosTanqueLlenos()){
             for(TanqueLangostinos tanque : tanques){
@@ -83,7 +83,7 @@ public class Langostinos {
             }
         }
 
-        Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaAlmacenCentral);
+        ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(comidaAlmacenCentral);
     }
 
     /**
@@ -186,9 +186,9 @@ public class Langostinos {
          * Gestiona la lógica de pasar un días en el tanque.
          */
         public void nextDay(){
-            int pecesMuertos = Simulador.simulador.granjaLangostinos.getMuertos();
+            int pecesMuertos = ((Langostinos) Simulador.simulador.edificios[2]).getMuertos();
             if(pecesMuertos > 0){
-                Simulador.simulador.granjaLangostinos.setMuertos(--pecesMuertos);
+                ((Langostinos) Simulador.simulador.edificios[2]).setMuertos(--pecesMuertos);
                 if(descanso > 0){
                     descanso--;
                 }

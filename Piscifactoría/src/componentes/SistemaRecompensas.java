@@ -25,6 +25,9 @@ import simulador.piscifactoria.Piscifactoria;
 import simulador.piscifactoria.Piscifactoria.AlmacenComida;
 
 import simulador.Tanque;
+import simulador.edificios.AlmacenCentral;
+import simulador.edificios.Fitoplancton;
+import simulador.edificios.Langostinos;
 import simulador.piscifactoria.PiscifactoriaMar;
 import simulador.piscifactoria.PiscifactoriaRio;
 
@@ -1830,14 +1833,14 @@ public class SistemaRecompensas {
                 capsulasAlgas = 2000;
             }
         }
-        if (Simulador.simulador.almacenCentral.isDisponible()) {
-            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
-            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+        if (((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()) {
+            int cantidadComidaVegetal = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaVegetal();
+            int cantidadMaximaComida = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCapacidadComida();
 
             if (cantidadMaximaComida - cantidadComidaVegetal > capsulasAlgas) {
-                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + capsulasAlgas);
+                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(cantidadComidaVegetal + capsulasAlgas);
             } else {
-                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(cantidadMaximaComida);
             }
 
             Simulador.simulador.repartirComida();
@@ -1890,14 +1893,14 @@ public class SistemaRecompensas {
                 capsulasPienso = 2000;
             }
         }
-        if (Simulador.simulador.almacenCentral.isDisponible()) {
-            int cantidadcomidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
-            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+        if (((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()) {
+            int cantidadcomidaAnimal = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaAnimal();
+            int cantidadMaximaComida = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCapacidadComida();
 
             if (cantidadMaximaComida - cantidadcomidaAnimal > capsulasPienso) {
-                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadcomidaAnimal + capsulasPienso);
+                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadcomidaAnimal + capsulasPienso);
             } else {
-                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadMaximaComida);
             }
 
             Simulador.simulador.repartirComida();
@@ -1950,20 +1953,20 @@ public class SistemaRecompensas {
                 capsulasComida = 1000;
             }
         }
-        if (Simulador.simulador.almacenCentral.isDisponible()) {
-            int cantidadComidaAnimal = Simulador.simulador.almacenCentral.getCantidadComidaAnimal();
-            int cantidadComidaVegetal = Simulador.simulador.almacenCentral.getCantidadComidaVegetal();
-            int cantidadMaximaComida = Simulador.simulador.almacenCentral.getCapacidadComida();
+        if (((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()) {
+            int cantidadComidaAnimal = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaAnimal();
+            int cantidadComidaVegetal = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaVegetal();
+            int cantidadMaximaComida = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCapacidadComida();
 
             if (cantidadMaximaComida - cantidadComidaAnimal > capsulasComida) {
-                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + capsulasComida);
+                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadComidaAnimal + capsulasComida);
             } else {
-                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
+                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadMaximaComida);
             }
             if (cantidadMaximaComida - cantidadComidaVegetal > capsulasComida) {
-                Simulador.simulador.almacenCentral.setCantidadComidaAnimal(cantidadComidaVegetal + capsulasComida);
+                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadComidaVegetal + capsulasComida);
             } else {
-                Simulador.simulador.almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
+                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(cantidadMaximaComida);
             }
 
             Simulador.simulador.repartirComida();
@@ -2096,11 +2099,11 @@ public class SistemaRecompensas {
      * Reclama la recompensa de almacen central.
      */
     private static void reclamarRecompensaAlmacenCentral() {
-        boolean disp = Simulador.simulador.almacenCentral.isDisponible();
+        boolean disp = ((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible();
         if (disp == true) {
-            Simulador.simulador.almacenCentral.mejorar();
+            ((AlmacenCentral) Simulador.simulador.edificios[0]).mejorar();
         } else {
-            Simulador.simulador.almacenCentral.setDisponible(true);
+            ((AlmacenCentral) Simulador.simulador.edificios[0]).setDisponible(true);
         }
         reducirRecompensa(new File("rewards/almacen_a.xml"));
         reducirRecompensa(new File("rewards/almacen_b.xml"));
@@ -2112,10 +2115,10 @@ public class SistemaRecompensas {
      * Reclama la recompensa del fitoplancton.
      */
     private static void reclamarRecompensaFitoplancton(){
-        if(!Simulador.simulador.granjaFitoplancton.isDisponible()){
-            if(Simulador.simulador.almacenCentral.isDisponible()){
-                Simulador.simulador.granjaFitoplancton.setDisponible(true);
-                Simulador.simulador.granjaFitoplancton.setTanques(1);
+        if(!((Fitoplancton) Simulador.simulador.edificios[1]).isDisponible()){
+            if(((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()){
+                ((Fitoplancton) Simulador.simulador.edificios[1]).setDisponible(true);
+                ((Fitoplancton) Simulador.simulador.edificios[1]).setTanques(1);
                 reducirRecompensa(new File("rewards/fitoplancton_a.xml"));
                 reducirRecompensa(new File("rewards/fitoplancton_b.xml"));
                 reducirRecompensa(new File("rewards/fitoplancton_c.xml"));

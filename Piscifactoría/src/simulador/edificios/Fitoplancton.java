@@ -3,7 +3,7 @@ package simulador.edificios;
 /**
  * Clase que representa a una granja de fitoplacton que produce comida vegetal.
  */
-public class Fitoplancton {
+public class Fitoplancton implements Edificio{
 
     /**
      * Indica si la granja de fitoplacton está disponible.
