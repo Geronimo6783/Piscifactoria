@@ -1,7 +1,19 @@
 package simulador.edificios;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.JsonAdapter;
 
 import simulador.Simulador;
 
@@ -9,6 +21,7 @@ import simulador.Simulador;
  * Clase que representa a una granja de langostinos que produce
  * comida animal.
  */
+@JsonAdapter(Langostinos.AdaptadorJSONLangostinos.class)
 public class Langostinos implements Edificio{
 
     /**
@@ -17,7 +30,7 @@ public class Langostinos implements Edificio{
     private boolean disponible = false;
 
     /**
-     * Número de peces muertos que tiene la granja.
+     * Número de peces muertos que tiene la granja. 
      */
     private int muertos = 0;
 
@@ -205,5 +218,40 @@ public class Langostinos implements Edificio{
                 }
             }
         }
+    }
+
+    /**
+     * Clase que se encarga de adoptar la clase Langostinos al formato JSON.
+     */
+    private class AdaptadorJSONLangostinos implements JsonSerializer<Langostinos>, JsonDeserializer<Langostinos> {
+
+        /**
+         * Se encarga de la deserialización del objeto Langostinos.
+         */
+        @Override
+        public Langostinos deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            Langostinos langostinos = new Langostinos();
+            JsonObject objetoJson = json.getAsJsonObject().get("langostinos").getAsJsonObject();
+            langostinos.disponible = objetoJson.get("disponible").getAsBoolean();
+            langostinos.muertos = objetoJson.get("muertos").getAsInt();
+            TanqueLangostinos[] tanquesLangostinos = new Gson().fromJson(objetoJson.get("tanques").toString(), TanqueLangostinos[].class);
+            
+            for(TanqueLangostinos tanque : tanquesLangostinos){
+                langostinos.tanques.add(tanque);
+            }
+
+            return langostinos;
+        }
+
+        /**
+         * Se encarga de la serialización del objeto Langostinos
+         */
+        @Override
+        public JsonElement serialize(Langostinos src, Type typeOfSrc, JsonSerializationContext context) {
+            String json = "{ \"langostinos\" : { \"disponible\" : \"" + src.disponible + "\" , \"muertos\" : " + src.muertos + ", \"tanques\" : " + new Gson().toJson(src.tanques) + "}}";
+            return JsonParser.parseString(json);
+        }
+
     }
 }

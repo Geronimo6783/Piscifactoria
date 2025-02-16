@@ -1756,6 +1756,10 @@ public class SistemaRecompensas {
                     reclamarRecompensaFitoplancton();
                     Logs.registrarUsoRecompensa(recompensaSeleccionada);
                 }
+                case "Granja de langostinos" -> {
+                    reclamarRecompensaLangostinos();
+                    Logs.registrarUsoRecompensa(recompensaSeleccionada);
+                }
             }
         }
         else{
@@ -2130,6 +2134,28 @@ public class SistemaRecompensas {
         }
         else{
             System.out.println("Ya se dispone de una granja de fitoplancton.");
+        }
+    }
+
+    /**
+     * Reclama la recompensa de la granja de langostinos.
+     */
+    private static void reclamarRecompensaLangostinos(){
+        if(!((Langostinos) Simulador.simulador.edificios[2]).isDisponible()){
+            if(((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()){
+                ((Langostinos) Simulador.simulador.edificios[2]).setDisponible(true);
+                ((Langostinos) Simulador.simulador.edificios[2]).mejorar();
+                reducirRecompensa(new File("rewards/langostinos_a.xml"));
+                reducirRecompensa(new File("rewards/langostinos_b.xml"));
+                reducirRecompensa(new File("rewards/langostinos_c.xml"));
+                reducirRecompensa(new File("rewards/langostinos_d.xml"));
+            }
+            else{
+                System.out.println("No se dispone del almacén central.");
+            }
+        }
+        else{
+            System.out.println("Ya se dispone de una granja de langostinos.");
         }
     }
 }
