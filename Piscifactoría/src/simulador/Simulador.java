@@ -47,6 +47,7 @@ import simulador.sql.dto.DTOPedidoUsuarioPez;
 import simulador.sql.dto.DTOPez;
 import simulador.tanque.Tanque;
 import simulador.tanque.TanqueCria;
+import simulador.tanque.TanqueHuevos;
 
 public class Simulador {
 
@@ -1376,14 +1377,18 @@ public class Simulador {
                     "Aumentar almacén de comida"
             };
 
-            int opcionMejora = GeneradorMenus.generarMenuOperativo(opcionesMejora, 0, 2);
+            int opcionMejora = GeneradorMenus.generarMenuOperativo(opcionesMejora, 0, 4);
 
             switch (opcionMejora) {
                 case 1:
                     comprarTanque(piscifactoria);
                     break;
-                case 2: comprarTanqueCria(piscifactoria);
-                case 3: //Añadir método necesario
+                case 2: 
+                    comprarTanqueCria(piscifactoria);
+                    break;
+                case 3: 
+                    comprarTanqueHuevos(piscifactoria);
+                    break;
                 case 4:
                     mejorarAlmacenComidaPiscifactoria(piscifactoria);
                     break;
@@ -1503,6 +1508,27 @@ public class Simulador {
         } else{
             System.out.println("No tienes suficientes monedas para comprar un tanque de cría, faltan "
                         + (costoTanqueCria - monedasDisponibles) + " monedas.");
+        }
+
+        archivoLogPartida.registrarCompraTanqueCria(piscifactoria.getNombre());
+
+    }
+
+    private void comprarTanqueHuevos(Piscifactoria piscifactoria){
+        int monedasDisponibles = sistemaMonedas.getMonedas();
+        int costoTanqueHuevos = 500;
+        if(monedasDisponibles>= costoTanqueHuevos){
+            sistemaMonedas.setMonedas(monedasDisponibles - costoTanqueHuevos);
+            Tanque nuevoTanqueHuevos = new TanqueHuevos(piscifactoria.getTanques().size() + 1, 25);
+            piscifactoria.getTanques().add(nuevoTanqueHuevos);
+            System.out.println("Tanque de huevos añadido a la piscifatoría " + piscifactoria.getNombre() +
+            ". Total de tanques: " + piscifactoria.getTanques().size());
+
+            archivoTranscripcionesPartida.registrarCompraTanque(nuevoTanqueHuevos.getNumeroTanque(),
+                        piscifactoria.getNombre(), costoTanqueHuevos);
+        } else{
+            System.out.println("No tienes suficientes monedas para comprar un tanque de huevos, faltan "
+                        + (costoTanqueHuevos - monedasDisponibles) + " monedas.");
         }
 
         archivoLogPartida.registrarCompraTanqueCria(piscifactoria.getNombre());
