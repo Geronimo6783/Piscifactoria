@@ -179,6 +179,22 @@ public class Tanque {
 
     /**
      * 
+     * @return Número de peces enfermos en el tanque.
+     */
+    public int pecesEnfermos() {
+        int pecesEnfermos = 0;
+
+        for (Pez pez : peces) {
+            if (pez.isEnfermo()) {
+                pecesEnfermos++;
+            }
+        }
+
+        return pecesEnfermos;
+    }
+
+    /**
+     * 
      * @return Número de peces adultos en el tanque.
      */
     public int pecesAdultos() {

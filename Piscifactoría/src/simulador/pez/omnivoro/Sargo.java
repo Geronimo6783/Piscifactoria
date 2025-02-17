@@ -31,6 +31,7 @@ public class Sargo extends Omnivoro implements Mar{
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
         System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.SARGO.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
+        System.out.println("Enfermo: " + ((enfermo) ? "Sí" : "No"));
     }
 
     /**
@@ -56,12 +57,24 @@ public class Sargo extends Omnivoro implements Mar{
                 if((edad == AlmacenPropiedades.SARGO.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.SARGO.getCiclo() && edad > AlmacenPropiedades.SARGO.getMadurez())) {
                     fertil = true;
                 }
+                if (isEnfermo() && edad == AlmacenPropiedades.SARGO.getMadurez()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 10);
+                    vivo=pezSigueConVida;
+                }else if (isEnfermo()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 25);
+                    vivo=pezSigueConVida;
+                    if(isAlimentado()){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
+                }
             }
             else{
                 fertil = false;
             }
         }
         alimentado = false;
+        enfermo = false;
     }
 
     /**

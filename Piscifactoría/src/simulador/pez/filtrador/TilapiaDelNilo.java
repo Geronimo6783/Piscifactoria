@@ -31,6 +31,7 @@ public class TilapiaDelNilo extends Filtrador implements Rio{
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
         System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.TILAPIA_NILO.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
+        System.out.println("Enfermo: " + ((enfermo) ? "Sí" : "No"));
     }
 
     /**
@@ -56,12 +57,24 @@ public class TilapiaDelNilo extends Filtrador implements Rio{
                 if((edad == AlmacenPropiedades.TILAPIA_NILO.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.TILAPIA_NILO.getCiclo() && edad > AlmacenPropiedades.TILAPIA_NILO.getMadurez())) {
                     fertil = true;
                 }
+                if (isEnfermo() && edad == AlmacenPropiedades.TILAPIA_NILO.getMadurez()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 10);
+                    vivo=pezSigueConVida;
+                }else if (isEnfermo()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 25);
+                    vivo=pezSigueConVida;
+                    if(isAlimentado()){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
+                }
             }
             else{
                 fertil = false;
             }
         }
         alimentado = false;
+        enfermo = false;
     }
 
     /**

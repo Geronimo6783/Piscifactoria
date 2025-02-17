@@ -31,6 +31,7 @@ public class Pejerrey extends Carnivoro implements Rio{
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
         System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.PEJERREY.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
+        System.out.println("Enfermo: " + ((enfermo) ? "Sí" : "No"));
     }
 
     /**
@@ -56,12 +57,24 @@ public class Pejerrey extends Carnivoro implements Rio{
                 if((edad == AlmacenPropiedades.PEJERREY.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.PEJERREY.getCiclo() && edad > AlmacenPropiedades.PEJERREY.getMadurez())) {
                     fertil = true;
                 }
+                if (isEnfermo() && edad == AlmacenPropiedades.PEJERREY.getMadurez()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 10);
+                    vivo=pezSigueConVida;
+                }else if (isEnfermo()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 25);
+                    vivo=pezSigueConVida;
+                    if(isAlimentado()){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
+                }
             }
             else{
                 fertil = false;
             }
         }
         alimentado = false;
+        enfermo = false;
     }
 
     /**

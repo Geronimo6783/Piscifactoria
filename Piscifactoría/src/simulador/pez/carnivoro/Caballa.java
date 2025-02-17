@@ -31,6 +31,7 @@ public class Caballa extends Carnivoro implements Mar{
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
         System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.CABALLA.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
+        System.out.println("Enfermo: " + ((enfermo) ? "Sí" : "No"));
     }
 
     /**
@@ -56,12 +57,24 @@ public class Caballa extends Carnivoro implements Mar{
                 if((edad == AlmacenPropiedades.CABALLA.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.CABALLA.getCiclo() && edad > AlmacenPropiedades.CABALLA.getMadurez())) {
                     fertil = true;
                 }
+                if (isEnfermo() && edad == AlmacenPropiedades.CABALLA.getMadurez()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 10);
+                    vivo=pezSigueConVida;
+                }else if (isEnfermo()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 25);
+                    vivo=pezSigueConVida;
+                    if(isAlimentado()){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
+                }
             }
             else{
                 fertil = false;
             }
         }
         alimentado = false;
+        enfermo = false;
     }
 
     /**

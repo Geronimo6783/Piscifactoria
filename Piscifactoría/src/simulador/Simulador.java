@@ -356,13 +356,13 @@ public class Simulador {
     private void menuPisc() {
         String[] cabeceraMenuPiscifactoria = { "Seleccione una opción:",
                 "--------------------------- Piscifactorías ---------------------------",
-                "[Peces vivos/ Peces totales/ Espacio total]" };
+                "[Peces vivos/ Peces enfermos/ Peces totales/ Espacio total]" };
         String[] opciones = new String[piscifactorias.size() + 1];
         opciones[0] = "Cancelar";
 
         for (int i = 0; i < piscifactorias.size(); i++) {
             Piscifactoria piscifactoria = piscifactorias.get(i);
-            opciones[i + 1] = piscifactoria.getNombre() + " [" + piscifactoria.getPecesVivos() + "/"
+            opciones[i + 1] = piscifactoria.getNombre() + " [" + piscifactoria.getPecesVivos() + "/"+ piscifactoria.getPecesEnfermos() + "/"
                     + piscifactoria.getPecesTotales() + "/" + piscifactoria.getEspacioPeces() + "]";
         }
 

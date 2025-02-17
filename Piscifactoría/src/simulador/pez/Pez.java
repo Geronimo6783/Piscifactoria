@@ -72,6 +72,26 @@ public abstract class Pez {
     protected int diasSinReproducirse;
 
     /**
+     * Indice si el pez esta enfermo
+     */
+    protected boolean enfermo;
+
+    /**
+     * 
+     * @return True si el pez esta enfermo.
+     */
+    public boolean isEnfermo() {
+        return enfermo;
+    }
+    /**
+     * Permite establecer el estado de salud del pez.
+     * @param enfermo Estado de salud del pez.
+     */
+    public void setEnfermo(boolean enfermo) {
+        this.enfermo = enfermo;
+    }
+
+    /**
      * 
      * @return Nombre del pez.
      */
@@ -188,6 +208,7 @@ public abstract class Pez {
         this.edad = 0;
         this.fertil = false;
         this.vivo = true;
+        this.enfermo = false;
     }
 
     /**
@@ -209,6 +230,7 @@ public abstract class Pez {
         this.vivo = true;
         this.alimentado = false;
         this.diasSinReproducirse = 0;
+        this.enfermo=false;
     }
 
     /**
@@ -250,7 +272,7 @@ public abstract class Pez {
     public String toString(){
         return "Nombre común: " + nombre + "\nNombre científico: " + nombreCientifico + "\nEdad: " + edad 
             + ((sexo) ? "\nSexo: Hembra" : "\nSexo: Macho") + ((fertil) ? "\nFértil: Sí" : "\nFértil: No" + ((vivo) ? "\nVivo: Sí" : "\nVivo: No")
-            + ((alimentado) ? "\nAlimentado: Sí" : "\nAlimentado: No") + "\nDías sin reproducirse: " + diasSinReproducirse);
+            + ((enfermo) ? "\nEnfermo: Si" : "\nEnfermo: No") + ((alimentado) ? "\nAlimentado: Sí" : "\nAlimentado: No") + "\nDías sin reproducirse: " + diasSinReproducirse);
     }
 
     /**
