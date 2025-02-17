@@ -196,7 +196,7 @@ public class Langostinos implements Edificio{
         }
 
         /**
-         * Gestiona la lógica de pasar un días en el tanque.
+         * Gestiona la lógica de pasar un día en el tanque.
          */
         public void nextDay(){
             int pecesMuertos = ((Langostinos) Simulador.simulador.edificios[2]).getMuertos();

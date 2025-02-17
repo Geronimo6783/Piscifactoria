@@ -29,6 +29,8 @@ public class CarpinTresEspinas extends Omnivoro implements Rio{
         System.out.println("Sexo: " + ((sexo) ? "H" : "M"));
         System.out.println("Vivo: " + ((vivo) ? "Sí" : "No"));
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
+        System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez()) ? "Sí" : "No"));
+        System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
     }
     
     /**
