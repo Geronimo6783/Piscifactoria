@@ -1473,7 +1473,7 @@ public class Simulador {
             }
             else{
                 if(((Langostinos) edificios[2]).isDisponible()){
-                    String[] opciones = {"Cancelar", "Mejorar una piscifactoría", "Mejorar el almacén central", "Mejorar la granja de fictoplancton", "Mejorar la granja de langostinos"};
+                    String[] opciones = {"Cancelar", "Mejorar una piscifactoría", "Mejorar el almacén central", "Mejorar la granja de fitoplancton", "Mejorar la granja de langostinos"};
                     int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 4);
 
                     switch(opcion){
@@ -1488,7 +1488,7 @@ public class Simulador {
                         "Cancelar",
                         "Mejorar una piscifactoría",
                         "Mejorar el almacén central",
-                        "Mejorar la granja de fictoplancton"
+                        "Mejorar la granja de fitoplancton"
                     };
                     int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 3);
 
