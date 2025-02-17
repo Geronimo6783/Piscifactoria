@@ -306,6 +306,29 @@ public class Logs {
                 }
             }
         }
+
+        public void registrarCompraTanqueCria(String piscifactoria){
+            BufferedWriter buferEscritura = null;
+    
+            try{
+                buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoLogs, true)));
+                buferEscritura.append("\n" + Logs.obtenerFechaHora() + " Comprado un tanque de cría para la piscifactoría " + piscifactoria + ".");
+                buferEscritura.flush();
+            }
+            catch(IOException e){
+                System.out.println("Hubo un problema a la hora de registrar la compra del tanque de cría.");
+            }
+            finally{
+                if(buferEscritura != null){
+                    try{
+                        buferEscritura.close();
+                    }
+                    catch(IOException e){
+    
+                    }
+                }
+            }
+        }
     
         /**
          * Registra la compra del almacén central.

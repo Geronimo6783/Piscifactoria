@@ -1,5 +1,6 @@
-package simulador;
+package simulador.tanque;
 
+import simulador.Simulador;
 import simulador.pez.*;
 
 import java.lang.reflect.Type;

@@ -1,7 +1,7 @@
 package simulador.piscifactoria;
 
 import simulador.Simulador;
-import simulador.Tanque;
+import simulador.tanque.Tanque;
 
 /**
  * Clase que representa a una piscifactoría de río.

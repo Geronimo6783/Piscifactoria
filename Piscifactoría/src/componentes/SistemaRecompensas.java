@@ -23,8 +23,7 @@ import org.dom4j.io.XMLWriter;
 import simulador.Simulador;
 import simulador.piscifactoria.Piscifactoria;
 import simulador.piscifactoria.Piscifactoria.AlmacenComida;
-
-import simulador.Tanque;
+import simulador.tanque.Tanque;
 import simulador.piscifactoria.PiscifactoriaMar;
 import simulador.piscifactoria.PiscifactoriaRio;
 

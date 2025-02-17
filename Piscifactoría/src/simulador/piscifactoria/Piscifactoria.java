@@ -14,7 +14,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
 
-import simulador.Tanque;
+import simulador.tanque.Tanque;
 
 /**
  * Clase que representa a una piscifactoría con múltiples tanques.

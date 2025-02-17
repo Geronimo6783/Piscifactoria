@@ -45,6 +45,8 @@ import simulador.sql.dto.DTOCliente;
 import simulador.sql.dto.DTOPedido;
 import simulador.sql.dto.DTOPedidoUsuarioPez;
 import simulador.sql.dto.DTOPez;
+import simulador.tanque.Tanque;
+import simulador.tanque.TanqueCria;
 
 public class Simulador {
 
@@ -346,7 +348,7 @@ public class Simulador {
         String[] opcionesMenuPrincipal = { "Estado general", "Estado piscifactoría", "Estado tanques", "Informes",
                 "Ictiopedia", "Pasar día",
                 "Comprar comida", "Comprar peces", "Vender peces", "Limpiar tanques", "Vaciar tanque", "Mejorar",
-                "Pasar varios días", "Reclamar recompensa", "Gestionar pedidos no finalizados", "Salir" };
+                "Pasar varios días", "Reclamar recompensa", "Gestionar pedidos no finalizados","Gestionar piscifatoría", "Salir" };
         GeneradorMenus.generarMenu(opcionesMenuPrincipal, 1);
     }
 
@@ -1369,6 +1371,8 @@ public class Simulador {
             String[] opcionesMejora = {
                     "Cancelar",
                     "Comprar tanque",
+                    "Comprar tanque de cría",
+                    "Comprar tanque de huevos",
                     "Aumentar almacén de comida"
             };
 
@@ -1378,7 +1382,9 @@ public class Simulador {
                 case 1:
                     comprarTanque(piscifactoria);
                     break;
-                case 2:
+                case 2: comprarTanqueCria(piscifactoria);
+                case 3: //Añadir método necesario
+                case 4:
                     mejorarAlmacenComidaPiscifactoria(piscifactoria);
                     break;
             }
@@ -1480,6 +1486,27 @@ public class Simulador {
         }
 
         archivoLogPartida.registrarCompraTanque(piscifactoria.getNombre());
+    }
+
+    private void comprarTanqueCria(Piscifactoria piscifactoria){
+        int monedasDisponibles = sistemaMonedas.getMonedas();
+        int costoTanqueCria = 500;
+        if(monedasDisponibles>= costoTanqueCria){
+            sistemaMonedas.setMonedas(monedasDisponibles - costoTanqueCria);
+            Tanque nuevoTanqueCria = new TanqueCria(piscifactoria.getTanques().size() + 1, 2);
+            piscifactoria.getTanques().add(nuevoTanqueCria);
+            System.out.println("Tanque de cria añadido a la piscifatoría " + piscifactoria.getNombre() +
+            ". Total de tanques: " + piscifactoria.getTanques().size());
+
+            archivoTranscripcionesPartida.registrarCompraTanque(nuevoTanqueCria.getNumeroTanque(),
+                        piscifactoria.getNombre(), costoTanqueCria);
+        } else{
+            System.out.println("No tienes suficientes monedas para comprar un tanque de cría, faltan "
+                        + (costoTanqueCria - monedasDisponibles) + " monedas.");
+        }
+
+        archivoLogPartida.registrarCompraTanqueCria(piscifactoria.getNombre());
+
     }
 
     /**
@@ -2381,9 +2408,9 @@ public class Simulador {
             init();
 
             int opcion = 0;
-            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 96, 97, 98, 99 };
+            int[] opcionesNumericas = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 96, 97, 98, 99 };
 
-            while (opcion != 16) {
+            while (opcion != 17) {
 
                 try {
                     System.out.println("Día actual: " + (simulador.diasPasados + 1));
@@ -2407,7 +2434,8 @@ public class Simulador {
                         case 13 -> {simulador.pasarDias();}
                         case 14 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 15 -> {simulador.gestionarPedidosNoFinalizados();}
-                        case 16 -> {System.out.println("Cerrando...");}
+                        case 16 -> {} //Añadir método para gestionar piscifatoría y sus tanques especiales
+                        case 17 -> {System.out.println("Cerrando...");}
                         case 96 -> {simulador.mostrarPedidosCompletados();}
                         case 97 -> {simulador.borrarTodosLosPedidos();}
                         case 98 -> {simulador.anadirPezAleatorio();}
