@@ -1498,7 +1498,7 @@ public class Simulador {
         int costoTanqueCria = 500;
         if(monedasDisponibles>= costoTanqueCria){
             sistemaMonedas.setMonedas(monedasDisponibles - costoTanqueCria);
-            Tanque nuevoTanqueCria = new TanqueCria(piscifactoria.getTanques().size() + 1, 2);
+            Tanque nuevoTanqueCria = new TanqueCria(piscifactoria.getTanques().size() + 1, 2, piscifactoria);
             piscifactoria.getTanques().add(nuevoTanqueCria);
             System.out.println("Tanque de cria añadido a la piscifatoría " + piscifactoria.getNombre() +
             ". Total de tanques: " + piscifactoria.getTanques().size());
