@@ -16,7 +16,7 @@ import com.google.gson.annotations.JsonAdapter;
  * Clase que representa a una granja de fitoplacton que produce comida vegetal.
  */
 @JsonAdapter(Fitoplancton.AdaptadorJSONFitoplancton.class)
-public class Fitoplancton implements Edificio{
+public class Fitoplancton {
 
     /**
      * Indica si la granja de fitoplacton está disponible.
@@ -101,7 +101,7 @@ public class Fitoplancton implements Edificio{
         public Fitoplancton deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
             Fitoplancton fitoplancton = new Fitoplancton();
-            JsonObject fitoplanctonDeserializado = json.getAsJsonObject().get("fitoplancton").getAsJsonObject();
+            JsonObject fitoplanctonDeserializado = json.getAsJsonObject();
             fitoplancton.disponible = fitoplanctonDeserializado.get("disponible").getAsBoolean();
             fitoplancton.tanques = fitoplanctonDeserializado.get("tanques").getAsInt();
             fitoplancton.ciclo = fitoplanctonDeserializado.get("ciclo").getAsInt();
@@ -113,8 +113,8 @@ public class Fitoplancton implements Edificio{
          */
         @Override
         public JsonElement serialize(Fitoplancton src, Type typeOfSrc, JsonSerializationContext context) {
-            String json = "{ \"fitoplancton\" : { \"disponible\" : \"" + src.disponible + "\" , \"tanques\" : " + src.tanques + 
-            " , \"ciclo\" : " + src.ciclo + " }}";
+            String json = "{ \"disponible\" : \"" + src.disponible + "\" , \"tanques\" : " + src.tanques + 
+            " , \"ciclo\" : " + src.ciclo + " }";
             return JsonParser.parseString(json);
         }
 

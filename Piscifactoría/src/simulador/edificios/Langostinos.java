@@ -22,7 +22,7 @@ import simulador.Simulador;
  * comida animal.
  */
 @JsonAdapter(Langostinos.AdaptadorJSONLangostinos.class)
-public class Langostinos implements Edificio{
+public class Langostinos {
 
     /**
      * Indica si la granja de langostinos está disponible.
@@ -82,8 +82,9 @@ public class Langostinos implements Edificio{
      * Reparte la comida vegetal entre los tanques de langostinos.
      */
     public void repartirComidaVegetal(){
+        AlmacenCentral almacenCentral = Simulador.simulador.edificios.getAlmacen();
         int comidaTanque;
-        int comidaAlmacenCentral = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaVegetal();
+        int comidaAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
 
         if(comidaAlmacenCentral >= 50 && !isTodosLosTanqueLlenos()){
             for(TanqueLangostinos tanque : tanques){
@@ -96,7 +97,7 @@ public class Langostinos implements Edificio{
             }
         }
 
-        ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(comidaAlmacenCentral);
+        almacenCentral.setCantidadComidaVegetal(comidaAlmacenCentral);
     }
 
     /**
@@ -199,9 +200,10 @@ public class Langostinos implements Edificio{
          * Gestiona la lógica de pasar un día en el tanque.
          */
         public void nextDay(){
-            int pecesMuertos = ((Langostinos) Simulador.simulador.edificios[2]).getMuertos();
+            Langostinos langostinos = Simulador.simulador.edificios.getLangostinos();
+            int pecesMuertos = langostinos.getMuertos();
             if(pecesMuertos > 0){
-                ((Langostinos) Simulador.simulador.edificios[2]).setMuertos(--pecesMuertos);
+                langostinos.setMuertos(--pecesMuertos);
                 if(descanso > 0){
                     descanso--;
                 }
@@ -232,7 +234,7 @@ public class Langostinos implements Edificio{
         public Langostinos deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
             Langostinos langostinos = new Langostinos();
-            JsonObject objetoJson = json.getAsJsonObject().get("langostinos").getAsJsonObject();
+            JsonObject objetoJson = json.getAsJsonObject();
             langostinos.disponible = objetoJson.get("disponible").getAsBoolean();
             langostinos.muertos = objetoJson.get("muertos").getAsInt();
             TanqueLangostinos[] tanquesLangostinos = new Gson().fromJson(objetoJson.get("tanques").toString(), TanqueLangostinos[].class);
@@ -249,7 +251,7 @@ public class Langostinos implements Edificio{
          */
         @Override
         public JsonElement serialize(Langostinos src, Type typeOfSrc, JsonSerializationContext context) {
-            String json = "{ \"langostinos\" : { \"disponible\" : \"" + src.disponible + "\" , \"muertos\" : " + src.muertos + ", \"tanques\" : " + new Gson().toJson(src.tanques) + "}}";
+            String json = " { \"disponible\" : \"" + src.disponible + "\" , \"muertos\" : " + src.muertos + ", \"tanques\" : " + new Gson().toJson(src.tanques) + "}";
             return JsonParser.parseString(json);
         }
 

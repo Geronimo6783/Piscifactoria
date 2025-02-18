@@ -16,7 +16,7 @@ import com.google.gson.annotations.JsonAdapter;
  * Clase que representa a un almacén central que almacena comida y la distribuye equitativamente entre las piscifactrías.
  */
 @JsonAdapter(AlmacenCentral.AdaptadorJSONAlmacenCentral.class)
-public class AlmacenCentral implements Edificio{
+public class AlmacenCentral {
 
     /**
      * Capacidad máxima del almacén para cada tipo de comida.
@@ -138,7 +138,7 @@ public class AlmacenCentral implements Edificio{
         public AlmacenCentral deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
             AlmacenCentral almacenCentral = new AlmacenCentral();
-            JsonObject almacen = json.getAsJsonObject().get("almacen").getAsJsonObject();
+            JsonObject almacen = json.getAsJsonObject();
             JsonObject comida = almacen.get("comida").getAsJsonObject();
             almacenCentral.disponible = almacen.get("disponible").getAsBoolean();
             almacenCentral.capacidadComida = almacen.get("capacidad").getAsInt();
@@ -152,8 +152,8 @@ public class AlmacenCentral implements Edificio{
          */
         @Override
         public JsonElement serialize(AlmacenCentral src, Type typeOfSrc, JsonSerializationContext context) {
-            String json = "{ \"almacen\" : { \"disponible\" : \"" + src.disponible + "\" , \"capacidad\" : " + src.capacidadComida
-            + " , \"comida\" : { \"vegetal\" : " + src.cantidadComidaVegetal + " , \"animal\" : " + src.cantidadComidaAnimal + " }}}";
+            String json = "{ \"disponible\" : \"" + src.disponible + "\" , \"capacidad\" : " + src.capacidadComida
+            + " , \"comida\" : { \"vegetal\" : " + src.cantidadComidaVegetal + " , \"animal\" : " + src.cantidadComidaAnimal + " }}";
             return JsonParser.parseString(json);
         }
 

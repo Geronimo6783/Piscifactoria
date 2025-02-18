@@ -34,7 +34,6 @@ import propiedades.PecesProps;
 import simulador.pez.filtrador.ArenqueDelAtlantico;
 import simulador.pez.filtrador.TilapiaDelNilo;
 import simulador.edificios.AlmacenCentral;
-import simulador.edificios.Edificio;
 import simulador.edificios.Fitoplancton;
 import simulador.edificios.Langostinos;
 import simulador.pez.Pez;
@@ -42,6 +41,7 @@ import simulador.pez.carnivoro.*;
 import simulador.pez.omnivoro.*;
 import simulador.piscifactoria.*;
 import simulador.piscifactoria.Piscifactoria.AlmacenComida;
+import simulador.sistemaguardado.Edificio;
 import simulador.sql.Conexion;
 import simulador.sql.DAOPedidos;
 import simulador.sql.GeneradorBD;
@@ -124,7 +124,7 @@ public class Simulador {
     /**
      * Edificios de la piscifactoría.
      */
-    public Edificio[] edificios = new Edificio[3];
+    public Edificio edificios;
 
     /**
      * Piscifactorías de la simulación.
@@ -236,9 +236,7 @@ public class Simulador {
                     AlmacenPropiedades.SALMON_CHINOOK.getNombre(), AlmacenPropiedades.SARGO.getNombre(),
                     AlmacenPropiedades.TILAPIA_NILO.getNombre() };
             simulador.estadisticas = new Estadisticas(simulador.pecesImplementados);
-            simulador.edificios[0] = new AlmacenCentral();
-            simulador.edificios[1] = new Fitoplancton();
-            simulador.edificios[2] = new Langostinos();
+            simulador.edificios = new Edificio(new AlmacenCentral(), new Fitoplancton(), new Langostinos());
         }
 
         try {
@@ -418,10 +416,11 @@ public class Simulador {
         }
         System.out.println("Día actual: " + (diasPasados + 1));
         System.out.println("Monedas: " + sistemaMonedas.getMonedas());
-        if (((AlmacenCentral) edificios[0]).isDisponible()) {
-            int cantidadComidaAnimalAlmacen = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
-            int cantidadComidaVegetalAlmacen = ((AlmacenCentral) edificios[0]).getCantidadComidaVegetal();
-            int capacidadComidaAlmacen = ((AlmacenCentral) edificios[0]).getCapacidadComida();
+        AlmacenCentral almacenCentral = edificios.getAlmacen();
+        if (almacenCentral.isDisponible()) {
+            int cantidadComidaAnimalAlmacen = almacenCentral.getCantidadComidaAnimal();
+            int cantidadComidaVegetalAlmacen = almacenCentral.getCantidadComidaVegetal();
+            int capacidadComidaAlmacen = almacenCentral.getCapacidadComida();
             System.out.println("Comida animal disponible en el almacén central: " + cantidadComidaAnimalAlmacen);
             System.out.println("Comida vegetal disponible en el almacén central: " + cantidadComidaVegetalAlmacen);
             System.out
@@ -526,6 +525,9 @@ public class Simulador {
         int monedasGanadas = 0;
         int pecesRio = 0;
         int pecesMar = 0;
+        AlmacenCentral almacenCentral = edificios.getAlmacen();
+        Fitoplancton fitoplancton = edificios.getFitoplancton();
+        Langostinos langostinos = edificios.getLangostinos();
 
         for (Piscifactoria piscifactoria : piscifactorias) {
             dineroAntesDePasarDia = sistemaMonedas.getMonedas();
@@ -544,7 +546,7 @@ public class Simulador {
 
         System.out.println(pecesVendidos + " peces vendidos por un total de " + monedasGanadas + " monedas.");
 
-        if (((AlmacenCentral) edificios[0]).isDisponible()) {
+        if (almacenCentral.isDisponible()) {
             repartirComida();
         }
 
@@ -556,43 +558,43 @@ public class Simulador {
         showGeneralStatus();
         simulador.generarPedidosAutomaticamente(diasPasados);
 
-        if(((Fitoplancton) edificios[1]).isDisponible()){
-            int ciclo = ((Fitoplancton) edificios[1]).getCiclo();
+        if(fitoplancton.isDisponible()){
+            int ciclo = fitoplancton.getCiclo();
             ciclo++;
             
             if(ciclo == 5){
                 ciclo = -1;
-                int comidaGenerada = ((Fitoplancton) edificios[1]).getTanques() * 500;
-                int comidaMaximaVegetal = ((AlmacenCentral) edificios[0]).getCapacidadComida();
-                int comidaVegetal = ((AlmacenCentral) edificios[0]).getCantidadComidaVegetal();
+                int comidaGenerada = fitoplancton.getTanques() * 500;
+                int comidaMaximaVegetal = almacenCentral.getCapacidadComida();
+                int comidaVegetal = almacenCentral.getCantidadComidaVegetal();
                 
                 if(comidaGenerada > (comidaMaximaVegetal - comidaVegetal)){
-                    ((AlmacenCentral) edificios[0]).setCantidadComidaVegetal(comidaMaximaVegetal);
+                    almacenCentral.setCantidadComidaVegetal(comidaMaximaVegetal);
                 }
                 else{
-                    ((AlmacenCentral) edificios[0]).setCantidadComidaVegetal(comidaGenerada + comidaVegetal);
+                    almacenCentral.setCantidadComidaVegetal(comidaGenerada + comidaVegetal);
                 }
 
                 repartirComida();
             }
 
-            ((Fitoplancton) edificios[1]).setCiclo(ciclo);
+            fitoplancton.setCiclo(ciclo);
         }
 
-        if(((Langostinos) edificios[2]).isDisponible()){
-            ((Langostinos) edificios[2]).nextDay();
-            int comidaGenerada = ((Langostinos) edificios[2]).comidaGenerada();
-            int comidaMaximaAnimal = ((AlmacenCentral) edificios[0]).getCapacidadComida();
-            int comidaAnimal = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
+        if(langostinos.isDisponible()){
+            langostinos.nextDay();
+            int comidaGenerada = langostinos.comidaGenerada();
+            int comidaMaximaAnimal = almacenCentral.getCapacidadComida();
+            int comidaAnimal = almacenCentral.getCantidadComidaAnimal();
 
             if(comidaGenerada >= (comidaMaximaAnimal - comidaAnimal)){
-                ((AlmacenCentral) edificios[0]).setCantidadComidaAnimal(comidaMaximaAnimal);
+                almacenCentral.setCantidadComidaAnimal(comidaMaximaAnimal);
             }
             else{
-                ((AlmacenCentral) edificios[0]).setCantidadComidaAnimal(comidaGenerada + comidaAnimal);
+                almacenCentral.setCantidadComidaAnimal(comidaGenerada + comidaAnimal);
             }
 
-            ((Langostinos) edificios[2]).repartirComidaVegetal();
+            langostinos.repartirComidaVegetal();
         }
 
         try {
@@ -607,15 +609,16 @@ public class Simulador {
      * central.
      */
     private void addFood() {
-        if (((AlmacenCentral) edificios[0]).isDisponible()) {
+        AlmacenCentral almacenCentral = new AlmacenCentral();
+        if (almacenCentral.isDisponible()) {
             int tipoComida = menuTipoComida();
 
             if (tipoComida != 0) {
                 int cantidadAAgregar = menuCantidadComida();
-                int capacidadComidaAlmacen = ((AlmacenCentral) edificios[0]).getCapacidadComida();
+                int capacidadComidaAlmacen = almacenCentral.getCapacidadComida();
 
                 if (tipoComida == 1) {
-                    int cantidadComidaAnimalAntes = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
+                    int cantidadComidaAnimalAntes = almacenCentral.getCantidadComidaAnimal();
                     if (cantidadComidaAnimalAntes < capacidadComidaAlmacen) {
                         switch (cantidadAAgregar) {
                             case 1 -> {
@@ -632,18 +635,18 @@ public class Simulador {
                             }
                         }
 
-                        ((AlmacenCentral) edificios[0]).setCantidadComidaAnimal(cantidadComidaAnimalAntes + cantidadAAgregar);
+                        almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimalAntes + cantidadAAgregar);
 
                         int costoAnimal = calcularCosto(cantidadAAgregar);
                         if (sistemaMonedas.getMonedas() >= costoAnimal) {
                             sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoAnimal);
                             System.out.println("Añadida " + cantidadAAgregar + " de comida animal.");
                             System.out.println("Depósito de comida animal en el almacén central " +
-                                ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal() + "/" + ((AlmacenCentral) edificios[0]).getCapacidadComida()
+                                almacenCentral.getCantidadComidaAnimal() + "/" + almacenCentral.getCapacidadComida()
                                     +
                                     " al " + String.format("%.2f",
                                             (float) (cantidadComidaAnimalAntes + cantidadAAgregar) /
-                                                ((AlmacenCentral) edificios[0]).getCapacidadComida() * 100)
+                                                almacenCentral.getCapacidadComida() * 100)
                                     + "%.");
 
                             archivoTranscripcionesPartida.registrarCompraComida(cantidadAAgregar, " animal ",
@@ -658,7 +661,7 @@ public class Simulador {
                                 .println("No se puede añadir comida animal, excede la capacidad del almacén central.");
                     }
                 } else if (tipoComida == 2) {
-                    int cantidadComidaVegetalAntes = ((AlmacenCentral) edificios[0]).getCantidadComidaVegetal();
+                    int cantidadComidaVegetalAntes = almacenCentral.getCantidadComidaVegetal();
                     if (cantidadComidaVegetalAntes < capacidadComidaAlmacen) {
                         switch (cantidadAAgregar) {
                             case 1 -> {
@@ -675,18 +678,18 @@ public class Simulador {
                             }
                         }
 
-                        ((AlmacenCentral) edificios[0]).setCantidadComidaVegetal(cantidadComidaVegetalAntes + cantidadAAgregar);
+                        almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetalAntes + cantidadAAgregar);
 
                         int costoVegetal = calcularCosto(cantidadAAgregar);
                         if (sistemaMonedas.getMonedas() >= costoVegetal) {
                             sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - costoVegetal);
                             System.out.println("Añadida " + cantidadAAgregar + " de comida vegetal.");
                             System.out.println("Depósito de comida vegetal en el almacén central " +
-                                ((AlmacenCentral) edificios[0]).getCantidadComidaVegetal() + "/"
-                                    + ((AlmacenCentral) edificios[0]).getCapacidadComida() +
+                                almacenCentral.getCantidadComidaVegetal() + "/"
+                                    + almacenCentral.getCapacidadComida() +
                                     " al " + String.format("%.2f",
                                             (float) (cantidadComidaVegetalAntes + cantidadAAgregar) /
-                                                ((AlmacenCentral) edificios[0]).getCapacidadComida() * 100)
+                                                almacenCentral.getCapacidadComida() * 100)
                                     + "%.");
 
                             archivoTranscripcionesPartida.registrarCompraComida(cantidadAAgregar, " vegetal ",
@@ -1295,10 +1298,10 @@ public class Simulador {
      */
     private void comprarEdificio() {
         System.out.println("========== Comprar edificio ==========");
-        if (((AlmacenCentral) edificios[0]).isDisponible()) {
+        if (edificios.getAlmacen().isDisponible()) {
 
-            if(((Fitoplancton) edificios[1]).isDisponible()){
-                if(((Langostinos) edificios[2]).isDisponible()){
+            if(edificios.getFitoplancton().isDisponible()){
+                if(edificios.getLangostinos().isDisponible()){
                     String[] opciones = { "Cancelar", "Comprar piscifactoría" };
                     int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 1);
 
@@ -1319,7 +1322,7 @@ public class Simulador {
                 }
             }
             else{
-                if(((Langostinos) edificios[2]).isDisponible()){
+                if(edificios.getLangostinos().isDisponible()){
                     String[] opciones = {"Cancelar", "Comprar piscifactoría", "Comprar granja de fitoplancton - 5000 monedas"};
                     int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 2);
 
@@ -1350,7 +1353,7 @@ public class Simulador {
                 case 2:
                     if (sistemaMonedas.getMonedas() >= 2000) {
                         sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - 2000);
-                        ((AlmacenCentral) edificios[0]).setDisponible(true);
+                        edificios.getAlmacen().setDisponible(true);
                         System.out.println("Almacén central comprado.");
 
                         archivoTranscripcionesPartida.registrarCompraAlmacenCentral();
@@ -1368,12 +1371,13 @@ public class Simulador {
      * Gestiona la compra de la granja de langostinos.
      */
     private void comprarGranjaLangostinos(){
+        Langostinos langostinos = edificios.getLangostinos();
         int monedas = sistemaMonedas.getMonedas();
         if(monedas >= 3000){
             monedas -= 3000;
             sistemaMonedas.setMonedas(monedas);
-            ((Langostinos) edificios[2]).setDisponible(true);
-            ((Langostinos) edificios[2]).mejorar();
+            langostinos.setDisponible(true);
+            langostinos.mejorar();
             Simulador.archivoTranscripcionesPartida.registrarCompraGranjaLangostinos();
         }
         else{
@@ -1385,12 +1389,13 @@ public class Simulador {
      * Gestiona la compra de la granja de fitoplancton.
      */
     private void comprarGranjaFitoplancton(){
+        Fitoplancton fitoplancton = edificios.getFitoplancton();
         int monedas = sistemaMonedas.getMonedas();
         if(monedas >= 5000){
             monedas -= 5000;
             sistemaMonedas.setMonedas(monedas);
-            ((Fitoplancton) edificios[1]).setDisponible(true);
-            ((Fitoplancton) edificios[1]).setTanques(1);
+            fitoplancton.setDisponible(true);
+            fitoplancton.setTanques(1);
             Simulador.archivoTranscripcionesPartida.registrarCompraGranjaFitoplancton();
         }
         else{
@@ -1440,10 +1445,10 @@ public class Simulador {
      */
     private void mejorarEdificio() {
         System.out.println("========== Mejorar edificio ==========");
-        if (((AlmacenCentral) edificios[0]).isDisponible()) {
+        if (edificios.getAlmacen().isDisponible()) {
 
-            if(!((Fitoplancton) edificios[1]).isDisponible()){
-                if(((Langostinos) edificios[2]).isDisponible()){
+            if(!edificios.getFitoplancton().isDisponible()){
+                if(edificios.getLangostinos().isDisponible()){
                     String[] opciones = {"Cancelar", "Mejorar una piscifactoría", "Mejorar el almacén central", "Mejorar la granja de langostinos"};
                     int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 3);
 
@@ -1472,7 +1477,7 @@ public class Simulador {
                 }
             }
             else{
-                if(((Langostinos) edificios[2]).isDisponible()){
+                if(edificios.getLangostinos().isDisponible()){
                     String[] opciones = {"Cancelar", "Mejorar una piscifactoría", "Mejorar el almacén central", "Mejorar la granja de fitoplancton", "Mejorar la granja de langostinos"};
                     int opcion = GeneradorMenus.generarMenuOperativo(opciones, 0, 4);
 
@@ -1516,12 +1521,13 @@ public class Simulador {
      * Gestiona la mejora de la granja de langostinos.
      */
     private void mejorarGranjaLangostinos(){
+        Langostinos langostinos = edificios.getLangostinos();
         int monedas = sistemaMonedas.getMonedas();
         if(monedas >= 1500){
-            ((Langostinos) edificios[2]).mejorar();
+            langostinos.mejorar();
             monedas -= 1500;
             sistemaMonedas.setMonedas(monedas);
-            Simulador.archivoTranscripcionesPartida.registrarMejoraGranjaLangostinos(((Langostinos) edificios[2]).getNumeroTanques());
+            Simulador.archivoTranscripcionesPartida.registrarMejoraGranjaLangostinos(langostinos.getNumeroTanques());
         }
         else{
             System.out.println("No tiene suficientes monedas para mejorar la granja de langostinos, faltan " + (1500 - monedas) + " monedas.");
@@ -1532,12 +1538,13 @@ public class Simulador {
      * Gestiona la mejora de la granja de fitoplancton.
      */
     private void mejorarGranjaFitoplancton(){
+        Fitoplancton fitoplancton = edificios.getFitoplancton();
         int monedas = sistemaMonedas.getMonedas();
         if(monedas >= 2500){
-            ((Fitoplancton) edificios[1]).mejorar();
+            fitoplancton.mejorar();
             monedas -= 2500;
             sistemaMonedas.setMonedas(monedas);
-            Simulador.archivoTranscripcionesPartida.registrarMejoraGranjaFictoplancton(((Fitoplancton) edificios[1]).getTanques());
+            Simulador.archivoTranscripcionesPartida.registrarMejoraGranjaFictoplancton(fitoplancton.getTanques());
         }
         else{
             System.out.println("No tiene suficiente monedas para mejorar la granja de fictoplancton, faltan " + (2500 - monedas) + " monedas.");
@@ -1674,15 +1681,16 @@ public class Simulador {
      * Aumenta la capacidad del almacén central.
      */
     private void aumentarCapacidadAlmacenCentral() {
+        AlmacenCentral almacenCentral = edificios.getAlmacen();
         int costoAumento = 200;
         int monedasDisponibles = sistemaMonedas.getMonedas();
 
         if (monedasDisponibles >= costoAumento) {
             sistemaMonedas.setMonedas(monedasDisponibles - costoAumento);
-            ((AlmacenCentral) edificios[0]).mejorar();
+            almacenCentral.mejorar();
             System.out.println("Capacidad del almacén central aumentada en 50 unidades.");
 
-            archivoTranscripcionesPartida.registrarMejoraAlmacenCentral(((AlmacenCentral) edificios[0]).getCapacidadComida(),
+            archivoTranscripcionesPartida.registrarMejoraAlmacenCentral(almacenCentral.getCapacidadComida(),
                     costoAumento);
         } else {
             System.out.println("No tienes suficientes monedas para aumentar la capacidad del almacén central, faltan "
@@ -1782,6 +1790,9 @@ public class Simulador {
 
         System.out.println("Introduce el número de días que deseas avanzar: ");
         dias = SistemaEntrada.entradaOpcionNumericaEnteraPositiva();
+        AlmacenCentral almacenCentral = edificios.getAlmacen();
+        Fitoplancton fitoplancton = edificios.getFitoplancton();
+        Langostinos langostinos = edificios.getLangostinos();
 
         for (int i = 0; i < dias; i++) {
             for (Piscifactoria piscifactoria : piscifactorias) {
@@ -1799,47 +1810,47 @@ public class Simulador {
 
             }
 
-            if (((AlmacenCentral) edificios[0]).isDisponible()) {
+            if (almacenCentral.isDisponible()) {
                 repartirComida();
             }
 
-            if(((Fitoplancton) edificios[1]).isDisponible()){
-                int ciclo = ((Fitoplancton) edificios[1]).getCiclo();
+            if(fitoplancton.isDisponible()){
+                int ciclo = fitoplancton.getCiclo();
                 ciclo++;
 
                 if(ciclo == 5){
                     ciclo = -1;
-                    int comidaGenerada = ((Fitoplancton) edificios[1]).getTanques() * 500;
-                    int comidaMaximaVegetal = ((AlmacenCentral) edificios[0]).getCapacidadComida();
-                    int comidaVegetal = ((AlmacenCentral) edificios[0]).getCantidadComidaVegetal();
+                    int comidaGenerada = fitoplancton.getTanques() * 500;
+                    int comidaMaximaVegetal = almacenCentral.getCapacidadComida();
+                    int comidaVegetal = almacenCentral.getCantidadComidaVegetal();
                     
                     if(comidaGenerada > (comidaMaximaVegetal - comidaVegetal)){
-                        ((AlmacenCentral) edificios[0]).setCantidadComidaVegetal(comidaMaximaVegetal);
+                        almacenCentral.setCantidadComidaVegetal(comidaMaximaVegetal);
                     }
                     else{
-                        ((AlmacenCentral) edificios[0]).setCantidadComidaVegetal(comidaGenerada + comidaVegetal);
+                        almacenCentral.setCantidadComidaVegetal(comidaGenerada + comidaVegetal);
                     }
     
                     repartirComida();
                 }
     
-                ((Fitoplancton) edificios[1]).setCiclo(ciclo);
+                fitoplancton.setCiclo(ciclo);
             }
     
-            if(((Langostinos) edificios[2]).isDisponible()){
-                ((Langostinos) edificios[2]).nextDay();
-                int comidaGenerada = ((Langostinos) edificios[2]).comidaGenerada();
-                int comidaMaximaAnimal = ((AlmacenCentral) edificios[0]).getCapacidadComida();
-                int comidaAnimal = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
+            if(langostinos.isDisponible()){
+                langostinos.nextDay();
+                int comidaGenerada = langostinos.comidaGenerada();
+                int comidaMaximaAnimal = almacenCentral.getCapacidadComida();
+                int comidaAnimal = almacenCentral.getCantidadComidaAnimal();
     
                 if(comidaGenerada >= (comidaMaximaAnimal - comidaAnimal)){
-                    ((AlmacenCentral) edificios[0]).setCantidadComidaAnimal(comidaMaximaAnimal);
+                    almacenCentral.setCantidadComidaAnimal(comidaMaximaAnimal);
                 }
                 else{
-                    ((AlmacenCentral) edificios[0]).setCantidadComidaAnimal(comidaGenerada + comidaAnimal);
+                    almacenCentral.setCantidadComidaAnimal(comidaGenerada + comidaAnimal);
                 }
     
-                ((Langostinos) edificios[2]).repartirComidaVegetal();
+                langostinos.repartirComidaVegetal();
             }
 
             archivoTranscripcionesPartida.registrarPasoDia(diasPasados + 1, pecesRio, pecesMar, monedasGanadas, pecesVendidos);
@@ -2066,10 +2077,11 @@ public class Simulador {
      *                                  piscifactoría.
      */
     private void repartirComidaAnimal() {
+        AlmacenCentral almacenCentral = edificios.getAlmacen();
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaAnimal = new ArrayList<>(piscifactorias);
 
         AlmacenComida almacenComidaPiscifactoria;
-        int cantidadComidaAnimalAlmacenCentral = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
+        int cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
         int mediaCantidadComidaAnimal;
 
         while (!todasLasPiscifactoriasLlenasDeComidaAnimal() && cantidadComidaAnimalAlmacenCentral != 0) {
@@ -2124,12 +2136,12 @@ public class Simulador {
                             }
 
                             if (cantidadComidaAnimalAlmacenCentral >= cantidadDeComidaAAnadir) {
-                                ((AlmacenCentral) edificios[0]).setCantidadComidaAnimal(
+                                almacenCentral.setCantidadComidaAnimal(
                                         cantidadComidaAnimalAlmacenCentral - cantidadDeComidaAAnadir);
                                 almacenComidaPiscifactoria.setCantidadComidaAnimal(mediaCantidadComidaAnimal);
-                                cantidadComidaAnimalAlmacenCentral = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
+                                cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
                             } else {
-                                ((AlmacenCentral) edificios[0]).setCantidadComidaAnimal(0);
+                                almacenCentral.setCantidadComidaAnimal(0);
                                 almacenComidaPiscifactoria.setCantidadComidaAnimal(
                                         cantidadComidaAnimalAlmacenCentral + cantidadComidaAnimalPiscifactoria);
                                 cantidadComidaAnimalAlmacenCentral = 0;
@@ -2148,8 +2160,8 @@ public class Simulador {
                             && (cantidadComidaAnimalPiscifactoria < almacenComidaPiscifactoria
                                     .getCapacidadMaximaComida())) {
                         almacenComidaPiscifactoria.setCantidadComidaAnimal(cantidadComidaAnimalPiscifactoria + 1);
-                        ((AlmacenCentral) edificios[0]).setCantidadComidaAnimal(((AlmacenCentral) edificios[0]).getCantidadComidaAnimal() - 1);
-                        cantidadComidaAnimalAlmacenCentral = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
+                        almacenCentral.setCantidadComidaAnimal(almacenCentral.getCantidadComidaAnimal() - 1);
+                        cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
                     }
                 }
             }
@@ -2232,10 +2244,11 @@ public class Simulador {
      *                                   piscifactoría.
      */
     private void repartirComidaVegetal() {
+        AlmacenCentral almacenCentral = edificios.getAlmacen();
         ArrayList<Piscifactoria> piscifactoriaOrdenadoPorCantidadComidaVegetal = new ArrayList<>(piscifactorias);
 
         AlmacenComida almacenComidaPiscifactoria;
-        int cantidadComidaVegetalAlmacenCentral = ((AlmacenCentral) edificios[0]).getCantidadComidaVegetal();
+        int cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
         int mediaCantidadComidaVegetal;
 
         while (!todasLasPiscifactoriasLlenasDeComidaVegetal() && cantidadComidaVegetalAlmacenCentral != 0) {
@@ -2290,12 +2303,12 @@ public class Simulador {
                             }
 
                             if (cantidadComidaVegetalAlmacenCentral >= cantidadDeComidaAAnadir) {
-                                ((AlmacenCentral) edificios[0]).setCantidadComidaVegetal(
+                                almacenCentral.setCantidadComidaVegetal(
                                         cantidadComidaVegetalAlmacenCentral - cantidadDeComidaAAnadir);
                                 almacenComidaPiscifactoria.setCantidadComidaVegetal(mediaCantidadComidaVegetal);
-                                cantidadComidaVegetalAlmacenCentral = ((AlmacenCentral) edificios[0]).getCantidadComidaVegetal();
+                                cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
                             } else {
-                                ((AlmacenCentral) edificios[0]).setCantidadComidaVegetal(0);
+                                almacenCentral.setCantidadComidaVegetal(0);
                                 almacenComidaPiscifactoria.setCantidadComidaVegetal(
                                         cantidadComidaVegetalAlmacenCentral + cantidadComidaVegetalPiscifactoria);
                                 cantidadComidaVegetalAlmacenCentral = 0;
@@ -2313,8 +2326,8 @@ public class Simulador {
                             && (cantidadComidaVegetalPiscifactoria < almacenComidaPiscifactoria
                                     .getCapacidadMaximaComida())) {
                         almacenComidaPiscifactoria.setCantidadComidaVegetal(cantidadComidaVegetalPiscifactoria + 1);
-                        ((AlmacenCentral) edificios[0]).setCantidadComidaVegetal(((AlmacenCentral) edificios[0]).getCantidadComidaVegetal() - 1);
-                        cantidadComidaVegetalAlmacenCentral = ((AlmacenCentral) edificios[0]).getCantidadComidaVegetal();
+                        almacenCentral.setCantidadComidaVegetal(almacenCentral.getCantidadComidaVegetal() - 1);
+                        cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
                     }
                 }
             }

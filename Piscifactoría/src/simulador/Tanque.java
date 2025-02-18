@@ -287,8 +287,9 @@ public class Tanque {
         ArrayList<Integer> cantidadDeComidaNecesariaPorPez = new ArrayList<>();
         int comidaAnimal = almacenComida.getCantidadComidaAnimal();
         int comidaVegetal = almacenComida.getCantidadComidaVegetal();
+        AlmacenCentral almacenCentral = Simulador.simulador.edificios.getAlmacen();
 
-        if (!((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()) {
+        if (!almacenCentral.isDisponible()) {
             for (Pez pez : peces) {
                 if (pez.isVivo() && !pez.isAlimentado()) {
                     cantidadDeComidaNecesariaPorPez.add(pez.comer());
@@ -363,8 +364,8 @@ public class Tanque {
                 }
             }
         } else {
-            int comidaAnimalAlmacen = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaAnimal();
-            int comidaVegetalAlmacen = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaVegetal();
+            int comidaAnimalAlmacen = almacenCentral.getCantidadComidaAnimal();
+            int comidaVegetalAlmacen = almacenCentral.getCantidadComidaVegetal();
 
             for (Pez pez : peces) {
                 if (pez.isVivo() && !pez.isAlimentado()) {
@@ -382,7 +383,7 @@ public class Tanque {
                 if ((comidaAnimal + comidaAnimalAlmacen) >= comidaNecesaria) {
                     comidaAnimal -= comidaNecesaria;
                     if (comidaAnimal < 0) {
-                        ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(comidaAnimalAlmacen + comidaAnimal);
+                        almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen + comidaAnimal);
                         comidaAnimal = 0;
                     }
                     for (Pez pez : peces) {
@@ -401,7 +402,7 @@ public class Tanque {
                     if ((comidaVegetal + comidaVegetalAlmacen) >= comidaNecesaria) {
                         comidaVegetal -= comidaNecesaria;
                         if (comidaVegetal < 0) {
-                            ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
+                            almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
                             comidaVegetal = 0;
                         }
                         for (Pez pez : peces) {
@@ -443,25 +444,25 @@ public class Tanque {
 
                             if (comidaVegetalAlmacen > comidaAnimalAlmacen) {
                                 if (comidaVegetalAlmacen >= comidaNecesaria) {
-                                    ((AlmacenCentral) Simulador.simulador.edificios[0])
+                                    almacenCentral
                                             .setCantidadComidaVegetal(comidaVegetalAlmacen - comidaNecesaria);
                                 } else {
                                     comidaVegetalAlmacen -= comidaNecesaria;
                                     comidaAnimalAlmacen += comidaVegetal;
                                     comidaVegetal = 0;
-                                    ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(comidaAnimalAlmacen);
-                                    ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(comidaVegetalAlmacen);
+                                    almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
+                                    almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
                                 }
                             } else {
                                 if (comidaAnimalAlmacen >= comidaNecesaria) {
-                                    ((AlmacenCentral) Simulador.simulador.edificios[0])
+                                    almacenCentral
                                             .setCantidadComidaAnimal(comidaAnimalAlmacen - comidaNecesaria);
                                 } else {
                                     comidaAnimalAlmacen -= comidaNecesaria;
                                     comidaVegetalAlmacen += comidaAnimal;
                                     comidaAnimalAlmacen = 0;
-                                    ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(comidaAnimalAlmacen);
-                                    ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(comidaVegetalAlmacen);
+                                    almacenCentral.setCantidadComidaAnimal(comidaAnimalAlmacen);
+                                    almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen);
                                 }
                             }
                         }
@@ -490,6 +491,7 @@ public class Tanque {
      */
     private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez,
         Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
+        AlmacenCentral almacenCentral = Simulador.simulador.edificios.getAlmacen();
         Random rt = new Random();
         ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
         int posicionAleatoria = 0;
@@ -515,7 +517,7 @@ public class Tanque {
             }
         }
 
-        if (!((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()) {
+        if (!almacenCentral.isDisponible()) {
             if (peces.get(0) instanceof Carnivoro) {
                 comidaAnimal = comidaDisponible;
 
@@ -537,24 +539,24 @@ public class Tanque {
         } else {
             if (peces.get(0) instanceof Carnivoro) {
                 almacenComida.setCantidadComidaAnimal(0);
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(comidaDisponible);
+                almacenCentral.setCantidadComidaAnimal(comidaDisponible);
             } else {
                 if (peces.get(0) instanceof Filtrador) {
                     almacenComida.setCantidadComidaVegetal(0);
-                    ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(comidaDisponible);
+                    almacenCentral.setCantidadComidaVegetal(comidaDisponible);
 
                 } else {
-                    if (((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaAnimal() > ((AlmacenCentral) Simulador.simulador.edificios[0])
+                    if (almacenCentral.getCantidadComidaAnimal() > almacenCentral
                             .getCantidadComidaVegetal()) {
                         almacenComida.setCantidadComidaAnimal(0);
                         almacenComida.setCantidadComidaVegetal(0);
-                        ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(0);
-                        ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(comidaDisponible);
+                        almacenCentral.setCantidadComidaAnimal(0);
+                        almacenCentral.setCantidadComidaVegetal(comidaDisponible);
                     } else {
                         almacenComida.setCantidadComidaAnimal(0);
                         almacenComida.setCantidadComidaVegetal(0);
-                        ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(0);
-                        ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(comidaDisponible);
+                        almacenCentral.setCantidadComidaVegetal(0);
+                        almacenCentral.setCantidadComidaAnimal(comidaDisponible);
                     }
 
                 }
@@ -636,7 +638,7 @@ public class Tanque {
             }
 
             Simulador.simulador.sistemaMonedas.setMonedas(Simulador.simulador.sistemaMonedas.getMonedas()
-                    + (pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas()));
+                    + (pecesAVender * AlmacenPropiedades.getPropByName(nombrePez).getMonedas()));
             
             return pecesAVender;
         }
@@ -693,7 +695,7 @@ public class Tanque {
         if(!peces.isEmpty()){
             Iterator<Pez> iterador = peces.iterator();
             Pez pez;
-            Langostinos granjaLangostinos = ((Langostinos) Simulador.simulador.edificios[2]);
+            Langostinos granjaLangostinos = Simulador.simulador.edificios.getLangostinos();
 
             while(iterador.hasNext()){
                 pez = iterador.next();

@@ -1819,6 +1819,7 @@ public class SistemaRecompensas {
      */
     private static void reclamarRecompensaAlgas(int nivel) {
         int capsulasAlgas = 0;
+        AlmacenCentral almacenCentral = Simulador.simulador.edificios.getAlmacen();
 
         switch (nivel) {
             case 1 -> {
@@ -1837,14 +1838,14 @@ public class SistemaRecompensas {
                 capsulasAlgas = 2000;
             }
         }
-        if (((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()) {
-            int cantidadComidaVegetal = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaVegetal();
-            int cantidadMaximaComida = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCapacidadComida();
+        if (almacenCentral.isDisponible()) {
+            int cantidadComidaVegetal = almacenCentral.getCantidadComidaVegetal();
+            int cantidadMaximaComida = almacenCentral.getCapacidadComida();
 
             if (cantidadMaximaComida - cantidadComidaVegetal > capsulasAlgas) {
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(cantidadComidaVegetal + capsulasAlgas);
+                almacenCentral.setCantidadComidaVegetal(cantidadComidaVegetal + capsulasAlgas);
             } else {
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(cantidadMaximaComida);
+                almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
             }
 
             Simulador.simulador.repartirComida();
@@ -1879,6 +1880,7 @@ public class SistemaRecompensas {
      */
     private static void reclamarRecompensaPienso(int nivel) {
         int capsulasPienso = 0;
+        AlmacenCentral almacenCentral = Simulador.simulador.edificios.getAlmacen();
 
         switch (nivel) {
             case 1 -> {
@@ -1897,14 +1899,14 @@ public class SistemaRecompensas {
                 capsulasPienso = 2000;
             }
         }
-        if (((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()) {
-            int cantidadcomidaAnimal = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaAnimal();
-            int cantidadMaximaComida = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCapacidadComida();
+        if (almacenCentral.isDisponible()) {
+            int cantidadcomidaAnimal = almacenCentral.getCantidadComidaAnimal();
+            int cantidadMaximaComida = almacenCentral.getCapacidadComida();
 
             if (cantidadMaximaComida - cantidadcomidaAnimal > capsulasPienso) {
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadcomidaAnimal + capsulasPienso);
+                almacenCentral.setCantidadComidaAnimal(cantidadcomidaAnimal + capsulasPienso);
             } else {
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadMaximaComida);
+                almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
             }
 
             Simulador.simulador.repartirComida();
@@ -1939,6 +1941,7 @@ public class SistemaRecompensas {
      */
     private static void reclamarRecompensaComida(int nivel) {
         int capsulasComida = 0;
+        AlmacenCentral almacenCentral = Simulador.simulador.edificios.getAlmacen();
 
         switch (nivel) {
             case 1 -> {
@@ -1957,20 +1960,20 @@ public class SistemaRecompensas {
                 capsulasComida = 1000;
             }
         }
-        if (((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()) {
-            int cantidadComidaAnimal = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaAnimal();
-            int cantidadComidaVegetal = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCantidadComidaVegetal();
-            int cantidadMaximaComida = ((AlmacenCentral) Simulador.simulador.edificios[0]).getCapacidadComida();
+        if (almacenCentral.isDisponible()) {
+            int cantidadComidaAnimal = almacenCentral.getCantidadComidaAnimal();
+            int cantidadComidaVegetal = almacenCentral.getCantidadComidaVegetal();
+            int cantidadMaximaComida = almacenCentral.getCapacidadComida();
 
             if (cantidadMaximaComida - cantidadComidaAnimal > capsulasComida) {
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadComidaAnimal + capsulasComida);
+                almacenCentral.setCantidadComidaAnimal(cantidadComidaAnimal + capsulasComida);
             } else {
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadMaximaComida);
+                almacenCentral.setCantidadComidaAnimal(cantidadMaximaComida);
             }
             if (cantidadMaximaComida - cantidadComidaVegetal > capsulasComida) {
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaAnimal(cantidadComidaVegetal + capsulasComida);
+                almacenCentral.setCantidadComidaAnimal(cantidadComidaVegetal + capsulasComida);
             } else {
-                ((AlmacenCentral) Simulador.simulador.edificios[0]).setCantidadComidaVegetal(cantidadMaximaComida);
+                almacenCentral.setCantidadComidaVegetal(cantidadMaximaComida);
             }
 
             Simulador.simulador.repartirComida();
@@ -2103,11 +2106,12 @@ public class SistemaRecompensas {
      * Reclama la recompensa de almacen central.
      */
     private static void reclamarRecompensaAlmacenCentral() {
-        boolean disp = ((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible();
+        AlmacenCentral almacenCentral = Simulador.simulador.edificios.getAlmacen();
+        boolean disp = almacenCentral.isDisponible();
         if (disp == true) {
-            ((AlmacenCentral) Simulador.simulador.edificios[0]).mejorar();
+            almacenCentral.mejorar();
         } else {
-            ((AlmacenCentral) Simulador.simulador.edificios[0]).setDisponible(true);
+            almacenCentral.setDisponible(true);
         }
         reducirRecompensa(new File("rewards/almacen_a.xml"));
         reducirRecompensa(new File("rewards/almacen_b.xml"));
@@ -2119,10 +2123,11 @@ public class SistemaRecompensas {
      * Reclama la recompensa del fitoplancton.
      */
     private static void reclamarRecompensaFitoplancton(){
-        if(!((Fitoplancton) Simulador.simulador.edificios[1]).isDisponible()){
-            if(((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()){
-                ((Fitoplancton) Simulador.simulador.edificios[1]).setDisponible(true);
-                ((Fitoplancton) Simulador.simulador.edificios[1]).setTanques(1);
+        Fitoplancton fitoplancton = Simulador.simulador.edificios.getFitoplancton();
+        if(!fitoplancton.isDisponible()){
+            if(Simulador.simulador.edificios.getAlmacen().isDisponible()){
+                fitoplancton.setDisponible(true);
+                fitoplancton.setTanques(1);
                 reducirRecompensa(new File("rewards/fitoplancton_a.xml"));
                 reducirRecompensa(new File("rewards/fitoplancton_b.xml"));
                 reducirRecompensa(new File("rewards/fitoplancton_c.xml"));
@@ -2141,10 +2146,11 @@ public class SistemaRecompensas {
      * Reclama la recompensa de la granja de langostinos.
      */
     private static void reclamarRecompensaLangostinos(){
-        if(!((Langostinos) Simulador.simulador.edificios[2]).isDisponible()){
-            if(((AlmacenCentral) Simulador.simulador.edificios[0]).isDisponible()){
-                ((Langostinos) Simulador.simulador.edificios[2]).setDisponible(true);
-                ((Langostinos) Simulador.simulador.edificios[2]).mejorar();
+        Langostinos langostinos = Simulador.simulador.edificios.getLangostinos();
+        if(!langostinos.isDisponible()){
+            if(Simulador.simulador.edificios.getAlmacen().isDisponible()){
+                langostinos.setDisponible(true);
+                langostinos.mejorar();
                 reducirRecompensa(new File("rewards/langostinos_a.xml"));
                 reducirRecompensa(new File("rewards/langostinos_b.xml"));
                 reducirRecompensa(new File("rewards/langostinos_c.xml"));
