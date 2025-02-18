@@ -558,8 +558,9 @@ public class Simulador {
 
         if(((Fitoplancton) edificios[1]).isDisponible()){
             int ciclo = ((Fitoplancton) edificios[1]).getCiclo();
+            ciclo++;
             
-            if(ciclo % 5 == 0){
+            if(ciclo == 5){
                 ciclo = -1;
                 int comidaGenerada = ((Fitoplancton) edificios[1]).getTanques() * 500;
                 int comidaMaximaVegetal = ((AlmacenCentral) edificios[0]).getCapacidadComida();
@@ -575,11 +576,11 @@ public class Simulador {
                 repartirComida();
             }
 
-            ciclo++;
             ((Fitoplancton) edificios[1]).setCiclo(ciclo);
         }
 
         if(((Langostinos) edificios[2]).isDisponible()){
+            ((Langostinos) edificios[2]).nextDay();
             int comidaGenerada = ((Langostinos) edificios[2]).comidaGenerada();
             int comidaMaximaAnimal = ((AlmacenCentral) edificios[0]).getCapacidadComida();
             int comidaAnimal = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
@@ -592,7 +593,6 @@ public class Simulador {
             }
 
             ((Langostinos) edificios[2]).repartirComidaVegetal();
-            ((Langostinos) edificios[2]).nextDay();
         }
 
         try {
@@ -1370,7 +1370,7 @@ public class Simulador {
     private void comprarGranjaLangostinos(){
         int monedas = sistemaMonedas.getMonedas();
         if(monedas >= 3000){
-            monedas += 3000;
+            monedas -= 3000;
             sistemaMonedas.setMonedas(monedas);
             ((Langostinos) edificios[2]).setDisponible(true);
             ((Langostinos) edificios[2]).mejorar();
@@ -1805,8 +1805,9 @@ public class Simulador {
 
             if(((Fitoplancton) edificios[1]).isDisponible()){
                 int ciclo = ((Fitoplancton) edificios[1]).getCiclo();
-                
-                if(ciclo % 5 == 0){
+                ciclo++;
+
+                if(ciclo == 5){
                     ciclo = -1;
                     int comidaGenerada = ((Fitoplancton) edificios[1]).getTanques() * 500;
                     int comidaMaximaVegetal = ((AlmacenCentral) edificios[0]).getCapacidadComida();
@@ -1822,11 +1823,11 @@ public class Simulador {
                     repartirComida();
                 }
     
-                ciclo++;
                 ((Fitoplancton) edificios[1]).setCiclo(ciclo);
             }
     
             if(((Langostinos) edificios[2]).isDisponible()){
+                ((Langostinos) edificios[2]).nextDay();
                 int comidaGenerada = ((Langostinos) edificios[2]).comidaGenerada();
                 int comidaMaximaAnimal = ((AlmacenCentral) edificios[0]).getCapacidadComida();
                 int comidaAnimal = ((AlmacenCentral) edificios[0]).getCantidadComidaAnimal();
@@ -1839,7 +1840,6 @@ public class Simulador {
                 }
     
                 ((Langostinos) edificios[2]).repartirComidaVegetal();
-                ((Langostinos) edificios[2]).nextDay();
             }
 
             archivoTranscripcionesPartida.registrarPasoDia(diasPasados + 1, pecesRio, pecesMar, monedasGanadas, pecesVendidos);
