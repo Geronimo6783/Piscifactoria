@@ -106,11 +106,16 @@ public class Langostinos {
      */
     public int comidaGenerada(){
         int comidaGenerada = 0;
+        int capacidadMaximaAlmacen = Simulador.simulador.edificios.getAlmacen().getCapacidadComida();
+        int comidaAnimal = Simulador.simulador.edificios.getAlmacen().getCantidadComidaAnimal();
         Random rt = new Random();
 
         for(TanqueLangostinos tanque : tanques){
             if(tanque.getDescanso() == 0){
                 comidaGenerada += rt.nextInt(100, 201);
+                if(comidaGenerada > (capacidadMaximaAlmacen - comidaAnimal)){
+                    comidaGenerada = capacidadMaximaAlmacen - comidaAnimal;
+                }
             }
         }
 

@@ -763,7 +763,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
-            buferEscritura.append("Comprada la granja de langostinos");
+            buferEscritura.append("\nComprada la granja de langostinos.");
             buferEscritura.flush();
         }
         catch(IOException e){
@@ -790,7 +790,7 @@ public class Transcripciones {
 
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
-            buferEscritura.append("Mejorada la granja de langostinos añadiendo un tanque por un total de " + tanques + " tanques.");
+            buferEscritura.append("\nMejorada la granja de langostinos añadiendo un tanque por un total de " + tanques + " tanques.");
             buferEscritura.flush();
         }
         catch(IOException e){
