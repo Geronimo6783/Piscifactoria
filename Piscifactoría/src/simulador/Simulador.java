@@ -2086,7 +2086,7 @@ public class Simulador {
 
         while (!todasLasPiscifactoriasLlenasDeComidaAnimal() && cantidadComidaAnimalAlmacenCentral != 0) {
             mediaCantidadComidaAnimal = mediaComidaAnimal();
-            if (!todasLasPiscifactoriasEnLaMediaComidaAnimal(mediaCantidadComidaAnimal)) {
+            if (!todasLasPiscifactoriasEnLaMediaComidaAnimal(mediaComidaAnimal())) {
                 Collections.sort(piscifactoriaOrdenadoPorCantidadComidaAnimal, new Comparator<Piscifactoria>() {
 
                     /**
