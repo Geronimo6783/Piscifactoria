@@ -2121,24 +2121,24 @@ public class Simulador {
 
                 int cantidadComidaAnimalPiscifactoria;
                 int cantidadDeComidaAAnadir;
-                int capacidadComidaAlmacen;
+                int capacidadComidaAnimalPiscifactoria;
                 for (Piscifactoria piscifactoria : piscifactoriaOrdenadoPorCantidadComidaAnimal) {
                     almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
                     cantidadComidaAnimalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaAnimal();
-                    capacidadComidaAlmacen = almacenComidaPiscifactoria.getCapacidadMaximaComida();
+                    capacidadComidaAnimalPiscifactoria = almacenComidaPiscifactoria.getCapacidadMaximaComida();
 
                     if (cantidadComidaAnimalPiscifactoria < mediaCantidadComidaAnimal) {
                         if (cantidadComidaAnimalAlmacenCentral != 0) {
                             cantidadDeComidaAAnadir = mediaCantidadComidaAnimal - cantidadComidaAnimalPiscifactoria;
 
-                            if (cantidadDeComidaAAnadir + cantidadComidaAnimalPiscifactoria > capacidadComidaAlmacen) {
-                                cantidadDeComidaAAnadir = capacidadComidaAlmacen - cantidadComidaAnimalPiscifactoria;
+                            if(mediaCantidadComidaAnimal > capacidadComidaAnimalPiscifactoria){
+                                cantidadDeComidaAAnadir = capacidadComidaAnimalPiscifactoria - cantidadComidaAnimalPiscifactoria;
                             }
 
                             if (cantidadComidaAnimalAlmacenCentral >= cantidadDeComidaAAnadir) {
                                 almacenCentral.setCantidadComidaAnimal(
                                         cantidadComidaAnimalAlmacenCentral - cantidadDeComidaAAnadir);
-                                almacenComidaPiscifactoria.setCantidadComidaAnimal(mediaCantidadComidaAnimal);
+                                almacenComidaPiscifactoria.setCantidadComidaAnimal(cantidadComidaAnimalPiscifactoria + cantidadDeComidaAAnadir);
                                 cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
                             } else {
                                 almacenCentral.setCantidadComidaAnimal(0);
@@ -2151,14 +2151,14 @@ public class Simulador {
                 }
             } else {
                 int cantidadComidaAnimalPiscifactoria;
+                int capacidadComidaAnimalPiscifactoria;
 
                 for (Piscifactoria piscifactoria : piscifactorias) {
                     almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
                     cantidadComidaAnimalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaAnimal();
+                    capacidadComidaAnimalPiscifactoria = almacenComidaPiscifactoria.getCapacidadMaximaComida();
 
-                    if (cantidadComidaAnimalAlmacenCentral != 0
-                            && (cantidadComidaAnimalPiscifactoria < almacenComidaPiscifactoria
-                                    .getCapacidadMaximaComida())) {
+                    if (cantidadComidaAnimalAlmacenCentral != 0 && (cantidadComidaAnimalPiscifactoria < capacidadComidaAnimalPiscifactoria)) {
                         almacenComidaPiscifactoria.setCantidadComidaAnimal(cantidadComidaAnimalPiscifactoria + 1);
                         almacenCentral.setCantidadComidaAnimal(almacenCentral.getCantidadComidaAnimal() - 1);
                         cantidadComidaAnimalAlmacenCentral = almacenCentral.getCantidadComidaAnimal();
@@ -2287,25 +2287,25 @@ public class Simulador {
                 });
 
                 int cantidadComidaVegetalPiscifactoria;
+                int capacidadComidaVegetalPiscifactoria;
                 int cantidadDeComidaAAnadir;
-                int capacidadComidaAlmacen;
                 for (Piscifactoria piscifactoria : piscifactoriaOrdenadoPorCantidadComidaVegetal) {
                     almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
                     cantidadComidaVegetalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaVegetal();
-                    capacidadComidaAlmacen = almacenComidaPiscifactoria.getCapacidadMaximaComida();
+                    capacidadComidaVegetalPiscifactoria = almacenComidaPiscifactoria.getCapacidadMaximaComida();
 
                     if (cantidadComidaVegetalPiscifactoria < mediaCantidadComidaVegetal) {
                         if (cantidadComidaVegetalAlmacenCentral != 0) {
                             cantidadDeComidaAAnadir = mediaCantidadComidaVegetal - cantidadComidaVegetalPiscifactoria;
 
-                            if (cantidadDeComidaAAnadir + cantidadComidaVegetalPiscifactoria > capacidadComidaAlmacen) {
-                                cantidadDeComidaAAnadir = capacidadComidaAlmacen - cantidadComidaVegetalPiscifactoria;
+                            if(mediaCantidadComidaVegetal > capacidadComidaVegetalPiscifactoria){
+                                cantidadDeComidaAAnadir = capacidadComidaVegetalPiscifactoria - cantidadComidaVegetalPiscifactoria;
                             }
 
                             if (cantidadComidaVegetalAlmacenCentral >= cantidadDeComidaAAnadir) {
                                 almacenCentral.setCantidadComidaVegetal(
                                         cantidadComidaVegetalAlmacenCentral - cantidadDeComidaAAnadir);
-                                almacenComidaPiscifactoria.setCantidadComidaVegetal(mediaCantidadComidaVegetal);
+                                almacenComidaPiscifactoria.setCantidadComidaVegetal(cantidadComidaVegetalPiscifactoria + cantidadDeComidaAAnadir);
                                 cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
                             } else {
                                 almacenCentral.setCantidadComidaVegetal(0);
@@ -2318,13 +2318,13 @@ public class Simulador {
                 }
             } else {
                 int cantidadComidaVegetalPiscifactoria;
+                int capacidadComidaVegetalPiscifactoria;
                 for (Piscifactoria piscifactoria : piscifactorias) {
                     almacenComidaPiscifactoria = piscifactoria.getAlmacenInicial();
                     cantidadComidaVegetalPiscifactoria = almacenComidaPiscifactoria.getCantidadComidaVegetal();
+                    capacidadComidaVegetalPiscifactoria = almacenComidaPiscifactoria.getCapacidadMaximaComida();
 
-                    if (cantidadComidaVegetalAlmacenCentral != 0
-                            && (cantidadComidaVegetalPiscifactoria < almacenComidaPiscifactoria
-                                    .getCapacidadMaximaComida())) {
+                    if (cantidadComidaVegetalAlmacenCentral != 0  && (cantidadComidaVegetalPiscifactoria < capacidadComidaVegetalPiscifactoria)) {
                         almacenComidaPiscifactoria.setCantidadComidaVegetal(cantidadComidaVegetalPiscifactoria + 1);
                         almacenCentral.setCantidadComidaVegetal(almacenCentral.getCantidadComidaVegetal() - 1);
                         cantidadComidaVegetalAlmacenCentral = almacenCentral.getCantidadComidaVegetal();
