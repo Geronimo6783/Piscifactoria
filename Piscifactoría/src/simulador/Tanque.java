@@ -766,8 +766,14 @@ public class Tanque {
             }
         }
     }
-
-
+    /**
+     * Metodo que cura manualmente a los peces del tanque
+     */
+    public void curar(){
+        for (Pez pez : peces) {
+            pez.setEnfermo(false);
+        }
+    }
 
     /**
      * Elimina todos los peces de un tanque, independientemente de si 

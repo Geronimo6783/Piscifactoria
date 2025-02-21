@@ -480,6 +480,26 @@ public abstract class Piscifactoria {
     }
 
     /**
+     * Metodo que indica la cantidad de peces enfermos en los tanques
+     */
+    public String pecesEnfermosPorTanque(){
+        String pecesEnfermos="";
+        for(Tanque tanque : tanques){
+                pecesEnfermos+="|"+tanque.pecesEnfermos()+"|";
+        }
+        return pecesEnfermos;
+    }
+
+    /**
+     * Metodo que cura a todos los peces de los tanques
+     */
+    public void curarPeces(){
+        for (Tanque tanque : tanques) {
+            tanque.curar();
+        }
+    }
+
+    /**
      * Devuelve un string con información de la piscifactoría.
      * @return String con información de la piscifactoría.
      */

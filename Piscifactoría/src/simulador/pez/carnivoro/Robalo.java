@@ -60,6 +60,10 @@ public class Robalo extends Carnivoro implements Mar{
                 if (isEnfermo() && edad == AlmacenPropiedades.ROBALO.getMadurez()) {
                     boolean pezSigueConVida = (rt.nextInt( 100) > 10);
                     vivo=pezSigueConVida;
+                    if(isAlimentado() || pezSigueConVida){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
                 }else if (isEnfermo()) {
                     boolean pezSigueConVida = (rt.nextInt( 100) > 25);
                     vivo=pezSigueConVida;

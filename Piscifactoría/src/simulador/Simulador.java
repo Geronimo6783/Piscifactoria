@@ -2372,22 +2372,33 @@ public class Simulador {
 
     /**
      * Metodo que permite gestionar los peces enfermos de las piscifactorias.
-     * 
      */
     public void gestionarEnfermedad(){
-        String[] cabeceraGestionarEnfermedad = { "Seleccione una piscifactoria para curar:",
-                "========== Enfermos ==========",
-                "|Peces enfermos/ Tanque|" };
-        System.out.println();
+        String[] cabeceraGestionarEnfermedad = {"========== Enfermos ==========" };
         String[] opciones = new String[piscifactorias.size() + 1];
         opciones[0] = "Cancelar";
 
         for (int i = 0; i < piscifactorias.size(); i++) {
             Piscifactoria piscifactoria = piscifactorias.get(i);
-            opciones[i + 1] = i+".- Piscifactoría "+piscifactoria.getNombre() + " |" + piscifactoria.getPecesVivos() + "/"+ piscifactoria.getPecesEnfermos()+ "|";
+            opciones[i + 1] = i+".- Piscifactoría "+piscifactoria.getNombre() + " "+ piscifactoria.pecesEnfermosPorTanque();
         }
-
         GeneradorMenus.generarMenu(cabeceraGestionarEnfermedad, opciones, 0);
+        System.out.println("¿Desea curar a los peces?[S/N]");
+        String siNo=SistemaEntrada.entradaTexto();
+        if(siNo=="S" || siNo=="Si" || siNo=="SI"){
+            System.out.println("¿Cual piscifactoria quiere curar?");
+            int pisciSelec=SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
+            int monedasParaCura=piscifactorias.get(pisciSelec-1).getPecesEnfermos()*10;
+            System.out.println("En ese caso el precio de cura será "+(monedasParaCura)+". ¿Desea proceder?[S/N]");
+            String confirma=SistemaEntrada.entradaTexto();
+            if(siNo=="S" || siNo=="Si" || siNo=="SI"){
+                piscifactorias.get(pisciSelec-1).curarPeces();
+                sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - monedasParaCura);
+            }
+        }else{
+            System.out.println("");
+        }
+        
     }
 
     /**

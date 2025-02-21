@@ -60,10 +60,14 @@ public class Sargo extends Omnivoro implements Mar{
                 if (isEnfermo() && edad == AlmacenPropiedades.SARGO.getMadurez()) {
                     boolean pezSigueConVida = (rt.nextInt( 100) > 10);
                     vivo=pezSigueConVida;
+                    if(isAlimentado() || pezSigueConVida){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
                 }else if (isEnfermo()) {
                     boolean pezSigueConVida = (rt.nextInt( 100) > 25);
                     vivo=pezSigueConVida;
-                    if(isAlimentado()){
+                    if(isAlimentado() || pezSigueConVida){
                         boolean sigueEnfermo=(rt.nextInt(100)>10);
                         enfermo=sigueEnfermo;
                     }

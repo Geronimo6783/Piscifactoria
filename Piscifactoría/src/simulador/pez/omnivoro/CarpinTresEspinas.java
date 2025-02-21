@@ -60,10 +60,14 @@ public class CarpinTresEspinas extends Omnivoro implements Rio{
                 if (isEnfermo() && edad == AlmacenPropiedades.CARPIN_TRES_ESPINAS.getMadurez()) {
                     boolean pezSigueConVida = (rt.nextInt( 100) > 10);
                     vivo=pezSigueConVida;
+                    if(isAlimentado() || pezSigueConVida){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
                 }else if (isEnfermo()) {
                     boolean pezSigueConVida = (rt.nextInt( 100) > 25);
                     vivo=pezSigueConVida;
-                    if(isAlimentado()){
+                    if(isAlimentado() || pezSigueConVida){
                         boolean sigueEnfermo=(rt.nextInt(100)>10);
                         enfermo=sigueEnfermo;
                     }
