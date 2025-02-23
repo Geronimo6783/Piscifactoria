@@ -21,6 +21,8 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
 
 import java.util.Iterator;
+import java.util.List;
+
 import propiedades.AlmacenPropiedades;
 
 /**
@@ -588,11 +590,38 @@ public class Tanque {
     /**
      * Gestiona la lógica de reproducción de los peces del tanque.
      */
-    private void reproducir() {
+    // private void reproducir() {
+    //     int numeroHuevos = 0;
+    //     int numeroHuevosPorHembra = AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getHuevos();
+
+    //     if (hayMachoFertil() ) {
+    //         for (Pez pez : peces) {
+    //             if (pez.isSexo() && pez.isFertil()) {
+    //                 pez.setFertil(false);
+    //                 pez.setDiasSinReproducirse(0);
+    //                 numeroHuevos += numeroHuevosPorHembra;
+    //             }
+    //         }
+
+    //         while (peces.size() < capacidadMaximaPeces && numeroHuevos > 0) {
+    //             if (pecesMacho() >= pecesHembra()) {
+    //                 peces.add(peces.getFirst().obtenerPezHija());
+    //             } else {
+    //                 peces.add(peces.getFirst().obtenerPezHijo());
+    //             }
+
+    //             numeroHuevos--;
+    //         }
+
+            
+    //     }
+    // }
+
+    private void reproducir(List<TanqueHuevos> tanquesHuevos) {
         int numeroHuevos = 0;
         int numeroHuevosPorHembra = AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getHuevos();
-
-        if (hayMachoFertil() ) {
+    
+        if (hayMachoFertil()) {
             for (Pez pez : peces) {
                 if (pez.isSexo() && pez.isFertil()) {
                     pez.setFertil(false);
@@ -600,18 +629,32 @@ public class Tanque {
                     numeroHuevos += numeroHuevosPorHembra;
                 }
             }
-
+    
             while (peces.size() < capacidadMaximaPeces && numeroHuevos > 0) {
                 if (pecesMacho() >= pecesHembra()) {
                     peces.add(peces.getFirst().obtenerPezHija());
                 } else {
                     peces.add(peces.getFirst().obtenerPezHijo());
                 }
-
                 numeroHuevos--;
+            }
+    
+            if (!tanquesHuevos.isEmpty()) { // Solo intentamos guardar huevos si hay tanques de huevos
+                for (TanqueHuevos tanqueHuevos : tanquesHuevos) {
+                    while (numeroHuevos > 0 && tanqueHuevos.tieneEspacio()) {
+                        tanqueHuevos.agregarHuevo(peces.getFirst().getNombre());
+                        numeroHuevos--;
+                    }                    
+                    if (numeroHuevos == 0) {
+                        break;
+                    }
+                }
             }
         }
     }
+
+    
+    
 
     /**
      * Vende todos los peces que se encuentran en una edad óptima para ser vendidos.
@@ -688,17 +731,28 @@ public class Tanque {
      * están en la edad óptima.
      * @return Peces vendidos en el día.
      */
-    public int nextDay() {
-        if(!peces.isEmpty()){
+    // public int nextDay() {
+    //     if(!peces.isEmpty()){
+    //         for (Pez pez : peces) {
+    //             pez.grow();
+    //         }
+    //         reproducir();
+    //         return venderPecesOptimos();
+    //     }
+
+    //     return 0;
+    // }
+    public int nextDay(List<TanqueHuevos> tanquesHuevos) {
+        if (!peces.isEmpty()) {
             for (Pez pez : peces) {
                 pez.grow();
             }
-            reproducir();
+            reproducir(tanquesHuevos); // Pasamos los tanques de huevos
             return venderPecesOptimos();
         }
-
         return 0;
     }
+    
 
     /**
      * Elimina todos los peces de un tanque, independientemente de si 

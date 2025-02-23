@@ -1,7 +1,7 @@
 package simulador.tanque;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.List;
 
 import simulador.pez.Pez;
@@ -9,55 +9,55 @@ import simulador.piscifactoria.Piscifactoria;
 
 public class TanqueHuevos extends Tanque{
     private static final int CAPACIDAD_MAXIMA = 25;
-    private List<Pez> huevos; 
+    private List<String> huevos; 
     private Piscifactoria piscifactoria;
+    
 
     public TanqueHuevos(int numeroTanque, Piscifactoria piscifactoria) {
-        super(numeroTanque, 25);
+        super(numeroTanque, CAPACIDAD_MAXIMA);
         this.piscifactoria = piscifactoria;
-        this.huevos = new LinkedList<>();
+        this.huevos = new ArrayList<>();
     }
 
     public boolean tieneEspacio() {
         return huevos.size() < CAPACIDAD_MAXIMA;
     }
 
-    public void agregarHuevo(Pez huevo) {
+    public void agregarHuevo(String nombrePez) {
         if (tieneEspacio()) {
-            huevos.add(huevo);
+            huevos.add(nombrePez);
         }
     }
 
+  
     public void procesarHuevos() {
         List<Tanque> tanques = piscifactoria.getTanques();
-        List<Pez> huevosTransferidos = new LinkedList<>();
+        Iterator<String> iteradorHuevos = huevos.iterator();
     
-        for (Pez huevo : new ArrayList<>(huevos)) {
+        while (iteradorHuevos.hasNext()) {
+            String nombrePez = iteradorHuevos.next(); 
+    
             for (Tanque tanque : tanques) {
-                if (puedeRecibirPez(huevo)) {
-                    tanque.getPeces().add(huevo); 
-                    huevosTransferidos.add(huevo);
-                    System.out.println("Huevo de " + huevo.getNombre() + " transferido al tanque " + tanque.getNumeroTanque());
-                    break;
+                if (!tanque.getPeces().isEmpty() && tanque.getPeces().size() < tanque.getCapacidadMaximaPeces()) {
+                    
+                    if (tanque.getPeces().get(0).getNombre().equals(nombrePez)) {
+                       
+                        Pez pezBase = tanque.getPeces().getFirst();
+    
+                        Pez nuevoPez = tanque.pecesMacho() >= tanque.pecesHembra() ? 
+                                       pezBase.obtenerPezHija() : 
+                                       pezBase.obtenerPezHijo();
+    
+                        tanque.getPeces().add(nuevoPez);
+                        iteradorHuevos.remove(); 
+    
+                        System.out.println("Un huevo ha eclosionado y fue transferido al tanque " + tanque.getNumeroTanque());
+    
+                        break;
+                    }
                 }
             }
         }
-        
-        huevos.removeAll(huevosTransferidos); 
-    }
-    
-    public boolean puedeRecibirPez(Pez pez) {
-        // Verificar espacio
-        if (getCapacidadMaximaPeces() - getPeces().size() <= 0) {
-            return false;
-        }
-    
-        // Verificar raza 
-        if (!getPeces().isEmpty() && !getPeces().get(0).getNombre().equals(pez.getNombre())) {
-            return false;
-        }
-    
-        return true;
     }
     
 }

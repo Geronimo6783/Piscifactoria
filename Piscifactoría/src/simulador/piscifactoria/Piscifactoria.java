@@ -2,6 +2,8 @@ package simulador.piscifactoria;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -15,6 +17,7 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
 
 import simulador.tanque.Tanque;
+import simulador.tanque.TanqueHuevos;
 
 /**
  * Clase que representa a una piscifactoría con múltiples tanques.
@@ -352,17 +355,40 @@ public abstract class Piscifactoria {
      * Realiza la lógica de que se pasa un día cuando no se dispone de almacén central.
      * @return Número de peces vendidos en la piscifactoría cuando pasa el día.
      */
+    // public int nextDay() {
+    //     int pecesVendidos = 0;
+    //     for(Tanque tanque : tanques){
+    //         if(!tanque.getPeces().isEmpty()){
+    //             tanque.alimentar(almacenInicial);
+    //         }
+    //         pecesVendidos += tanque.nextDay();
+    //     }
+
+    //     return pecesVendidos;
+    // }
+
     public int nextDay() {
         int pecesVendidos = 0;
-        for(Tanque tanque : tanques){
-            if(!tanque.getPeces().isEmpty()){
+        List<TanqueHuevos> tanquesHuevos = getTanquesHuevos(); // Obtiene los tanques de huevos de la piscifactoría
+    
+        for (Tanque tanque : tanques) {
+            if (!tanque.getPeces().isEmpty()) {
                 tanque.alimentar(almacenInicial);
             }
-            pecesVendidos += tanque.nextDay();
+            pecesVendidos += tanque.nextDay(tanquesHuevos); // Pasamos los tanques de huevos
         }
-
+    
         return pecesVendidos;
     }
+
+    public List<TanqueHuevos> getTanquesHuevos() {
+        return tanques.stream()
+                .filter(tanque -> tanque instanceof TanqueHuevos)
+                .map(tanque -> (TanqueHuevos) tanque)
+                .collect(Collectors.toList());
+    }
+    
+    
 
     /**
      * Método que vende los peces maduros y vivos de los tanques.
