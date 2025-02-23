@@ -21,7 +21,6 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
 
 import java.util.Iterator;
-import java.util.List;
 
 import propiedades.AlmacenPropiedades;
 
@@ -48,6 +47,11 @@ public class Tanque {
     private ArrayList<Pez> peces;
 
     /**
+     * Número de huevos restantes en el sistema
+     */
+    protected int huevosRestantes;
+
+    /**
      * 
      * @return Capacidad máxima de peces que puede tener el tanque.
      */
@@ -66,10 +70,14 @@ public class Tanque {
     }
 
     /**
+     * Permite obtener los peces del tanque.
      * 
      * @return Peces del tanque.
      */
     public ArrayList<Pez> getPeces() {
+        if (peces == null) {
+            peces = new ArrayList<>();
+        }
         return peces;
     }
 
@@ -92,28 +100,30 @@ public class Tanque {
 
     /**
      * Permite establecer el número del tanque.
+     * 
      * @param numeroTanque Número del tanque a establecer.
      */
-    public void setNumeroTanque(int numeroTanque){
+    public void setNumeroTanque(int numeroTanque) {
         this.numeroTanque = numeroTanque;
     }
 
     /**
      * Constructor de tanques.
      * 
-     * @param numeroTanque Número del tanque.
+     * @param numeroTanque         Número del tanque.
      * @param capacidadMaximaPeces Capacidad máxima de peces del tanque.
      */
     public Tanque(int numeroTanque, int capacidadMaximaPeces) {
         this.numeroTanque = numeroTanque;
         peces = new ArrayList<>();
         this.capacidadMaximaPeces = capacidadMaximaPeces;
+        this.huevosRestantes = 0;
     }
 
     /**
      * Constructor sin parámetros.
      */
-    public Tanque(){
+    public Tanque() {
         numeroTanque = 0;
         capacidadMaximaPeces = 25;
     }
@@ -200,18 +210,18 @@ public class Tanque {
      * 
      * @return Número de peces adultos vivos en el tanque.
      */
-    public int pecesAdultosVivos(){
+    public int pecesAdultosVivos() {
         int pecesAdultos = 0;
 
-        for(Pez pez : peces){
-            if(pez.isVivo() && pez.isMaduro()){
+        for (Pez pez : peces) {
+            if (pez.isVivo() && pez.isMaduro()) {
                 pecesAdultos += 1;
             }
         }
 
         return pecesAdultos;
     }
- 
+
     /**
      * 
      * @return Número de peces macho en el tanque.
@@ -276,12 +286,15 @@ public class Tanque {
      */
     public void showCapacity(String piscifactoria) {
         System.out.println("Tanque " + numeroTanque + " de la piscifactoría " + piscifactoria + " al "
-                + String.format("%.2f", ((float) peces.size() / (float) capacidadMaximaPeces) * 100) + "% de capacidad.");
+                + String.format("%.2f", ((float) peces.size() / (float) capacidadMaximaPeces) * 100)
+                + "% de capacidad.");
     }
 
     /**
      * Gestiona la lógica para alimentar a los peces.
-     * @param almacenComida Almacén de comida de la piscifactoría donde se sitúa el tanque.
+     * 
+     * @param almacenComida Almacén de comida de la piscifactoría donde se sitúa el
+     *                      tanque.
      */
     public void alimentar(Piscifactoria.AlmacenComida almacenComida) {
         int comidaNecesaria = 0;
@@ -402,7 +415,8 @@ public class Tanque {
                     if ((comidaVegetal + comidaVegetalAlmacen) >= comidaNecesaria) {
                         comidaVegetal -= comidaNecesaria;
                         if (comidaVegetal < 0) {
-                            Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
+                            Simulador.simulador.almacenCentral
+                                    .setCantidadComidaVegetal(comidaVegetalAlmacen + comidaVegetal);
                             comidaVegetal = 0;
                         }
                         for (Pez pez : peces) {
@@ -484,13 +498,18 @@ public class Tanque {
     }
 
     /**
-     * Gestiona la lógica para alimentar a los peces cuando la comida es insuficiente.
-     * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada Pez para alimentarse.
-     * @param almacenComida Almacén de comida de la piscifactoría donde se sitúa el tanque.
-     * @param comidaDisponible Comida de la que se dispone para alimentar a los peces.
+     * Gestiona la lógica para alimentar a los peces cuando la comida es
+     * insuficiente.
+     * 
+     * @param cantidadDeComidaNecesariaPorPez Cantidad de comida que necesita cada
+     *                                        Pez para alimentarse.
+     * @param almacenComida                   Almacén de comida de la piscifactoría
+     *                                        donde se sitúa el tanque.
+     * @param comidaDisponible                Comida de la que se dispone para
+     *                                        alimentar a los peces.
      */
     private void alimentarAleatorio(ArrayList<Integer> cantidadDeComidaNecesariaPorPez,
-        Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
+            Piscifactoria.AlmacenComida almacenComida, int comidaDisponible) {
         Random rt = new Random();
         ArrayList<Integer> posicionesPecesAlimentados = new ArrayList<>();
         int posicionAleatoria = 0;
@@ -545,8 +564,9 @@ public class Tanque {
                     Simulador.simulador.almacenCentral.setCantidadComidaVegetal(comidaDisponible);
 
                 } else {
-                    if (Simulador.simulador.almacenCentral.getCantidadComidaAnimal() > Simulador.simulador.almacenCentral
-                            .getCantidadComidaVegetal()) {
+                    if (Simulador.simulador.almacenCentral
+                            .getCantidadComidaAnimal() > Simulador.simulador.almacenCentral
+                                    .getCantidadComidaVegetal()) {
                         almacenComida.setCantidadComidaAnimal(0);
                         almacenComida.setCantidadComidaVegetal(0);
                         Simulador.simulador.almacenCentral.setCantidadComidaAnimal(0);
@@ -590,37 +610,10 @@ public class Tanque {
     /**
      * Gestiona la lógica de reproducción de los peces del tanque.
      */
-    // private void reproducir() {
-    //     int numeroHuevos = 0;
-    //     int numeroHuevosPorHembra = AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getHuevos();
-
-    //     if (hayMachoFertil() ) {
-    //         for (Pez pez : peces) {
-    //             if (pez.isSexo() && pez.isFertil()) {
-    //                 pez.setFertil(false);
-    //                 pez.setDiasSinReproducirse(0);
-    //                 numeroHuevos += numeroHuevosPorHembra;
-    //             }
-    //         }
-
-    //         while (peces.size() < capacidadMaximaPeces && numeroHuevos > 0) {
-    //             if (pecesMacho() >= pecesHembra()) {
-    //                 peces.add(peces.getFirst().obtenerPezHija());
-    //             } else {
-    //                 peces.add(peces.getFirst().obtenerPezHijo());
-    //             }
-
-    //             numeroHuevos--;
-    //         }
-
-            
-    //     }
-    // }
-
-    private void reproducir(List<TanqueHuevos> tanquesHuevos) {
+    private void reproducir() {
         int numeroHuevos = 0;
         int numeroHuevosPorHembra = AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getHuevos();
-    
+
         if (hayMachoFertil()) {
             for (Pez pez : peces) {
                 if (pez.isSexo() && pez.isFertil()) {
@@ -629,32 +622,33 @@ public class Tanque {
                     numeroHuevos += numeroHuevosPorHembra;
                 }
             }
-    
+
             while (peces.size() < capacidadMaximaPeces && numeroHuevos > 0) {
                 if (pecesMacho() >= pecesHembra()) {
                     peces.add(peces.getFirst().obtenerPezHija());
                 } else {
                     peces.add(peces.getFirst().obtenerPezHijo());
                 }
+
                 numeroHuevos--;
             }
-    
-            if (!tanquesHuevos.isEmpty()) { // Solo intentamos guardar huevos si hay tanques de huevos
-                for (TanqueHuevos tanqueHuevos : tanquesHuevos) {
-                    while (numeroHuevos > 0 && tanqueHuevos.tieneEspacio()) {
-                        tanqueHuevos.agregarHuevo(peces.getFirst().getNombre());
-                        numeroHuevos--;
-                    }                    
-                    if (numeroHuevos == 0) {
-                        break;
-                    }
-                }
-            }
+
+            this.huevosRestantes = numeroHuevos;
         }
     }
 
-    
-    
+    /**
+     * Transfiere los huevos al tanque de huevos especificado.
+     * 
+     * @param tanqueHuevos El tanque de huevos al que se transferirán los huevos.
+     */
+    public void transferirHuevos(TanqueHuevos tanqueHuevos) {
+        if (tanqueHuevos != null && tanqueHuevos.tieneEspacio()) {
+            tanqueHuevos.transferirHuevos();
+        } else {
+            System.out.println("No hay espacio en el TanqueHuevos o el tanque no existe.");
+        }
+    }
 
     /**
      * Vende todos los peces que se encuentran en una edad óptima para ser vendidos.
@@ -662,24 +656,25 @@ public class Tanque {
      * @return Peces vendidos.
      */
     private int venderPecesOptimos() {
-        if(!peces.isEmpty()){
+        if (!peces.isEmpty()) {
             int pecesAVender = 0;
             Iterator<Pez> iterador = peces.iterator();
             String nombrePez = peces.get(0).getNombre();
-            
-            while(iterador.hasNext()){
+
+            while (iterador.hasNext()) {
                 Pez pez = iterador.next();
 
                 if (pez.isEdadOptima()) {
                     pecesAVender++;
-                    Simulador.simulador.estadisticas.registrarVenta(nombrePez, AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
+                    Simulador.simulador.estadisticas.registrarVenta(nombrePez,
+                            AlmacenPropiedades.getPropByName(nombrePez).getMonedas());
                     iterador.remove();
                 }
             }
 
             Simulador.simulador.sistemaMonedas.setMonedas(Simulador.simulador.sistemaMonedas.getMonedas()
                     + (pecesAVender * AlmacenPropiedades.getPropByName(peces.get(0).getNombre()).getMonedas()));
-            
+
             return pecesAVender;
         }
 
@@ -689,8 +684,8 @@ public class Tanque {
     /**
      * Vende todos los peces que estén maduros.
      */
-    public void venderPeces(){
-        if(!peces.isEmpty()){
+    public void venderPeces() {
+        if (!peces.isEmpty()) {
             int monedasAObtener = 0;
             Iterator<Pez> iterador = peces.iterator();
             String nombrePez = peces.get(0).getNombre();
@@ -699,14 +694,15 @@ public class Tanque {
             while (iterador.hasNext()) {
                 Pez pez = iterador.next();
 
-                if(pez.isMaduro() && !pez.isEdadOptima()){
+                if (pez.isMaduro() && !pez.isEdadOptima()) {
                     monedasAObtener += monedasPez;
                     Simulador.simulador.estadisticas.registrarVenta(nombrePez, monedasPez);
                     iterador.remove();
                 }
             }
 
-            Simulador.simulador.sistemaMonedas.setMonedas(Simulador.simulador.sistemaMonedas.getMonedas() + monedasAObtener);
+            Simulador.simulador.sistemaMonedas
+                    .setMonedas(Simulador.simulador.sistemaMonedas.getMonedas() + monedasAObtener);
         }
     }
 
@@ -729,33 +725,22 @@ public class Tanque {
      * Implementa la lógica de que haya pasado un día haciendo crecer a los
      * peces, realizando la lógica de reproducción y vendiendo los peces que
      * están en la edad óptima.
+     * 
      * @return Peces vendidos en el día.
      */
-    // public int nextDay() {
-    //     if(!peces.isEmpty()){
-    //         for (Pez pez : peces) {
-    //             pez.grow();
-    //         }
-    //         reproducir();
-    //         return venderPecesOptimos();
-    //     }
-
-    //     return 0;
-    // }
-    public int nextDay(List<TanqueHuevos> tanquesHuevos) {
+    public int nextDay() {
         if (!peces.isEmpty()) {
             for (Pez pez : peces) {
                 pez.grow();
             }
-            reproducir(tanquesHuevos); // Pasamos los tanques de huevos
+            reproducir(); 
             return venderPecesOptimos();
         }
         return 0;
     }
-    
 
     /**
-     * Elimina todos los peces de un tanque, independientemente de si 
+     * Elimina todos los peces de un tanque, independientemente de si
      * están vivos o muertos.
      */
     public void vaciarTanque() {
@@ -764,18 +749,21 @@ public class Tanque {
 
     /**
      * Devuelve un String con información relevante del tanque.
+     * 
      * @return String con información relevante del tanque.
      */
-    public String toString(){
+    public String toString() {
         int numeroPeces = peces.size();
-        return "Número tanque: " + numeroTanque + "\nCapacidad máxima peces: " + capacidadMaximaPeces + "\nNúmero de peces: " + numeroPeces
-            + ((numeroPeces != 0) ? "\nPez: " + peces.get(0).getNombre() : "");
+        return "Número tanque: " + numeroTanque + "\nCapacidad máxima peces: " + capacidadMaximaPeces
+                + "\nNúmero de peces: " + numeroPeces
+                + ((numeroPeces != 0) ? "\nPez: " + peces.get(0).getNombre() : "");
     }
 
     /**
-     * Clase que se encarga de adaptar la serialización y la deserialización de objetos de la clase Tanque.
+     * Clase que se encarga de adaptar la serialización y la deserialización de
+     * objetos de la clase Tanque.
      */
-    private class AdaptadorJSON implements JsonDeserializer<Tanque>, JsonSerializer<Tanque>{
+    private class AdaptadorJSON implements JsonDeserializer<Tanque>, JsonSerializer<Tanque> {
 
         /**
          * Se encarga de la deserialización de un objeto Tanque.
@@ -785,8 +773,8 @@ public class Tanque {
                 throws JsonParseException {
             Tanque tanque = new Tanque();
             tanque.peces = new ArrayList<Pez>();
-            
-            for(Pez pez : new Gson().fromJson(json.getAsJsonObject().get("peces"), Pez[].class)){
+
+            for (Pez pez : new Gson().fromJson(json.getAsJsonObject().get("peces"), Pez[].class)) {
                 tanque.peces.add(pez);
             }
 
@@ -802,23 +790,24 @@ public class Tanque {
             Gson gson = new Gson();
             String pecesJson;
 
-            if(peces != 0){
+            if (peces != 0) {
                 pecesJson = " [";
 
-                for(Pez pez : src.peces){
-                    pecesJson += gson.toJson(pez,  Pez.class) + ",";
+                for (Pez pez : src.peces) {
+                    pecesJson += gson.toJson(pez, Pez.class) + ",";
                 }
 
                 pecesJson = pecesJson.substring(0, pecesJson.length() - 1);
                 pecesJson += " ]";
-            }
-            else{
+            } else {
                 pecesJson = " [] ";
             }
 
-            String json = "{ \"pez\" : \"" + ((peces != 0) ? src.peces.get(0).getNombre() + "\"" : "\"") + " , \"num\" : " + peces + " , \"datos\" : {"
-            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " }" + ", \"peces\" : "
-            + pecesJson + "}";
+            String json = "{ \"pez\" : \"" + ((peces != 0) ? src.peces.get(0).getNombre() + "\"" : "\"")
+                    + " , \"num\" : " + peces + " , \"datos\" : {"
+                    + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos()
+                    + " , \"fertiles\" : " + src.pecesFertiles() + " }" + ", \"peces\" : "
+                    + pecesJson + "}";
             return JsonParser.parseString(json);
         }
 

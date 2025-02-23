@@ -1228,6 +1228,12 @@ public class SistemaRecompensas {
         Logs.registrarCreacionRecompensa();
     }
 
+    /**
+     * Genera una recompensa para el tanque de cría basado en la parte recibida.
+     * 
+     * @param parte  Parte a la que pertenecen los materiales para la construcción.
+     * @param origen El origen o contexto desde el cual se genera la recompensa.
+     */
     public static void generarRecompensaTanqueCria(char parte, String origen) {
         switch (parte) {
             case 'A' -> {
@@ -1343,6 +1349,12 @@ public class SistemaRecompensas {
         }
     }
 
+    /**
+     * Genera una recompensa para el tanque de huevos basado en la parte recibida.
+     * 
+     * @param parte  Parte a la que pertenecen los materiales para la construcción.
+     * @param origen El origen o contexto desde el cual se genera la recompensa.
+     */
     public static void generarRecompensaTanqueHuevos(char parte, String origen) {
         switch (parte) {
             case 'A' -> {
@@ -2134,20 +2146,20 @@ public class SistemaRecompensas {
         reducirRecompensa(new File("rewards/almacen_d.xml"));
     }
 
+    /**
+     * Reclama una recompensa para añadir un tanque de cría a una piscifactoría.
+     */
     private static void reclamarRecompensaTanqueCria() {
         int piscifactoriaSeleccionada = Simulador.simulador.selectPisc();
 
         if (piscifactoriaSeleccionada != 0) {
             Piscifactoria piscifactoria = Simulador.simulador.piscifactorias.get(piscifactoriaSeleccionada - 1);
 
-            // Verificar si es una piscifactoría de mar o río
             if (piscifactoria instanceof PiscifactoriaMar || piscifactoria instanceof PiscifactoriaRio) {
-                // Contar cuántos tanques de cría tiene la piscifactoría
                 long tanquesDeCria = piscifactoria.getTanques().stream()
-                        .filter(tanque -> tanque instanceof TanqueCria) // Filtra los tanques de cría
+                        .filter(tanque -> tanque instanceof TanqueCria)
                         .count();
 
-                // Si la piscifactoría tiene menos de 3 tanques de cría, se agrega uno nuevo
                 if (tanquesDeCria < 3) {
                     int numeroTanques = piscifactoria.getTanques().size();
                     piscifactoria.getTanques().add(new TanqueCria(numeroTanques + 1, 2, piscifactoria));
@@ -2162,6 +2174,9 @@ public class SistemaRecompensas {
         reducirRecompensa(new File("rewards/tanque_c_c.xml"));
     }
 
+    /**
+     * Reclama una recompensa para añadir un tanque de huevos a una piscifactoría.
+     */
     private static void reclamarRecompensaTanqueHuevos() {
         int piscifactoriaSeleccionada = Simulador.simulador.selectPisc();
 

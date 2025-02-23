@@ -307,6 +307,11 @@ public class Logs {
             }
         }
 
+        /**
+         * Registra la compra de un tanque de cría para una piscifactoría en el archivo de logs.
+         * 
+         * @param piscifactoria El nombre de la piscifactoría donde se ha realizado la compra.
+         */
         public void registrarCompraTanqueCria(String piscifactoria){
             BufferedWriter buferEscritura = null;
     
@@ -330,6 +335,11 @@ public class Logs {
             }
         }
 
+        /**
+         * Registra la compra de un tanque de huevos para una piscifactoría en el archivo de logs.
+         * 
+         * @param piscifactoria El nombre de la piscifactoría donde se ha realizado la compra.
+         */
         public void registrarCompraTanqueHuevos(String piscifactoria){
             BufferedWriter buferEscritura = null;
     
