@@ -382,6 +382,52 @@ public class Transcripciones {
         }
     }
 
+    public void registrarCompraTanqueCria(int numeroTanque, String piscifactoria, int monedas){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
+            buferEscritura.append("\n" + "Comprado un tanque de cría número " + numeroTanque + " de la piscifactoría " + piscifactoria + " por " + monedas + "monedas.");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar la compra del tanque.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    public void registrarCompraTanqueHuevos(int numeroTanque, String piscifactoria, int monedas){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true), "UTF-8"));
+            buferEscritura.append("\n" + "Comprado un tanque de huevos número " + numeroTanque + " de la piscifactoría " + piscifactoria + " por " + monedas + "monedas.");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar la compra del tanque.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
     /**
      * Registra la compra del almacén central.
      */
@@ -685,6 +731,52 @@ public class Transcripciones {
         try{
             buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
             buferEscritura.append("\n" + " Enviados " + pecesEnviados + " peces al pedido de " + nombrePez + " con referencia " + idPedido + ".");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar el pedido completado.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    public void registrarEnvioPecesTanqueCria(int pecesEnviados, String piscifactoria){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("\n" + pecesEnviados + " peces criados en el tanque de cría de la piscifactoría " + piscifactoria +  ".");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar el pedido completado.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
+
+    public void registrarEnvioPecesTanqueHuevos(int pecesEnviados, String piscifactoria){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("\n" + pecesEnviados + " peces transferidos a los tanques de la piscifactoría " + piscifactoria +  "desde sus tanques de huevos.");
             buferEscritura.flush();
         }
         catch(IOException e){

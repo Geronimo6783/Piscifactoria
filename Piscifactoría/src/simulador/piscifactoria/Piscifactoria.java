@@ -17,6 +17,7 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.JsonAdapter;
 
 import simulador.tanque.Tanque;
+import simulador.tanque.TanqueCria;
 import simulador.tanque.TanqueHuevos;
 
 /**
@@ -370,9 +371,14 @@ public abstract class Piscifactoria {
     public int nextDay() {
         int pecesVendidos = 0;
         List<TanqueHuevos> tanquesHuevos = getTanquesHuevos(); 
+        List<TanqueCria> tanquesCrias = getTanquesCrias(); 
 
         for (TanqueHuevos tanqueHuevos : tanquesHuevos) {
             tanqueHuevos.procesarHuevos(); 
+        }
+
+        for(TanqueCria tanqueCria : tanquesCrias){
+            tanqueCria.avanzarEdad(almacenInicial);
         }
     
         for (Tanque tanque : tanques) {
@@ -391,6 +397,14 @@ public abstract class Piscifactoria {
                 .map(tanque -> (TanqueHuevos) tanque)
                 .collect(Collectors.toList());
     }
+
+    public List<TanqueCria> getTanquesCrias() {
+        return tanques.stream()
+                .filter(tanque -> tanque instanceof TanqueCria)
+                .map(tanque -> (TanqueCria) tanque)
+                .collect(Collectors.toList());
+    }
+    
     
     
 
@@ -510,7 +524,7 @@ public abstract class Piscifactoria {
         @Override
         public JsonElement serialize(Piscifactoria src, Type typeOfSrc, JsonSerializationContext context) {
             String json = "{ \"nombre\" : \"" + src.nombre + "\" , \"tipo\" : \"" + src.tipo + "\" , \"capacidad\" : \"" + src.almacenInicial.capacidadMaximaComida + "\" , \"comida\" : { "
-            + "\"vegetal\" : \"" + src.almacenInicial.cantidadComidaVegetal + "\" , \"animal\" : \"" + src.almacenInicial.cantidadComidaAnimal + "\" }, \"tanques\" : " + new Gson().toJson(src.tanques) + "}";
+            + "\"vegetal\" : \"" + src.almacenInicial.cantidadComidaVegetal + "\" , \"animal\" : \"" + src.almacenInicial.cantidadComidaAnimal + "\" }, \"mejoras\" : { " + "\"cria\" : }, \"tanques\" : " + new Gson().toJson(src.tanques) + "}";
             return JsonParser.parseString(json);
         }
 

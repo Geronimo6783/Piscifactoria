@@ -2,6 +2,7 @@ package simulador.tanque;
 
 import java.util.ArrayList;
 
+import componentes.Transcripciones;
 import propiedades.AlmacenPropiedades;
 
 import simulador.pez.Pez;
@@ -13,6 +14,7 @@ import simulador.piscifactoria.Piscifactoria;
 public class TanqueCria extends Tanque {
 
     private Piscifactoria piscifactoria;
+    public static Transcripciones archivoTranscripcionesPartida;
 
     /**
      * Peces del tanque.
@@ -46,7 +48,7 @@ public class TanqueCria extends Tanque {
                     comidaNecesariaAnimal += 2;
                 } else if (pez instanceof Filtrador) {
                     comidaNecesariaVegetal += 2;
-                } else { // Omnívoro
+                } else { 
                     comidaNecesariaAnimal += 1;
                     comidaNecesariaVegetal += 1;
                 }
@@ -77,27 +79,30 @@ public class TanqueCria extends Tanque {
      * @param pezMacho  Pez que debe ser macho.
      * @return true si la pareja se agregó correctamente; false en caso contrario.
      */
-    public boolean comprarPareja(Pez pezHembra, Pez pezMacho) {
+    // public boolean comprarPareja(Pez pezHembra, Pez pezMacho) {
 
-        if (!peces.isEmpty()) {
-            return false;
-        }
+    //     if (!peces.isEmpty()) {
+    //         return false;
+    //     }
 
-        if (!pezHembra.isSexo() || pezMacho.isSexo()) {
-            return false;
-        }
+    //     if (!pezHembra.isSexo() || pezMacho.isSexo()) {
+    //         return false;
+    //     }
 
-        peces.add(pezHembra);
-        peces.add(pezMacho);
-        return true;
-    }
+    //     peces.add(pezHembra);
+    //     peces.add(pezMacho);
+    //     return true;
+    // }
 
-    public void avanzarEdad() {
+    public void avanzarEdad(Piscifactoria.AlmacenComida almacenComida) {
+        alimentar(almacenComida);
+
         for (Pez pez : peces) {
             if (pez.isAlimentado()) {
                 pez.grow();
 
                 pez.setAlimentado(false);
+                pez.setVivo(true);
             }
         }
         reproducir();
@@ -145,6 +150,9 @@ public class TanqueCria extends Tanque {
             tanqueDestino.getPeces().add(nuevaCria);
 
         }
+
+        archivoTranscripcionesPartida.registrarEnvioPecesTanqueCria(huevosAProducir, piscifactoria.getNombre());
+
 
         // Reiniciamos los indicadores reproductivos de la pareja.
         pez1.setFertil(false);

@@ -1538,7 +1538,7 @@ public class Simulador {
             System.out.println("Tanque de cria añadido a la piscifatoría " + piscifactoria.getNombre() +
                     ". Total de tanques: " + piscifactoria.getTanques().size());
 
-            archivoTranscripcionesPartida.registrarCompraTanque(nuevoTanqueCria.getNumeroTanque(),
+            archivoTranscripcionesPartida.registrarCompraTanqueCria(nuevoTanqueCria.getNumeroTanque(),
                     piscifactoria.getNombre(), costoTanqueCria);
         } else {
             System.out.println("No tienes suficientes monedas para comprar un tanque de cría, faltan "
@@ -1559,14 +1559,14 @@ public class Simulador {
             System.out.println("Tanque de huevos añadido a la piscifatoría " + piscifactoria.getNombre() +
                     ". Total de tanques: " + piscifactoria.getTanques().size());
 
-            archivoTranscripcionesPartida.registrarCompraTanque(nuevoTanqueHuevos.getNumeroTanque(),
+            archivoTranscripcionesPartida.registrarCompraTanqueHuevos(nuevoTanqueHuevos.getNumeroTanque(),
                     piscifactoria.getNombre(), costoTanqueHuevos);
         } else {
             System.out.println("No tienes suficientes monedas para comprar un tanque de huevos, faltan "
                     + (costoTanqueHuevos - monedasDisponibles) + " monedas.");
         }
 
-        archivoLogPartida.registrarCompraTanqueCria(piscifactoria.getNombre());
+        archivoLogPartida.registrarCompraTanqueHuevos(piscifactoria.getNombre());
 
     }
 
