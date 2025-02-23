@@ -297,6 +297,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
                 
@@ -306,6 +307,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -315,6 +317,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -324,6 +327,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -333,6 +337,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -342,6 +347,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -351,6 +357,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -360,6 +367,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -369,6 +377,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -378,6 +387,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -387,6 +397,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
 
@@ -396,6 +407,7 @@ public abstract class Pez {
                     pez.diasSinReproducirse = extras.get("diasSinReproducirse").getAsInt();
                     pez.edad = pezDeserializado.get("edad").getAsInt();
                     pez.vivo = pezDeserializado.get("vivo").getAsBoolean();
+                    pez.enfermo =pezDeserializado.get("enfermo").getAsBoolean();
                     return (Pez) pez;
                 }
             }
@@ -446,7 +458,7 @@ public abstract class Pez {
             }
             String json = "{\"edad\": " + " \"" + src.edad + "\"" + ", \"sexo\": " + " \"" + src.sexo + "\"" + ", \"vivo\": " + " \"" + src.vivo + "\"" + ", \"maduro\": " + " \"" + (src.edad > AlmacenPropiedades.getPropByName(src.nombre).getMadurez()) + "\"" + 
             ", \"fertil\": " + " \"" + src.fertil + "\"" + ", \"ciclo\": " + " \"" + ((src.sexo && src.edad > AlmacenPropiedades.getPropByName(src.nombre).getMadurez()) ? (AlmacenPropiedades.getPropByName(src.nombre).getCiclo() - src.diasSinReproducirse) : 0) + "\"" + ", \"alimentado\": "
-            + " \"" + src.alimentado + "\"" + ", \"extra\": {" +"\"codigoPez\" : \"" + codigoPez + "\"" +  " , \"diasSinReproducirse\": " + " \"" + src.diasSinReproducirse + "\"" + "}}";
+            + " \"" + src.alimentado + "\"" + " \"" + src.enfermo + "\"" + ", \"extra\": {" +"\"codigoPez\" : \"" + codigoPez + "\"" +  " , \"diasSinReproducirse\": " + " \"" + src.diasSinReproducirse + "\"" + "}}";
             return JsonParser.parseString(json);
         }
         

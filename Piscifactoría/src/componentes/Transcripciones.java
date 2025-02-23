@@ -701,4 +701,34 @@ public class Transcripciones {
             }
         }
     }
+
+    /**
+     * Registra la cura manual de peces de una piscifactoria.
+     * 
+     * @param cantPeces     Cantidad de peces curados
+     * @param nombrePisci   Nombre de la piscifactoria
+     * @param cantMonedas   Cntidad de monedas gastadas
+     */
+    public void registrarCuraPeces(int cantPeces, String nombrePisci, int cantMonedas){
+        BufferedWriter buferEscritura = null;
+
+        try{
+            buferEscritura = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivoTranscripciones, true)));
+            buferEscritura.append("\n" + " Curados " + cantPeces + " peces de la piscifactoria " + nombrePisci + " por " + cantMonedas + ".");
+            buferEscritura.flush();
+        }
+        catch(IOException e){
+            System.out.println("Hubo un problema a la hora de registrar el pedido completado.");
+        }
+        finally{
+            if(buferEscritura != null){
+                try{
+                    buferEscritura.close();
+                }
+                catch(IOException e){
+
+                }
+            }
+        }
+    }
 }

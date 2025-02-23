@@ -602,9 +602,9 @@ public class Tanque {
 
             while (peces.size() < capacidadMaximaPeces && numeroHuevos > 0) {
                 if (pecesMacho() >= pecesHembra()) {
-                    peces.add(peces.getFirst().obtenerPezHija());
+                    peces.add(peces.get(0).obtenerPezHija());
                 } else {
-                    peces.add(peces.getFirst().obtenerPezHijo());
+                    peces.add(peces.get(0).obtenerPezHijo());
                 }
 
                 numeroHuevos--;
@@ -838,7 +838,7 @@ public class Tanque {
             }
 
             String json = "{ \"pez\" : \"" + ((peces != 0) ? src.peces.get(0).getNombre() + "\"" : "\"") + " , \"num\" : " + peces + " , \"datos\" : {"
-            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " }" + ", \"peces\" : "
+            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " , \"enfermos\" : " + src.pecesEnfermos() + " }" + ", \"peces\" : "
             + pecesJson + "}";
             return JsonParser.parseString(json);
         }

@@ -346,7 +346,7 @@ public class Simulador {
         String[] opcionesMenuPrincipal = { "Estado general", "Estado piscifactoría", "Estado tanques", "Informes",
                 "Ictiopedia", "Pasar día",
                 "Comprar comida", "Comprar peces", "Vender peces", "Limpiar tanques", "Vaciar tanque", "Mejorar",
-                "Pasar varios días", "Reclamar recompensa", "Gestionar pedidos no finalizados", "Salir" };
+                "Pasar varios días", "Reclamar recompensa", "Gestionar pedidos no finalizados","Gestionar enfermedades", "Salir" };
         GeneradorMenus.generarMenu(opcionesMenuPrincipal, 1);
     }
 
@@ -2388,17 +2388,18 @@ public class Simulador {
         if(siNo=="S" || siNo=="Si" || siNo=="SI"){
             System.out.println("¿Cual piscifactoria quiere curar?");
             int pisciSelec=SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
-            int monedasParaCura=piscifactorias.get(pisciSelec-1).getPecesEnfermos()*10;
+            int pecesACurar= piscifactorias.get(pisciSelec-1).getPecesEnfermos();
+            int monedasParaCura=pecesACurar*10;
             System.out.println("En ese caso el precio de cura será "+(monedasParaCura)+". ¿Desea proceder?[S/N]");
             String confirma=SistemaEntrada.entradaTexto();
             if(siNo=="S" || siNo=="Si" || siNo=="SI"){
                 piscifactorias.get(pisciSelec-1).curarPeces();
                 sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - monedasParaCura);
+                archivoTranscripcionesPartida.registrarCuraPeces(pecesACurar, piscifactorias.get(pisciSelec-1).getNombre(), monedasParaCura);
             }
         }else{
-            System.out.println("");
+            System.out.println("No se curará ningun pez.");
         }
-        
     }
 
     /**
@@ -2438,7 +2439,8 @@ public class Simulador {
                         case 13 -> {simulador.pasarDias();}
                         case 14 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 15 -> {simulador.gestionarPedidosNoFinalizados();}
-                        case 16 -> {System.out.println("Cerrando...");}
+                        case 16 -> {simulador.gestionarEnfermedad();}
+                        case 17 -> {System.out.println("Cerrando...");}
                         case 96 -> {simulador.mostrarPedidosCompletados();}
                         case 97 -> {simulador.borrarTodosLosPedidos();}
                         case 98 -> {simulador.anadirPezAleatorio();}
