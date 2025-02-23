@@ -44,6 +44,8 @@ public class DTOPedidoUsuarioPez {
      * @param numeroReferencia     Número de referencia del pedido.
      * @param nombreCliente        Nombre del cliente que realiza el pedido.
      * @param nombrePez            Nombre del pez del que se realiza el pedido.
+     * @param pecesEnviados        Número de peces enviados.
+     * @param pecesSolicitados     Número de peces solicitados.
      * @param porcentajeCompletado Porcentaje de completado del pedido.
      */
     public DTOPedidoUsuarioPez(int numeroReferencia, String nombreCliente, String nombrePez, int pecesEnviados,

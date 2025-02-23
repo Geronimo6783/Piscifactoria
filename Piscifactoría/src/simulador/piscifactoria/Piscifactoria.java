@@ -369,13 +369,17 @@ public abstract class Piscifactoria {
 
     public int nextDay() {
         int pecesVendidos = 0;
-        List<TanqueHuevos> tanquesHuevos = getTanquesHuevos(); // Obtiene los tanques de huevos de la piscifactoría
+        List<TanqueHuevos> tanquesHuevos = getTanquesHuevos(); 
+
+        for (TanqueHuevos tanqueHuevos : tanquesHuevos) {
+            tanqueHuevos.procesarHuevos(); 
+        }
     
         for (Tanque tanque : tanques) {
             if (!tanque.getPeces().isEmpty()) {
                 tanque.alimentar(almacenInicial);
             }
-            pecesVendidos += tanque.nextDay(tanquesHuevos); // Pasamos los tanques de huevos
+            pecesVendidos += tanque.nextDay(tanquesHuevos); 
         }
     
         return pecesVendidos;

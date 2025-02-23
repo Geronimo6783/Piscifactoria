@@ -29,6 +29,9 @@ public class TanqueHuevos extends Tanque{
         }
     }
 
+    public List<String> getHuevos() {
+        return huevos;
+    }
   
     public void procesarHuevos() {
         List<Tanque> tanques = piscifactoria.getTanques();
