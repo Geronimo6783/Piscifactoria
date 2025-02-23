@@ -248,6 +248,7 @@ public abstract class Piscifactoria {
         int hembras = 0;
         int machos = 0;
         int fertiles = 0;
+        int enfermos = 0;
 
         for (int i = 0; i < tanques.size(); i++) {
             peces += tanques.get(i).getPeces().size();
@@ -258,6 +259,7 @@ public abstract class Piscifactoria {
             hembras += tanques.get(i).pecesHembra();
             machos += tanques.get(i).pecesMacho();
             fertiles += tanques.get(i).pecesFertiles();
+            enfermos += tanques.get(i).pecesEnfermos();
             }
         
         if(peces != 0){
@@ -269,6 +271,7 @@ public abstract class Piscifactoria {
                         "\nPeces adultos: " + adultos + "/" + vivos + "(" + String.format("%.2f", (((float)adultos / (float)vivos) * 100)) + "%)" +
                         "\nHembras / Machos: " + hembras + "/" + machos +
                         "\nFértiles: " + fertiles + "/" + vivos + "(" + String.format("%.2f", (((float)fertiles / (float)vivos) * 100))+ "%)" +
+                        "\nEnfermos: " + enfermos + "/" + vivos + "(" + String.format("%.2f", (((float)enfermos / (float)vivos) * 100))+ "%)" +
                         "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
                         + almacenInicial.capacidadMaximaComida + "("
                         + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
@@ -283,6 +286,7 @@ public abstract class Piscifactoria {
                     "\nPeces adultos: " + 0 + "/" + 0 + "(" + 100 + "%)" +
                     "\nHembras / Machos: " + hembras + "/" + machos +
                     "\nFértiles: " + 0 + "/" + 0 + "(" + 100 + "%)" +
+                    "\nEnfermos: " + 0 + "/" + 0 + "(" + 100 + "%)" +
                     "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
                     + almacenInicial.capacidadMaximaComida + "("
                     + String.format("%.2f",((float)almacenInicial.cantidadComidaAnimal/ (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
@@ -298,6 +302,7 @@ public abstract class Piscifactoria {
             "\nPeces adultos: " + adultos + "/" + vivos + "(100%)" +
             "\nHembras / Machos: " + hembras + "/" + machos +
             "\nFértiles: " + fertiles + "/" + vivos + "(100%)" +
+            "\nEnfermos: " + enfermos + "/" + vivos + "(100%)" +
             "\nAlmacén de comida: \n\t-comida carnivoros: " + almacenInicial.cantidadComidaAnimal + "/"
             + almacenInicial.capacidadMaximaComida + "("
             + String.format("%.2f", ((float)almacenInicial.cantidadComidaAnimal / (float)almacenInicial.capacidadMaximaComida) * 100) + "%)"
@@ -393,6 +398,19 @@ public abstract class Piscifactoria {
 
     /**
      * 
+     * @return Número de peces enfermos en la piscifactoría.
+     */
+    public int getPecesEnfermos(){
+        int pecesEnfermos = 0;
+        for(Tanque tanque : tanques){
+            pecesEnfermos += tanque.pecesEnfermos();
+        }
+
+        return pecesEnfermos;
+    }
+
+    /**
+     * 
      * @return Número de peces totales en la piscifactoría.
      */
     public int getPecesTotales(){
@@ -459,6 +477,26 @@ public abstract class Piscifactoria {
         }
 
         return true;
+    }
+
+    /**
+     * Metodo que indica la cantidad de peces enfermos en los tanques
+     */
+    public String pecesEnfermosPorTanque(){
+        String pecesEnfermos="";
+        for(Tanque tanque : tanques){
+                pecesEnfermos+="|"+tanque.pecesEnfermos()+"|";
+        }
+        return pecesEnfermos;
+    }
+
+    /**
+     * Metodo que cura a todos los peces de los tanques
+     */
+    public void curarPeces(){
+        for (Tanque tanque : tanques) {
+            tanque.curar();
+        }
     }
 
     /**

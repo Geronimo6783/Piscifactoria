@@ -602,9 +602,9 @@ public class Tanque {
 
             while (peces.size() < capacidadMaximaPeces && numeroHuevos > 0) {
                 if (pecesMacho() >= pecesHembra()) {
-                    peces.add(peces.getFirst().obtenerPezHija());
+                    peces.add(peces.get(0).obtenerPezHija());
                 } else {
-                    peces.add(peces.getFirst().obtenerPezHijo());
+                    peces.add(peces.get(0).obtenerPezHijo());
                 }
 
                 numeroHuevos--;
@@ -693,10 +693,86 @@ public class Tanque {
                 pez.grow();
             }
             reproducir();
+            enfermar();
             return venderPecesOptimos();
         }
 
         return 0;
+    }
+
+
+    /**
+     * Indica si hay un pez enfermo en el tanque.
+     * 
+     * @return True si hay un pez enfermo en el tanque.
+     */
+    private boolean hayPezEnfermo() {
+        for (Pez pez : peces) {
+            if (pez.isEnfermo()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * @return Número de peces enfermos en el tanque.
+     */
+    public int pecesEnfermos() {
+        int pecesEnfermos = 0;
+
+        for (Pez pez : peces) {
+            if (pez.isEnfermo()) {
+                pecesEnfermos++;
+            }
+        }
+
+        return pecesEnfermos;
+    }
+
+    /**
+     * Indica si hay un pez muerto en el tanque.
+     * 
+     * @return True si hay un pez muerto en el tanque.
+     */
+    private boolean hayPezMuerto() {
+        for (Pez pez : peces) {
+            if (!pez.isVivo()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gestiona la lógica de enfermar de los peces del tanque.
+     */
+    private void enfermar() {
+        Random rt = new Random();
+        if (hayPezMuerto() ) {
+            for (Pez pez : peces) {
+                if (!pez.isEnfermo()) {
+                    boolean pezEnferma = (rt.nextInt( 100) > 5);
+                    pez.setEnfermo(pezEnferma);
+                }
+            }
+        }else if(hayPezEnfermo()){
+            for (Pez pez : peces) {
+                if (!pez.isEnfermo()) {
+                    boolean pezEnferma = (rt.nextInt( 100) > 10);
+                    pez.setEnfermo(pezEnferma);
+                }
+            }
+        }
+    }
+    /**
+     * Metodo que cura manualmente a los peces del tanque
+     */
+    public void curar(){
+        for (Pez pez : peces) {
+            pez.setEnfermo(false);
+        }
     }
 
     /**
@@ -762,7 +838,7 @@ public class Tanque {
             }
 
             String json = "{ \"pez\" : \"" + ((peces != 0) ? src.peces.get(0).getNombre() + "\"" : "\"") + " , \"num\" : " + peces + " , \"datos\" : {"
-            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " }" + ", \"peces\" : "
+            + " \"vivos\" : " + src.pecesVivos() + " , \"maduros\" : " + src.pecesAdultosVivos() + " , \"fertiles\" : " + src.pecesFertiles() + " , \"enfermos\" : " + src.pecesEnfermos() + " }" + ", \"peces\" : "
             + pecesJson + "}";
             return JsonParser.parseString(json);
         }

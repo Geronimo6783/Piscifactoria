@@ -31,6 +31,7 @@ public class Dorada extends Omnivoro implements Rio, Mar{
         System.out.println("Alimentado: " + ((alimentado) ? "Sí" : "No"));
         System.out.println("Adulto: " + ((edad >= AlmacenPropiedades.DORADA.getMadurez()) ? "Sí" : "No"));
         System.out.println("Fértil: " + ((fertil) ? "Sí" : "No"));
+        System.out.println("Enfermo: " + ((enfermo) ? "Sí" : "No"));
     }
 
     /**
@@ -56,12 +57,28 @@ public class Dorada extends Omnivoro implements Rio, Mar{
                 if((edad == AlmacenPropiedades.DORADA.getMadurez()) || (diasSinReproducirse >= AlmacenPropiedades.DORADA.getCiclo() && edad > AlmacenPropiedades.DORADA.getMadurez())) {
                     fertil = true;
                 }
+                if (isEnfermo() && edad == AlmacenPropiedades.DORADA.getMadurez()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 10);
+                    vivo=pezSigueConVida;
+                    if(isAlimentado() || pezSigueConVida){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
+                }else if (isEnfermo()) {
+                    boolean pezSigueConVida = (rt.nextInt( 100) > 25);
+                    vivo=pezSigueConVida;
+                    if(isAlimentado() || pezSigueConVida){
+                        boolean sigueEnfermo=(rt.nextInt(100)>10);
+                        enfermo=sigueEnfermo;
+                    }
+                }
             }
             else{
                 fertil = false;
             }
         }
         alimentado = false;
+        enfermo = false;
     }
 
     /**

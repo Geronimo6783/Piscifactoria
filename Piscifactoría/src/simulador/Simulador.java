@@ -346,7 +346,7 @@ public class Simulador {
         String[] opcionesMenuPrincipal = { "Estado general", "Estado piscifactoría", "Estado tanques", "Informes",
                 "Ictiopedia", "Pasar día",
                 "Comprar comida", "Comprar peces", "Vender peces", "Limpiar tanques", "Vaciar tanque", "Mejorar",
-                "Pasar varios días", "Reclamar recompensa", "Gestionar pedidos no finalizados", "Salir" };
+                "Pasar varios días", "Reclamar recompensa", "Gestionar pedidos no finalizados","Gestionar enfermedades", "Salir" };
         GeneradorMenus.generarMenu(opcionesMenuPrincipal, 1);
     }
 
@@ -356,13 +356,13 @@ public class Simulador {
     private void menuPisc() {
         String[] cabeceraMenuPiscifactoria = { "Seleccione una opción:",
                 "--------------------------- Piscifactorías ---------------------------",
-                "[Peces vivos/ Peces totales/ Espacio total]" };
+                "[Peces vivos/ Peces enfermos/ Peces totales/ Espacio total]" };
         String[] opciones = new String[piscifactorias.size() + 1];
         opciones[0] = "Cancelar";
 
         for (int i = 0; i < piscifactorias.size(); i++) {
             Piscifactoria piscifactoria = piscifactorias.get(i);
-            opciones[i + 1] = piscifactoria.getNombre() + " [" + piscifactoria.getPecesVivos() + "/"
+            opciones[i + 1] = piscifactoria.getNombre() + " [" + piscifactoria.getPecesVivos() + "/"+ piscifactoria.getPecesEnfermos() + "/"
                     + piscifactoria.getPecesTotales() + "/" + piscifactoria.getEspacioPeces() + "]";
         }
 
@@ -2371,6 +2371,38 @@ public class Simulador {
     }
 
     /**
+     * Metodo que permite gestionar los peces enfermos de las piscifactorias.
+     */
+    public void gestionarEnfermedad(){
+        String[] cabeceraGestionarEnfermedad = {"========== Enfermos ==========" };
+        String[] opciones = new String[piscifactorias.size() + 1];
+        opciones[0] = "Cancelar";
+
+        for (int i = 0; i < piscifactorias.size(); i++) {
+            Piscifactoria piscifactoria = piscifactorias.get(i);
+            opciones[i + 1] = i+".- Piscifactoría "+piscifactoria.getNombre() + " "+ piscifactoria.pecesEnfermosPorTanque();
+        }
+        GeneradorMenus.generarMenu(cabeceraGestionarEnfermedad, opciones, 0);
+        System.out.println("¿Desea curar a los peces?[S/N]");
+        String siNo=SistemaEntrada.entradaTexto();
+        if(siNo=="S" || siNo=="Si" || siNo=="SI"){
+            System.out.println("¿Cual piscifactoria quiere curar?");
+            int pisciSelec=SistemaEntrada.entradaOpcionNumerica(0, piscifactorias.size());
+            int pecesACurar= piscifactorias.get(pisciSelec-1).getPecesEnfermos();
+            int monedasParaCura=pecesACurar*10;
+            System.out.println("En ese caso el precio de cura será "+(monedasParaCura)+". ¿Desea proceder?[S/N]");
+            String confirma=SistemaEntrada.entradaTexto();
+            if(siNo=="S" || siNo=="Si" || siNo=="SI"){
+                piscifactorias.get(pisciSelec-1).curarPeces();
+                sistemaMonedas.setMonedas(sistemaMonedas.getMonedas() - monedasParaCura);
+                archivoTranscripcionesPartida.registrarCuraPeces(pecesACurar, piscifactorias.get(pisciSelec-1).getNombre(), monedasParaCura);
+            }
+        }else{
+            System.out.println("No se curará ningun pez.");
+        }
+    }
+
+    /**
      * Método principal del programa que gestiona el uso del programa por parte del
      * usuario.
      * 
@@ -2407,7 +2439,8 @@ public class Simulador {
                         case 13 -> {simulador.pasarDias();}
                         case 14 -> {SistemaRecompensas.reclamarRecompensa();}
                         case 15 -> {simulador.gestionarPedidosNoFinalizados();}
-                        case 16 -> {System.out.println("Cerrando...");}
+                        case 16 -> {simulador.gestionarEnfermedad();}
+                        case 17 -> {System.out.println("Cerrando...");}
                         case 96 -> {simulador.mostrarPedidosCompletados();}
                         case 97 -> {simulador.borrarTodosLosPedidos();}
                         case 98 -> {simulador.anadirPezAleatorio();}
